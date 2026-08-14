@@ -1,6 +1,9 @@
 # LaTeX build artifacts
 *.aux
 *.log
+
+# Per-generation run data behind the emergence paper. Not build logs.
+!smbpann/data/*.log
 *.out
 *.fls
 *.fdb_latexmk
