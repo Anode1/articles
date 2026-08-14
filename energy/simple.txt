@@ -1,0 +1,161 @@
+PLAIN WORDS: THE PROBLEM AND WHAT I PROPOSE
+
+For when someone asks "so what are you actually saying?" — four lengths,
+shortest first. Use whichever fits the room.
+
+
+=== ONE SENTENCE ===
+
+Provinces should sell electricity to data centres at a published price
+instead of handing out permissions, and should sell a cheaper kind that
+can be switched off a few dozen hours a year.
+
+
+=== THIRTY SECONDS ===
+
+Right now, if you want to plug a big data centre into a Canadian grid,
+you don't buy power. You apply for permission. BC holds a contest.
+Alberta set a cap and it's already full. Quebec wants to double the
+price. Ontario passed a law letting a minister decide, and hasn't
+written the rules.
+
+That's the wrong shape. When a monopoly has more buyers than supply, it
+either names a price or picks winners. All four picked winners.
+
+What I propose: post two prices. One for firm power that's always on.
+One, cheaper, for power the grid can cut off when it's tight — about
+85 hours a year, under one percent of the time. Then connect anyone who
+pays. That's it. No new agency, no national agreement, no one has to
+change their mind about climate policy.
+
+The reason this works is that AI training doesn't need to run every
+minute. It's batch work. It already stops and restarts constantly on
+its own, because the hardware breaks. A data centre would happily agree
+to pause 85 hours a year in exchange for connecting in 2027 instead of
+2031. Nobody in Canada is allowed to make that trade.
+
+
+=== TWO MINUTES ===
+
+THE PROBLEM
+
+Everyone wants to build data centres. The power equipment to serve them
+is sold out — the biggest turbine maker is booking deliveries for 2031.
+So nothing anyone builds changes the next three years. The only thing
+still in play is who gets to use the grid we already have, and on what
+terms.
+
+Canada answered that question badly, in four provinces at once. Buying
+electricity for a large load stopped being a purchase and became an
+application. BC releases a fixed amount and runs a competition for it.
+Alberta set an interim cap of 1.2 GW against 16 GW of requests, and it's
+full. Quebec wants to roughly double the price by regulatory decree.
+Ontario passed a law letting a minister approve connections and never
+wrote the criteria.
+
+None of that is indecision. Each one is a firm, fast decision that the
+seller of electricity will choose the buyer.
+
+Two things follow.
+
+First, the value goes to the wrong people. In November a company sold
+its 180 MW Alberta allocation — just the permission, no plant, no
+building — for $18 million. AESO handed that permission out for free.
+So the scarcity is worth real money; it just never reaches the grid that
+created the scarcity. A price would have collected that.
+
+Second, developers don't wait. They build their own gas or diesel behind
+the meter and connect to nothing. That's worse on every measure: dirtier,
+bound by no reliability standard, no connection agreement, no benefit to
+anyone else on the system. And it needs nobody's approval, which is what
+makes it the likely outcome.
+
+And it's not free for households either. A grid that can't sell
+flexibility has to build for the peak instead. Ordinary customers end up
+paying for peaking capacity that a handful of large customers would
+gladly have been paid to go without.
+
+WHAT I PROPOSE
+
+Act like a seller, not a gatekeeper.
+
+1. Post a price for firm service and a price for interruptible service,
+   and connect anyone who pays. The interruptible offer is the whole
+   thing: accept deep curtailment, connect in 2027 instead of 2031.
+   It's an offer, not a levy. It taxes nobody and subsidises nobody.
+
+2. Put the behaviour in the contract, not in a rulebook written later.
+   How the load rides through a fault, when it curtails — agree that
+   before the concrete is poured, not retroactively onto buildings
+   already financed.
+
+3. Take deposits and require site control. That's how a seller tells a
+   real buyer from someone holding a free option, and it thins the queue
+   without anyone judging whose project is worthier.
+
+4. Drop the rest — quantity caps, per-project ceilings, scoring on
+   criteria the applicant can't see, ministerial discretion with no
+   published basis. Each is a substitute for a price and worse than the
+   price it replaces.
+
+5. Don't wait for the other three provinces. One province posting real
+   terms takes the business, and the other three have to answer it the
+   following year. Alberta is the obvious one: it has the queue, it has
+   surplus it's currently exporting, and its market was built for exactly
+   this kind of price signal.
+
+WHY THE TRADE IS REAL
+
+The customer being turned away is the most flexible large load any grid
+has ever been offered. Model training is a batch job built to be
+interrupted — Meta's biggest run hit 419 hardware failures in 54 days
+and saves its state every four minutes as a matter of course. Asking it
+to pause is asking it to do something it already does, unprompted,
+hundreds of times a run.
+
+And the grid barely needs it. Duke's estimate is that the largest US
+balancing areas could absorb 76 GW of new load at a quarter of a percent
+curtailment — about 85 hours a year. Alberta's actual problem is winter
+evenings in December and January. A handful of hours. A handful of hours
+is exactly what a price can solve and a quota cannot.
+
+WHAT I'M NOT SAYING
+
+Not that curtailment is cheap — once the servers are bought, an idle
+hour throws away about eight times more in standing capital than it
+saves in power. That's the point: this buyer values uptime enormously
+and the seller needs relief rarely. Those are exactly the two parties
+who should be able to strike a deal.
+
+Not that the reliability concern is fake. AESO was right that connecting
+every large load *firm* would impair reliability. But an interruptible
+connection isn't a claim on the winter peak, which is precisely why
+there's room in grids that look full. The constraint is a reason to sell
+the interruptible kind, not to refuse it.
+
+Not that this is about climate policy. The federal rules don't bite
+until 2035, the carbon price was cut this year, and AESO explained its
+cap by citing request volume and reliability, not Ottawa. The constraint
+is that the seller is a monopoly, and monopolies facing excess demand
+ration instead of transacting.
+
+
+=== IF THEY PUSH BACK IN ONE LINE ===
+
+"Isn't the queue proof of a crisis?"
+  A queue is an upper bound on interest, not demand. Positions are free
+  and non-binding; developers file in several provinces to shop terms.
+  Generation queues convert at 13-20%.
+
+"Isn't Alberta short of power?"
+  Not today — prices fell 30% in 2025 to an eight-year low and it
+  exported six times what it imported. It's short on winter evenings.
+  That's hours, not megawatts.
+
+"What if these customers leave and ratepayers eat the cost?"
+  Then charge for that in the contract — deposits, exit terms, minimum
+  take. That's a seller's problem with a seller's solution, and it's
+  cheaper than refusing the sale.
+
+"Doesn't this need Ottawa / a national strategy?"
+  No. It needs one province to post a number.

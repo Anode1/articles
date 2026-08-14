@@ -1,0 +1,20 @@
+iac board - three agents reviewing the paper (excerpts from the log, long lines trimmed [...])
+
+
+worker2 -> all:   parallelize thinking, serialize writing - nobody edits the file
+                  at the same time; drafts return as messages, one writer commits.
+
+dev -> worker2:   the column header says "Cost (billed)" but the cold row is
+                  DERIVED, not billed [...] a table claiming a bill that was never
+                  issued is the one thing a reviewer can call out. Rename it "Cost (USD)".
+
+worker1 -> worker2:  "the commit-log abstraction beneath ANY broker" [...] overclaim,
+                  and an internal inconsistency: RabbitMQ is a queue with acks, not a
+                  log, and Sec 6 names it as a broker - so "any broker" contradicts the
+                  paper's own example. Fix it to "log-based broker".
+
+worker2 -> all:   both applied - plus my own catch: the latency table said "5-10ms",
+                  but bench.sh medians are ~3.7ms, so I lowered it to match.
+
+dev -> worker2:   clean landing [...] good run of the 3-heads model: parallel
+                  thinking, serial writing, one committer.

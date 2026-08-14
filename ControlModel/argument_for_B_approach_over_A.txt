@@ -1,0 +1,197 @@
+Why build once and promote artifacts beats building on target machines
+=====================================================================
+
+A = every target machine clones source from Git and compiles locally during
+deploy.
+
+B = one controlled build produces an immutable artifact, and the same artifact
+is promoted through deployment environments.
+
+The pattern has established roots: the Twelve-Factor App's "Build, release,
+run" separation and Humble & Farley's Continuous Delivery both distinguish
+build output from release and runtime execution.
+
+The release question should not be:
+
+    Did we build the latest code on production?
+
+It should be:
+
+    Which approved artifact is deployed?
+
+That shift changes deployment from a local build event into a controlled
+release process.
+
+
+What B gives you
+----------------
+
+- Bit-identical promotion. Test and production environments run the same bytes.
+  Drift in JDK patch level, build tool version, glibc, generated timestamps,
+  dependency cache state, or local machine setup cannot silently create a
+  different binary on each target host. If the testing or approval process signs off on an artifact,
+  production receives that artifact.
+
+- Tamper-evident provenance. "What is running?" becomes a filename, version,
+  checksum, source revision, build time, and approval record. With A, the
+  answer is closer to "whatever Git and the local toolchain produced when each
+  machine pulled." That is much harder to prove, reproduce, or audit.
+
+- Atomic rollback. B can redeploy a known previous artifact, or promote a new
+  artifact containing older approved bits according to release policy. A must
+  revert or select source, rebuild on each target machine, and hope all rebuilds
+  match.
+
+- Single trunk works. The main branch can remain the source of code truth. The
+  environment is determined by which artifact and runtime configuration are
+  deployed, not by maintaining long-lived <dev_branch>, <qa_branch>, and
+  <prod_branch> variants with cherry-pick drift.
+
+- Smaller production surface. B needs a runtime and deployment procedure. A
+  requires Git, a JDK, a build tool such as Ant, Maven, or Gradle, and a source
+  checkout on production targets. Each additional tool is a patching burden,
+  possible CVE surface, and possible information-leak surface.
+
+- Works in restricted networks. Production or high-assurance networks often
+  cannot reach public source-control systems directly. B works because the
+  target environment accepts approved artifacts, not arbitrary source checkout
+  and dependency resolution from the internet.
+
+
+Runtime configuration and secrets
+---------------------------------
+
+A production deployment should not obtain secrets from source control. Source
+control should contain the same application code for all deployment
+environments. The artifact should contain built application bits and deployment
+logic, not environment-specific secrets.
+
+In a simple server-based implementation, runtime configuration can be one
+protected configuration set per environment, for example:
+
+    /etc/<project_name>/system.properties
+
+All instances in the same environment receive the same configuration set.
+Creating a new environment such as <qa_env>, <prod2_env>, <dr_env>, or a
+temporary test environment means provisioning a new configuration set, not
+changing source code and not rebuilding the application.
+
+This configuration set may contain database connection strings, database
+credentials, SMTP settings, API tokens, storage bucket names, CDN identifiers,
+service endpoints, and other operational values. It must be excluded from Git
+and must not be embedded into the artifact. Larger platforms may use a vault,
+cloud secret manager, parameter store, managed identity, mounted secret, or
+platform configuration service. The mechanism can differ; the control boundary
+is the point.
+
+Approach A can be implemented safely if the team is disciplined. But because
+each target machine checks out source, resolves build configuration, compiles,
+deploys, and runs the service, the boundaries between source, build
+configuration, deployment configuration, and runtime configuration are easier to
+blur. Environment-specific profiles, property files, deployment scripts, and
+local overrides tend to accumulate near the source checkout. Even when they do
+not contain literal passwords, they increase the risk of secret sprawl,
+accidental commits, and unclear ownership of production configuration.
+
+If source control is compromised, both models require incident response. The
+difference is blast radius and gating. Under A, deployment machines may consume
+the compromised repository directly at deploy time. Under B, production deploys
+a previously built artifact whose identity can be hashed, signed, scanned,
+approved, archived, and promoted independently of the current repository state.
+A source-control compromise can affect a future build, but it does not by
+itself reveal runtime secrets or change the identity of an already-approved
+production artifact.
+
+
+Where B matters most
+--------------------
+
+Artifact promotion is especially important in regulated, certified,
+high-assurance, and security-conscious environments. It does not automatically
+make a system compliant, but it supports the evidence those environments
+usually require: release identity, configuration control, segregation of duties,
+integrity verification, approval history, rollback path, and audit trail.
+
+Examples:
+
+- Healthcare: HIPAA, HITRUST, SOC 2, SBOM practices, and controlled handling of
+  systems that process sensitive health data.
+
+- Finance: SOX, FFIEC, PCI DSS, and internal change-control requirements.
+
+- Federal systems: FedRAMP Moderate/High, FISMA, and NIST SP 800-53 control
+  families such as configuration management, change control, and system
+  integrity.
+
+- DoD and defense: DoD Impact Levels IL-4/IL-5/IL-6, CMMC, NIST SP 800-171,
+  DFARS cybersecurity clauses, and production enclaves that accept approved
+  artifacts rather than source trees.
+
+- Aviation and safety-critical systems: RTCA DO-178C-style controlled build and
+  release discipline.
+
+- Pharma and life sciences: GxP, computer system validation, and FDA 21 CFR
+  Part 11 contexts where recompile/redeploy ambiguity can undermine validation
+  evidence.
+
+- HFT and latency-sensitive systems: tuned builds, JVM flags, AOT/PGO, pinned
+  dependencies, and heterogeneous build hosts can create timing variance that
+  has real operational cost.
+
+
+Failure modes of A
+------------------
+
+- Toolchain drift. One environment has a different JDK patch, build tool,
+  dependency cache, OS package level, or local setting. Same Git revision,
+  different output.
+
+- Partial-fleet deploy. Ten machines pull source. Seven succeed. Three fail due
+  to network, Git, package repository, or local build issues. Production now
+  runs multiple versions at once.
+
+- Per-environment branch drift. Teams create <dev_branch>, <qa_branch>, and
+  <prod_branch>. Cherry-picks are missed. Fixes exist in one branch but not
+  another. "What is in production?" becomes a forensic question.
+
+- Git as runtime dependency. A source-control outage, credential issue, branch
+  protection change, or network egress block can prevent deployment. Production
+  should not require live access to Git to install an approved release.
+
+- Production as build host. The target machine becomes a source checkout host,
+  dependency resolver, compiler, deployment runner, secret/config consumer, and
+  production runtime at the same time.
+
+
+Common objections
+-----------------
+
+- "Old artifacts ship CVEs." Only if they sit unreleased or unrebuilt. Under a
+  real release process, CVE response under B is often faster: rebuild once,
+  approve once, promote once, instead of coordinating source pulls and local
+  builds across a fleet.
+
+- "B is overengineered." A minimal implementation can be one artifact bucket,
+  one release identity convention, one IAM role, and one deployment procedure.
+  The operational cost is small compared with the value of knowing exactly what
+  is deployed.
+
+- "We need source on the box for debugging." Debug symbols, source jars, build
+  metadata, and source revision links can ship alongside the artifact or be
+  referenced from release metadata. Production debugging should not require a
+  mutable source checkout on the host.
+
+- "B means a specific CI vendor." No. The build can run on a release master's
+  machine, Jenkins, GitHub Actions, GitLab CI, Azure Pipelines, AWS CodeBuild,
+  or another controlled build environment. B is defined by build once, identify
+  the artifact, and promote it; not by the product used to build it.
+
+
+Bottom line
+-----------
+
+Production should run a known, immutable, hash-verifiable artifact, not the
+side effect of a compile step performed at deploy time. Approach A trades
+release identity, auditability, rollback, and control boundaries for a small
+reduction in deployment infrastructure. That trade is rarely favorable once the
+system matters, the fleet grows, secrets matter, or audits exist.

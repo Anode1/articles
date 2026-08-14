@@ -1,0 +1,12 @@
+EPOLL ORIGIN HOOK
+(For the technical pitch: LinkedIn to engineers, the Substack article, or iac_linkedin_paper.txt. Keep it out of the plain note; "epoll" is too techy for that one.)
+
+
+OPENER (fuller):
+
+This isn't an AI idea. It's an epoll idea. If you've ever written a network server, you know the cheapest thing in computing is a process asleep in epoll_wait: off the CPU, costing nothing, woken by the kernel the instant a packet lands. So watching LLM agents burn real money polling their own inboxes felt wrong in the gut. The reflex of anyone who knows the syscalls is immediate: don't poll from the expensive thing. Push the wait down into a cheap child process that just blocks, the way epoll_wait has for decades, and let its return be the wakeup. That is the whole trick. iac is that one systems instinct, made small.
+
+
+ONE-LINER:
+
+iac is what happens when someone who knows epoll_wait watches an agent poll its own inbox and asks the obvious question: why is the expensive part doing the waiting?

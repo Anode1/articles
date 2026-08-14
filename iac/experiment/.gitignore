@@ -1,0 +1,8 @@
+# never commit secrets
+.apikey
+*.apikey
+.env
+*.key
+
+# local run artifacts (keep results_*.json you intend to publish; ignore scratch)
+tokenbill_result.json

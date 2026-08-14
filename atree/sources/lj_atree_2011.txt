@@ -1,0 +1,393 @@
+Compact text format for genealogies storing and exchange
+siberean, LiveJournal, 7 November 2011, 18:37
+https://siberean.livejournal.com/14874.html
+Retrieved 2026-07-28 as a local copy of the author's own 2011 specification.
+==========================================================================
+
+">              siberean
+
+   November 7 2011, 18:37
+
+       Compact text format for genealogies storing and exchange
+   The following new proposed format allows sending genealogy trees to relatives, potential relatives, researches or just to store and organize genealogical information in a compact form (for notes).
+This format is for the ascending tree only and shows all direct ancestors of the root person (it is not supposed to work for more general graphs for descending genealogies). Each person has it's own unique binary tree.
+
+If you have a GEDCOM file - you can get your own atree using "aisgedcom" program which is available here. This is the simplest way to get your own atree (and most of genealogists usually have their genealogy in GEDCOM format, been exported from some program (notice that it should be plain text GEDCOM, not XML format, version 5.5 or 5.5.1 or earlier since XML is not supported yet).
+
+Each line represents a person. It contains an ID (unique path) as the very first field (which is formed as a sequence of letters corresponding to genders of ancestors), so the ID is always unique relatively to the researcher (the person which is in the root of the hierarchy. The root person is in the first line, this is not required since the lines are independent, but desired - to identify the tree. If a descendant (a son or a daughter) of the genealogy owner will continue the research - they will just need to append their gender at the front of each line and optionally merge with the second parent tree. Also, if 2 trees are to be merged - then 2 root persons will only have to find the path between them and append the corresponding prefixes. During the merge - they may want to resolve conflicts (the final merged line with every ID on the merged final tree should have the most current understanding of the name writing and dates). This is similar to resolving conflicts during merge of two versions of any text, document or programming code.
+
+An example of the binary tree of ancestors - in case Female (F) is in the root, in 2-dimentional printing:
+
+[F=1]-------[FF=3]---------[FFF=7]------------[FFFF=15]-------------[FFFFF=31]
+   \         \                 \-----------[FFFМ=14]
+    \         \-------[FFМ=6]-----------[FFМF=13]
+     \                   \-----------[FFМM=12]
+      \-[FМ=2]------[FMF=5]-------[FMFF=11]
+          \            \-----[FMFM=10]---------[FMFМF=21]
+           \                    \----------[FMFMМ=20]
+            \--[FММ=4]----[FMМF=9]-----[FMМFF=19]
+                 \           \-----[FMМFM=18]
+                  \--[FМММ=8]----[FМММF=17]
+                        \------[FММММ=16]
+
+The problem of 2-dimentional trees representation is that they require scrolling with depth of just few centures and so do not show the big picture and are good - only when the depth is small. They are not scalable (when the tree becomes large - the tree cannot be fit on the screen). Also it is impossible or very hard to cut subtrees from it, merge trees etc. Our format (let's name it atree) is based on unique paths from the root (like paths in computer filesystems) and is much more scalable: the path size grows as logarithm of the total tree size, is very compact and lines are always self-sufficient, they do not require any relative context. You can send just one line or a subset of lines to a relative to whom it may concern. Also the format is very convenient for haplogroups assigning. The overhead is small and is the same as in binary system in comparison with the decimal system. One page can fit a lot of information about ancestors and subtrees can be easily cut into separate pages.
+
+A real ATree example (my updated tree in Russian is here):
+
+M [N1c1] ... <== myself
+MM [N1c1] ... /Gavrilov/ <== father (not shown for privacy reasons)
+MF [H10a1] Zoya Vasilyevna /Gavrilov (Gusev)/ (20 SEP 1941 - 20 OCT 1984) <== mother
+MFM Vasiliy Nikolayevich /Gusev/ (~1914 - 1963)
+MFF [H10a1] Anastasiya Ivanovna /Gusev (Marinov)/ (20 DEC 1913 - 03 JUN 2006)
+MFMF Evdokiya Nikolayevna /Gusev (?)/ (?), Milna, daughter of merchant
+MFMFM Nikolay /?/ <== merchant, owned mill(s)?
+MFMFF ?
+MFMM Nikolay Gerasimovich /Gusev/, Vladimirskaya obl.
+MFMMM ?
+MFMMF ?
+MFFM Iohann (Ivan) Dorimedontovich /Marinov/ (26 AUG 1874-21 AUG 1943) <== relation with his father (MFFMM) has to be clarified, was adopted, however by other sources - the son from the 1st marriage
+MFFF [H10a1] Nadejda Kirillovna-Kirova /Marinova (Eryomina)/ (17 SEP 1872/SEP 1954), Vladimirskaya obl.
+MFFFM Kirill /Eryomin?/
+MFFFF [H10a1] /? (?)/
+MFFMM Dorimedont Pahomovih /Mihailov/ (ABT 1839-02 AUG 1885) <== merchant, owned  department stores in Melenki (Vladimirskaya obl)
+MFFMMM Pahom Agapovich (ABT 1807)
+MFFMMMM Agap Nikiforovich (ABT 1807)
+MFFMF ?
+MFFMMM ?
+MFFMMF ?
+MMM [N1c1] Georgiy (Legor, Egor) Konstantinovich /Gavrilov/ (18 APR 1912-ABT 1942), Udmurtiya/Kirovskaya obl, Russia
+MMMM [N1c1] Konstantin Ivanovich /Gavrilov/ (15 MAY 1874-ABT 1940)
+MMMF Tatyana Iosifovna (Osipovna) /Gavrilov (?)/ (ABT 1876-ABT 1940)
+MMMFM Iosef Andreevich, pochinok Sumsiil
+MMMFF ?
+MMF [U5] Domna Gavrilovna /Gavrilova (Ivshina)/ (31 AUG 1912-AFT 1942), Udmurtiya/Kirovskaya obl, Russia
+MMFM Gavriil Nikolayevich /Ivshin/ (10 JUL 1887-ABT 1960)
+MMFF [U5] Aleksandra Timofeevna /Ivshina (Kashina)/ (09 APR 1883-ABT 1960), Punsi-Uberi
+MMFFM Timofey Egorovich /Kashin/ (~1856-09 MAR 1917)
+MMFFF [U5] Marina Miheevna, Punsi-Uberi
+MMMMM [N1c1] Ivan Gavrilovich /Gavrilov/ (ABT 1848-12 OCT 1896)
+MMMMMM [N1c1] Gavriil /Gavrilov/ (1816-1817 - ?)
+MMMMMF Maria /Gavrilov (?)/ (~1823 - ?)
+MMMMF Nataliya Ivanovna /Gavrilov (?)/ (ABT 1846-10 JAN 1906)
+MMMMFM ?
+MMMMFF ?
+MMFMM Nikolay Afanas'yevich /Ivshin/ (ABT 1858-18 JAN 1907)
+MMFMF Marfa Ivanovna /Ivshina (?)/ (25 AUG 1854-?)
+MMFMFM Ivan Vasil'evich, Vilingurd
+MMFMFF Glikeriya Ivanovna
+MMFMMM Afanasiy Timofeevich /Ivshin/ (?-BEF 1878), Punsi-Uberi
+MMFMMF ?
+MMFMMMM Timofey
+MMFMMMF ?
+
+The tree always shows one level of unknown terminal nodes, so if a next person will be researched - then his/her parents will be added with '?' marks which mean unknown. However you can avoid printing lines with question marks. A women may have two question marks under surname (delimited by // - as in GEDCOM format) and the one in brackets means her maiden surname. For example, if the marriage has been proved by documents and her marital surname is shown but her maiden surname is not - we have only one question mark - the one which is in the brackets as in "FirstName /Surname (?)/".
+
+The format allows easy both-way conversions from Ahnentafel (also known as Sosa-Stradonitz) enumerating system. The problem of that format is that it uses surrogate keys (decimal numbering system counter) and it is not obvious - what is the exact path to a node - without arithmetic (geometric progression) calculations. When the depth is very big - the number may be even untraceable and may overflow computers registers. The path is much more scalable. The old system also does not specify - who is in the root: a female or a male (F or M), and it puts always 1 there. This eliminates the root node which makes the format not self-sufficient and is not convenient for automatic processing. Our format (atree) is self-sufficient (and subtrees can be safely cut from it). Also the format idea is to standardize format for genealogies exchange (spaces, delimiters, question marks for unknowns) between people as well as for automatic processing in internet.
+
+The following Table shows correspondence between atree paths (IDs), Ahnentafel system numbers and binary numerical format for both Females and Males at the root. It is seen that when Female is on the root - then we may get binary format by direct substitution '1'<->'F', '0'<->'M'. But in case of Male - we should prevent automatic trimming of 0s at the beginning of numbers, so in case of 'M' - 1 is put as the very first digit (ignoring that 1 is for 'F').
+
+person
+Ahnentafel format
+binary format
+atree (for women)
+atree (for men)
+
+myself
+1
+1
+F
+M
+
+father
+2
+10
+FM
+MM
+
+mother
+3
+11
+FF
+MF
+
+grandfather (father's)
+4
+100
+FMM
+MMM
+
+grandmother (father's)
+5
+101
+FMF
+MMF
+
+grandfather (mother's)
+6
+110
+FFM
+MFM
+
+grandmother (mother's)
+7
+111
+FFF
+MFF
+
+Here is the correspondence between atree IDs and Ahnentafel system IDs for men for the first 4 levels (2^4=16 terminal nodes + 15 intermediate nodes):
+
+1 M
+2 MM
+3 MF
+4 MMM
+5 MMF
+6 MFM
+7 MFF
+8 MMMM
+9 MMMF
+10 MMFM
+11 MMFF
+12 MFMM
+13 MFMF
+14 MFFM
+15 MFFF
+16 MMMMM
+17 MMMMF
+18 MMMFM
+19 MMMFF
+20 MMFMM
+21 MMFMF
+22 MMFFM
+23 MMFFF
+24 MFMMM
+25 MFMMF
+26 MFMFM
+27 MFMFF
+28 MFFMM
+29 MFFMF
+30 MFFFM
+31 MFFFF
+...
+
+Examples of a valid line, not showing the ID (path) prefix and skipping optional haplogroups:
+
+FirstName
+FirstName (1600)
+FirstName (ABT 1600)
+FirstName (14 AUG 1855-5 APR 1877)
+FirstName /Surname/
+FirstName /Surname/ (ABT 1800)
+FirstName /Surname/ (?)
+FirstName /Surname/ (?-ABT 1800)
+FirstName /Surname/ (?-?)
+FirstName /Surname/ (AFT 1800-?)
+FirstName /Surname/ (1600-1680)
+/Surname/ (28 OCT 1852-BEF 1880)
+/Surname/ (?-AFT 1673)
+/Surname (?)/ (28 OCT 1852-BEF 1880)
+FirstName /Surname/ (1742-20 DEC 1799), Place of Origin
+FirstName /Surname (MadenSurname)/ (1764-6 OCT 1813)
+FirstName Another Name /Surname (MadenSurname)/ (14 AUG 1855-5 APR 1877), Place of origin
+FirstName Another Name /Surname (MadenSurname)/ (14 AUG 1855-5 APR 1877) Place of origin
+FirstName // (1600)
+   <== nothing is known
+// <== nothing is known
+/?/ <== nothing is known but surname refining is the priority
+FirstName //
+FirstName /?/
+FirstName /? (?)/
+FirstName /Surname (?)/
+FirstName /Surname(?)/ ?
+FirstName /Surname/, ?
+FirstName /Surname/ (?)
+FirstName /Surname/ (?), ?
+# this is a comment
+
+# commas in the names or surnames before the names - as some languages require
+# and as in GEDCOM
+/Surname/, AnotherName
+/Surname/, AnotherName (1800)
+/Surname/, AnotherName (1800), Place of origin
+
+# if place of origin exists and not to confuse it with commas in names - use dates as the delimiter
+Names (?), Place of origin
+#or even
+Names (?) Place of origin
+
+Formal grammar:
+
+============================
+atree format grammar
+============================
+
+Grammar below is BNF-like, where terminals are delimited by " " (double-quotes), non-terminals -
+by < >, and simple regular expresions like character grouping [ ], repetitions *, +, {N,M} are used.
+[:blank:], [:graph:], [:alpha:], [:punct:], [:digit:] - are standard POSIX character classes.
+( ) denotes grouping, ? ? - verbal explanation of a character class
+
+ ::= (  "\n" )*
+ ::=  |
+ ::= "#" ()*
+ :== [:blank:]
+ ::=   ( ){0,1} {0,1} {0,1} "," {0,1}
+ ::= "[" ([:alpha:] | [:digit:]) "]"
+ :== [FM]+
+ ::= ()*
+ ::= [:alpha:] | [:punct:] | [:blank:]
+ ::= [:blank:]
+ ::= * {0,1} *
+ ::= "/" * {0,1} "/"
+ ::= ? any characters except '/', and no dates inside (valid date will be considered as names part delimiter) ?
+ ::= "(" + ")"
+ ::= "("  ")"
+ ::=  |  |  | "?"
+ ::=  "-"
+ ::=  |  |  | "?"
+ ::=  [ ]  [ ]
+ ::=  [ ]
+ ::= ("ABT " | "BEF " | "AFT ")*
+ ::= [:digit:]{4}
+ ::= "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC"
+ ::= [:digit:]{1,2}
+
+Template for IDs (paths) for the first 31 nodes (4 generations):
+
+M
+MM
+MF
+MMM
+MMF
+MFM
+MFF
+MMMM
+MMMF
+MMFM
+MMFF
+MFMM
+MFMF
+MFFM
+MFFF
+MMMMM
+MMMMF
+MMMFM
+MMMFF
+MMFMM
+MMFMF
+MMFFM
+MMFFF
+MFMMM
+MFMMF
+MFMFM
+MFMFF
+MFFMM
+MFFMF
+MFFFM
+MFFFF
+...
+
+A bigger template may be produced by copying of the terminal nodes twice (those with the longest path) and appending both M and F at the path end. Alternatively a Bourne shell script may be run under any Unix/Linux machine (specify depth, your gender and 'F' and 'M' in your native language - if desired):
+
+#!/bin/sh
+#user defined parameters:
+depth=8
+my_gender=M
+female=F
+male=M
+
+nodes_number=$(echo "2^($depth+1)" | bc)
+i=1
+while [ $i -lt $nodes_number ] ;do
+ number=$(echo "obase=2;$i" | bc)
+ letters=$(printf "%0o\n" 0$number | tr '0' $male | tr '1' $female)
+
+ #if male - change the first letter to $male:
+ if [ "$my_gender" == "$male" ]; then
+  letters=$(echo "$letters" | sed "s/^.\(.*\)/${my_gender}\1/")
+ fi
+
+ #printf "%d " $i
+ echo $letters
+ i=`expr $i + 1`
+done
+
+If you have an existing genealogy which utilizes Ahnentafel enumeration system - it is possible to write a script which will convert Ahnentafel numbers into atree ID system. Also you could reuse the following script (bc calculator should be installed):
+
+Usage of individual number convertor:
+
+$ sh atree2s.sh 23567
+FMFFFMMMMMMFFFF
+
+The code:
+
+#!/bin/sh
+
+#user defined parameters:
+my_gender=F
+female=F
+male=M
+
+[ ! -n "$1" ] && {
+ echo "Parameter not passed"
+ exit -1;
+}
+
+if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
+ echo "Not a number"
+ exit -1
+fi
+
+input=$1
+
+number=$(echo "obase=2;$input" | bc)
+letters=$(printf "%0o\n" 0$number | tr '0' $male | tr '1' $female)
+
+#if male - change the first letter to $male:
+if [ "$my_gender" == "$male" ]; then
+ letters=$(echo "$letters" | sed "s/^.\(.*\)/${my_gender}\1/")
+fi
+
+#printf "%d " $i
+echo $letters
+
+It may be desirable a reverse procedure: to convert atree ID to the corresponding Ahnentafel system decimal number:
+
+$ sh s2atree.sh MFFMMMMFFFMMF
+7225
+
+The conversion script:
+
+#!/bin/sh
+
+#user defined parameters:
+female=F
+male=M
+
+[ ! -n "$1" ] && {
+ echo "Parameter not passed"
+ exit -1;
+}
+
+input=$1
+
+#substitute the first char - if male
+length=$(expr length "$input" - 1)
+first_char=$(expr substr "$input" 1 1)
+the_rest=$(expr substr "$input" 2 "$length")
+if [ "$first_char" == "$male" ]; then
+ input=$(echo "$female$the_rest")
+fi
+
+binary=$(echo $input | tr $male '0' | tr $female '1')
+decimal=$(echo "ibase=2;obase=A;$binary" | bc)
+echo $decimal
+
+Such scripts (or similar code) can be incorporated into another processing routine or convertor - between Ahnentafel and atree notations.
+
+I use atree format for publishing my genealogy in genealogy forums, for sending it to relatives, discussing individual nodes, sending it to researchers and as a personal genealogy organizer for myself. Sure, additional information and metadata as well as photos and other information has been stored separately, in files, records or in a database, but this format allows to keep the main structure of the binary tree (been aligned with all the natural keys, IDs).
+The format is also convenient for automatic processing by robots and who knows - may be in future robots will scan internet and will merge individual genealogies by applying heuristics, building genealogy trees for people automatically.
+
+About atree in Russian
+
+aisgedcom program (among other functions processes GEDCOM into atree)
+
+  <div class="

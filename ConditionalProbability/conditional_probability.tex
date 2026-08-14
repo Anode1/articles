@@ -1,0 +1,551 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{trees,positioning,arrows.meta,fit,backgrounds}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{array}
+
+\title{Conditional Probability in Diagnostic Testing:\\
+  An Isomorphism Between Tree Diagrams, Bayes' Theorem,\\
+  Contingency Tables, and Clinical Risk Measures}
+\author{Vasili Gavrilov\thanks{Independent researcher. ORCID: 0009-0007-9371-5994.
+Corresponding author: Vasili Gavrilov, \texttt{gavr145@gmail.com}.}}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Diagnostic test results are systematically misinterpreted by both patients and clinicians, despite the underlying probability calculation being elementary. Four notational frameworks for the same calculation circulate across professional communities: the tree diagram in statistics and decision analysis; Bayes' theorem in probability theory; the 2$\times$2 contingency table in epidemiology; and the Absolute and Relative Risk Reduction (ARR, RRR) pair used in clinical risk communication. The cognitive equivalence of natural-frequency representations such as the tree and the contingency table has been documented since Gigerenzer and Hoffrage (1995). That literature does not, to the author's knowledge, set the correspondence out as an explicit isomorphism, nor extend it to the ARR/RRR notation of clinical-trials reporting. This paper adds four things. \emph{First}, a Diagnostic Interpretation Procedure: a short auditable algorithm whose final step adds three sanity checks aimed at the documented failure modes (arithmetic error, base-rate neglect, relative-versus-absolute confusion), with a flat spreadsheet realization of the multi-test extension. \emph{Second}, an argument for curriculum reform: medical and epidemiology training should expose the calculation through all four notations, not only the contingency table traditionally taught. \emph{Third}, the inclusion of ARR/RRR in the same isomorphism, completing a four-way mapping not previously laid out in one place. \emph{Fourth}, the framing of the four formulations as cross-disciplinary ``professional dialects,'' in which fluency in one is not fluency in the underlying calculation. The paper is a pedagogical synthesis rather than a statistical innovation: the contribution is the mapping, the named dialects, the auditable procedure, and the curriculum argument, not new mathematics.
+\end{abstract}
+
+\section{Introduction}
+
+A positive result on a screening test for a low-prevalence condition is far more likely to be a false alarm than a real finding. This is a direct consequence of Bayes' theorem, taught in every introductory probability course, and yet the misinterpretation is persistent and widespread, both in lay readers and in trained medical professionals. The base-rate-neglect literature traces back at least to Tversky and Kahneman (1974) \cite{tversky1974}, and clinical-medicine instances are equally classical: Casscells, Schoenberger, and Grayboys (1978) \cite{casscells1978} reported that a majority of trained physicians, faced with a textbook conditional-probability problem (1\% prevalence, 5\% false-positive rate, perfect sensitivity), produced an answer off by an order of magnitude; Eddy (1982) \cite{eddy1982} catalogued the same family of errors and labelled the tendency to confuse $\Pr(D \mid T^+)$ with $\Pr(T^+ \mid D)$ the inverse fallacy. The gap between the canonical formula and reliable application remains an active area of clinical-education research \cite{kahwati2017}. An informal Russian-language version of the present treatment appeared on LiveJournal in 2012 \cite{lj2012}.
+
+Part of the persistence is notational. The same calculation appears in at least four professional dialects:
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=0.3em]
+  \item Tree-diagram (statistical, physics, and decision-analytic): a branching of paths, with conditional probabilities on each edge and joint probabilities obtained by multiplication along the path.
+  \item Bayes' theorem (probability-theoretic): an algebraic rule combining prior, likelihood, and total probability into a posterior.
+  \item Contingency table (epidemiological): a 2$\times$2 table cross-classifying disease status against test result, populated with observed or expected frequencies.
+  \item ARR / RRR (clinical risk-communication): two summary statistics, Absolute Risk Reduction and Relative Risk Reduction, derived from the same cross-classification.
+\end{enumerate}
+
+A reader fluent in one dialect often struggles to recognize the same calculation in another. The argument of this paper is that the four are isomorphic: every element of any one corresponds bijectively to elements of the others, and a worked-out mapping between them removes most of the friction that drives the misinterpretation.
+
+The cognitive equivalence of natural-frequency representations such as the tree and the 2$\times$2 contingency table is well-documented in the medical-education literature. Gigerenzer and Hoffrage (1995) \cite{gigerenzer1995} introduced the natural-frequency reformulation of Bayesian problems, an approach equivalent in content to a tree-diagram representation with absolute frequencies, and showed that it substantially improves Bayesian reasoning across populations including practising clinicians; subsequent empirical work has confirmed and extended the effect \cite{binder2015, bocherer2018, friederichs2020, krauss2020}.
+
+What this paper adds is fourfold. \emph{First}, and most concrete, a Diagnostic Interpretation Procedure (Section 6): a short auditable algorithm in which steps 1--4 operationalize the natural-frequency approach already advocated in the literature \cite{gigerenzer1995, binder2015, friederichs2020} and step 5 contributes three explicit sanity checks targeting the documented failure modes (arithmetic error, base-rate neglect, relative-vs-absolute confusion). The procedure extends naturally to the multi-test setting via a spreadsheet realization (Section 6, ``Multi-test spreadsheet template''), which converts cross-notational fluency into a tool directly usable by clinicians and policy staff in Excel or Google Sheets. \emph{Second}, an explicit practical argument addressed to medical and epidemiology educators: training that exposes the calculation only through the contingency-table view leaves the practitioner without access to the conditional path structure of the tree, the algebraic compactness of Bayes' formula, or the absolute-scale visibility that the tree-and-frequency representations preserve, and the natural-frequencies literature documents that this matters empirically (Section 5.3). \emph{Third}, the explicit inclusion of the ARR/RRR clinical-risk-communication notation in the same isomorphism, alongside the three notations already covered in the natural-frequencies literature. \emph{Fourth}, the cross-disciplinary ``professional dialects'' framing: contingency tables, trees, formulae, and ARR/RRR are not analogous but isomorphic, and fluency in one is not equivalent to fluency in the underlying calculation. Cross-notational fluency reduces the risk of base-rate neglect and of relative-versus-absolute confusion, both documented in Kahwati et al.\ (2017) \cite{kahwati2017} and Brown (2021) \cite{brown2021}.
+
+\section{The Diagnostic Testing Problem}
+
+We adopt a canonical worked example with realistic clinical parameters. Let:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2em]
+  \item $\Pr(D) = 0.01$: prevalence of the disease in the screened population (1\%).
+  \item $\Pr(T^+ \mid D) = 0.80$: sensitivity of the test (true positive rate, 80\%).
+  \item $\Pr(T^+ \mid \neg D) = 0.096$: false positive rate (9.6\%).
+\end{itemize}
+
+\noindent The question is the positive predictive value:
+\begin{equation*}
+  \mathrm{PPV} \;=\; \Pr(D \mid T^+) \;=\; ?
+\end{equation*}
+
+This is the probability that an individual with a positive test result actually has the disease. Intuition suggests a value comparable to the sensitivity (80\%); the correct value is approximately 7.8\%. The remainder of this paper derives that value four times, once in each notation, then exhibits the explicit correspondence.
+
+\section{Four Equivalent Formulations}
+
+\subsection{Method 1. Tree Diagram (Statistical / Decision-Analytic Notation)}
+
+Construct a probability tree by branching first on disease status, then on test result. Conditional probabilities are written on each edge; joint probabilities at the leaves are obtained by multiplying along the path from the root.
+
+\begin{center}
+\begin{tikzpicture}[
+  level distance=1.8cm,
+  level 1/.style={sibling distance=7cm},
+  level 2/.style={sibling distance=3.4cm},
+  every node/.style={font=\small},
+  edge from parent/.style={draw, -{Latex}},
+  leaf/.style={draw, rounded corners, inner sep=4pt, font=\scriptsize}
+]
+\node {Population}
+  child {
+    node {$D$ ($1\%$)}
+      child { node[leaf, fill=red!10]    {$T^+ \cap D = 0.008$}     edge from parent node[above left,  font=\scriptsize] {$0.80$} }
+      child { node[leaf, fill=yellow!20] {$T^- \cap D = 0.002$}     edge from parent node[above right, font=\scriptsize] {$0.20$} }
+    edge from parent node[above left, font=\scriptsize] {$0.01$}
+  }
+  child {
+    node {$\neg D$ ($99\%$)}
+      child { node[leaf, fill=green!15] {$T^+ \cap \neg D = 0.09504$} edge from parent node[above left,  font=\scriptsize] {$0.096$} }
+      child { node[leaf, fill=blue!10]  {$T^- \cap \neg D = 0.89496$} edge from parent node[above right, font=\scriptsize] {$0.904$} }
+    edge from parent node[above right, font=\scriptsize] {$0.99$}
+  };
+\end{tikzpicture}
+\end{center}
+
+Two of the four leaves correspond to a positive test result: $T^+ \cap D$ (true positive, red) and $T^+ \cap \neg D$ (false positive, green). The other two leaves are irrelevant given the conditioning event $T^+$.
+
+The positive predictive value is the ratio of the true-positive leaf to the sum of both positive leaves:
+\begin{equation}
+  \Pr(D \mid T^+) \;=\; \frac{0.008}{0.008 + 0.09504} \;=\; \frac{0.008}{0.10304} \;\approx\; 0.0776 \;\approx\; 7.8\%.
+\end{equation}
+
+The same four joint probabilities can be displayed as regions of a Venn diagram inside the ``world'' of all individuals. The tree and the Venn are mathematically equivalent but appeal to different intuitions: the tree to sequential, temporal reasoning (first this happened, then that), the Venn to spatial, set-theoretic reasoning (this region overlaps with that one). Readers from different professional backgrounds often find one more natural than the other, and both are shown here for that reason. The circle sizes below are not to strict scale (a 1\% region is invisible at any readable figure size), but the categorical relationships and the numerical values are exact.
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \fill[blue!10] (0,0) rectangle (12,7);
+  \fill[green!25] (7,3) ellipse (4 and 2);
+  \fill[yellow!40] (3.5,4) circle (1.8);
+  \begin{scope}
+    \clip (3.5,4) circle (1.8);
+    \fill[red!40] (7,3) ellipse (4 and 2);
+  \end{scope}
+  \draw[thick] (0,0) rectangle (12,7);
+  \draw[thick] (7,3) ellipse (4 and 2);
+  \draw[thick] (3.5,4) circle (1.8);
+  \node[align=center] at (2.4,4.5) {\textbf{FN}\\$0.002$\\$(0.2\%)$};
+  \node[align=center] at (4.7,3.5) {\textbf{TP}\\$0.008$\\$(0.8\%)$};
+  \node[align=center] at (9.4,3.0) {\textbf{FP}\\$0.09504$\\$(9.5\%)$};
+  \node[align=center] at (10.5,6.0) {\textbf{TN}\\$0.89496$\\$(89.5\%)$};
+  \node at (3.5,6.5) {\textbf{Disease, $D$\,(1\%)}};
+  \node at (7.0,0.55) {\textbf{Test positive, $T^+$\,(10.3\%)}};
+\end{tikzpicture}
+\end{center}
+
+The full circle on the left is the disease set $D$ (1\% of the world). The ellipse on the right is the test-positive set $T^+$ (10.3\% of the world). Their intersection is the true-positive region (red, 0.8\% of the world); the disease region outside the ellipse is the false-negative region (yellow, 0.2\%); the positive region outside the disease circle is the false-positive region (green, 9.5\%); and the remainder of the world is the true-negative region (blue, 89.5\%). The PPV computation is the ratio of the red area to the total area of the ellipse (red + green): $0.8\% / 10.3\% \approx 7.8\%$.
+
+\subsection{Method 2. Bayes' Theorem (Probability-Theoretic Notation)}
+
+The same calculation expressed algebraically.\footnote{Standard textbook treatments of this formula, for readers who want the general theory rather than the diagnostic special case: Jaynes (2003) \cite{jaynes2003}, Sivia and Skilling (2006) \cite{sivia2006}, and MacKay (2003) \cite{mackay2003}; Cox (1946) \cite{cox1946} for the grounding of probability as an extension of logical inference; Gnedenko \cite{gnedenko1976} and Ventsel \cite{ventsel1965} for the Russian university and engineering-applied traditions, both in English translation.}
+\begin{equation}
+  \Pr(D \mid T^+) \;=\; \frac{\Pr(T^+ \mid D)\,\Pr(D)}{\Pr(T^+ \mid D)\,\Pr(D) + \Pr(T^+ \mid \neg D)\,\Pr(\neg D)}.
+\end{equation}
+
+Substituting:
+\begin{equation}
+  \Pr(D \mid T^+) \;=\; \frac{0.80 \times 0.01}{0.80 \times 0.01 \;+\; 0.096 \times 0.99} \;=\; \frac{0.008}{0.008 + 0.09504} \;\approx\; 7.8\%.
+\end{equation}
+
+The numerator of the Bayes form is the true-positive leaf. The denominator is the marginal probability of a positive test, equal to the sum of the two positive-leaf joint probabilities. The structural identity with the tree is immediate.
+
+\subsection{Method 3. Contingency Table (Epidemiological Notation)}
+
+Cross-classify a hypothetical population of 100{,}000 individuals against disease status and test result.
+
+\begin{center}
+\begin{tabular}{l|cc|c}
+\toprule
+                  & $T^+$ (positive)  & $T^-$ (negative)  & Row total \\
+\midrule
+$D$ (disease)     & 800    & 200    & 1{,}000  \\
+$\neg D$ (no disease) & 9{,}504  & 89{,}496 & 99{,}000 \\
+\midrule
+Column total      & 10{,}304 & 89{,}696 & 100{,}000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The four interior cells are obtained by multiplying the joint probabilities from Method 1 by the population size. The positive predictive value is the conditional cell frequency:
+\begin{equation}
+  \Pr(D \mid T^+) \;=\; \frac{\text{cell}(D, T^+)}{\text{column total}(T^+)} \;=\; \frac{800}{10{,}304} \;\approx\; 7.8\%.
+\end{equation}
+
+The mapping to the tree is one-to-one: each interior cell is one leaf, the row totals are the first branching, and the column totals are the marginals over test result.
+
+The same 2$\times$2 structure admits a complementary visual view, in which the four cells are presented as colored quadrants of error categorization. This view connects the diagnostic-testing vocabulary to the classical hypothesis-testing vocabulary (Type I and Type II error) and to the signal-detection vocabulary (hit, miss, correct rejection, false alarm).
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \fill[red!20]    (0,3) rectangle (3,6);
+  \fill[yellow!30] (3,3) rectangle (6,6);
+  \fill[green!20]  (0,0) rectangle (3,3);
+  \fill[blue!20]   (3,0) rectangle (6,3);
+  \draw[thick] (0,0) rectangle (6,6);
+  \draw[thick] (3,0) -- (3,6);
+  \draw[thick] (0,3) -- (6,3);
+  \node[align=center] at (1.5, 4.5) {\textbf{True positive}\\[2pt]\footnotesize hit};
+  \node[align=center] at (4.5, 4.5) {\textbf{False negative}\\[2pt]\footnotesize Type II error \,/\, miss};
+  \node[align=center] at (1.5, 1.5) {\textbf{False positive}\\[2pt]\footnotesize Type I error \,/\, false alarm};
+  \node[align=center] at (4.5, 1.5) {\textbf{True negative}\\[2pt]\footnotesize correct rejection};
+  \node[font=\small] at (1.5, 6.4) {Test: \textbf{positive}};
+  \node[font=\small] at (4.5, 6.4) {Test: \textbf{negative}};
+  \node[font=\small, rotate=90] at (-0.6, 4.5) {Disease: \textbf{present}};
+  \node[font=\small, rotate=90] at (-0.6, 1.5) {Disease: \textbf{absent}};
+\end{tikzpicture}
+\end{center}
+
+The colors match those of the tree leaves in Section 3.1. The two diagonals carry the system's correct decisions (true positive and true negative) and the off-diagonals carry its two error modes. Cross-disciplinary readers may recognize this layout as the confusion matrix of binary classification.
+
+Programmers may also recognize the 2$\times$2 view as the natural shape of two nested binary conditions: an outer \texttt{if}/\texttt{else} on disease status and an inner \texttt{if}/\texttt{else} on test result, yielding four leaf states. The tree of Section 3.1 is the same structure viewed as a depth-2 binary tree (the statistician's and physicist's view, in which paths carry probabilities); the contingency table is the same structure viewed as a 2$\times$2 grid (the epidemiologist's view, in which cells carry frequencies); the four-quadrant figure above is the same structure viewed as colored regions of error categorization (the signal-detection and hypothesis-testing view). The isomorphism that unifies these views is set out explicitly in Section 4.
+
+\subsection{Method 4. ARR and RRR (Clinical Risk-Communication Notation)}
+
+A second canonical example is needed to display ARR and RRR cleanly, because these measures compare two populations (treated vs.\ control) rather than two states of a single population. Consider a hypothetical trial in which disease incidence is 1\% in the control arm and 0.2\% in the treatment arm. Then:
+\begin{align}
+  \mathrm{ARR} \;&=\; \Pr(D \mid \text{control}) - \Pr(D \mid \text{treatment}) \;=\; 0.010 - 0.002 \;=\; 0.008 \;=\; 0.8\%. \\
+  \mathrm{RRR} \;&=\; \frac{\Pr(D \mid \text{control}) - \Pr(D \mid \text{treatment})}{\Pr(D \mid \text{control})} \;=\; \frac{0.008}{0.010} \;=\; 0.80 \;=\; 80\%.
+\end{align}
+
+The two summary statistics are derived from the same 2$\times$2 cross-classification (treatment $\times$ outcome) as the diagnostic-testing contingency table, with one axis re-labelled. The same data therefore admits two summaries that look starkly different: an 80\% RRR is correct and an 0.8\% ARR is also correct, and the gap between them is the rhetorical lever exploited by selective reporting.
+
+\section{The Isomorphism}
+
+The four formulations are not analogous; they are isomorphic. The following table makes the correspondence explicit row by row.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{p{0.16\textwidth}|p{0.13\textwidth}|p{0.20\textwidth}|p{0.13\textwidth}|p{0.08\textwidth}|p{0.09\textwidth}}
+\toprule
+\textbf{Concept}      & \textbf{Tree-diagram path} & \textbf{Bayes' theorem term} & \textbf{Contingency cell} & \textbf{Value} & \textbf{Percent} \\
+\midrule
+True positive   & $D \to T^+$    & $\Pr(T^+ \mid D)\,\Pr(D)$ & $D, T^+$ cell & 0.008 & 0.8\% \\
+False negative  & $D \to T^-$    & $\Pr(T^- \mid D)\,\Pr(D)$ & $D, T^-$ cell & 0.002 & 0.2\% \\
+False positive  & $\neg D \to T^+$ & $\Pr(T^+ \mid \neg D)\,\Pr(\neg D)$ & $\neg D, T^+$ cell & 0.09504 & 9.504\% \\
+True negative   & $\neg D \to T^-$ & $\Pr(T^- \mid \neg D)\,\Pr(\neg D)$ & $\neg D, T^-$ cell & 0.89496 & 89.496\% \\
+\midrule
+Marginal of $T^+$ & sum of upper two leaves & denominator of Bayes' rule & $T^+$ column total / $N$ & 0.10304 & 10.304\% \\
+PPV ($\Pr(D \mid T^+)$) & true-pos / total-pos & posterior probability & cell / column total & 0.0776 & 7.8\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The 2$\times$2 cross-classification underlying both the contingency table and the ARR/RRR statistics is the same matrix; only the labels on the axes differ (disease status vs.\ treatment assignment). Two further identities complete the picture:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2em]
+  \item The leaves of the tree are the joint probabilities, identical to the four interior cells of the contingency table after normalization by $N$.
+  \item The numerator and denominator of Bayes' theorem are the same two quantities the tree-diagram method tells the reader to extract (true-positive leaf and total-positive marginal).
+  \item ARR is the difference between two row-conditional probabilities; RRR is that same difference normalized by one of them. Both are read directly off the 2$\times$2 table.
+\end{itemize}
+
+Operationally, the four methods are not merely equivalent in answer; they are equivalent in computation. A practitioner who has internalized one can read any clinical, statistical, or decision-analytic paper using any of the others.
+
+\section{Discussion}
+
+\subsection{Why the misinterpretation persists}
+
+If the four formulations are isomorphic and the calculation is elementary, why does the misinterpretation persist? Two contributing factors are visible in the structure of the notations themselves.
+
+First, ARR and RRR are presented in clinical literature as separate summary statistics, often without the underlying 2$\times$2 table that produced them. A reader who sees only ``95\% relative risk reduction'' loses access to the absolute scale at which the change actually happened. Brown (2021) \cite{brown2021} documents outcome-reporting bias of exactly this shape in the COVID-19 mRNA vaccine trials, where relative risk reductions of approximately 95\% were communicated alongside absolute risk reductions on the order of 0.7--1.1\% over the trial period. Both figures are correct and arise from the same data; they answer different questions. A reader confronted only with the relative figure has no way to recover the absolute scale.
+
+Second, Kahwati et al.\ (2017) \cite{kahwati2017} systematically reviewed the critical-appraisal skills of prescribing physicians and found that practitioners consistently overestimate treatment effectiveness when results are presented relatively rather than absolutely. The misinterpretation is not a failure of training; clinicians are explicitly trained to read clinical literature. The misinterpretation is a failure of the notation to make the absolute scale salient when only the relative summary is presented.
+
+The tree-diagram and contingency-table formulations both make the absolute scale visible at a glance: the relative magnitudes of branches and the absolute frequencies in each cell carry the answer to base-rate questions without any further derivation. The Bayes' theorem formulation requires plugging numbers into a formula; the RRR formulation discards the absolute scale entirely. Notation choice therefore has direct consequences for the probability of accurate interpretation.
+
+The cost of the misinterpretation therefore extends beyond individual clinical decisions and into the communication of clinical research results. The same relative-versus-absolute presentation choice plausibly affects downstream interpretation by clinicians and lay readers when trial results are communicated publicly, although a direct empirical evaluation of that downstream effect at the regulatory or policy level remains outside the scope of the present paper. Improving cross-notational fluency is, on the present evidence, a concern for both clinical pedagogy and the framing of clinical research results in public communication.
+
+\subsection{Implications for practice}
+
+A pragmatic recommendation follows. When reporting or reading results from a diagnostic test or a clinical trial, present both formulations of the underlying 2$\times$2 table: the contingency-table view (absolute cell frequencies) and any derived statistic (PPV, ARR, RRR, sensitivity, specificity, likelihood ratios). A tree-diagram representation, while less common in clinical literature, makes the conditional structure additionally explicit and supports rapid mental computation. The cost of presenting both is small; the cost of presenting only one is documented in the literature cited above.
+
+\subsection{Implications for epidemiology and clinical training}
+
+Epidemiological and clinical curricula traditionally introduce conditional probability through the 2$\times$2 contingency table and its derived statistics (PPV, ARR, RRR, sensitivity, specificity, likelihood ratios). The contingency-table view is concise and computationally complete, but it makes only one aspect of the underlying calculation salient: the joint frequency of each disease-test combination. Other aspects of the same calculation, namely the conditional flow of reasoning from prior to posterior (visible in the tree-diagram view), the algebraic identity that links them (visible in the Bayes' formula view), and the absolute scale on which the change actually occurs (visible in either the tree with natural frequencies or the absolute cells of the table), are obscured to varying degrees in any single notation.
+
+The natural-frequencies literature \cite{gigerenzer1995, binder2015, bocherer2018, friederichs2020, krauss2020} establishes empirically that exposing students and clinicians to the tree-diagram and absolute-frequency views, in addition to formulae and tables, raises the rate of correct Bayesian inference substantially on standard diagnostic problems. The argument generalizes: cross-notational fluency reduces interpretation errors not because any one notation is superior, but because each makes a different aspect of the calculation salient. An epidemiologist who has internalized the tree-and-frequency view in addition to the contingency-table view is less likely to over-weight the relative form of a clinical statistic, because the absolute scale remains visible in the tree representation even after the relative summary has been computed. Including the tree-diagram and Bayes-formula views in epidemiology training therefore has a measurable practical pay-off, beyond a purely aesthetic gain in formal completeness.
+
+The forward-looking recommendation is concrete. Medical schools, epidemiology programmes, public-health degrees, and continuing-education curricula for prescribing clinicians and regulatory staff should explicitly cover all four notational frameworks of the present paper (tree diagrams, Bayes' formula, contingency tables, ARR/RRR), should drill the isomorphism between them, and should include supervised practice with an auditable interpretation procedure such as the one set out in Section 6. The cost of adding this material is small: at most a few hours of class time, distributed across the existing biostatistics and clinical-epidemiology blocks. Set against it is the cost documented in the literature cited above, which falls on individual prescribers reading trial results \cite{kahwati2017} and on the public communication of those results \cite{brown2021}. On the present analysis, that is a question of curriculum reform rather than of mathematical research.
+
+\subsection{Limitations}
+
+Several limitations of the present treatment should be noted. \emph{Binary outcomes.} The worked examples assume binary disease status and binary test outcomes. Many real diagnostic settings involve multi-class outcomes (graded severity, multiple competing diagnoses, ordinal test scores); the four-way isomorphism extends to those settings in principle but the tables, trees, and spreadsheets grow accordingly, and the present paper does not work through that extension. \emph{Conditional independence in the multi-test example.} The multi-test spreadsheet template of Section 6 uses conditional independence between sequential tests given disease status as a teaching simplification. Real test pairs frequently share error sources and are positively correlated; in that case the joint probabilities must be populated using $\Pr(T_2 \mid T_1, D)$ rather than $\Pr(T_2 \mid D)$, as noted in Section 6. \emph{No empirical evaluation of the proposed procedure.} The natural-frequency steps 1--4 of the Diagnostic Interpretation Procedure are supported by a substantial body of empirical evidence \cite{gigerenzer1995, hoffrage1998, binder2015, bocherer2018, friederichs2020, krauss2020}; the sanity-check additions in step 5 are proposed on theoretical grounds and would benefit from prospective evaluation in clinical-education settings. \emph{Scope of cited evidence on misinterpretation.} The cited literature documents specific patterns: Casscells et al.\ (1978) and the Kahwati systematic review (2017) document misinterpretation by individual clinicians; Brown (2021) documents outcome-reporting bias in specific vaccine trials. The broader inference that these patterns affect regulatory and public-policy communication is consistent with that evidence but is not directly established by the cited papers.
+
+\subsection{Generalization to iterative inference}
+
+The four-notation isomorphism presented in this paper covers the single-observation case: one diagnostic test, one positive result. The same structure extends naturally to multi-observation Bayesian inference, as used in the medical expert-system tradition (MYCIN, INTERNIST-1, and their descendants), in the Bayesian-network formalism of Pearl (1988) \cite{pearl1988} and its many subsequent variants, in hidden-Markov inference, and in iterative decision-tree updates more generally. At each step (epoch) the posterior probability from the previous step becomes the prior for the next, and the same four notations (tree-diagram, Bayes' formula, contingency table, and ARR/RRR derivatives) apply to the local update. The renormalization at each epoch is the natural counterpart of the marginal-of-positive in the static case. The Diagnostic Interpretation Procedure of Section 6 generalizes by being applied at each epoch to the running posterior; the three sanity checks remain valid at every step. The static four-notation correspondence of this paper is therefore the depth-1 special case of a broader iterative framework, and the practical recommendations (curriculum reform, auditable procedure) carry forward without modification. The iterative framework also admits a flat spreadsheet realization (described later in Section 6), which may be more accessible to clinicians, public-health officers, and policy staff than a drawn tree, because spreadsheets are the lingua franca of every clinic and policy office.
+
+\section{A Diagnostic Interpretation Procedure}
+
+The literature documents that even trained clinicians and epidemiologists misread conditional probabilities in predictable ways (see Section 1 for the classical references). The calculation itself is elementary; the failure is procedural. This section proposes a short, fully explicit procedure that any clinician, epidemiologist, journalist, or lay reader can apply when presented with a diagnostic test result or a clinical-trial finding. The procedure operationalizes the natural-frequency approach \cite{gigerenzer1995, hoffrage1998} and adds explicit sanity-check steps that target the failure modes documented in \cite{kahwati2017} and \cite{brown2021}.
+
+\subsection*{Procedure}
+
+\begin{enumerate}[leftmargin=2em,itemsep=0.5em]
+  \item \textbf{Identify the base rate.} Write down the prevalence of the condition in the screened population (for diagnostic tests) or the event rate in the control arm (for clinical trials). This is the most important single number; everything else depends on it. A reader who does not have this number cannot interpret the result.
+
+  \item \textbf{Express all rates as natural frequencies in a fixed reference population.} Choose $N = 1{,}000$ or $N = 10{,}000$ (round numbers minimize arithmetic error). Multiply each rate by $N$ to convert to integer counts.
+
+  \item \textbf{Fill in the 2$\times$2 table of absolute frequencies.} Use the natural-frequency counts from step 2 to populate each of the four cells: disease-positive, disease-negative, no-disease-positive, no-disease-negative. Verify that the four cells sum to $N$.
+
+  \item \textbf{Compute the answer from the absolute frequencies, not from the relative summary.} The positive predictive value is the disease-positive cell divided by the column total of positives. The absolute risk reduction is the difference between two row-conditional cell counts (rescaled by $N$). The relative risk reduction is the absolute risk reduction divided by the control-arm rate. In each case the answer is read directly from the absolute cells.
+
+  \item \textbf{Apply three sanity checks before accepting the answer.}
+  \begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=0.25em]
+    \item \emph{Sum check}: the four cells of the 2$\times$2 table must sum to $N$. If they do not, an arithmetic error has occurred.
+    \item \emph{Base-rate sanity check}: for a low-prevalence condition, the positive predictive value must be closer to the prevalence than to the sensitivity. If the computed PPV is closer to the sensitivity, the calculation has likely committed base-rate neglect.
+    \item \emph{Absolute-vs-relative check}: if a relative measure (RRR, relative-risk reduction, percent improvement) is reported, also compute the absolute measure (ARR, absolute-risk reduction). If the ratio of the two is large (commonly greater than 10), the relative measure is misleading without the absolute one and the absolute scale should be reported alongside it.
+  \end{enumerate}
+\end{enumerate}
+
+\subsection*{Worked example using the running scenario}
+
+\begin{enumerate}[leftmargin=2em,itemsep=0.4em]
+  \item Base rate: $\Pr(D) = 1\%$.
+  \item Reference population $N = 10{,}000$.
+  \item Fill the table: $10{,}000 \times 1\% = 100$ have the disease; $80\%$ of those test positive (80 true positives, 20 false negatives); $9{,}900$ do not have the disease; $9.6\%$ of those test positive (950 false positives, 8{,}950 true negatives). Sum: $80 + 20 + 950 + 8{,}950 = 10{,}000$. \emph{(Note: 9504 in the earlier section used $N = 100{,}000$; the rounding here is benign because all relevant ratios are preserved.)}
+  \item PPV $= 80 / (80 + 950) = 80 / 1{,}030 \approx 7.8\%$.
+  \item Sanity checks: (a) sum is 10{,}000, OK. (b) PPV (7.8\%) is much closer to prevalence (1\%) than to sensitivity (80\%); base-rate sanity check passes. (c) No relative measure was reported, so the absolute-vs-relative check is trivially satisfied. Result accepted.
+\end{enumerate}
+
+\subsection*{What this procedure adds}
+
+Step 5 is the contribution of the present paper. Steps 1--4 are the natural-frequency procedure already advocated in the literature \cite{gigerenzer1995, binder2015, friederichs2020}. The three sanity checks in step 5 target the three documented failure modes (arithmetic error, base-rate neglect, relative-vs-absolute confusion) and convert the natural-frequency approach into an auditable algorithm: any reader can apply the procedure and detect, locally and without reference to external authority, whether their interpretation has fallen into one of the known traps. In settings where the cost of misinterpretation is large (regulatory communication, clinical screening, public-health policy), the procedural cost of running the three checks is negligible relative to the cost of the failure modes they detect.
+
+\subsection*{Multi-test spreadsheet template}
+
+For any reader who prefers a tabular layout to a drawn tree, and for workflows involving more than one diagnostic test (initial screening followed by confirmation testing, longitudinal monitoring, or sequential tests of different modalities), the framework admits a flat spreadsheet realization. Each row of the spreadsheet is one combinatorial path of outcomes; each column from left to right is one step (epoch); the rightmost column carries the joint probability of that path. At every stage, the sum of the rightmost column must equal 1 (the renormalization sanity check at that depth).
+
+Suppose the running screening test of Section 2 is applied to the same patient twice. The worked example below makes the simplifying assumption that the two test outcomes are conditionally independent given the underlying disease status. This assumption is a teaching device, not a clinical recommendation: in practice, repeated applications of the same test on the same specimen or platform are often positively correlated through shared error sources (specimen quality, calibration drift, operator variability, biological confounders). When the assumption fails, the conditional probabilities $\Pr(T_2 \mid T_1, D)$ and $\Pr(T_2 \mid T_1, \neg D)$ must be used in place of $\Pr(T_2 \mid D)$ and $\Pr(T_2 \mid \neg D)$, and the spreadsheet structure below is unchanged in shape: each row is still expanded by the conditional probability of the next outcome \emph{given the path so far}. The assumption is most defensible when the two tests are of different modality (for example, a serological screen followed by a confirmatory nucleic-acid test) and the error sources are mechanically distinct. The algorithm is presented one step at a time so the row-doubling and renormalization pattern is visible.
+
+\paragraph{Step 0: Initial condition (the prior).}
+Before any test, the table has just two rows, one per disease status, and the joint probability is the prior on disease.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{c|c|l}
+\toprule
+\textbf{Row} & \textbf{Disease} & \textbf{Joint probability after step 0 (prior)} \\
+\midrule
+1 & $D$      & $0.01$ \\
+2 & $\neg D$ & $0.99$ \\
+\midrule
+  & \multicolumn{1}{r|}{\textbf{Sum (renormalization check)}} & $\;\;\mathbf{1.00000}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two prior probabilities sum to $1$. This is the trivial renormalization check at depth $0$.
+
+\paragraph{Step 1: After Test 1.}
+Each row of step 0 is expanded into two rows, one for each possible outcome of Test 1. The new joint probability is the step-0 prior times the conditional probability of the Test 1 outcome. The table now has four rows.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{c|c|c|l}
+\toprule
+\textbf{Row} & \textbf{Disease} & \textbf{Test 1} & \textbf{Joint probability after step 1} \\
+\midrule
+1 & $D$      & $+$ & $0.01 \times 0.80 = 0.00800$ \\
+2 & $D$      & $-$ & $0.01 \times 0.20 = 0.00200$ \\
+3 & $\neg D$ & $+$ & $0.99 \times 0.096 = 0.09504$ \\
+4 & $\neg D$ & $-$ & $0.99 \times 0.904 = 0.89496$ \\
+\midrule
+  & \multicolumn{2}{r|}{\textbf{Sum (renormalization check)}} & $\;\;\mathbf{1.00000}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The four joint probabilities total $1.00000$. The renormalization check passes; the table is complete after one test.
+
+\paragraph{Step 2: After Test 2.}
+To incorporate the second test, each row of the previous table is expanded into two rows, one for each possible outcome of Test 2. The new joint probability is the previous joint times the conditional probability of the observed Test 2 outcome.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{c|c|c|c|l}
+\toprule
+\textbf{Row} & \textbf{Disease} & \textbf{Test 1} & \textbf{Test 2} & \textbf{Joint probability after step 2} \\
+\midrule
+1 & $D$      & $+$ & $+$ & $0.00800 \times 0.80   = 0.00640$ \\
+2 & $D$      & $+$ & $-$ & $0.00800 \times 0.20   = 0.00160$ \\
+3 & $D$      & $-$ & $+$ & $0.00200 \times 0.80   = 0.00160$ \\
+4 & $D$      & $-$ & $-$ & $0.00200 \times 0.20   = 0.00040$ \\
+5 & $\neg D$ & $+$ & $+$ & $0.09504 \times 0.096  = 0.00912$ \\
+6 & $\neg D$ & $+$ & $-$ & $0.09504 \times 0.904  = 0.08592$ \\
+7 & $\neg D$ & $-$ & $+$ & $0.89496 \times 0.096  = 0.08592$ \\
+8 & $\neg D$ & $-$ & $-$ & $0.89496 \times 0.904  = 0.80904$ \\
+\midrule
+  & \multicolumn{3}{r|}{\textbf{Sum (renormalization check)}} & $\;\;\mathbf{1.00000}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The eight joint probabilities again total $1.00000$. The renormalization check passes after step 2 as well.
+
+The algorithm is now visible: row-count doubles at each step ($2 \to 4 \to 8 \to \ldots$). Every existing row is expanded into two rows, the new joint probability is the previous joint multiplied by the conditional probability of the new outcome, and the column sum-to-one check is run on the rightmost column. After $N$ sequential tests the table has $2^{N+1}$ rows.
+
+\paragraph{Reading off the answer.}
+After two positive results, the relevant rows of the step-2 table are 1 and 5. The updated PPV is
+\begin{equation*}
+  \Pr(D \mid T_1^+ \cap T_2^+) \;=\; \frac{0.00640}{0.00640 + 0.00912} \;=\; \frac{0.00640}{0.01552} \;\approx\; 0.412 \;\approx\; 41.2\%.
+\end{equation*}
+
+After one positive screening result the probability of actual disease was only 7.8\%; after two conditionally-independent positive results the same probability rises to about 41.2\%. This is precisely why follow-up confirmation testing is the clinically-recommended response to a positive screen on a low-prevalence condition: the second test moves the posterior into a range where intervention starts to make sense.
+
+\paragraph{General rule for reading off any posterior.}
+The posterior probability after any combination of observed outcomes is the sum of joint probabilities in the rows where the disease is present and the outcomes match, divided by the sum of joint probabilities in all rows where the outcomes match. Filter the spreadsheet on the observed columns; sum the matching probabilities for $D$; sum the matching probabilities for all; divide.
+
+\paragraph{Brief extension: when tests disagree.}
+The same spreadsheet answers any combination of observed outcomes, including the clinically common case where two tests disagree. Suppose $T_1$ was positive but $T_2$ was negative (still under independence). Filtering the step-2 table on $T_1^+$ and $T_2^-$ selects rows 2 and 6:
+\begin{align*}
+  \Pr(D, T_1^+, T_2^-)        &= 0.00160, \\
+  \Pr(\neg D, T_1^+, T_2^-)   &= 0.08592, \\
+  \Pr(D \mid T_1^+ \cap T_2^-) &= \frac{0.00160}{0.00160 + 0.08592} \;\approx\; 1.8\%.
+\end{align*}
+The posterior returns almost to the prior of $1\%$: the initial positive raised the suspicion, the subsequent negative pulled it back close to baseline. The two outcomes have nearly cancelled in posterior space. The reason can be made precise: the positive multiplies the prior odds by the ratio $\Pr(T^+ \mid D)/\Pr(T^+ \mid \neg D) = 0.80/0.096 \approx 8.3$, and the subsequent negative multiplies them by $\Pr(T^- \mid D)/\Pr(T^- \mid \neg D) = 0.20/0.904 \approx 0.22$. The product is $8.3 \times 0.22 \approx 1.8$, only slightly above unity, so the prior odds move only slightly. The general filter rule covers every other combination of outcomes by the same procedure; the cost of any new query is one lookup on the existing table.
+
+\paragraph{Brief extension: correlated tests.}
+The $7.8\%$ to $41.2\%$ jump above assumed conditional independence between $T_1$ and $T_2$ given disease status. When the two tests share error sources (two PCR runs on the same specimen, two antigen tests using the same lot, an at-home test followed by a confirmatory test on the same swab), the assumption fails and the second test contributes less information than its marginal accuracy suggests. The same spreadsheet procedure applies; only the conditional probabilities used to populate the columns change. Suppose, for a realistic correlated case,
+\begin{align*}
+  \Pr(T_2^+ \mid T_1^+, D)        &= 0.90, &
+  \Pr(T_2^+ \mid T_1^-, D)        &= 0.50, \\
+  \Pr(T_2^+ \mid T_1^+, \neg D)   &= 0.50, &
+  \Pr(T_2^+ \mid T_1^-, \neg D)   &= 0.05.
+\end{align*}
+The relevant step-2 cells become
+\begin{align*}
+  \Pr(D, T_1^+, T_2^+)      &= 0.01 \times 0.80 \times 0.90 = 0.00720, \\
+  \Pr(\neg D, T_1^+, T_2^+) &= 0.99 \times 0.096 \times 0.50 = 0.04752,
+\end{align*}
+and the PPV after two positive results is
+\[
+  \Pr(D \mid T_1^+ \cap T_2^+) \;=\; \frac{0.00720}{0.00720 + 0.04752} \;\approx\; 13.2\%.
+\]
+Compare: the independent case gives $41.2\%$; the correlated case gives only $13.2\%$. The same two positive results carry sharply less diagnostic weight when the tests share error sources. The clinical implication is direct: confirmation testing should use a different modality from the original screen wherever possible, so the conditional-independence assumption is at least defensible.
+
+\textbf{Practical advantages.} Excel and Google Sheets handle this layout natively; no specialized software is required. The format is particularly accessible to clinicians, public-health officers, and policy staff who already work in spreadsheets and may not be comfortable drawing trees or manipulating Bayes' formula. It is also auditable in the strict sense: a reviewer can re-compute every cell, verify the sum-to-one at each column, and inspect which rows were summed to obtain each conditional probability. The diagnostic-interpretation procedure earlier in this section applies row-wise and column-wise to this spreadsheet without modification.
+
+\section{Conclusion}
+
+Tree diagrams, Bayes' theorem, contingency tables, and the ARR/RRR pair are four notations for the same calculation. Their isomorphism is exhibited row by row in the mapping table of Section 4. The persistence of base-rate neglect and relative/absolute confusion in clinical interpretation is therefore not a failure of mathematics; it is a failure of cross-notational fluency. Explicit translation between notations, of the kind presented here, removes the friction. The Diagnostic Interpretation Procedure of Section 6 operationalizes this into an auditable algorithm that any reader can apply at the point of interpretation, and its spreadsheet realization extends it to the multi-test workflow used in screening-and-confirmation clinical practice.
+
+\section*{Acknowledgments}
+
+The author thanks Dr.\ Anna Martirosyan for illuminating discussions about Absolute Risk Reduction and Relative Risk Reduction, and for the education on these measures that sparked the present interest and led to the hand-calculation synthesis developed in this paper. The author also thanks Elena Vasserman for instructive discussions on the epidemiological context.
+
+\section*{Author Statements}
+
+\paragraph{Funding.} No external funding was received for this work.
+
+\paragraph{Conflicts of interest.} The author declares no conflicts of interest with respect to the present work.
+
+\paragraph{Prior affiliation disclosure.} For transparency, the author was previously employed for eleven years at a national Ministry of Health, in a capacity unrelated to the regulatory communication and clinical-research-reporting topics discussed in this paper. The prior affiliation ended before the present work and does not, on the author's assessment, constitute a current conflict of interest, but it is disclosed here so that readers may take it into account.
+
+\paragraph{Ethics.} This is a methodological synthesis with no human or animal subjects; no ethics approval was required.
+
+\paragraph{Author contributions.} Sole author; responsible for all aspects of the conception, analysis, writing, and revision.
+
+\paragraph{Data availability.} No new data were generated. All numerical examples are derived from the parameters stated in the text.
+
+\begin{thebibliography}{9}
+
+\bibitem{tversky1974}
+A.\ Tversky and D.\ Kahneman,
+``Judgment under Uncertainty: Heuristics and Biases,''
+\emph{Science}, vol.\ 185, no.\ 4157, pp.\ 1124--1131, 1974.
+
+\bibitem{gigerenzer1995}
+G.\ Gigerenzer and U.\ Hoffrage,
+``How to Improve Bayesian Reasoning Without Instruction: Frequency Formats,''
+\emph{Psychological Review}, vol.\ 102, no.\ 4, pp.\ 684--704, 1995.
+
+\bibitem{binder2015}
+K.\ Binder, S.\ Krauss, and G.\ Bruckmaier,
+``Effects of visualizing statistical information: An empirical study on tree diagrams and $2\times 2$ tables,''
+\emph{Frontiers in Psychology}, vol.\ 6, article 1186, 2015.
+PMC4549558. \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4549558/}
+
+\bibitem{bocherer2018}
+K.\ B\"{o}cherer-Linder and A.\ Eichler,
+``Visualizing the Bayesian 2-test case: The effect of tree diagrams on medical decision making,''
+\emph{PLOS ONE}, vol.\ 13, no.\ 3, e0195029, 2018.
+PMC5871005. \url{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0195029}
+
+\bibitem{friederichs2020}
+H.\ Friederichs, S.\ Ligges, and A.\ Weissenstein,
+``Natural frequency trees improve diagnostic efficiency in Bayesian reasoning,''
+\emph{Advances in Health Sciences Education}, vol.\ 25, pp.\ 1183--1198, 2020.
+PMC8338842. \url{https://link.springer.com/article/10.1007/s10459-020-10025-8}
+
+\bibitem{krauss2020}
+S.\ Krauss, K.\ Binder, P.\ Weber, and G.\ Bruckmaier,
+``Improving Diagnostic Efficiency with Frequency Double-Trees and Frequency Nets in Bayesian Reasoning,''
+PMC8935422. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC8935422/}
+
+\bibitem{casscells1978}
+W.\ Casscells, A.\ Schoenberger, and T.\ B.\ Grayboys,
+``Interpretation by Physicians of Clinical Laboratory Results,''
+\emph{New England Journal of Medicine}, vol.\ 299, no.\ 18, pp.\ 999--1001, 1978.
+
+\bibitem{eddy1982}
+D.\ M.\ Eddy,
+``Probabilistic Reasoning in Clinical Medicine: Problems and Opportunities,''
+in D.\ Kahneman, P.\ Slovic, and A.\ Tversky (eds.),
+\emph{Judgment Under Uncertainty: Heuristics and Biases},
+Cambridge University Press, 1982, pp.\ 249--267.
+
+\bibitem{hoffrage1998}
+U.\ Hoffrage and G.\ Gigerenzer,
+``Using Natural Frequencies to Improve Diagnostic Inferences,''
+\emph{Academic Medicine}, vol.\ 73, no.\ 5, pp.\ 538--540, 1998.
+
+\bibitem{pearl1988}
+J.\ Pearl,
+\emph{Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference},
+Morgan Kaufmann, San Mateo, CA, 1988.
+
+\bibitem{jaynes2003}
+E.\ T.\ Jaynes,
+\emph{Probability Theory: The Logic of Science},
+Cambridge University Press, 2003.
+
+\bibitem{sivia2006}
+D.\ S.\ Sivia and J.\ Skilling,
+\emph{Data Analysis: A Bayesian Tutorial}, 2nd ed.,
+Oxford University Press, 2006.
+
+\bibitem{mackay2003}
+D.\ J.\ C.\ MacKay,
+\emph{Information Theory, Inference, and Learning Algorithms},
+Cambridge University Press, 2003.
+Free online at \url{http://www.inference.org.uk/itila/}
+
+\bibitem{cox1946}
+R.\ T.\ Cox,
+``Probability, Frequency and Reasonable Expectation,''
+\emph{American Journal of Physics}, vol.\ 14, no.\ 1, pp.\ 1--13, 1946.
+
+\bibitem{kahwati2017}
+L.\ Kahwati, D.\ Carmody, N.\ Berkman, H.\ Sullivan, K.\ Aikin, and J.\ DeFrank,
+``Prescribers' Knowledge and Skills for Interpreting Research Results: A Systematic Review,''
+\emph{Journal of Continuing Education in the Health Professions}, 2017.
+PMC8218608. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC8218608/}
+
+\bibitem{brown2021}
+R.\ B.\ Brown,
+``Outcome Reporting Bias in COVID-19 mRNA Vaccine Clinical Trials,''
+\emph{Medicina (Kaunas)}, 2021.
+PMC7996517. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC7996517/}
+
+\bibitem{gnedenko1976}
+B.\ V.\ Gnedenko,
+\emph{The Theory of Probability},
+trans.\ from Russian,
+Mir Publishers, Moscow, 1976.
+(Standard Russian university probability textbook; also available in later editions from Chelsea Publishing / AMS.)
+
+\bibitem{ventsel1965}
+E.\ S.\ Ventsel (Wentzel),
+\emph{Probability Theory},
+trans.\ from Russian,
+Mir Publishers, Moscow, 1965.
+(Russian engineering-applied probability classic.)
+
+\bibitem{lj2012}
+V.\ Gavrilov,
+``Solving Conditional Probability Problems for Schoolchildren'' (informal Russian-language original of this paper),
+\emph{LiveJournal}, 25 April 2012.
+\url{https://siberean.livejournal.com/16220.html}
+
+\end{thebibliography}
+
+\end{document}

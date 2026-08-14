@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b6bcc4"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="#fbfcfd"/>
+
+  <!-- title -->
+  <text x="600" y="46" text-anchor="middle" font-size="30" font-weight="700" fill="#23272e">Build once, separate the secrets</text>
+
+  <!-- developer / release actor -->
+  <g transform="translate(60,88)">
+    <circle cx="22" cy="18" r="15" fill="#9aa3ad"/>
+    <path d="M-2 66 a24 26 0 0 1 48 0 z" fill="#9aa3ad"/>
+    <text x="58" y="14" font-size="19" font-weight="600" fill="#23272e">Developer / release</text>
+    <text x="58" y="39" font-size="15" fill="#6b727b">builds once, promotes the artifact</text>
+    <text x="58" y="61" font-size="15" font-weight="600" fill="#c1432f">holds no environment secrets</text>
+  </g>
+
+  <!-- artifact -->
+  <g transform="translate(450,84)">
+    <rect width="300" height="80" rx="10" fill="#ffffff" stroke="#c7ccd3" stroke-width="2"/>
+    <text x="150" y="35" text-anchor="middle" font-size="21" font-weight="700" fill="#23272e">artifact  v X.Y</text>
+    <text x="150" y="59" text-anchor="middle" font-size="15" fill="#6b727b">same bytes, no secrets inside</text>
+  </g>
+  <line x1="290" y1="124" x2="446" y2="120" stroke="#b6bcc4" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- promote label -->
+  <text x="600" y="200" text-anchor="middle" font-size="14" letter-spacing="2" fill="#8a909a">PROMOTED UNCHANGED</text>
+
+  <!-- connectors (bus at y=216 to four cards) -->
+  <path d="M600 164 V216 H168 V246" fill="none" stroke="#b6bcc4" stroke-width="2" marker-end="url(#arr)"/>
+  <path d="M600 164 V216 H456 V246" fill="none" stroke="#b6bcc4" stroke-width="2" marker-end="url(#arr)"/>
+  <path d="M600 164 V216 H744 V246" fill="none" stroke="#b6bcc4" stroke-width="2" marker-end="url(#arr)"/>
+  <path d="M600 164 V216 H1032 V246" fill="none" stroke="#b6bcc4" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ENV CARD: DEV -->
+  <g transform="translate(39,248)">
+    <rect width="258" height="300" rx="14" fill="#ffffff" stroke="#e2e6ea" stroke-width="2"/>
+    <rect width="258" height="52" rx="14" fill="#2a9d8f"/>
+    <text x="129" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">DEV</text>
+    <rect x="49" y="78" width="160" height="32" rx="8" fill="#f1f3f5" stroke="#e2e6ea"/>
+    <text x="129" y="99" text-anchor="middle" font-size="13.5" fill="#6b727b">same artifact</text>
+    <g transform="translate(96,158)">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#2a9d8f" stroke-width="7"/>
+      <rect x="13" y="-3.5" width="64" height="7" fill="#2a9d8f"/>
+      <rect x="62" y="3.5" width="7" height="14" fill="#2a9d8f"/>
+      <rect x="74" y="3.5" width="7" height="10" fill="#2a9d8f"/>
+    </g>
+    <text x="129" y="218" text-anchor="middle" font-size="18" font-weight="700" fill="#23272e">DEV secrets</text>
+    <text x="129" y="243" text-anchor="middle" font-size="13" fill="#6b727b">held by the DEV owner</text>
+  </g>
+
+  <!-- ENV CARD: UAT -->
+  <g transform="translate(327,248)">
+    <rect width="258" height="300" rx="14" fill="#ffffff" stroke="#e2e6ea" stroke-width="2"/>
+    <rect width="258" height="52" rx="14" fill="#e0922f"/>
+    <text x="129" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">UAT</text>
+    <rect x="49" y="78" width="160" height="32" rx="8" fill="#f1f3f5" stroke="#e2e6ea"/>
+    <text x="129" y="99" text-anchor="middle" font-size="13.5" fill="#6b727b">same artifact</text>
+    <g transform="translate(96,158)">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#e0922f" stroke-width="7"/>
+      <rect x="13" y="-3.5" width="64" height="7" fill="#e0922f"/>
+      <rect x="62" y="3.5" width="7" height="14" fill="#e0922f"/>
+      <rect x="74" y="3.5" width="7" height="10" fill="#e0922f"/>
+    </g>
+    <text x="129" y="218" text-anchor="middle" font-size="18" font-weight="700" fill="#23272e">UAT secrets</text>
+    <text x="129" y="243" text-anchor="middle" font-size="13" fill="#6b727b">held by another owner</text>
+  </g>
+
+  <!-- ENV CARD: PROD -->
+  <g transform="translate(615,248)">
+    <rect width="258" height="300" rx="14" fill="#ffffff" stroke="#e2e6ea" stroke-width="2"/>
+    <rect width="258" height="52" rx="14" fill="#c1432f"/>
+    <text x="129" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">PROD</text>
+    <rect x="49" y="78" width="160" height="32" rx="8" fill="#f1f3f5" stroke="#e2e6ea"/>
+    <text x="129" y="99" text-anchor="middle" font-size="13.5" fill="#6b727b">same artifact</text>
+    <g transform="translate(96,158)">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#c1432f" stroke-width="7"/>
+      <rect x="13" y="-3.5" width="64" height="7" fill="#c1432f"/>
+      <rect x="62" y="3.5" width="7" height="14" fill="#c1432f"/>
+      <rect x="74" y="3.5" width="7" height="10" fill="#c1432f"/>
+    </g>
+    <text x="129" y="218" text-anchor="middle" font-size="18" font-weight="700" fill="#23272e">PROD secrets</text>
+    <text x="129" y="243" text-anchor="middle" font-size="13" fill="#6b727b">only the PROD owner</text>
+  </g>
+
+  <!-- ENV CARD: PROD2 (standby) -->
+  <g transform="translate(903,248)">
+    <rect width="258" height="300" rx="14" fill="#ffffff" stroke="#e2e6ea" stroke-width="2"/>
+    <rect width="258" height="52" rx="14" fill="#4f6b86"/>
+    <text x="129" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">PROD2</text>
+    <rect x="49" y="78" width="160" height="32" rx="8" fill="#f1f3f5" stroke="#e2e6ea"/>
+    <text x="129" y="99" text-anchor="middle" font-size="13.5" fill="#6b727b">same artifact</text>
+    <g transform="translate(96,158)">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#4f6b86" stroke-width="7"/>
+      <rect x="13" y="-3.5" width="64" height="7" fill="#4f6b86"/>
+      <rect x="62" y="3.5" width="7" height="14" fill="#4f6b86"/>
+      <rect x="74" y="3.5" width="7" height="10" fill="#4f6b86"/>
+    </g>
+    <text x="129" y="218" text-anchor="middle" font-size="18" font-weight="700" fill="#23272e">PROD2 secrets</text>
+    <text x="129" y="243" text-anchor="middle" font-size="13" fill="#6b727b">standby, ready to take over</text>
+  </g>
+
+  <!-- footer -->
+  <text x="600" y="598" text-anchor="middle" font-size="15.5" fill="#6b727b">Same artifact everywhere. Secrets are separate, so a breach in one does not hand over the others, and a clean standby can take over.</text>
+</svg>

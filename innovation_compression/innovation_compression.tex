@@ -1,0 +1,331 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, citecolor=blue!50!black, urlcolor=blue!50!black}
+\usepackage[backend=biber, style=numeric-comp, sorting=nyt]{biblatex}
+\addbibresource{innovation_compression.bib}
+
+\title{Chaos Makes Many, Compression Keeps Few:\\
+Where Innovation Comes From, and the Human Part}
+\author{Vasili Gavrilov\\
+\small Independent researcher\\
+\small ORCID: \href{https://orcid.org/0009-0007-9371-5994}{0009-0007-9371-5994}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Innovation admits a single description: chaos and recombination generate candidates without limit;
+the few that survive are those that \emph{compress} a structure many share, which is also why they
+spread; and a population sifts them in parallel. Assembled from established results, recombinant
+growth, the bias--variance decomposition, and cultural evolution, the account splits the work into
+\emph{variation}, now a cheap machine commodity, and the selecting \emph{prior}, the inductive bias
+that decides what to keep. In one line: innovation is a high-conviction prior that resonates with
+many.
+
+The contribution is threefold. (i)~The \emph{assembly}, these results read as one process under a
+single lens. (ii)~The \emph{grounding}: a learner gains nothing from data without a prior the data cannot supply
+(No-Free-Lunch), and the classical limits of computation, the halting problem, G\"odel's
+incompleteness, and Rice's theorem, one limit in many guises, show that no system certifies its own
+foundations from within. A system can certainly \emph{change} its inductive bias, and meta-learning
+does; what it cannot do is warrant the change without appeal to a further bias it also did not derive.
+The argument offered here is therefore a \emph{regress}, formally motivated but not itself a theorem:
+at every level the commitment is imported rather than produced, so the human role is a floor set by
+the structure of justification, not a gap that scale will close. (iii)~A \emph{proposal}: a stable, human-controlled, key-addressed
+ledger that holds the prior, its index being the bias itself, used both as a person's archive and as
+the context supplied to a machine; a partial step toward the long-standing lifetime-archive problem. No individual theorem is offered as new.
+\end{abstract}
+
+\section{The picture in one breath}
+Innovation looks like this. Something generates a huge number of candidate patterns. Almost all are
+junk. A few are kept. The ones kept are the ones that are short to describe and that fit a structure
+many people already share, so they catch on and spread. The making is cheap and can be mechanised.
+The keeping needs a prior, a sense of which few are worth it, and that sense is the scarce part.
+
+The rest of the essay walks through that sentence slowly: how the many are made (Section
+\ref{sec:make}), why only a few survive (Section \ref{sec:few}), what ``survive'' means (Section
+\ref{sec:compress}), who does the sifting (Section \ref{sec:crowd}), the human part (Section
+\ref{sec:human}), why that part is a limit of principle and not a temporary gap (Section
+\ref{sec:limits}), the tools that help (Section \ref{sec:tools}), and an old problem they touch
+(Section \ref{sec:archive}). Section \ref{sec:new} says plainly what is new here, which is only the
+assembly. The frame throughout is that intelligence is
+the discovery of compressors, things that describe a lot with a little \cite{gavrilov_compressors}.
+
+\section{Many are made}
+\label{sec:make}
+A simple rule, run over and over, produces patterns of
+unlimited variety; this is what chaos and nonlinear dynamics do \cite{gavrilov_emergence}. And ideas
+combine: an innovation is usually old pieces put together in a new way, and the number of possible
+combinations grows exponentially with the number of pieces \cite{weitzman1998}. The supply of
+candidates is therefore effectively endless. Generation is the easy part; selection is not.
+
+\section{Few are kept}
+\label{sec:few}
+Out of that endless supply, only a small, countable set of forms come to matter, and they can often
+be \emph{enumerated}.
+
+\begin{itemize}
+\item In biology, evolution searches an enormous space of body plans yet arrives again and again at
+the same few solutions: the camera eye evolved independently dozens of times, powered flight in
+insects, birds, and bats, the streamlined body in sharks, dolphins, and the extinct ichthyosaurs.
+The space of possible forms is vast; the workable ones are few \cite{conwaymorris2003}.
+\item In physics, one rule of minimization fixes a form across wildly different scales: raindrops,
+bubbles, planets, and stars settle into the sphere, and packed cells tend to the hexagon, because few
+shapes minimize surface or energy \cite{thompson1917}.
+\item In catastrophe theory, the mathematics of how smooth systems can suddenly jump, Thom showed that for up to four
+controlling factors there are exactly \textbf{seven} basic shapes of change, the seven elementary
+catastrophes \cite{thom1975}; Arnold extended the same kind of classification to the caustics, the
+bright curves light makes \cite{arnold1984}, and to the generic behaviours of differential equations
+\cite{arnold_ode}.
+\item In complexity science, Wolfram ran the simplest possible programs (cellular automata) by the thousands and found they
+fall into just \textbf{four classes}; only a couple are genuinely rich, such as Rule~110 (which can
+compute anything) and Rule~30 (used as a randomness source) \cite{wolfram2002}.
+\item In statistical physics, wildly different materials near a critical point behave identically; they fall into
+a small number of \emph{universality classes}, which is the renormalization-group fact already used
+in the compressor account \cite{gavrilov_compressors}.
+\end{itemize}
+
+The lesson repeats across very different domains, and that it repeats, rather than that one mechanism
+is at work, is the point: catastrophe theory is not social selection, nor is renormalization. What
+they share is a \emph{shape}, a vast space collapsing to a few forms that a short description
+captures, the infinite squeezed into a handful. That shared shape is compression, and the next
+section argues it is also what decides which ideas are kept.
+
+\section{What ``kept'' means: it compresses}
+\label{sec:compress}
+The kept ones are those \emph{short to say and wide in what they explain}, capturing a structure
+shared across many cases. That is the definition of a good
+compressor. In a formal theory of creativity, Schmidhuber makes this precise for what we call interesting or beautiful: a pattern is
+interesting when noticing it lets you describe the world more briefly than before, a step of
+compression progress \cite{schmidhuber2010}. A theorem that unifies scattered facts, a statistical model that captures a
+process in a short formula and predicts its future to within a set error, a melody that
+many ears find right, a format that addresses a record by a short key \cite{gavrilov_atree}: each
+replaces a lot with a little. ``Resonates with many'' and ``compresses a shared structure'' are the
+same statement seen from two sides; what cannot be compressed at all, an irreducible computation with
+no shortcut shorter than running it \cite{wolfram2002}, is exactly what leaves no portable insight.
+
+\section{Who keeps them: the crowd, in parallel}
+\label{sec:crowd}
+The sifting is not done by one judge. It is done by a whole population at once. A society is, in
+effect, a machine with many processors running side by side (in computing terms, MIMD: many
+instructions on many data at the same time). Candidate ideas spread through it like a contagion;
+in cognitive anthropology, Sperber showed how ideas spread and settle on shared \emph{cultural attractors} \cite{sperber1996}, and, in the sociology of diffusion, Rogers mapped the familiar S-curve of how an
+innovation spreads through a population \cite{rogers2003}. This selection across a population is the
+old engine of cultural evolution, the inheritance of useful patterns without each person
+rediscovering them \cite{boyd1985, dawkins1976}, and the same engine drives a language, across its
+speakers, toward more learnable, compressible forms \cite{kirby2008}. A candidate is ``selected'' when it resonates,
+which, by the previous section, means when it compresses something many already half-hold.
+
+\section{The human part: the rare prior that points}
+\label{sec:human}
+As machines grow capable, the scarce part of innovation is no longer generation.
+
+Split the work into two terms, the way statisticians split a model's error. One term is
+\emph{variance}: how much you explore, how widely you search, how sensitive you are to the data. The
+other is \emph{bias}: the assumptions you commit to before looking, your prior
+\cite{geman1992}. Machines are very strong on variance. They generate and search through candidates
+cheaply and in parallel, and a whole research programme, open-ended and novelty search, aims to make machines generate
+variety on their own \cite{stanley2015}. Generation, the making of many, is becoming a machine commodity.
+
+What machines do not get for free is the \emph{prior}: which of the endless candidates is worth
+keeping here. That this cannot come from the data alone is a theorem of machine learning. Averaged over all possible
+problems, no search method beats any other; all of a method's advantage comes from a prior matched to
+the problem at hand \cite{wolpert1996}. The prior is information from outside the data. In machine learning this prior is made operational as
+\emph{regularization}, a bias imposed before the data speaks: a penalty (ridge, \(L_2\); lasso,
+\(L_1\)), or noise injected during training (jitter), which is equivalent to such a penalty. Supplying it,
+the standing bet about what to keep and what to throw away, is the scarce contribution; the economics
+of this, cheap machine prediction making human judgement more valuable, has been spelled out
+directly \cite{agrawal2018}.
+
+A good prior is expensive because it is paid for slowly: over evolutionary
+time, at birth in the genome, across history in language and craft, and over a lifetime in skill and
+taste. A cat's nervous system is a prior tuned tightly to its niche; a human's is looser and still
+experimenting, which is why humans keep finding new things. The most striking cases are people whose
+prior was unusually strong and idiosyncratic. Ramanujan, with little formal training, simply
+\emph{saw} mathematical identities that were then checked and found true; Bach and Mozart heard
+structure others did not, structure that is itself mathematical and well charted
+\cite{voloshinov}.\footnote{The author trained in music (graduate of a music school).} Their leaps
+were not blind guesses. This is the disagreement worth being
+clear about: the standard story says creative variation is \emph{blind}, and the human only selects
+afterwards \cite{campbell1960}. The cases above suggest the opposite: the rare prior makes the variation itself \emph{non-blind},
+pointing the search before any selection. A defender of the blind view can answer that the variation
+is merely internal, fast and unseen, and perhaps it is; but that does not touch the claim here, that
+the prior is what aims the search, and the prior, not the search, is the scarce thing.
+
+The definition follows. \textbf{Innovation is a high-conviction prior that resonates with
+many.} A strong, committed, often contrarian prior, at the scale of whole fields a Kuhnian paradigm shift
+\cite{kuhn1962}, is the generative bet. Resonance, the spread across the parallel crowd, is the verification that the bet
+caught a real shared structure. One point of precision: ``high-conviction prior'' here means a
+\emph{strong, narrow assumption} (a strong inductive bias), not the textbook ``high bias'' that means
+plain error. The bet looks like error to contemporaries and turns out to fit a deeper structure. Nor
+is such a prior a wager placed once and left alone. It is tightened by iteration from both sides,
+held too narrowly until the world objects, loosened until it picks out nothing in particular, then
+narrowed again. Overfitting and underfitting are the two cheap failures; the expensive thing between
+them is, in the plainest available word, \emph{fitting}, and that bracketing is what the search
+actually consists of \cite{gavrilov_compressors}.
+
+Putting the halves together: machines supply cheap, abundant, increasingly open-ended
+\emph{variation}; humans supply the rare, expensive, non-blind \emph{prior} that points it at the few
+patterns that will compress and resonate. Working together, the two invent what neither does alone.
+
+\section{Computational limits and the imported prior}
+\label{sec:limits}
+One might expect that a powerful enough machine, or a quantum one, will eventually remove every limit
+and even supply its own prior. Two things have to be kept apart here, and this section keeps them
+apart throughout: a set of theorems, which are settled, and an argument built on top of them, which is
+not a theorem and is not offered as one. The theorems come first; they apply to any computer, human
+brains included.
+
+No procedure decides, for all programs, whether they halt: no general method can always tell, in
+advance, whether a given program will eventually stop or run forever. This is the \emph{halting
+problem}, and it is not an isolated curiosity. The same boundary appears, in guises that are
+equivalent or inter-derivable, as G\"odel's incompleteness (no consistent system strong enough for
+arithmetic proves every truth it can state, or its own consistency), as Rice's theorem (no algorithm
+decides a non-trivial property of what a program computes), as the word problem for string-rewriting
+(semi-Thue) systems, across the interchangeable models of computation (Church's \(\lambda\)-calculus,
+the recursive functions, Turing machines), and in Wolfram's simplest programs once one of them is
+universal. These are theorems of computability theory, not gaps that faster hardware will close; one standard text works
+through them and their equivalences \cite{davis_sigal_weyuker, wolfram2002}. Because the same limit
+recurs under every guise, it belongs to computation itself, not to one model, and nothing internal
+escapes it by being faster or cleverer. Quantum
+computing does not change this: a quantum computer can be simulated by an ordinary one, so it computes
+no function a classical machine cannot, and it is not known to solve NP-complete problems
+efficiently. It speeds up a few tasks; it does not remove the limits.
+
+Two cautions, and then the limit of the argument itself. First, these limits do not show that human
+minds exceed machines; the known attempt to argue that from G\"odel does not hold, and we do not use
+it. The limits apply to people and machines alike. Second, what they do show is narrower: a system
+does not \emph{certify} its own foundations from within. A formal system cannot prove its own
+consistency, so the warrant for using it comes from outside; and a learner has no advantage without a
+prior, which the data cannot supply (No-Free-Lunch).
+
+The third caution runs against the argument of this section, and it is the important one. Nothing
+above forbids a system from \emph{changing} its own inductive bias, and systems do exactly that:
+meta-learning adjusts a learner's bias from experience across tasks, hierarchical models place priors
+over priors and update them, learned optimizers acquire their own update rules, and architecture
+search selects structural commitments a researcher would otherwise hand-write. Anyone claiming these
+are impossible is refuted by practice, and the present argument does not claim it. What none of them
+does is \emph{escape} the problem, because each shifts the commitment up a level rather than removing
+it: the meta-learner's own bias, the hyperprior, the space the architecture search ranges over, none
+of these is derived from the data either, and each was chosen by someone. What survives is therefore a
+regress rather than a corollary of computability theory. At every level the commitment is imported,
+and there is no level at which it is produced. The theorems above make the formal cousin of this exact
+in the case of proof, where the impossibility of self-certification is settled; the extension to
+inductive bias is an argument from the same shape, and is offered as one. It stands close to Hume's
+problem of induction and to Goodman's new riddle, and it inherits their standing rather than improving
+on it.
+
+One further concession is owed on the No-Free-Lunch side. The theorem averages uniformly over all
+problems, and a uniform distribution over target functions is itself a prior that nobody holds; real
+problem distributions are highly structured, which is why practical learners work at all. No-Free-Lunch
+therefore does not show that a good prior is hard to come by, only that it cannot be extracted from the
+data alone and has to come from somewhere else. That is all this argument needs, and it is worth
+claiming no more than that. \emph{Prior} here is meant broadly, not in the Bayesian sense of a probability distribution but as
+whatever a system needs and cannot generate from within: in physics the initial and boundary
+conditions, which the laws of motion never fix; in logic the axioms; in learning the inductive bias;
+in an AI system the context that frames its task. These are one move, not four; only the narrow
+Bayesian reading would split them. The dynamics may be universal, but what picks out the actual case
+is supplied from outside the computation, not produced by more of it. The same data admits different
+readings under different priors, and nothing within the data settles which is right.
+
+This grounds Section~\ref{sec:human}, with the status just stated: the prior is scarce not only for
+economic reasons but because nothing internal to a computation warrants it. Whoever supplies it, so
+far mostly humans, supplies what no amount of compute produces for itself, though compute can and
+does move the question up a level.
+
+\section{The tools that help}
+\label{sec:tools}
+A prior is only worth having if it can be kept and reused. It is stored in three places: in genes, in
+culture, and in external artifacts such as notes, code, and archives. External storage lets a prior
+\emph{compose}, build on itself across people and years, which is why human knowledge accumulates and
+a single animal's does not \cite{gavrilov_compressors}. Tools that pack accumulated knowledge into a
+compact, recallable form therefore extend the prior. The author's AIS is one such tool \cite{gavrilov_ais}: a personal,
+plain-text store in which a short key addresses a body of content, so that recalling by a short key
+is itself a small compression \cite{gavrilov_atree}.
+
+For this to work the store must be \emph{stable}: a volatile memory keeps no prior. Today's AI memory layers (per-session instruction
+and skill files, vector stores) are largely volatile and ad hoc, which is why the author has called
+for a stable, human-controlled ledger for an AI's working knowledge \cite{gavrilov_context_renorm}, in an open call to the model vendors \cite{gavrilov_context_call}, and offers a second version of that protocol built on AIS: a collection of
+plain-text files, each reached by a short key that points to the data. The key does the compressing, a short address for a lot of content; the files
+themselves stay plain, so no brittle fixed format is locked in and the way they are read can change
+while the files endure. The content itself can sit anywhere, even on the open web, held by reference
+such as a URL, so one store indexes a person's files and the web alike, and serves both that person's
+notes and an AI's working knowledge. What is personal and scarce is not the content but the index
+over it: the person's own associations, a living map of concepts grown to fit present understanding
+rather than adopted ready-made, which is the bias of earlier sections made concrete. The content is
+never copied: the index points to it by reference, even into shared, read-only stores, leaving the
+data in place. And since the index is one person's prior, another's differs; the tool keeps each
+person's own ordering of the world rather than collapsing many priors onto one ontology, and by
+No-Free-Lunch that diversity is a resource, not a flaw to correct.
+
+Its advantages over today's chat-managed memory are stability and human control. When a machine
+compresses its own running context, it does so with a prior, but not the keeper's: the one its
+designers and its training objective installed, held fixed and applied to every ledger alike. Asked
+to recompress a human's ledger it keeps what fits that objective and drops what the keeper marked as
+essential, unable to tell, from its own context, which items are load-bearing rather than restatable.
+When a human decides what the ledger keeps and what it drops, that decision comes from outside the system,
+directed by the prior, the same prior no computation derives for itself (Section~\ref{sec:limits}),
+and is made to fit the current understanding. The store can be strictly
+append-only, like a lifetime archive, or curated by hand; either way the compaction is human-directed,
+not a rewrite the model performs on itself mid-conversation. Against a flat instruction file, a record
+is also reached directly by its key, rather than carried whole in context.
+
+\section{An old problem: the lifetime archive}
+\label{sec:archive}
+The aim is older than the tools. Recording and retrieving what one accumulates over a lifetime, a
+personal archive, is a long-standing grand challenge: Bush's Memex \cite{bush1945}, and later one of
+Gray's dozen long-term goals for computing, to record what a person sees and hears and return any
+item on request \cite{gray2003}, and named again as the UK research community's ``Memories for Life'' challenge \cite{ohara2006}; to this day the challenge stands. The ledger here does not solve it either, and it leaves aside the
+separate, hard problem of keeping file formats readable across decades \cite{rothenberg1995}; it offers one practical,
+partial step, a stable, human-controlled, format-compatible store whose index is the person's own
+associations. The author's archive tools were built in that direction, motivated by those goals.
+
+This rests on tested practice rather than a new idea: the author has kept and used such plain-text
+context indexes since the early 2000s, organizing a personal archive that has outlived several disk
+failures without data loss, kept by plain redundant copies in sync. None of these tools manufacture the
+prior; they lower the cost of keeping and reusing the scarce
+thing.
+
+\section{What is new here, and what is not}
+\label{sec:new}
+Honesty about contribution. Every block above is established and named: combinatorial and recombinant
+growth \cite{weitzman1998}; the collapse to a few canonical forms
+\cite{thom1975, arnold1984, wolfram2002, conwaymorris2003, thompson1917}; compression as the mark of interest
+\cite{schmidhuber2010}; culture as parallel contagion with attractors \cite{sperber1996, rogers2003};
+variation and selection \cite{campbell1960, boyd1985}; the bias--variance split \cite{geman1992}; the
+limits of computation, Church--Turing, G\"odel, Rice \cite{davis_sigal_weyuker}, and the No-Free-Lunch
+limit \cite{wolpert1996}; cheap prediction and scarce judgement \cite{agrawal2018}. The
+two neighbours closest to this essay, and most important to credit, are \textbf{Sperber} (contagion
+and cultural attractors) and \textbf{Schmidhuber} (interest as compression). The contribution claimed
+here is the \emph{assembly}: viewing all of these as one process under a single lens, generation by
+chaos, collapse and selection by compression, sifting across a parallel social machine, with the
+human supplying the rare non-blind prior. The one move the author presses as his own, rather than
+borrows, is the grounding of that prior in the limits of computation (Section~\ref{sec:limits}),
+offered with the status that section states: not as a corollary of the theorems, but as a regress they
+motivate. A system can move its inductive bias up a level, and meta-learning does; at no level is the
+commitment produced rather than imported, and that is the floor under the human's role here. Alongside the assembly,
+the essay makes one concrete proposal (Section~\ref{sec:tools}): a stable, human-controlled,
+plain-text, key-addressed ledger, its content held by reference and its index the person's own map of
+concepts, grown rather than adopted ready-made. The data structure is not new, associative and graph
+memories exist; what is proposed is the specific human-curated, plain-text, reference-indexed form,
+and the point that the index is the bias; the proposal is offered as a partial step toward a
+long-recognized grand challenge, the lifetime personal archive (Section~\ref{sec:archive}). No
+individual theorem is offered as new.
+
+\section*{Closing}
+A last observation, exact rather than decorative. To write this essay is to take many separate, named
+results and squeeze them into one short structure. That act, replacing a lot with a little that fits,
+is the very thing the essay says innovation is. The map is an instance of the thing it maps.
+
+\printbibliography
+
+\end{document}

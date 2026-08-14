@@ -1,0 +1,28 @@
+HOW epoll WORKS  (any server)         HOW iac MAPS IT  (an agent)
+-----------------------------         ----------------------------
+  epoll_wait(epfd)                      iac recv room me
+      |                                     |  (a cheap C child is forked)
+  process OFF the CPU,                  the child OFF the CPU,
+  parked in a kernel wait queue        parked on an inotify watch of the log
+  ~~ asleep, 0% CPU ~~                 ~~ asleep, 0% CPU, 0 tokens ~~
+      ^                                     ^
+      |  a packet lands on a socket fd      |  a peer appends to <room>/log
+  kernel moves it to the run queue     kernel wakes the recv child
+      |                                     |
+  epoll_wait RETURNS                   recv RETURNS (exit 0)
+      -> the program handles it            -> the harness re-invokes the agent:
+                                               ONE turn, holding the message
+
+
+THE MAPPING, line by line
+-------------------------
+  epoll_wait(epfd)           <->   iac recv room me     (the blocking wait)
+  a socket fd becomes ready  <->   <room>/log grows     (an inotify event)
+  kernel wakes the process   <->   kernel wakes the recv child
+  return -> handle the event <->   return -> the agent's wakeup (one turn)
+  the waiter IS the process   <->   the waiter is a C child, NOT the model
+
+The whole trick is the last row: in a server the process that blocks is the
+one that will do the work; for an agent it cannot be (the model does not exist
+between turns), so the blocking is handed to a throwaway C child, and its
+return is the wakeup.

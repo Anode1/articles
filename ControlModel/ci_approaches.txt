@@ -1,0 +1,143 @@
+Continuous integration and cloud deployment approaches
+=====================================================
+
+There are two basic ways to ship application code to cloud deployment
+environments. Pick one model for a given system. Mixing them usually creates
+ambiguous release identity.
+
+A = each target machine checks out source code and builds locally during deploy.
+B = one controlled build produces an immutable artifact; the same artifact is
+    promoted through deployment environments.
+
+The environment names are organization-specific. Some teams use labels such as <development_env>, <integration_env>,
+<test_env>, <staging_env>, <production_env>, <dr_env>, <prod2_env>, or
+other organization-specific names. The model does not
+depend on those names.
+
+| Approach | Build location          | Artifact            | Target machine needs              | Promotion model                   |
+|----------|-------------------------|---------------------|-----------------------------------|-----------------------------------|
+| B        | <release_master> or CI   | <project>-X.Y.zip   | runtime only, plus deploy tools   | same artifact through envs        |
+| A        | each target machine      | none, local output   | Git, JDK, build tool, source tree | git pull/build on each target     |
+
+For Java, the build tool might be Ant, Maven, or Gradle. The artifact might be
+a zip, WAR, JAR, or container image. For .NET or Windows services, the same
+model applies with a published package, service bundle, installer, or container
+image. The defining property is not the tool. The defining property is whether
+production consumes source and builds locally, or consumes an already-built
+artifact.
+
+
+Approach B - build once, promote artifact
+-----------------------------------------
+
+The build runs once in a controlled place: a release master's workstation,
+Jenkins, GitHub Actions, GitLab CI, Azure Pipelines, AWS CodeBuild, or another
+controlled build environment. Target machines do not compile the application.
+They only download, unpack, activate, and run the approved artifact.
+
+Versions are monotonic. For example, artifacts can be named:
+
+    <project_name>-X.Y.zip
+
+In a simple S3-based implementation, the latest release in a bucket may be the
+highest numbered <project_name>-X.Y.zip. Rollback can be implemented by
+promoting a new version containing older approved bits, or by redeploying a
+known previous artifact according to the organization's release policy.
+
+Typical flow:
+
+    <release_master> or CI:
+        cd <project_repo>
+        <build_tool> <release_build_target>      # produces release/<project_name>-X.Y.zip
+
+        # test in <development_or_integration_env>
+
+        aws s3 cp release/<project_name>-X.Y.zip s3://<artifact_bucket_for_test_env>/
+
+        # bring the target fleet to the new artifact by one of:
+        #   - ASG instance refresh, with ALB draining and replacement instances auto-deploying
+        #   - SSM Run Command to existing instances
+        #   - manual SSH followed by the documented deployment procedure
+
+        # after smoke tests and approval, promote the same artifact:
+        aws s3 cp release/<project_name>-X.Y.zip s3://<artifact_bucket_for_production_env>/
+
+Example SSM Run Command to deploy the highest-numbered artifact to existing
+instances:
+
+    aws ssm send-command \
+        --document-name AWS-RunShellScript \
+        --targets "Key=tag:Env,Values=<env>" \
+        --parameters 'commands=["set -e",
+            "BUCKET=<artifact_bucket>",
+            "V=$(aws s3 ls s3://$BUCKET/ | awk \"{print \\\$4}\" | sed -n \"s/^<project_name>-\\(.*\\)\\.zip$/\\1/p\" | sort -V | tail -n 1)",
+            "cd /tmp && aws s3 cp s3://$BUCKET/<project_name>-$V.zip .",
+            "rm -rf <project_name>-$V && unzip -q <project_name>-$V.zip",
+            "cd <project_name>-$V && chmod +x *.sh && sudo <deployment_procedure>"]'
+
+Here <deployment_procedure> means the non-interactive deployment procedure
+inside, or associated with, the artifact. In a Java web application it may copy
+a WAR into Tomcat, sync static assets to S3, invalidate a CDN distribution, and
+restart the service. In another stack it may install a Windows service, update a
+container task definition, or activate a release directory.
+
+Auto-launch on instance start, IAM permissions, Auto Scaling Groups, optional
+autoscaling, pre-baked AMIs, and optional managed build services are
+implementation details. They support the model but do not define it.
+
+
+Environment-scoped runtime configuration
+----------------------------------------
+
+Source control should contain the same application code for all environments.
+The artifact should be environment-neutral. Environment-specific values should
+be supplied by the runtime environment.
+
+In a simple server-based implementation, each environment has one protected
+configuration set, for example:
+
+    /etc/<project_name>/system.properties
+
+All instances belonging to the same environment receive the same configuration
+set. Creating a new environment such as <qa_env>, <prod2_env>, <dr_env>, or a
+temporary test environment means provisioning a new configuration set, not
+changing source code and not rebuilding the artifact.
+
+The configuration set may contain database connection strings, credentials,
+SMTP settings, API tokens, storage bucket names, CDN identifiers, service
+endpoints, and other operational values. It must be excluded from source
+control and must not be embedded into the artifact. Larger platforms may use a
+vault, cloud secret manager, parameter store, managed identity, mounted secret,
+or platform configuration service. The mechanism can vary; the boundary is the
+important part.
+
+
+Approach A - build on each target machine
+-----------------------------------------
+
+Each target machine has Git, a JDK, a build tool such as Ant, Maven, or Gradle,
+and the source tree. A deployment command may look like this:
+
+    aws ssm send-command \
+        --document-name AWS-RunShellScript \
+        --targets "Key=tag:Env,Values=<env>" \
+        --parameters 'commands=["sudo -u <target_user> bash -lc \"cd ~/<project_name> && git pull --ff-only && <build_tool> <target_deploy_task>\""]'
+
+On each target machine:
+
+    git pull --ff-only
+    <build_tool> <target_deploy_task>
+
+A target-machine deployment script may build the application, deploy static
+assets, copy an application artifact to the runtime container, and restart the
+service. This can work, but it collapses source checkout, dependency
+resolution, local build tooling, deployment logic, runtime configuration, and
+production execution onto the target machine.
+
+
+Out of scope
+------------
+
+Database migrations, ETL, one-time data loads, and other non-idempotent data
+operations should remain explicit release steps. They must not run
+unconditionally on every new instance or every autoscaling event.

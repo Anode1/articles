@@ -1,0 +1,48 @@
+THE USUAL SCHEME    (a Slack bot / a broker / OpenClaw's gateway)
+
+   Slack / a user / a peer
+        |
+        |  push  (webhook HTTP, or a held WebSocket)
+        v
+   +===========================+
+   |  ALWAYS-ON SERVER         |  runs 24/7; holds a socket or a
+   |  (daemon / gateway / bot) |  public URL; routes + buffers
+   +===========================+
+        |
+        |  push, over a connection the agent HOLDS OPEN
+        v
+   +---------------------------+
+   |  YOUR AGENT               |  a LIVE process, connected and
+   |  (must stay running)      |  waiting; never switched off
+   +---------------------------+
+
+   idle cost : server AND agent burn resources 24/7
+   sleeping agent? : cannot be reached -- it must already be connected
+
+
+WHAT WE DO          (the wakeup: no server, a file, a sleeping waiter)
+
+   a peer   (or a human, via a thin bridge)
+        |
+        |  iac send room me "x"   =  append ONE line
+        v
+   +===========================+
+   |  A SHARED TEXT FILE       |  <room>/log on disk. no service,
+   |  <room>/log               |  no daemon, nothing running.
+   +===========================+
+        |
+        |  the file changed -> the kernel wakes...
+        v
+   +---------------------------+
+   |  iac recv : ASLEEP        |  a throwaway C child, ~$0,
+   |  (the cheap waiter)       |  parked until the line lands
+   +------------+--------------+
+                |  it returns, and THAT return starts the turn
+                v
+   +---------------------------+
+   |  YOUR AGENT : ONE TURN    |  spawned by the wakeup; reads "x",
+   |  then CEASES to exist     |  acts, replies, and is gone
+   +---------------------------+
+
+   idle cost : ~0 -- nothing runs between messages
+   sleeping agent? : reached -- the message's ARRIVAL is the wakeup

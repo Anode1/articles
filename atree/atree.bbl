@@ -1,0 +1,719 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{wiki_ahnentafel}{online}{}
+      \list{organization}{1}{%
+        {Wikipedia}%
+      }
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{title}{Ahnentafel}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://en.wikipedia.org/wiki/Ahnentafel
+      \endverb
+      \verb{url}
+      \verb https://en.wikipedia.org/wiki/Ahnentafel
+      \endverb
+    \endentry
+    \entry{anderson1995}{article}{}
+      \name{author}{1}{}{%
+        {{hash=444f9aacf5d840641f94f2332fb6fdda}{%
+           family={Anderson},
+           familyi={A\bibinitperiod},
+           given={Annelise\bibnamedelima Graebner},
+           giveni={A\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{444f9aacf5d840641f94f2332fb6fdda}
+      \strng{fullhash}{444f9aacf5d840641f94f2332fb6fdda}
+      \strng{bibnamehash}{444f9aacf5d840641f94f2332fb6fdda}
+      \strng{authorbibnamehash}{444f9aacf5d840641f94f2332fb6fdda}
+      \strng{authornamehash}{444f9aacf5d840641f94f2332fb6fdda}
+      \strng{authorfullhash}{444f9aacf5d840641f94f2332fb6fdda}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Missouri State Genealogical Association Journal}
+      \field{note}{Early father/mother (\texttt{f}/\texttt{m}) binary ancestor-path notation}
+      \field{number}{1}
+      \field{title}{Binary Properties of {Ahnentafel} Numbers}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{15}
+      \field{year}{1995}
+      \field{urldateera}{ce}
+      \field{pages}{52\bibrangedash 53}
+      \range{pages}{2}
+      \verb{urlraw}
+      \verb https://web.stanford.edu/~andrsn/ahnenbin.html
+      \endverb
+      \verb{url}
+      \verb https://web.stanford.edu/~andrsn/ahnenbin.html
+      \endverb
+    \endentry
+    \entry{chang1999}{article}{}
+      \name{author}{1}{}{%
+        {{hash=b897d032152987f3f3f37aa403ac68f4}{%
+           family={Chang},
+           familyi={C\bibinitperiod},
+           given={Joseph\bibnamedelima T.},
+           giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{b897d032152987f3f3f37aa403ac68f4}
+      \strng{fullhash}{b897d032152987f3f3f37aa403ac68f4}
+      \strng{bibnamehash}{b897d032152987f3f3f37aa403ac68f4}
+      \strng{authorbibnamehash}{b897d032152987f3f3f37aa403ac68f4}
+      \strng{authornamehash}{b897d032152987f3f3f37aa403ac68f4}
+      \strng{authorfullhash}{b897d032152987f3f3f37aa403ac68f4}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Applied Probability}
+      \field{number}{4}
+      \field{title}{Recent common ancestors of all present-day individuals}
+      \field{volume}{31}
+      \field{year}{1999}
+      \field{pages}{1002\bibrangedash 1026}
+      \range{pages}{25}
+    \endentry
+    \entry{clrs}{book}{}
+      \name{author}{4}{}{%
+        {{hash=835b8c52757d98c15859b416316d9820}{%
+           family={Cormen},
+           familyi={C\bibinitperiod},
+           given={Thomas\bibnamedelima H.},
+           giveni={T\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=a389dea91a76366c4b4af5f52a928a76}{%
+           family={Leiserson},
+           familyi={L\bibinitperiod},
+           given={Charles\bibnamedelima E.},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=3a964821f97ee17f8bb285bc61c52899}{%
+           family={Rivest},
+           familyi={R\bibinitperiod},
+           given={Ronald\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=bc78426660400760f77758aec45e71a8}{%
+           family={Stein},
+           familyi={S\bibinitperiod},
+           given={Clifford},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{c251cdfd036d9474565c517e73c19c5d}
+      \strng{fullhash}{10f004e08c7c03d98be0da1231a869ce}
+      \strng{bibnamehash}{c251cdfd036d9474565c517e73c19c5d}
+      \strng{authorbibnamehash}{c251cdfd036d9474565c517e73c19c5d}
+      \strng{authornamehash}{c251cdfd036d9474565c517e73c19c5d}
+      \strng{authorfullhash}{10f004e08c7c03d98be0da1231a869ce}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3}
+      \field{title}{Introduction to Algorithms}
+      \field{year}{2009}
+    \endentry
+    \entry{gramps_atree}{online}{}
+      \list{organization}{1}{%
+        {The Gramps Project (Discourse forum)}%
+      }
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labeltitlesource}{title}
+      \field{title}{Dual Atree (binary Ahnentafel) chart for cousins}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://gramps.discourse.group/t/dual-atree-binary-ahnentafel-chart-for-cousins/1115
+      \endverb
+      \verb{url}
+      \verb https://gramps.discourse.group/t/dual-atree-binary-ahnentafel-chart-for-cousins/1115
+      \endverb
+    \endentry
+    \entry{even_comb}{book}{}
+      \name{author}{1}{}{%
+        {{hash=1df6d440bdcf5ce3d3ad82d370770f54}{%
+           family={Even},
+           familyi={E\bibinitperiod},
+           given={Shimon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Macmillan}%
+      }
+      \strng{namehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{fullhash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{bibnamehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{authorbibnamehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{authornamehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{authorfullhash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \field{extraname}{1}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Algorithmic Combinatorics}
+      \field{year}{1973}
+    \endentry
+    \entry{even_graph}{book}{}
+      \name{author}{1}{}{%
+        {{hash=1df6d440bdcf5ce3d3ad82d370770f54}{%
+           family={Even},
+           familyi={E\bibinitperiod},
+           given={Shimon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Computer Science Press}%
+      }
+      \strng{namehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{fullhash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{bibnamehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{authorbibnamehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{authornamehash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \strng{authorfullhash}{1df6d440bdcf5ce3d3ad82d370770f54}
+      \field{extraname}{2}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{advanced graph algorithms, as studied by the author; 2nd edition, ed.\ Guy Even, Cambridge University Press, 2011}
+      \field{title}{Graph Algorithms}
+      \field{year}{1979}
+    \endentry
+    \entry{eytzinger1590}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=e8ccfca4b9e8a1460880c938f73bb4a1}{%
+           family={Eytzinger},
+           familyi={E\bibinitperiod},
+           given={Michaël},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{e8ccfca4b9e8a1460880c938f73bb4a1}
+      \strng{fullhash}{e8ccfca4b9e8a1460880c938f73bb4a1}
+      \strng{bibnamehash}{e8ccfca4b9e8a1460880c938f73bb4a1}
+      \strng{authorbibnamehash}{e8ccfca4b9e8a1460880c938f73bb4a1}
+      \strng{authornamehash}{e8ccfca4b9e8a1460880c938f73bb4a1}
+      \strng{authorfullhash}{e8ccfca4b9e8a1460880c938f73bb4a1}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Origin of the Ahnentafel (Sosa--Stradonitz) ancestor numbering}
+      \field{title}{Thesaurus principum hac aetate in Europa viventium}
+      \field{year}{1590}
+    \endentry
+    \entry{gedcom55}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=b5da1ef962b1bd130add8d365cd490ea}{%
+           family={{FamilySearch (The Church of Jesus Christ of Latter-day Saints)}},
+           familyi={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{b5da1ef962b1bd130add8d365cd490ea}
+      \strng{fullhash}{b5da1ef962b1bd130add8d365cd490ea}
+      \strng{bibnamehash}{b5da1ef962b1bd130add8d365cd490ea}
+      \strng{authorbibnamehash}{b5da1ef962b1bd130add8d365cd490ea}
+      \strng{authornamehash}{b5da1ef962b1bd130add8d365cd490ea}
+      \strng{authorfullhash}{b5da1ef962b1bd130add8d365cd490ea}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Open genealogy interchange specification; current versions maintained at gedcom.io}
+      \field{title}{The GEDCOM Standard, Release 5.5}
+      \field{year}{1996}
+      \verb{urlraw}
+      \verb https://gedcom.io/
+      \endverb
+      \verb{url}
+      \verb https://gedcom.io/
+      \endverb
+    \endentry
+    \entry{fellegi1969}{article}{}
+      \name{author}{2}{}{%
+        {{hash=3512111ae31e192e17da34a459844765}{%
+           family={Fellegi},
+           familyi={F\bibinitperiod},
+           given={Ivan\bibnamedelima P.},
+           giveni={I\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=a816d536603224ac2d3a6bfcfd534a11}{%
+           family={Sunter},
+           familyi={S\bibinitperiod},
+           given={Alan\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{fullhash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{bibnamehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authorbibnamehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authornamehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authorfullhash}{a02762c13c7328d97c299739a13bfd48}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the American Statistical Association}
+      \field{number}{328}
+      \field{title}{A Theory for Record Linkage}
+      \field{volume}{64}
+      \field{year}{1969}
+      \field{pages}{1183\bibrangedash 1210}
+      \range{pages}{28}
+    \endentry
+    \entry{lj_atree}{online}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{1}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{LiveJournal (siberean), 2011-11-07; first publication of the name ``atree''}
+      \field{title}{Compact text format for genealogies storing and exchange}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2011}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://siberean.livejournal.com/14874.html
+      \endverb
+      \verb{url}
+      \verb https://siberean.livejournal.com/14874.html
+      \endverb
+    \endentry
+    \entry{gavrilov_compressors}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{2}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Author's companion work}
+      \field{title}{Intelligence Is the Discovery of Compressors}
+      \field{year}{2026}
+      \verb{doi}
+      \verb 10.5281/zenodo.20440111
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.5281/zenodo.20440111
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.5281/zenodo.20440111
+      \endverb
+    \endentry
+    \entry{aisconvert}{online}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{3}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{hir/ package (c) 2009; used in online genealogy HIR matching}
+      \field{title}{aisconvert: personal genomics toolkit (HIR / centimorgan calculator)}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/Anode1/aisconvert
+      \endverb
+      \verb{url}
+      \verb https://github.com/Anode1/aisconvert
+      \endverb
+    \endentry
+    \entry{aisgedcom}{online}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{4}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{atree reference implementation; AtreeParser.java (c) 2011}
+      \field{title}{aisgedcom: molecular genealogy toolkit (GEDCOM/atree converter, relationship calculator)}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/Anode1/aisgedcom
+      \endverb
+      \verb{url}
+      \verb https://github.com/Anode1/aisgedcom
+      \endverb
+    \endentry
+    \entry{nid}{online}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{5}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{nid: anonymized unique-ID generation from a string (MD5/base64), ANSI C}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/Anode1/nid
+      \endverb
+      \verb{url}
+      \verb https://github.com/Anode1/nid
+      \endverb
+    \endentry
+    \entry{ped2raw}{online}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{6}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Later subsumed into aisconvert}
+      \field{title}{ped2raw: PED-to-RAW SNP genome format converter (ANSI C)}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/Anode1/ped2raw
+      \endverb
+      \verb{url}
+      \verb https://github.com/Anode1/ped2raw
+      \endverb
+    \endentry
+    \entry{gedcomx}{online}{}
+      \list{organization}{1}{%
+        {FamilySearch}%
+      }
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labeltitlesource}{title}
+      \field{note}{Successor data model to GEDCOM 5.5}
+      \field{title}{GEDCOM X}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb http://www.gedcomx.org/
+      \endverb
+      \verb{url}
+      \verb http://www.gedcomx.org/
+      \endverb
+    \endentry
+    \entry{wiki_gns}{online}{}
+      \list{organization}{1}{%
+        {Wikipedia}%
+      }
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labeltitlesource}{title}
+      \field{note}{Section ``Atree'' first added 2011-11-08}
+      \field{title}{Genealogical numbering systems}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://en.wikipedia.org/wiki/Genealogical_numbering_systems
+      \endverb
+      \verb{url}
+      \verb https://en.wikipedia.org/wiki/Genealogical_numbering_systems
+      \endverb
+    \endentry
+    \entry{prb_everlived}{online}{}
+      \name{author}{2}{}{%
+        {{hash=559f4e7ab4e61429a28368fc989cdf48}{%
+           family={Kaneda},
+           familyi={K\bibinitperiod},
+           given={Toshiko},
+           giveni={T\bibinitperiod}}}%
+        {{hash=900546e108c25a2216a77bf98ad63a28}{%
+           family={Haub},
+           familyi={H\bibinitperiod},
+           given={Carl},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Population Reference Bureau}%
+      }
+      \strng{namehash}{adc278e0797a5a0f0a8c182b709be6d4}
+      \strng{fullhash}{adc278e0797a5a0f0a8c182b709be6d4}
+      \strng{bibnamehash}{adc278e0797a5a0f0a8c182b709be6d4}
+      \strng{authorbibnamehash}{adc278e0797a5a0f0a8c182b709be6d4}
+      \strng{authornamehash}{adc278e0797a5a0f0a8c182b709be6d4}
+      \strng{authorfullhash}{adc278e0797a5a0f0a8c182b709be6d4}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{How Many People Have Ever Lived on Earth?}
+      \field{urlday}{7}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.prb.org/articles/how-many-people-have-ever-lived-on-earth/
+      \endverb
+      \verb{url}
+      \verb https://www.prb.org/articles/how-many-people-have-ever-lived-on-earth/
+      \endverb
+    \endentry
+    \entry{kekule1898}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=accb053288ed2079473b4a2e716227a6}{%
+           family={Kekulé\bibnamedelimb von\bibnamedelima Stradonitz},
+           familyi={K\bibinitperiod\bibinitdelim v\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Stephan},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{accb053288ed2079473b4a2e716227a6}
+      \strng{fullhash}{accb053288ed2079473b4a2e716227a6}
+      \strng{bibnamehash}{accb053288ed2079473b4a2e716227a6}
+      \strng{authorbibnamehash}{accb053288ed2079473b4a2e716227a6}
+      \strng{authornamehash}{accb053288ed2079473b4a2e716227a6}
+      \strng{authorfullhash}{accb053288ed2079473b4a2e716227a6}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Popularized the ancestor numbering now known as Sosa--Stradonitz}
+      \field{title}{Ahnentafel-Atlas}
+      \field{year}{1898}
+    \endentry
+    \entry{knuth_taocp3}{book}{}
+      \name{author}{1}{}{%
+        {{hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{1}
+      \field{note}{1st edition, as used by the author; a 2nd edition (1998) is also available}
+      \field{title}{The Art of Computer Programming, Volume 3: Sorting and Searching}
+      \field{year}{1973}
+    \endentry
+    \entry{philips1990}{article}{}
+      \name{author}{1}{}{%
+        {{hash=aa036afd1abcf6c28c211f8114c2bc3e}{%
+           family={Philips},
+           familyi={P\bibinitperiod},
+           given={Lawrence},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{aa036afd1abcf6c28c211f8114c2bc3e}
+      \strng{fullhash}{aa036afd1abcf6c28c211f8114c2bc3e}
+      \strng{bibnamehash}{aa036afd1abcf6c28c211f8114c2bc3e}
+      \strng{authorbibnamehash}{aa036afd1abcf6c28c211f8114c2bc3e}
+      \strng{authornamehash}{aa036afd1abcf6c28c211f8114c2bc3e}
+      \strng{authorfullhash}{aa036afd1abcf6c28c211f8114c2bc3e}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Language}
+      \field{number}{12}
+      \field{title}{Hanging on the Metaphone}
+      \field{volume}{7}
+      \field{year}{1990}
+    \endentry
+    \entry{rohde2004}{article}{}
+      \name{author}{3}{}{%
+        {{hash=b05750b8ff8bea7b0b83c0fe8d137e91}{%
+           family={Rohde},
+           familyi={R\bibinitperiod},
+           given={Douglas\bibnamedelimb L.\bibnamedelimi J.},
+           giveni={D\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=de9b7d07e3d68a67557236c5df24c4bf}{%
+           family={Olson},
+           familyi={O\bibinitperiod},
+           given={Steve},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b897d032152987f3f3f37aa403ac68f4}{%
+           family={Chang},
+           familyi={C\bibinitperiod},
+           given={Joseph\bibnamedelima T.},
+           giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{8ba3ea86ba4c9c11fc0fb027e5f7d263}
+      \strng{fullhash}{8ba3ea86ba4c9c11fc0fb027e5f7d263}
+      \strng{bibnamehash}{8ba3ea86ba4c9c11fc0fb027e5f7d263}
+      \strng{authorbibnamehash}{8ba3ea86ba4c9c11fc0fb027e5f7d263}
+      \strng{authornamehash}{8ba3ea86ba4c9c11fc0fb027e5f7d263}
+      \strng{authorfullhash}{8ba3ea86ba4c9c11fc0fb027e5f7d263}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Nature}
+      \field{title}{Modelling the recent common ancestry of all living humans}
+      \field{volume}{431}
+      \field{year}{2004}
+      \field{pages}{562\bibrangedash 566}
+      \range{pages}{5}
+    \endentry
+    \entry{russell1918}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=993fd554f0c31fd34ac4c33dd01b5829}{%
+           family={Russell},
+           familyi={R\bibinitperiod},
+           given={Robert\bibnamedelima C.},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{993fd554f0c31fd34ac4c33dd01b5829}
+      \strng{fullhash}{993fd554f0c31fd34ac4c33dd01b5829}
+      \strng{bibnamehash}{993fd554f0c31fd34ac4c33dd01b5829}
+      \strng{authorbibnamehash}{993fd554f0c31fd34ac4c33dd01b5829}
+      \strng{authornamehash}{993fd554f0c31fd34ac4c33dd01b5829}
+      \strng{authorfullhash}{993fd554f0c31fd34ac4c33dd01b5829}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{U.S. Patent 1,261,167 (Soundex)}
+      \field{year}{1918}
+    \endentry
+    \entry{sosa1676}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=208f271748d2ca6bb6cc54112d599a85}{%
+           family={Sosa},
+           familyi={S\bibinitperiod},
+           given={Jerónimo},
+           giveni={J\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \strng{namehash}{208f271748d2ca6bb6cc54112d599a85}
+      \strng{fullhash}{208f271748d2ca6bb6cc54112d599a85}
+      \strng{bibnamehash}{208f271748d2ca6bb6cc54112d599a85}
+      \strng{authorbibnamehash}{208f271748d2ca6bb6cc54112d599a85}
+      \strng{authornamehash}{208f271748d2ca6bb6cc54112d599a85}
+      \strng{authorfullhash}{208f271748d2ca6bb6cc54112d599a85}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Popularized the ancestor numbering later called Sosa--Stradonitz}
+      \field{title}{Noticia de la gran casa de los marqueses de Villafranca}
+      \field{year}{1676}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

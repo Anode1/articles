@@ -1,0 +1,38 @@
+========================  THE MONEY SHOT  ========================
+WHAT IT COSTS TO KEEP AN AGENT WAITING FOR A MESSAGE
+(measured: Sonnet, ~50k-token context, one check every 30s)
+
+  THE USUAL WAY -- the model checks its own inbox
+     check -> "nothing"   $$$
+     check -> "nothing"   $$$      every check re-reads everything
+     check -> "nothing"   $$$      the agent knows: a full charge,
+     check -> "nothing"   $$$      whether or not anyone wrote.
+     ...all day...        $$$$$$
+                                   1 agent  :  ~$2/hr   (up to ~$18 cold)
+                                   10 agents:  ~$20 - $180 / hr
+                                   an 8h day:  ~$160 - $1,400  BURNED
+                                   ...before any real work is done.
+
+  THE iac WAY -- a blocked recv in C, asleep
+     zzz .............    $0
+     zzz .............    $0        waiting is free. the model is
+     zzz .............    $0        not even running.
+     MESSAGE LANDS ->     $ one turn
+                                   you pay for words, not for waiting.
+
+
+==================  WHERE THE MONEY GOES  ==================
+ONE TRIP THROUGH THE LOOP
+
+  shell:  msg=$(iac recv room me) --fork+exec--> [ recv ]
+                                                    |
+                                              asleep in kernel     <-- $0, for hours
+                                                    |   (a peer appends one line)
+                                              * WAKEUP * ---------> recv returns, exit 0
+  shell:  invoke_model "$msg" ------------------> [ AGENT TURN ]    <-- $$$ paid ONCE, here
+                                                   read -> act -> reply,
+                                                   then CEASES to exist
+  shell:  loop ----------------------------------> re-park on iac recv
+
+  the trick: the WAITING is done by the cheap C process, not the model.
+  one inference PER MESSAGE, never per check.

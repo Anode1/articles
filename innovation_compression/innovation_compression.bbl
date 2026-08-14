@@ -1,0 +1,915 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{agrawal2018}{book}{}
+      \name{author}{3}{}{%
+        {{hash=d379b2563b45b79c2a7d0703c88b412a}{%
+           family={Agrawal},
+           familyi={A\bibinitperiod},
+           given={Ajay},
+           giveni={A\bibinitperiod}}}%
+        {{hash=a3d4e21b1e5cc4edaaab0d63cc2de494}{%
+           family={Gans},
+           familyi={G\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod}}}%
+        {{hash=1c03aa99078dac095be795ecb415c439}{%
+           family={Goldfarb},
+           familyi={G\bibinitperiod},
+           given={Avi},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Harvard Business Review Press}%
+      }
+      \strng{namehash}{7a33f2eccf739d3f412657ae8e5d9599}
+      \strng{fullhash}{7a33f2eccf739d3f412657ae8e5d9599}
+      \strng{bibnamehash}{7a33f2eccf739d3f412657ae8e5d9599}
+      \strng{authorbibnamehash}{7a33f2eccf739d3f412657ae8e5d9599}
+      \strng{authornamehash}{7a33f2eccf739d3f412657ae8e5d9599}
+      \strng{authorfullhash}{7a33f2eccf739d3f412657ae8e5d9599}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Prediction Machines: The Simple Economics of Artificial Intelligence}
+      \field{year}{2018}
+    \endentry
+    \entry{arnold_ode}{book}{}
+      \name{author}{1}{}{%
+        {{hash=92d7efabd161dd52a00501a33ccb997d}{%
+           family={Arnold},
+           familyi={A\bibinitperiod},
+           given={Vladimir\bibnamedelima I.},
+           giveni={V\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{fullhash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{bibnamehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{authorbibnamehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{authornamehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{authorfullhash}{92d7efabd161dd52a00501a33ccb997d}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Ordinary Differential Equations}
+      \field{year}{1973}
+    \endentry
+    \entry{arnold1984}{book}{}
+      \name{author}{1}{}{%
+        {{hash=92d7efabd161dd52a00501a33ccb997d}{%
+           family={Arnold},
+           familyi={A\bibinitperiod},
+           given={Vladimir\bibnamedelima I.},
+           giveni={V\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{fullhash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{bibnamehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{authorbibnamehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{authornamehash}{92d7efabd161dd52a00501a33ccb997d}
+      \strng{authorfullhash}{92d7efabd161dd52a00501a33ccb997d}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Catastrophe Theory}
+      \field{year}{1984}
+    \endentry
+    \entry{boyd1985}{book}{}
+      \name{author}{2}{}{%
+        {{hash=018a1bcaeb722c836df66d27c47f298a}{%
+           family={Boyd},
+           familyi={B\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=999bae4db12937f0da3aec7f0d7d2fee}{%
+           family={Richerson},
+           familyi={R\bibinitperiod},
+           given={Peter\bibnamedelima J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {University of Chicago Press}%
+      }
+      \strng{namehash}{396b74ac71c1177aec5cc46540a56900}
+      \strng{fullhash}{396b74ac71c1177aec5cc46540a56900}
+      \strng{bibnamehash}{396b74ac71c1177aec5cc46540a56900}
+      \strng{authorbibnamehash}{396b74ac71c1177aec5cc46540a56900}
+      \strng{authornamehash}{396b74ac71c1177aec5cc46540a56900}
+      \strng{authorfullhash}{396b74ac71c1177aec5cc46540a56900}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Culture and the Evolutionary Process}
+      \field{year}{1985}
+    \endentry
+    \entry{bush1945}{article}{}
+      \name{author}{1}{}{%
+        {{hash=b312ced1256a24388308f96ba6268d03}{%
+           family={Bush},
+           familyi={B\bibinitperiod},
+           given={Vannevar},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{b312ced1256a24388308f96ba6268d03}
+      \strng{fullhash}{b312ced1256a24388308f96ba6268d03}
+      \strng{bibnamehash}{b312ced1256a24388308f96ba6268d03}
+      \strng{authorbibnamehash}{b312ced1256a24388308f96ba6268d03}
+      \strng{authornamehash}{b312ced1256a24388308f96ba6268d03}
+      \strng{authorfullhash}{b312ced1256a24388308f96ba6268d03}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Atlantic Monthly}
+      \field{note}{the Memex; origin of the personal lifetime store}
+      \field{number}{1}
+      \field{title}{As We May Think}
+      \field{volume}{176}
+      \field{year}{1945}
+      \field{pages}{101\bibrangedash 108}
+      \range{pages}{8}
+    \endentry
+    \entry{campbell1960}{article}{}
+      \name{author}{1}{}{%
+        {{hash=b82d4be5d69907887d37ff8d9a6a1656}{%
+           family={Campbell},
+           familyi={C\bibinitperiod},
+           given={Donald\bibnamedelima T.},
+           giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{b82d4be5d69907887d37ff8d9a6a1656}
+      \strng{fullhash}{b82d4be5d69907887d37ff8d9a6a1656}
+      \strng{bibnamehash}{b82d4be5d69907887d37ff8d9a6a1656}
+      \strng{authorbibnamehash}{b82d4be5d69907887d37ff8d9a6a1656}
+      \strng{authornamehash}{b82d4be5d69907887d37ff8d9a6a1656}
+      \strng{authorfullhash}{b82d4be5d69907887d37ff8d9a6a1656}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychological Review}
+      \field{number}{6}
+      \field{title}{Blind Variation and Selective Retention in Creative Thought as in Other Knowledge Processes}
+      \field{volume}{67}
+      \field{year}{1960}
+      \field{pages}{380\bibrangedash 400}
+      \range{pages}{21}
+    \endentry
+    \entry{conwaymorris2003}{book}{}
+      \name{author}{1}{}{%
+        {{hash=2c68827b8167651e37c495324b9999b4}{%
+           family={Conway\bibnamedelima Morris},
+           familyi={C\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{2c68827b8167651e37c495324b9999b4}
+      \strng{fullhash}{2c68827b8167651e37c495324b9999b4}
+      \strng{bibnamehash}{2c68827b8167651e37c495324b9999b4}
+      \strng{authorbibnamehash}{2c68827b8167651e37c495324b9999b4}
+      \strng{authornamehash}{2c68827b8167651e37c495324b9999b4}
+      \strng{authorfullhash}{2c68827b8167651e37c495324b9999b4}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{the pervasiveness of convergent evolution}
+      \field{title}{Life's Solutions: Inevitable Humans in a Lonely Universe}
+      \field{year}{2003}
+    \endentry
+    \entry{davis_sigal_weyuker}{book}{}
+      \name{author}{3}{}{%
+        {{hash=e4114c789dca8de08a7a621c5d95c5d9}{%
+           family={Davis},
+           familyi={D\bibinitperiod},
+           given={Martin\bibnamedelima D.},
+           giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=8f74b401cf63a53c8bedd3cf5cf10a19}{%
+           family={Sigal},
+           familyi={S\bibinitperiod},
+           given={Ron},
+           giveni={R\bibinitperiod}}}%
+        {{hash=1c0f203e94c0cbd2be0d82faf70a16b0}{%
+           family={Weyuker},
+           familyi={W\bibinitperiod},
+           given={Elaine\bibnamedelima J.},
+           giveni={E\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press}%
+      }
+      \strng{namehash}{0ba48642b5c350ef5030151e18291fd3}
+      \strng{fullhash}{0ba48642b5c350ef5030151e18291fd3}
+      \strng{bibnamehash}{0ba48642b5c350ef5030151e18291fd3}
+      \strng{authorbibnamehash}{0ba48642b5c350ef5030151e18291fd3}
+      \strng{authornamehash}{0ba48642b5c350ef5030151e18291fd3}
+      \strng{authorfullhash}{0ba48642b5c350ef5030151e18291fd3}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{title}{Computability, Complexity, and Languages: Fundamentals of Theoretical Computer Science}
+      \field{year}{1994}
+    \endentry
+    \entry{dawkins1976}{book}{}
+      \name{author}{1}{}{%
+        {{hash=e4bf161272e948cc189fac2d9b7415a5}{%
+           family={Dawkins},
+           familyi={D\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{e4bf161272e948cc189fac2d9b7415a5}
+      \strng{fullhash}{e4bf161272e948cc189fac2d9b7415a5}
+      \strng{bibnamehash}{e4bf161272e948cc189fac2d9b7415a5}
+      \strng{authorbibnamehash}{e4bf161272e948cc189fac2d9b7415a5}
+      \strng{authornamehash}{e4bf161272e948cc189fac2d9b7415a5}
+      \strng{authorfullhash}{e4bf161272e948cc189fac2d9b7415a5}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{memes}
+      \field{title}{The Selfish Gene}
+      \field{year}{1976}
+    \endentry
+    \entry{gavrilov_context_renorm}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{1}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{GitHub}
+      \field{note}{the ledger proposal, first version; stable release PDF}
+      \field{title}{Context Renormalization}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://github.com/Anode1/context-renormalization/releases/download/v1.0/context_renormalization.pdf
+      \endverb
+      \verb{url}
+      \verb https://github.com/Anode1/context-renormalization/releases/download/v1.0/context_renormalization.pdf
+      \endverb
+    \endentry
+    \entry{gavrilov_ais}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{2}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{GitHub}
+      \field{note}{personal plain-text associative index, keys to content, records holding link sets; the ledger proposal built on a graph-style index, second version; origin 2001}
+      \field{title}{AIS: Associative Indexing Service}
+      \field{year}{2026}
+      \verb{urlraw}
+      \verb https://github.com/Anode1/ais
+      \endverb
+      \verb{url}
+      \verb https://github.com/Anode1/ais
+      \endverb
+    \endentry
+    \entry{gavrilov_context_call}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{3}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Substack}
+      \field{note}{open call to the model vendors; links the stable v1 release PDF}
+      \field{title}{An Open Call for a Cross-Vendor Context Protocol}
+      \field{year}{2026}
+      \verb{urlraw}
+      \verb https://gavr144.substack.com/p/a-follow-up-thought-on-context-renormalization
+      \endverb
+      \verb{url}
+      \verb https://gavr144.substack.com/p/a-follow-up-thought-on-context-renormalization
+      \endverb
+    \endentry
+    \entry{gavrilov_emergence}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{4}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{author's companion essay}
+      \field{title}{Emergence Does Not Care About Substrate}
+      \field{year}{2026}
+    \endentry
+    \entry{gavrilov_compressors}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{5}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{author's companion work}
+      \field{title}{Intelligence Is the Discovery of Compressors}
+      \field{year}{2026}
+    \endentry
+    \entry{gavrilov_atree}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f9e18b1a5c167c9e37369539d7799368}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={Vasili},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Zenodo}%
+      }
+      \strng{namehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{fullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{bibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorbibnamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authornamehash}{f9e18b1a5c167c9e37369539d7799368}
+      \strng{authorfullhash}{f9e18b1a5c167c9e37369539d7799368}
+      \field{extraname}{6}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Zenodo concept DOI (all versions); resolves to the latest}
+      \field{title}{The Atree Format: A Scalable Binary-Path Notation for Ancestral Genealogies}
+      \field{year}{2026}
+      \verb{doi}
+      \verb 10.5281/zenodo.20587715
+      \endverb
+    \endentry
+    \entry{geman1992}{article}{}
+      \name{author}{3}{}{%
+        {{hash=559187c6e8cad5a03e2e2c57be738be0}{%
+           family={Geman},
+           familyi={G\bibinitperiod},
+           given={Stuart},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5e800f4e8612595408e837b525dcb194}{%
+           family={Bienenstock},
+           familyi={B\bibinitperiod},
+           given={Elie},
+           giveni={E\bibinitperiod}}}%
+        {{hash=354d7f4444d2ce013f0557758d97d4da}{%
+           family={Doursat},
+           familyi={D\bibinitperiod},
+           given={René},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{dd71a5679a5bb79d7c782553f3d32dd4}
+      \strng{fullhash}{dd71a5679a5bb79d7c782553f3d32dd4}
+      \strng{bibnamehash}{dd71a5679a5bb79d7c782553f3d32dd4}
+      \strng{authorbibnamehash}{dd71a5679a5bb79d7c782553f3d32dd4}
+      \strng{authornamehash}{dd71a5679a5bb79d7c782553f3d32dd4}
+      \strng{authorfullhash}{dd71a5679a5bb79d7c782553f3d32dd4}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neural Computation}
+      \field{number}{1}
+      \field{title}{Neural Networks and the Bias/Variance Dilemma}
+      \field{volume}{4}
+      \field{year}{1992}
+      \field{pages}{1\bibrangedash 58}
+      \range{pages}{58}
+      \verb{doi}
+      \verb 10.1162/neco.1992.4.1.1
+      \endverb
+    \endentry
+    \entry{gray2003}{article}{}
+      \name{author}{1}{}{%
+        {{hash=d2f74f5c31108f8e927626ee785fec46}{%
+           family={Gray},
+           familyi={G\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{d2f74f5c31108f8e927626ee785fec46}
+      \strng{fullhash}{d2f74f5c31108f8e927626ee785fec46}
+      \strng{bibnamehash}{d2f74f5c31108f8e927626ee785fec46}
+      \strng{authorbibnamehash}{d2f74f5c31108f8e927626ee785fec46}
+      \strng{authornamehash}{d2f74f5c31108f8e927626ee785fec46}
+      \strng{authorfullhash}{d2f74f5c31108f8e927626ee785fec46}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the ACM}
+      \field{note}{1998 ACM Turing Award Lecture; goal: a personal Memex, record what one sees and hears and return any item on request; earlier as Microsoft Research MSR-TR-99-50, 1999}
+      \field{number}{1}
+      \field{title}{What Next? A Dozen Information-Technology Research Goals}
+      \field{volume}{50}
+      \field{year}{2003}
+      \field{pages}{41\bibrangedash 57}
+      \range{pages}{17}
+    \endentry
+    \entry{kirby2008}{article}{}
+      \name{author}{3}{}{%
+        {{hash=466ad0e29b90ba35b93ae3a5b45f2e2b}{%
+           family={Kirby},
+           familyi={K\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c0295a129288c40a0a99629d34d6803f}{%
+           family={Cornish},
+           familyi={C\bibinitperiod},
+           given={Hannah},
+           giveni={H\bibinitperiod}}}%
+        {{hash=411f2bbc9a4add6206457602060eff73}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Kenny},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{a7c15fb6bbc2ef7bcb93fb657ba2ca57}
+      \strng{fullhash}{a7c15fb6bbc2ef7bcb93fb657ba2ca57}
+      \strng{bibnamehash}{a7c15fb6bbc2ef7bcb93fb657ba2ca57}
+      \strng{authorbibnamehash}{a7c15fb6bbc2ef7bcb93fb657ba2ca57}
+      \strng{authornamehash}{a7c15fb6bbc2ef7bcb93fb657ba2ca57}
+      \strng{authorfullhash}{a7c15fb6bbc2ef7bcb93fb657ba2ca57}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the National Academy of Sciences}
+      \field{number}{31}
+      \field{title}{Cumulative Cultural Evolution in the Laboratory: An Experimental Approach to the Origins of Structure in Human Language}
+      \field{volume}{105}
+      \field{year}{2008}
+      \field{pages}{10681\bibrangedash 10686}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1073/pnas.0707835105
+      \endverb
+    \endentry
+    \entry{kuhn1962}{book}{}
+      \name{author}{1}{}{%
+        {{hash=d0261ae5373d7a2ba373aa72a2ddac43}{%
+           family={Kuhn},
+           familyi={K\bibinitperiod},
+           given={Thomas\bibnamedelima S.},
+           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {University of Chicago Press}%
+      }
+      \strng{namehash}{d0261ae5373d7a2ba373aa72a2ddac43}
+      \strng{fullhash}{d0261ae5373d7a2ba373aa72a2ddac43}
+      \strng{bibnamehash}{d0261ae5373d7a2ba373aa72a2ddac43}
+      \strng{authorbibnamehash}{d0261ae5373d7a2ba373aa72a2ddac43}
+      \strng{authornamehash}{d0261ae5373d7a2ba373aa72a2ddac43}
+      \strng{authorfullhash}{d0261ae5373d7a2ba373aa72a2ddac43}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Structure of Scientific Revolutions}
+      \field{year}{1962}
+    \endentry
+    \entry{ohara2006}{article}{}
+      \name{author}{6}{}{%
+        {{hash=9461c8b8056a9c7795a79540699fb9e2}{%
+           family={O'Hara},
+           familyi={O\bibinitperiod},
+           given={Kieron},
+           giveni={K\bibinitperiod}}}%
+        {{hash=50b7af3dac8bcb43b90b3191fb9b09a5}{%
+           family={Morris},
+           familyi={M\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=f5ed7103c4ec9a220dedc3161dc1782c}{%
+           family={Shadbolt},
+           familyi={S\bibinitperiod},
+           given={Nigel},
+           giveni={N\bibinitperiod}}}%
+        {{hash=74e147c7bc9e5b0501979cd38acae284}{%
+           family={Hitch},
+           familyi={H\bibinitperiod},
+           given={Graham\bibnamedelima J.},
+           giveni={G\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=459b6ba12179dc24dc1de5b9c277d976}{%
+           family={Hall},
+           familyi={H\bibinitperiod},
+           given={Wendy},
+           giveni={W\bibinitperiod}}}%
+        {{hash=4e753e969c75d137e9d4e1dce9b2cf6e}{%
+           family={Beagrie},
+           familyi={B\bibinitperiod},
+           given={Neil},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6ed390f841785806f42c05b64e54c8a}
+      \strng{fullhash}{f8b501f4b2516146e9e2f7c71a9588fc}
+      \strng{bibnamehash}{b6ed390f841785806f42c05b64e54c8a}
+      \strng{authorbibnamehash}{b6ed390f841785806f42c05b64e54c8a}
+      \strng{authornamehash}{b6ed390f841785806f42c05b64e54c8a}
+      \strng{authorfullhash}{f8b501f4b2516146e9e2f7c71a9588fc}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the Royal Society Interface}
+      \field{note}{the UKCRC ``Memories for Life'' Grand Challenge, 2003}
+      \field{number}{8}
+      \field{title}{Memories for Life: A Review of the Science and Technology}
+      \field{volume}{3}
+      \field{year}{2006}
+      \field{pages}{351\bibrangedash 365}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1098/rsif.2006.0125
+      \endverb
+    \endentry
+    \entry{rogers2003}{book}{}
+      \name{author}{1}{}{%
+        {{hash=669b8abed5f7af06c8e59f33187e24ba}{%
+           family={Rogers},
+           familyi={R\bibinitperiod},
+           given={Everett\bibnamedelima M.},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Free Press}%
+      }
+      \strng{namehash}{669b8abed5f7af06c8e59f33187e24ba}
+      \strng{fullhash}{669b8abed5f7af06c8e59f33187e24ba}
+      \strng{bibnamehash}{669b8abed5f7af06c8e59f33187e24ba}
+      \strng{authorbibnamehash}{669b8abed5f7af06c8e59f33187e24ba}
+      \strng{authornamehash}{669b8abed5f7af06c8e59f33187e24ba}
+      \strng{authorfullhash}{669b8abed5f7af06c8e59f33187e24ba}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{5}
+      \field{note}{1st ed. 1962}
+      \field{title}{Diffusion of Innovations}
+      \field{year}{2003}
+    \endentry
+    \entry{rothenberg1995}{article}{}
+      \name{author}{1}{}{%
+        {{hash=8d3b8d51136ea83a79ce84511204c497}{%
+           family={Rothenberg},
+           familyi={R\bibinitperiod},
+           given={Jeff},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{8d3b8d51136ea83a79ce84511204c497}
+      \strng{fullhash}{8d3b8d51136ea83a79ce84511204c497}
+      \strng{bibnamehash}{8d3b8d51136ea83a79ce84511204c497}
+      \strng{authorbibnamehash}{8d3b8d51136ea83a79ce84511204c497}
+      \strng{authornamehash}{8d3b8d51136ea83a79ce84511204c497}
+      \strng{authorfullhash}{8d3b8d51136ea83a79ce84511204c497}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific American}
+      \field{note}{the canonical digital-longevity / format-obsolescence problem}
+      \field{number}{1}
+      \field{title}{Ensuring the Longevity of Digital Documents}
+      \field{volume}{272}
+      \field{year}{1995}
+      \field{pages}{42\bibrangedash 47}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1038/scientificamerican0195-42
+      \endverb
+    \endentry
+    \entry{schmidhuber2010}{article}{}
+      \name{author}{1}{}{%
+        {{hash=288bdbcfe1b91ad7484d7a24f74f99ed}{%
+           family={Schmidhuber},
+           familyi={S\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{288bdbcfe1b91ad7484d7a24f74f99ed}
+      \strng{fullhash}{288bdbcfe1b91ad7484d7a24f74f99ed}
+      \strng{bibnamehash}{288bdbcfe1b91ad7484d7a24f74f99ed}
+      \strng{authorbibnamehash}{288bdbcfe1b91ad7484d7a24f74f99ed}
+      \strng{authornamehash}{288bdbcfe1b91ad7484d7a24f74f99ed}
+      \strng{authorfullhash}{288bdbcfe1b91ad7484d7a24f74f99ed}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Autonomous Mental Development}
+      \field{number}{3}
+      \field{title}{Formal Theory of Creativity, Fun, and Intrinsic Motivation (1990--2010)}
+      \field{volume}{2}
+      \field{year}{2010}
+      \field{pages}{230\bibrangedash 247}
+      \range{pages}{18}
+    \endentry
+    \entry{sperber1996}{book}{}
+      \name{author}{1}{}{%
+        {{hash=668bce40d496b0ee9fba07b4b1040e79}{%
+           family={Sperber},
+           familyi={S\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Blackwell}%
+      }
+      \strng{namehash}{668bce40d496b0ee9fba07b4b1040e79}
+      \strng{fullhash}{668bce40d496b0ee9fba07b4b1040e79}
+      \strng{bibnamehash}{668bce40d496b0ee9fba07b4b1040e79}
+      \strng{authorbibnamehash}{668bce40d496b0ee9fba07b4b1040e79}
+      \strng{authornamehash}{668bce40d496b0ee9fba07b4b1040e79}
+      \strng{authorfullhash}{668bce40d496b0ee9fba07b4b1040e79}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Epidemiology of representations; cultural attractors}
+      \field{title}{Explaining Culture: A Naturalistic Approach}
+      \field{year}{1996}
+    \endentry
+    \entry{stanley2015}{book}{}
+      \name{author}{2}{}{%
+        {{hash=cd20c341249f4e0cd9cb16431e439823}{%
+           family={Stanley},
+           familyi={S\bibinitperiod},
+           given={Kenneth\bibnamedelima O.},
+           giveni={K\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=5367165912539f2cda5ace6976c571c1}{%
+           family={Lehman},
+           familyi={L\bibinitperiod},
+           given={Joel},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{bbeab1d3fe732cbe19bcf8eaa351b0e4}
+      \strng{fullhash}{bbeab1d3fe732cbe19bcf8eaa351b0e4}
+      \strng{bibnamehash}{bbeab1d3fe732cbe19bcf8eaa351b0e4}
+      \strng{authorbibnamehash}{bbeab1d3fe732cbe19bcf8eaa351b0e4}
+      \strng{authornamehash}{bbeab1d3fe732cbe19bcf8eaa351b0e4}
+      \strng{authorfullhash}{bbeab1d3fe732cbe19bcf8eaa351b0e4}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Why Greatness Cannot Be Planned: The Myth of the Objective}
+      \field{year}{2015}
+    \endentry
+    \entry{thom1975}{book}{}
+      \name{author}{1}{}{%
+        {{hash=6f1f3ecf1d3fa414d9495cc27437887e}{%
+           family={Thom},
+           familyi={T\bibinitperiod},
+           given={René},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {W. A. Benjamin}%
+      }
+      \strng{namehash}{6f1f3ecf1d3fa414d9495cc27437887e}
+      \strng{fullhash}{6f1f3ecf1d3fa414d9495cc27437887e}
+      \strng{bibnamehash}{6f1f3ecf1d3fa414d9495cc27437887e}
+      \strng{authorbibnamehash}{6f1f3ecf1d3fa414d9495cc27437887e}
+      \strng{authornamehash}{6f1f3ecf1d3fa414d9495cc27437887e}
+      \strng{authorfullhash}{6f1f3ecf1d3fa414d9495cc27437887e}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{7 elementary catastrophes; French original 1972}
+      \field{title}{Structural Stability and Morphogenesis}
+      \field{year}{1975}
+    \endentry
+    \entry{thompson1917}{book}{}
+      \name{author}{1}{}{%
+        {{hash=5dd3f43a28df8427fd2bbfb900cce710}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={D'Arcy\bibnamedelima Wentworth},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{5dd3f43a28df8427fd2bbfb900cce710}
+      \strng{fullhash}{5dd3f43a28df8427fd2bbfb900cce710}
+      \strng{bibnamehash}{5dd3f43a28df8427fd2bbfb900cce710}
+      \strng{authorbibnamehash}{5dd3f43a28df8427fd2bbfb900cce710}
+      \strng{authornamehash}{5dd3f43a28df8427fd2bbfb900cce710}
+      \strng{authorfullhash}{5dd3f43a28df8427fd2bbfb900cce710}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{On Growth and Form}
+      \field{year}{1917}
+    \endentry
+    \entry{voloshinov}{book}{}
+      \name{author}{1}{}{%
+        {{hash=f7839b593583ac2d0c96e9770e6ab3f5}{%
+           family={Voloshinov},
+           familyi={V\bibinitperiod},
+           given={Aleksandr\bibnamedelima V.},
+           giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Prosveshchenie, Moscow}%
+      }
+      \strng{namehash}{f7839b593583ac2d0c96e9770e6ab3f5}
+      \strng{fullhash}{f7839b593583ac2d0c96e9770e6ab3f5}
+      \strng{bibnamehash}{f7839b593583ac2d0c96e9770e6ab3f5}
+      \strng{authorbibnamehash}{f7839b593583ac2d0c96e9770e6ab3f5}
+      \strng{authornamehash}{f7839b593583ac2d0c96e9770e6ab3f5}
+      \strng{authorfullhash}{f7839b593583ac2d0c96e9770e6ab3f5}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{note}{in Russian; 1st ed. 1992}
+      \field{title}{Mathematics and Art [Matematika i iskusstvo]}
+      \field{year}{2000}
+    \endentry
+    \entry{weitzman1998}{article}{}
+      \name{author}{1}{}{%
+        {{hash=776b6344e4ce0084d8735a601c1bdc8c}{%
+           family={Weitzman},
+           familyi={W\bibinitperiod},
+           given={Martin\bibnamedelima L.},
+           giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \strng{namehash}{776b6344e4ce0084d8735a601c1bdc8c}
+      \strng{fullhash}{776b6344e4ce0084d8735a601c1bdc8c}
+      \strng{bibnamehash}{776b6344e4ce0084d8735a601c1bdc8c}
+      \strng{authorbibnamehash}{776b6344e4ce0084d8735a601c1bdc8c}
+      \strng{authornamehash}{776b6344e4ce0084d8735a601c1bdc8c}
+      \strng{authorfullhash}{776b6344e4ce0084d8735a601c1bdc8c}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Quarterly Journal of Economics}
+      \field{number}{2}
+      \field{title}{Recombinant Growth}
+      \field{volume}{113}
+      \field{year}{1998}
+      \field{pages}{331\bibrangedash 360}
+      \range{pages}{30}
+    \endentry
+    \entry{wolfram2002}{book}{}
+      \name{author}{1}{}{%
+        {{hash=fc7f119c141fbcc7810a4b3a86f599db}{%
+           family={Wolfram},
+           familyi={W\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wolfram Media}%
+      }
+      \strng{namehash}{fc7f119c141fbcc7810a4b3a86f599db}
+      \strng{fullhash}{fc7f119c141fbcc7810a4b3a86f599db}
+      \strng{bibnamehash}{fc7f119c141fbcc7810a4b3a86f599db}
+      \strng{authorbibnamehash}{fc7f119c141fbcc7810a4b3a86f599db}
+      \strng{authornamehash}{fc7f119c141fbcc7810a4b3a86f599db}
+      \strng{authorfullhash}{fc7f119c141fbcc7810a4b3a86f599db}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A New Kind of Science}
+      \field{year}{2002}
+    \endentry
+    \entry{wolpert1996}{article}{}
+      \name{author}{1}{}{%
+        {{hash=ad1e9fc8d8c048abe3c7a40671b7a044}{%
+           family={Wolpert},
+           familyi={W\bibinitperiod},
+           given={David\bibnamedelima H.},
+           giveni={D\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{ad1e9fc8d8c048abe3c7a40671b7a044}
+      \strng{fullhash}{ad1e9fc8d8c048abe3c7a40671b7a044}
+      \strng{bibnamehash}{ad1e9fc8d8c048abe3c7a40671b7a044}
+      \strng{authorbibnamehash}{ad1e9fc8d8c048abe3c7a40671b7a044}
+      \strng{authornamehash}{ad1e9fc8d8c048abe3c7a40671b7a044}
+      \strng{authorfullhash}{ad1e9fc8d8c048abe3c7a40671b7a044}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neural Computation}
+      \field{number}{7}
+      \field{title}{The Lack of A Priori Distinctions Between Learning Algorithms}
+      \field{volume}{8}
+      \field{year}{1996}
+      \field{pages}{1341\bibrangedash 1390}
+      \range{pages}{50}
+      \verb{doi}
+      \verb 10.1162/neco.1996.8.7.1341
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

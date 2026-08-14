@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 636" width="760" height="636" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<title>Emissions intensity of grid-served against self-supplied load</title>
+<rect width="760" height="636" fill="#fcfcfb"/>
+<text x="24" y="30" font-size="20" font-weight="600" fill="#0b0b0b">What refusing to sell produces</text>
+<text x="24" y="50" font-size="14" fill="#52514e">Grams of CO2e per kilowatt hour. The load gets built either way;</text>
+<text x="24" y="66" font-size="14" fill="#52514e">the connection decides which of these two groups it lands in.</text>
+<line x1="236.0" y1="116" x2="236.0" y2="400" stroke="#e2e1dd" stroke-width="1"/>
+<text x="236.0" y="420" font-size="12.5" text-anchor="middle" fill="#52514e">0</text>
+<line x1="328.7" y1="116" x2="328.7" y2="400" stroke="#e2e1dd" stroke-width="1"/>
+<text x="328.7" y="420" font-size="12.5" text-anchor="middle" fill="#52514e">200</text>
+<line x1="421.4" y1="116" x2="421.4" y2="400" stroke="#e2e1dd" stroke-width="1"/>
+<text x="421.4" y="420" font-size="12.5" text-anchor="middle" fill="#52514e">400</text>
+<line x1="514.0" y1="116" x2="514.0" y2="400" stroke="#e2e1dd" stroke-width="1"/>
+<text x="514.0" y="420" font-size="12.5" text-anchor="middle" fill="#52514e">600</text>
+<line x1="606.7" y1="116" x2="606.7" y2="400" stroke="#e2e1dd" stroke-width="1"/>
+<text x="606.7" y="420" font-size="12.5" text-anchor="middle" fill="#52514e">800</text>
+<text x="426.0" y="440" font-size="13" text-anchor="middle" fill="#52514e">grams CO2e per kWh</text>
+<text x="220" y="134" font-size="12" font-weight="600" text-anchor="end" fill="#2a78d6" letter-spacing="0.5">SERVED BY THE GRID</text>
+<text x="220" y="164" font-size="14" text-anchor="end" fill="#0b0b0b">Modern combined cycle</text>
+<text x="220" y="179" font-size="11" font-style="italic" text-anchor="end" fill="#b9b8b3">cited</text>
+<path d="M236,148 H389.5609756097561 a4,4 0 0 1 4,4 V178 a4,4 0 0 1 -4,4 H236 Z" fill="#2a78d6"/>
+<rect x="393.6" y="148" width="13.9" height="34" rx="4" fill="#2a78d6" opacity="0.45"/>
+<text x="417.5" y="171" font-size="14" font-weight="600" fill="#0b0b0b">340-370</text>
+<text x="220" y="224" font-size="14" text-anchor="end" fill="#0b0b0b">Alberta fleet average</text>
+<text x="220" y="239" font-size="11" font-style="italic" text-anchor="end" fill="#b9b8b3">cited, 2022</text>
+<path d="M236,208 H449.8048780487805 a4,4 0 0 1 4,4 V238 a4,4 0 0 1 -4,4 H236 Z" fill="#2a78d6"/>
+<text x="463.8" y="231" font-size="14" font-weight="600" fill="#0b0b0b">470</text>
+<text x="220" y="284" font-size="12" font-weight="600" text-anchor="end" fill="#eb6834" letter-spacing="0.5">BUILT BEHIND THE FENCE</text>
+<text x="220" y="314" font-size="14" text-anchor="end" fill="#0b0b0b">Simple-cycle gas on site</text>
+<text x="220" y="329" font-size="11" font-style="italic" text-anchor="end" fill="#b9b8b3">indicative</text>
+<path d="M236,298 H486.8780487804878 a4,4 0 0 1 4,4 V328 a4,4 0 0 1 -4,4 H236 Z" fill="#eb6834"/>
+<rect x="490.9" y="298" width="46.3" height="34" rx="4" fill="#eb6834" opacity="0.45"/>
+<text x="547.2" y="321" font-size="14" font-weight="600" fill="#0b0b0b">550-650</text>
+<text x="220" y="374" font-size="14" text-anchor="end" fill="#0b0b0b">Diesel reciprocating on site</text>
+<text x="220" y="389" font-size="11" font-style="italic" text-anchor="end" fill="#b9b8b3">indicative</text>
+<path d="M236,358 H533.219512195122 a4,4 0 0 1 4,4 V388 a4,4 0 0 1 -4,4 H236 Z" fill="#eb6834"/>
+<rect x="537.2" y="358" width="46.3" height="34" rx="4" fill="#eb6834" opacity="0.45"/>
+<text x="593.6" y="381" font-size="14" font-weight="600" fill="#0b0b0b">650-750</text>
+<text x="24" y="484" font-size="15" fill="#0b0b0b">A third of Alberta&#8217;s queue is about 33 TWh a year.</text>
+<text x="24" y="506" font-size="15" fill="#0b0b0b">Grid-served that is <tspan font-weight="600">12 to 15 Mt</tspan> a year. Self-supplied, about <tspan font-weight="600">18 to 23 Mt</tspan>.</text>
+<text x="24" y="559" font-size="12" fill="#52514e">Cited values: Canada Energy Regulator, Alberta electricity intensity 470 g/kWh in 2022, down 48 per cent since 2005, a fleet</text>
+<text x="24" y="572" font-size="12" fill="#52514e">average including zero-emitting generation. Combined-cycle band from Capital Power Genesee 0.35, Kineticor Cascade 0.35-0.37,</text>
+<text x="24" y="585" font-size="12" fill="#52514e">AESO reference plant 0.34, Alberta TIER good-as-best-gas benchmark 0.37. The two on-site rows are marked indicative because</text>
+<text x="24" y="598" font-size="12" fill="#52514e">they are derived, not cited: fuel carbon divided by typical plant efficiency, not measurements of any installed unit. A large</text>
+<text x="24" y="611" font-size="12" fill="#52514e">enough campus could instead build combined cycle on site and land near the grid figure; the band assumes the fast-deploying</text>
+<text x="24" y="624" font-size="12" fill="#52514e">reciprocating and simple-cycle equipment realistic inside a three-year window. Megatonne arithmetic is mine, at 5.3 GW and 70%.</text>
+</svg>

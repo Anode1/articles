@@ -1,0 +1,21 @@
+{
+  "model": "claude-sonnet-5",
+  "polls": 120,
+  "interval": 30.0,
+  "arms": [
+    {
+      "label": "warm",
+      "mode": "warm",
+      "polls_requested": 120,
+      "polls_done": 120,
+      "context_tokens": 49836,
+      "totals": {
+        "input": 4440,
+        "output": 875,
+        "cache_read": 5926081,
+        "cache_write": 49799
+      },
+      "usd": 1.99101555
+    }
+  ]
+}

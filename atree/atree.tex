@@ -1,0 +1,564 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath, amssymb, amsthm}
+\newtheorem{proposition}{Proposition}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, citecolor=blue!50!black, urlcolor=blue!50!black}
+\usepackage[backend=biber, style=numeric-comp, sorting=nyt]{biblatex}
+\addbibresource{atree.bib}
+
+\newcommand{\atree}{\texttt{atree}}
+
+\title{The Atree Format: A Scalable Binary-Path Notation for\\ Ancestral Genealogies, with an Application to Lineage Matching}
+\author{Vasili Gavrilov\\
+\small Independent researcher\\
+\small ORCID: \href{https://orcid.org/0009-0007-9371-5994}{0009-0007-9371-5994}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe \atree, a compact, human-readable, plain-text notation for \emph{ascending}
+genealogies (a person's direct ancestors). Each ancestor is named by the path of ancestral sexes
+from the subject, \texttt{M} for father, \texttt{F} for mother, so \texttt{MF} is the father's
+mother. This path is exactly the classical Ahnentafel (Sosa--Stradonitz) number written in binary,
+reading each $0$ as father and each $1$ as mother. A decimal Ahnentafel number doubles every
+generation and soon grows unwieldy; an \atree{} path instead has one letter per generation, so its
+length is simply how far back one is looking, and each line stands on its own, needing no surrounding
+file, so any subset can be shared freely. We give the grammar, exact and reversible conversions to
+and from Ahnentafel, tool support (GEDCOM import; an HIR/centimorgan calculator), and the limits
+(ascending trees only; when the same ancestor recurs through cousin marriage, ``pedigree collapse'',
+the tree becomes a graph). The main application is \emph{cross-person lineage matching}: when two
+people's \atree{} paths share a tail, the names along it sound alike, and any Y/mtDNA haplogroups
+agree, that is a measurable, spelling-robust signal that the two trees meet at the same ancestor.
+About $37$ yes/no choices ($37$ bits) suffice to single out any human who has ever lived, so
+identifying a person is itself a form of compression.
+\end{abstract}
+
+\noindent\textbf{Keywords:} genealogy; Ahnentafel; Sosa--Stradonitz; binary tree; ancestral path;
+record linkage; phonetic name matching; haplogroup; data compression; Kolmogorov complexity.
+
+\section{Introduction}
+\label{sec:intro}
+Personal genealogies must be stored and \emph{exchanged} as durable, human- and machine-readable
+text. The classical Ahnentafel numbering is compact but its decimal identifiers grow exponentially
+with depth and are opaque as paths. We present \atree: a sex-path identifier that is the natural
+coordinate of the ancestor binary tree, fixing both the scalability and the self-containment
+weaknesses of decimal Ahnentafel.\footnote{The notation underlying this paper arose earlier, in discussion on the molgen.org
+genealogy forum and during the author's DNA/genealogy tool work of 2009--2011 (\texttt{aisconvert}
+\textcopyright~2009 \cite{aisconvert}; \texttt{aisgedcom}/\texttt{AtreeParser} \textcopyright~2011
+\cite{aisgedcom}); the binary-tree genealogy format itself is listed by the author as proposed in
+2007. He named it ``\atree'' and first published the specification as a LiveJournal post on
+7~November~2011 \cite{lj_atree}, adding a Wikipedia section the next day \cite{wiki_gns}. This paper
+organizes and extends that material.}
+Contributions: (i)~the \atree{} notation and self-contained plain-text format (building on the older
+binary ancestor path of Anderson~\cite{anderson1995}); (ii)~a formal
+grammar (with reference converters); (iii)~bijective conversions;
+(iv)~a cross-person \emph{lineage-matching} method (combining structural, phonetic, and genetic evidence),
+with an information-theoretic analysis; and (v)~a statement of limitations.
+
+\section{Background: Ahnentafel / Sosa--Stradonitz}
+\label{sec:background}
+The Ahnentafel system \cite{eytzinger1590, wiki_ahnentafel} numbers a subject $1$, and assigns
+person $n$'s father $2n$ and mother $2n{+}1$. It is credited to Eytzinger (1590) and takes its
+common name ``Sosa--Stradonitz'' from Jer\'onimo de Sosa (1676) \cite{sosa1676} and Stephan
+Kekul\'e von Stradonitz (1898) \cite{kekule1898}, who popularised it. This is the same numbering
+computer science uses to keep a binary tree in a plain array (a node's two children at positions
+$2n$ and $2n{+}1$), and listing ancestors in number order simply walks the family tree generation by
+generation \cite{knuth_taocp3, clrs}. Writing $n$ in binary, dropping the leading $1$, then reading
+each bit as father ($0$) or mother ($1$) gives the genealogical path; \atree{} renames those bits
+\texttt{M}/\texttt{F}. This binary/letter-path
+reading of Ahnentafel, writing an ancestor as the string of father/mother steps given by the binary
+digits of its number, was already set out by Anderson~\cite{anderson1995} (in \texttt{f}/\texttt{m}
+form); \atree{} adopts the \texttt{M}/\texttt{F} convention and builds a self-contained exchange
+format upon it.
+
+\section{The \atree{} notation}
+\label{sec:notation}
+An \atree{} identifier is the \texttt{M}/\texttt{F} path from the subject to an ancestor; the first
+character encodes the subject's own sex. Formally, $\mathrm{atree}(n)=s\,\mu(b(n))$, where $s$ is
+the subject's sex letter, $b(n)$ is the binary expansion of $n$ without its leading~$1$, and $\mu$
+maps $0\mapsto\mathtt{M}$ and $1\mapsto\mathtt{F}$.
+Each line carries its full path, so any subset of lines is valid and shareable on its own.
+\textbf{No surrogate keys.} The path is a \emph{natural} key: it is derived from the data it names and
+it states the position it denotes, so an identifier can be read rather than resolved. This is the point
+of departure from both neighbours. GEDCOM assigns arbitrary surrogate identifiers
+(\texttt{@I1@}) that carry no information and must be dereferenced. Ahnentafel numbers are derived
+rather than arbitrary, but opaque: recovering the path from the number takes arithmetic, and the number
+grows geometrically with depth. \atree{} introduces no surrogate identifier at any level.
+
+A single \atree{} starts from one subject and lists only that subject's ancestors; a family or a
+whole database is therefore a \emph{collection} of \atree{}s, one per person. Because paths are
+relative to their subject, the same path string occurs in every tree and denotes a different person in
+each, so a collection needs one identifier per \emph{tree} to say whose ancestors a block of lines
+describes. That is the only identifier the format requires, and it scales with the number of subjects
+rather than the number of people: $N$ trees need $N$ such labels, not one per ancestor. Joining two
+collections is therefore a matter of keeping the subjects apart, not of reconciling per-person keys,
+and the matching of Section~\ref{sec:matching} then works across trees on the paths themselves. Siblings are simply
+different starting points whose ancestor paths coincide from the parents upward, so their lists share
+the same tails, the overlap that the matching of Section~\ref{sec:matching} uses.
+
+\section{Grammar}
+\label{sec:grammar}
+The grammar is BNF with POSIX character classes and regular-expression repetition. One rule is
+semantic rather than syntactic: a parenthesized group \texttt{(\dots)} is a \emph{date} when its
+contents parse as a date and it is \emph{not} enclosed by the surname slashes \texttt{/\dots/} (in
+which case it is a maiden name).
+
+\begin{verbatim}
+<atree>       ::= ( <line> <eol> )*
+<line>        ::= <blank> | <comment_line> | <person>
+<blank>       ::= <ws>*
+<comment_line> ::= <ws>* <comment>
+<comment>     ::= "#" [:print:]*
+
+<person>      ::= <path> <haps> <namefield> <datefield>
+                  <locfield> <commentfield>
+<haps>        ::= ( <ws>+ <haplogroup> )*
+<namefield>   ::= ( <ws>+ ","? <ws>* <names> )?
+<datefield>   ::= ( <ws>* <dates> )?
+<locfield>    ::= ( <sep> <location> )?
+<commentfield> ::= ( <ws>* <comment> )?
+<sep>         ::= <ws>+ ","? <ws>* | "," <ws>*
+
+<path>        ::= [MF]+     ; 1st letter = subject's sex;
+                            ; rest = father M / mother F
+<haplogroup>  ::= "[" ( <hapsys> ":" )? <hapname> "]"
+<hapsys>      ::= "Y" | "mt"   ; the two trees share clade letters
+<hapname>     ::= [:alnum:] ( [:alnum:] | "-" | "." )*
+                            ; stable SNP form, e.g. R-M269, N-M178
+<names>       ::= <name_text>? ( <ws>* <surname>
+                  ( <ws>* <name_text> )? )?
+<name_text>   ::= <word> ( <ws>+ <word> )*
+<word>        ::= <name_char>+
+<name_char>   ::= [:alnum:] | "'" | "-" | "." | "?"
+<surname>     ::= "/" <name_text>? <maiden>? "/"
+<maiden>      ::= "(" <name_text>? ")"
+
+<dates>       ::= "(" <ws>* <date_or_range> <ws>* ")"
+<date_or_range> ::= <gdate> ( <ws>* "-" <ws>* <gdate> )?
+<gdate>       ::= <approx>? ( <full_date> | <short_date>
+                  | <year> ) | "?"
+<approx>      ::= ( "ABT" | "BEF" | "AFT" | "EST" ) <ws>+ | "~"
+<full_date>   ::= <day> <ws>+ <month> <ws>+ <year>
+<short_date>  ::= <month> <ws>+ <year>
+<day>         ::= [:digit:]{1,2}
+<year>        ::= [:digit:]{1,4}
+<month>       ::= "JAN"|"FEB"|"MAR"|"APR"|"MAY"|"JUN"
+                | "JUL"|"AUG"|"SEP"|"OCT"|"NOV"|"DEC"
+
+<location>    ::= <loc_char>+
+<loc_char>    ::= [:print:] except "#"
+<ws>          ::= [:blank:]
+<eol>         ::= "\n"
+\end{verbatim}
+
+\section{Line syntax and examples}
+\label{sec:examples}
+Names precede an optional surname in \texttt{/\dots/} (GEDCOM style) with a maiden name in
+parentheses; \texttt{//} and \texttt{?} mark unknowns; dates use \texttt{ABT}/\texttt{BEF}/%
+\texttt{AFT}/\texttt{EST} and ranges. A worked ascending tree (excerpt); each person is one line:
+
+{\footnotesize\begin{verbatim}
+M    [Y:N1c1] ...
+MM   [Y:N1c1] ... /Gavrilov/
+MF   [mt:H10a1] Zoya Vasilyevna /Gavrilova (Guseva)/ (20 SEP 1941 - 20 OCT 1984)
+MFM  Vasiliy Nikolayevich /Gusev/ (~1914 - 1963)
+MFF  [mt:H10a1] Anastasiya Ivanovna /Guseva (Marinova)/ (20 DEC 1913 - 03 JUN 2006)
+MFMF Evdokiya Nikolayevna /Guseva (?)/ (?), Milna, daughter of merchant
+\end{verbatim}}
+
+\section{Conversions}
+\label{sec:conversions}
+\begin{proposition}\label{prop:bij}
+For a fixed subject sex, $\mathrm{atree}(\cdot)$ is a bijection between Ahnentafel numbers $n\ge 1$
+and \atree{} paths.
+\end{proposition}
+\begin{proof}
+Writing $n$ in binary and dropping the leading $1$ is a bijection from $\{n\ge 1\}$ onto
+$\{0,1\}^{*}$; the relabelling $0\mapsto\mathtt{M}$, $1\mapsto\mathtt{F}$ is a bijection onto
+$\{\mathtt{M},\mathtt{F}\}^{*}$; and the subject-sex letter is prepended (and, in reverse,
+normalised) invertibly. The two converters below realise both directions.
+\end{proof}
+The reference converters are two short shell scripts,
+\texttt{atree2s.sh} (Ahnentafel\,$\to$\,\atree) and \texttt{s2atree.sh} (\atree\,$\to$\,Ahnentafel),
+reproduced in Appendix~\ref{app:scripts}; they are preferred over the Java toolkit for portability,
+e.g.\ \texttt{s2atree.sh MFFMMMMFFFMMF} yields \texttt{7225}.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\hline
+Person & Ahnentafel & Binary & \atree{} (subj.\ F) & \atree{} (subj.\ M)\\
+\hline
+Self          & 1 & 1   & F   & M\\
+Father        & 2 & 10  & FM  & MM\\
+Mother        & 3 & 11  & FF  & MF\\
+Paternal GF   & 4 & 100 & FMM & MMM\\
+Paternal GM   & 5 & 101 & FMF & MMF\\
+Maternal GF   & 6 & 110 & FFM & MFM\\
+Maternal GM   & 7 & 111 & FFF & MFF\\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Properties}
+\label{sec:properties}
+\textbf{Record independence.} One line is one person, and it carries its full path, so it means the
+same thing alone as in the file it came from. This is the property the rest follow from. Because no
+line refers to another, a line can be questioned, corrected, re-sorted, dropped or sent on its own,
+which matches how genealogical research actually proceeds: one ancestor at a time, provisionally, and
+revised years later. The grammar supports the provisional state directly, with \texttt{?} and
+\texttt{//} for unknown fields and \texttt{(?)} for an unknown maiden name (Appendix~\ref{app:template}),
+so partial knowledge is written down rather than left absent. \textbf{Hand-repairability.} Having no
+cross-references to keep consistent, the file can be edited in any text editor without a parser, and a
+damaged file degrades line by line rather than as a whole. \textbf{Tool-independence.} A format is
+durable to the extent that it can be read and repaired without its software, which is the practical
+content of the digital-preservation argument for plain text. This work supplies its own evidence: the
+2009--2011 Java tooling described in Section~\ref{sec:tooling} no longer builds unmodified, while the
+files it produced remain readable and editable, and the reference converters of
+Appendix~\ref{app:scripts} still run. \textbf{Short identifiers.} A path has one letter per
+generation, so its length is just the generation distance (about $\log_2$ of the Ahnentafel number),
+and there is no large number to overflow, unlike a decimal Ahnentafel. \textbf{Natural tree order.}
+The letters give an ancestor's generation and position directly, so paths sort into family-tree order,
+and being UTF-8 and one record per line the format is easy to compare (diff) and merge
+(version-control friendly).
+
+\section{Tooling and interoperability}
+\label{sec:tooling}
+\texttt{aisgedcom} \cite{aisgedcom} is the \atree{} reference implementation: a parser
+(\texttt{AtreeParser}), GEDCOM$\leftrightarrow$\atree{} conversion, the canonical grammar and example
+records, and a two-relatives relationship calculator. \texttt{aisconvert} \cite{aisconvert} (personal
+genomics toolkit) provides the HIR/Half-IBD calculator, which measures shared
+autosomal segments and reports centimorgans across autosomes 1--22. It computes sharing; it does not
+infer relationships. The X chromosome is reported separately, since its sex-dependent transmission
+traverses only a restricted subset of pedigree paths, so X centimorgans must not be pooled into a
+total from which relationship distance is later inferred. The \atree{} term appears in third-party genealogy
+discussion, for example a Gramps forum thread proposing a ``Dual Atree chart for cousins''
+\cite{gramps_atree}. The wording there follows the Wikipedia section the author added in 2011
+\cite{wiki_gns}, so the term's propagation is traceable to that edit and is not independent adoption.
+
+\section{Limitations and open problems}
+\label{sec:limitations}
+\atree{} covers the \emph{ascending} (two-parent) tree; descendant trees branch many ways and are out
+of scope. \textbf{Pedigree collapse} (the same ancestor appearing more than once through cousin
+marriage) gives more than one path to a single real person: a path is unique as a \emph{position},
+not as a \emph{person}, so the full pedigree is no longer a tree but a graph (one ancestor reached by
+several paths), and storing it compactly becomes a matter of sharing the repeated sub-trees (a
+compression problem). A full genealogy, covering all branches or a whole database, is therefore kept
+as a \emph{collection} of \atree{}s, one ascending tree per subject (Section~\ref{sec:notation}); this
+covers the whole graph at the cost of repeating shared ancestors across trees, the very repetition
+that a collapse-aware, sub-tree-sharing encoding would remove.
+
+\section{Application: cross-person lineage matching}
+\label{sec:matching}
+The central application is matching people who share ancestors, a long-standing problem in
+genealogy: deciding when two records mean the same person. When persons $A$ and $B$ share a common
+ancestor $X$, every ancestor \emph{above} $X$ is the same in both trees; so although their paths
+\emph{to} $X$ differ (they start from different people), the \texttt{M}/\texttt{F} steps from $X$
+upward, the tail of each path, are identical, and the names along that tail agree apart from
+spelling. Four signals combine; the first two need only the written record: (i)~a shared \textbf{tail} of the path (the longer the
+shared tail, the more generations in common, and this uses no names at all); and (ii)~\textbf{name
+sound-alike} agreement \cite{russell1918, philips1990} to absorb spelling differences.
+Phonetic coding is \emph{optional} and is performed by the matching software at comparison time, not
+required by the format: names are stored as written, in whatever spelling is convenient to the user,
+and the matcher applies Soundex/Metaphone (or any chosen scheme) when scoring. All normalisation is
+deferred to the software, keeping the stored file human-convenient.
+A missing or extra generation shifts the tail by a position or two, so the tails are compared by
+approximate alignment, allowing an occasional inserted or dropped step, rather than by exact match.
+Writing each path deep-ancestor-first and grouping paths by their shared opening avoids comparing
+every pair: records with the same deep ancestry fall into the same group, so a match becomes a
+lookup. In the language of record linkage, the shared tail is a new grouping key that does not depend
+on names. The two extreme paths are exactly the DNA-trackable lines: all-\texttt{M}
+($\mathtt{MMM}\dots$) is the patrilineal (Y-DNA) line, all-\texttt{F} ($\mathtt{FFF}\dots$) the
+matrilineal (mtDNA) line, and the haplogroup field is the third signal, confirming or refuting a match along those two
+edges alone. A fourth signal is independent of the written record altogether. Autosomal half-identical regions
+(HIR), measured in centimorgans, are shared in an amount that falls with relationship distance, and the
+\texttt{aisconvert} calculator \cite{aisconvert} computes them across autosomes 1--22 and X. Unlike
+the other three, this one does not read the genealogy at all: it measures the genome, so it
+\emph{tests} the relationship a shared tail asserts rather than adding to the assertion. A tail
+implying a common ancestor $g$ generations back predicts an expected range of shared centimorgans;
+agreement corroborates the paper trail, and disagreement localises an error in it. The check has a
+range limit, since detectable autosomal sharing falls away beyond roughly six to eight generations, so
+it validates only the recent end of a path. That is the same window in which, by the argument of
+Section~\ref{sec:why}, the distinguishing information sits, so the two lines of reasoning bound the
+useful depth from opposite directions.
+
+Combining
+the four pieces of evidence, the length of the shared tail, the name sound-alike, haplogroup
+agreement on the uniparental edges, and autosomal centimorgan sharing, in a standard record-linkage
+score \cite{fellegi1969} gives a match \emph{probability}. We present this as a
+\emph{proposed} method: the false-positive model of Section~\ref{sec:why} motivates it analytically,
+but empirical evaluation on a labeled genealogical corpus (precision and recall against known
+relationships) remains future work.
+
+\subsection{Why it works: far fewer real ancestors than possible paths}
+\label{sec:why}
+About $1.17\times10^{11}$ people have ever lived \cite{prb_everlived}; since
+$\log_2(1.17\times10^{11})\approx 37$, roughly $37$ yes/no facts ($37$ bits) are enough to give
+\emph{every} human who has ever lived a distinct label, close to the smallest code possible. (For
+scale, $37$ generations span about a millennium; reaching an ancestor more distant than that needs a
+longer path, but pedigree collapse, below, holds the number of \emph{distinct} ancestors far below
+the naive count of $2^{L}$ possible paths.) An \atree{} path is also a label relative to its
+starting person: the same ancestor has different paths from different descendants (and several when
+collapse occurs), so the $37$-bit figure says only that a short label \emph{exists}; it does not
+claim that an \atree{} path is by itself a single global ID for that person, and building such an ID
+is the collapse-aware merge of Section~\ref{sec:conclusion}. There are $2^{L}$ possible paths of
+length $L$, far more than the $\le 10^{11}$ people who could fill them (at $L{=}100$ that is
+$2^{100}\approx 1.3\times10^{30}$ slots), so the paths actually used are very thinly spread. Two
+unrelated lines share a tail of $k$ steps by chance with probability about $2^{-k}$ (taking the sexes
+along a path as roughly even and independent; about $10^{-9}$ at $k{=}30$), and matching names make a
+coincidence even less likely; a shared tail of $20$--$30$ letters with matching names is almost
+certainly a real common ancestor. The paths in use are thinly spread \emph{because they are shared}:
+pedigree collapse, together with the recent common ancestry of all living people
+\cite{chang1999, rohde2004}, means deep ancestors are common to nearly everyone (the tails converge)
+while people differ mainly in recent generations. So the information that tells people apart sits in
+the recent end of the path (the first $\sim\!20$--$35$ letters), and the number of truly distinct
+lines is about the population, $\sim\!\log_2(\text{population})\approx 37$ bits, not the naive $100$.
+The huge count of possible paths is an artifact of writing the family graph out as a tree; the real
+object is a small, shared graph, and identifying a person in it is again a form of compression.
+
+\subsection{A scoring model}
+\label{sec:scoring}
+Record linkage scores a candidate pair by summing the log likelihood ratio of each piece of evidence
+\cite{fellegi1969}; in bits, the terms add. Writing $R$ for ``the pair is related as the shared tail
+asserts'':
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lll@{}}
+\hline
+Evidence & $\log_2 \mathrm{LR}$ (bits) & Where it is valid\\
+\hline
+Shared tail of $k$ steps      & $k$                       & recent range only (Sec.~\ref{sec:why})\\
+Name agreement                & $\log_2(m/u)$             & $m,u$ estimated from a labelled corpus\\
+Haplogroup concordant, freq.\ $f$ & $\log_2(1/f)$: $1.0$ at $f{=}0.5$, & all-\texttt{M} / all-\texttt{F} edges only\\
+                              & $2.3$ at $f{=}0.2$, $4.3$ at $f{=}0.05$ & \\
+Haplogroup discordant         & large negative (exclusion) & all-\texttt{M} / all-\texttt{F} edges only\\
+Autosomal cM sharing          & likelihood over $g$        & $g \lesssim 6$--$8$ generations\\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent\textbf{The tail term} follows from Section~\ref{sec:why}: two unrelated lines share a
+$k$-step tail with probability about $2^{-k}$, while related ones share it by construction, so
+concordance is worth about $k$ bits. This holds only in the range where the independence assumption
+does: beyond roughly $20$--$30$ generations, universal recent common ancestry \cite{chang1999,
+rohde2004} makes deep tails common to nearly everyone, and the term must not be read as $2^{k}$ there.
+The model is therefore strongest exactly where Section~\ref{sec:why} locates the distinguishing
+information, in the first $20$--$35$ letters.
+
+\noindent\textbf{The haplogroup term is asymmetric,} and this is its main practical point.
+Haplogroups are deep clades, unchanged over genealogical time, so concordance is expected of a true
+relative but also of everyone else in the clade: its evidential value is only $\log_2(1/f)$, which for
+a common haplogroup is one or two bits, an order of magnitude less than a ten-step tail. Discordance,
+by contrast, is close to decisive, since a mismatch along an unbroken patriline or matriline refutes
+the asserted path. The field is thus better read as an exclusion test than as confirmation, and it
+speaks only about the two extreme paths; a mixed \texttt{M}/\texttt{F} tail receives no uniparental
+evidence at all.
+
+\noindent\textbf{The autosomal term is the only one that measures anything outside the record.}
+Expected sharing falls with relationship distance, so an observed centimorgan total induces a
+likelihood over $g$ that can be compared with the $g$ the tail asserts. Haplogroups cannot supply this,
+having no genealogical-timescale clock; short tandem repeat haplotypes, which mutate at a rate per
+marker per generation, could supply a second such estimate along the patriline.
+
+We give the model rather than fitted parameters: $m$ and $u$, the haplogroup frequencies, and the
+expected-sharing curve are all quantities the literature or a labelled corpus supplies, and estimating
+them here without such a corpus would be a fit to nothing. The contribution is the decomposition and
+its stated validity limits.
+
+\section{Related work}
+\label{sec:related}
+The dominant genealogical interchange format is GEDCOM \cite{gedcom55} (and the later GEDCOM~X
+\cite{gedcomx}):
+record- and pointer-oriented, and general enough to represent arbitrary family graphs. \atree{} is
+complementary rather than competing, a compact, line-oriented encoding specialized to the
+\emph{ascending} tree, in which each line is self-sufficient. The difference is structural rather
+than stylistic: GEDCOM identifies individuals by cross-reference, so a record's meaning depends on the
+records it points to, and editing by hand means preserving referential integrity by hand. That design
+is what makes GEDCOM general, and also what makes a single record unusable in isolation. In \atree{}
+the path is the position, so there is nothing to dereference. When the format was designed
+(2007--2011), genealogies were kept either in application-specific stores or in GEDCOM, so correcting
+or exchanging part of a tree meant working through an application; independence from any application
+was the motivating requirement. The author's own open-source tools
+realize the surrounding interoperability: \texttt{aisgedcom} converts between GEDCOM and \atree{}
+\cite{aisgedcom}; \texttt{aisconvert} \cite{aisconvert} parses 23andMe/FTDNA genomes and computes
+HIR / centimorgan overlaps (with \texttt{ped2raw} \cite{ped2raw} for PED$\to$RAW conversion); and
+\texttt{nid} \cite{nid} produces anonymized identifiers by cryptographic hashing, relevant to the
+entity-resolution setting. Among genealogical numbering systems,
+ascendant numbering is dominated by Ahnentafel / Sosa--Stradonitz \cite{eytzinger1590,
+wiki_ahnentafel}, while descendant lines use the Henry, d'Aboville, de~Villiers--Pama, and Register
+systems \cite{wiki_gns}; \atree{} is the binary (path) form of Ahnentafel and inherits its two-parent structure. The
+binary/letter-path reading of Ahnentafel was described earlier by Anderson~\cite{anderson1995}, who
+also observes that the charts of two people can be compared to determine their relationship. The
+structural comparison is therefore Anderson's; the contribution of \atree{} over that precursor is the
+named, self-contained exchange format with its grammar and reference implementations, and, for
+matching, the scored combination of suffix, phonetic, uniparental and autosomal evidence with stated
+validity limits. The
+matching method of Section~\ref{sec:matching} builds on classical record linkage \cite{fellegi1969}
+and phonetic name coding \cite{russell1918, philips1990}, contributing the \atree{} path suffix as a
+compact, name-independent blocking key, complementary to autosomal-segment (HIR / centimorgan) and
+uniparental (Y/mtDNA) evidence.
+
+\section{Prior publication}
+\label{sec:provenance}
+The \atree{} specification, with its BNF grammar, was first published by the author on
+7~November~2011 \cite{lj_atree}; the corresponding section of the Wikipedia article
+\emph{Genealogical numbering systems} \cite{wiki_gns} was added the following day. The reference
+implementations predate both (\texttt{aisconvert}, 2009; \texttt{aisgedcom}, 2011). The Wikipedia
+section was written by the author, so it is disclosed here as provenance and is not cited as
+independent corroboration. The present paper consolidates and extends that material: the grammar, the
+bijection, the tooling description, and the lineage-matching analysis of
+Section~\ref{sec:matching} appear here for the first time in a single reviewed account. Both 2011
+sources are archived by the Internet Archive.\footnote{%
+\url{http://web.archive.org/web/20260607185709/https://siberean.livejournal.com/14874.html} and
+\url{http://web.archive.org/web/20260420170149/https://en.wikipedia.org/wiki/Genealogical_numbering_systems}.}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\atree{} encodes a direct ancestor as the \texttt{M}/\texttt{F} path from the subject, the binary
+form of the Ahnentafel number, giving identifiers that are logarithmic in tree size,
+self-sufficient, and plain-text (hence diffable, mergeable, and durable). It comes with a grammar,
+bijective converters, and GEDCOM interoperation. Its main payoff is matching: a shared path suffix,
+combined with phonetic name agreement and uniparental haplogroup concordance, gives a quantifiable,
+name-robust signal for genealogical entity resolution, and $\sim\!37$ bits suffice to address any
+human who has ever lived, identification as compression, a perspective developed in the author's
+companion work on intelligence as the discovery of compressors~\cite{gavrilov_compressors}. Open
+directions: a collapse-aware merge
+that folds the tree-unfolding back to the underlying DAG, and joint structural/phonetic/genetic
+scoring at scale.
+
+\section*{Acknowledgements and attribution}
+The bare sex-path notation, a string of \texttt{M}/\texttt{F} letters (e.g.\ \texttt{MMFFFMFM}), was
+already in circulation in genealogy forum discussion, used by example and without a name; the author
+met it there and thanks the correspondent who introduced it. The notation is pre-existing. The
+earliest published description the author has located is Anderson's, in print by 1995
+\cite{anderson1995}, which gives the same father/mother reading of the binary Ahnentafel expansion in
+\texttt{f}/\texttt{m} form. The author was unaware of it: Anderson's two-page note appeared in a
+regional genealogical society journal and did not surface in the general sources consulted at the
+time, among them the Wikipedia survey of genealogical numbering systems, which then listed no binary
+or path-based notation at all. The format described here was therefore developed without reference to
+that precursor, which is a statement about the author's knowledge and not a claim of priority over
+it. The author's distinct contributions are therefore \emph{not} the binary path
+itself, but: the \textbf{name ``\atree''}; the \textbf{self-contained plain-text format and grammar};
+the \textbf{reference implementations} as sole programmer; and the \textbf{lineage-matching analysis}
+of Section~\ref{sec:matching}. The raw notation has a shared, pre-existing origin; the name,
+formalization, implementation, and application are the author's.
+
+The author's grounding in graph theory owes much to the advanced graph-theory course of the late
+Professor Shimon Even (1935--2004) \cite{even_graph, even_comb}, whose student he was.
+
+\section*{Code and data availability}
+The \atree{} reference implementation and related tooling are open source: \texttt{aisgedcom}
+(GEDCOM$\leftrightarrow$\atree{} conversion and \texttt{AtreeParser}) \cite{aisgedcom};
+\texttt{aisconvert} (HIR / centimorgan calculator) \cite{aisconvert}; \texttt{ped2raw}
+\cite{ped2raw}; and \texttt{nid} \cite{nid}. The two reference shell converters are reproduced in
+full in Appendix~\ref{app:scripts}. No new datasets were used; the record in
+Section~\ref{sec:examples} is an illustrative excerpt.
+These tools were written in 2009--2011 and are no longer maintained; they are provided as historical
+artifacts, for provenance and reference, and may not build or run unmodified on current systems. The
+self-contained shell converters of Appendix~\ref{app:scripts}, by contrast, are current: run under a
+POSIX shell, \texttt{s2atree.sh MFFMMMMFFFMMF} returns \texttt{7225} and \texttt{atree2s.sh 7225}
+returns the same path, differing only in the leading subject-sex letter, which Ahnentafel does not
+encode and which the script takes from its \texttt{my\_gender} setting (Proposition~\ref{prop:bij}).
+Conversion was checked at every depth from~$1$ to~$200$: the path length matches the generation
+distance, the alphabet is closed, and the round trip through \texttt{s2atree.sh} returns the original
+number exactly.
+
+\appendix
+
+\section{A template / example file}
+\label{app:template}
+Person-field forms (each real line is prefixed by an \atree{} \texttt{M}/\texttt{F} path; the field
+forms below are the part after the path). Surname in \texttt{/\dots/}, maiden name in parentheses,
+\texttt{?} and \texttt{//} for unknowns, a date acts as the name/place delimiter, and \texttt{\#}
+starts a comment.
+
+\begin{verbatim}
+FirstName
+FirstName (1600)
+FirstName (ABT 1600)
+FirstName (14 AUG 1855-5 APR 1877)
+FirstName /Surname/
+FirstName /Surname/ (?-ABT 1800)
+FirstName /Surname/ (AFT 1800-?)
+/Surname/ (28 OCT 1852-BEF 1880)
+FirstName /Surname (MaidenSurname)/ (1764-6 OCT 1813)
+FirstName Another Name /Surname (MaidenSurname)/ (14 AUG 1855-5 APR 1877), Place of origin
+FirstName // (1600)        # nothing but a date is known
+//                         # nothing is known
+/?/                        # surname refinement is the priority
+FirstName /Surname (?)/    # maiden surname unknown
+# a comma before the given name, as some languages / GEDCOM require:
+/Surname/, AnotherName (1800), Place of origin
+# if a place could be confused with a comma in a name, the date is the delimiter:
+Names (?) Place of origin
+\end{verbatim}
+
+\section{Reference converter scripts}
+\label{app:scripts}
+The two reference converters (subject sex set at the top; \texttt{bc} does the base conversion).
+
+\begin{verbatim}
+#!/bin/sh
+# atree2s.sh : convert an Ahnentafel number to an atree path  (POSIX sh).
+# Usage: atree2s.sh <ahnentafel-number>
+
+my_gender=F          # subject's sex: M or F
+male=M
+female=F
+
+case "$1" in
+    '')        echo "usage: $0 <ahnentafel-number>" >&2; exit 1 ;;
+    *[!0-9]*)  echo "$0: '$1' is not a number"      >&2; exit 1 ;;
+esac
+case "$1" in
+    *[!0]*)    : ;;
+    *)         echo "$0: Ahnentafel numbers start at 1" >&2; exit 1 ;;
+esac
+
+# Ahnentafel number -> binary -> letters (0 = father M, 1 = mother F).
+# bc folds long output at 70 columns with a backslash-newline;
+# strip the continuations before touching the digits, or paths
+# deeper than 67 generations are silently corrupted below.
+binary=$(echo "obase=2; $1" | bc | tr -d '\\\n')
+letters=$(printf '%s' "$binary" | tr '0' "$male" | tr '1' "$female")
+
+# The leading bit denotes the subject; rewrite it as the subject's sex.
+letters=$(printf '%s' "$letters" | sed "s/^./$my_gender/")
+
+echo "$letters"
+\end{verbatim}
+
+\begin{verbatim}
+#!/bin/sh
+# s2atree.sh : convert an atree path to its Ahnentafel number  (POSIX sh).
+# Usage: s2atree.sh <atree-path>
+
+male=M
+female=F
+
+case "$1" in
+    '')        echo "usage: $0 <atree-path>"        >&2; exit 1 ;;
+    *[!MF]*)   echo "$0: '$1' is not an atree path" >&2; exit 1 ;;
+esac
+
+# The first letter is the subject; the Ahnentafel leading bit is always 1,
+# so normalise it to F before mapping letters back to bits (M = 0, F = 1).
+path="$female$(printf '%s' "$1" | cut -c2-)"
+binary=$(printf '%s' "$path" | tr "$male" '0' | tr "$female" '1')
+
+echo "ibase=2; $binary" | bc
+\end{verbatim}
+
+\printbibliography
+
+\end{document}

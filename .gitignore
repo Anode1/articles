@@ -1,0 +1,35 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.bcf
+*.run.xml
+*.blg
+*.synctex.gz
+*.toc
+*.bak
+*.bak2
+__pycache__/
+*.pyc
+
+# Credentials. Never commit.
+.apikey
+*.key
+
+# Not mine to redistribute: a third-party published paper, kept locally for reference.
+s12911-023-02307-z.pdf
+
+# Local, not for publication.
+Profile.pdf
+
+# Draft, held back deliberately.
+locality_principle/
+
+# Has its own repository: https://github.com/Anode1/context-renormalization
+context-renormalization/
+
+# Private correspondence and live credentials. Kept locally, never published.
+intelligence_compressors/SESSION_STATE.md
+smbpann/endorsement_letters.md

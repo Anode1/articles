@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 492" width="760" height="492" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<title>How Canada treats its two new electrical loads</title>
+<rect width="760" height="492" fill="#fcfcfb"/>
+<text x="24" y="30" font-size="20" font-weight="600" fill="#0b0b0b">The load we subsidise and the load we cap</text>
+<text x="24" y="50" font-size="14" fill="#52514e">Same grid, same decade, opposite treatment. Both figures describe delivering flexibility to the system.</text>
+<rect x="24" y="92" width="336" height="246" rx="8" fill="#ecebe7"/>
+<rect x="400" y="92" width="336" height="246" rx="8" fill="#eef4fc"/>
+<text x="46" y="122" font-size="12.5" font-weight="600" fill="#eb6834" letter-spacing="0.6">ELECTRIC VEHICLES</text>
+<text x="46" y="174" font-size="40" font-weight="600" fill="#0b0b0b">222,700</text>
+<text x="46" y="196" font-size="12.5" fill="#52514e">enrolled households to deliver 100 MW</text>
+<text x="46" y="230" font-size="13" fill="#52514e">Enrolled customers, US 2024</text>
+<text x="338" y="230" font-size="13" font-weight="600" text-anchor="end" fill="#0b0b0b">10.7 million</text>
+<line x1="46" y1="239" x2="338" y2="239" stroke="#b9b8b3" stroke-width="0.75" opacity="0.5"/>
+<text x="46" y="260" font-size="13" fill="#52514e">Actual peak savings</text>
+<text x="338" y="260" font-size="13" font-weight="600" text-anchor="end" fill="#0b0b0b">4,785 MW</text>
+<line x1="46" y1="269" x2="338" y2="269" stroke="#b9b8b3" stroke-width="0.75" opacity="0.5"/>
+<text x="46" y="290" font-size="13" fill="#52514e">Per customer</text>
+<text x="338" y="290" font-size="13" font-weight="600" text-anchor="end" fill="#0b0b0b">0.449 kW</text>
+<line x1="46" y1="299" x2="338" y2="299" stroke="#b9b8b3" stroke-width="0.75" opacity="0.5"/>
+<text x="46" y="322" font-size="12" font-style="italic" fill="#52514e">Distribution upgrades: paid by every ratepayer.</text>
+<text x="422" y="122" font-size="12.5" font-weight="600" fill="#2a78d6" letter-spacing="0.6">ONE DATA CENTRE CLUSTER</text>
+<text x="422" y="174" font-size="40" font-weight="600" fill="#0b0b0b">1</text>
+<text x="422" y="196" font-size="12.5" fill="#52514e">counterparty to deliver 100 MW</text>
+<text x="422" y="230" font-size="13" fill="#52514e">Meters</text>
+<text x="714" y="230" font-size="13" font-weight="600" text-anchor="end" fill="#0b0b0b">one</text>
+<line x1="422" y1="239" x2="714" y2="239" stroke="#b9b8b3" stroke-width="0.75" opacity="0.5"/>
+<text x="422" y="260" font-size="13" fill="#52514e">Contracts to negotiate</text>
+<text x="714" y="260" font-size="13" font-weight="600" text-anchor="end" fill="#0b0b0b">one</text>
+<line x1="422" y1="269" x2="714" y2="269" stroke="#b9b8b3" stroke-width="0.75" opacity="0.5"/>
+<text x="422" y="290" font-size="13" fill="#52514e">Telemetry</text>
+<text x="714" y="290" font-size="13" font-weight="600" text-anchor="end" fill="#0b0b0b">full</text>
+<line x1="422" y1="299" x2="714" y2="299" stroke="#b9b8b3" stroke-width="0.75" opacity="0.5"/>
+<text x="422" y="322" font-size="12" font-style="italic" fill="#52514e">Network upgrades: deposit plus contribution.</text>
+<text x="24" y="376" font-size="15" fill="#0b0b0b">One load is subsidised at purchase and has its wires socialised.</text>
+<text x="24" y="398" font-size="15" fill="#0b0b0b">The other pays its own way, and is capped anyway.</text>
+<text x="24" y="441" font-size="12" fill="#52514e">Sources: EIA Electric Power Annual, Table 10.3: US residential demand response 2024, 10,658,027 customers enrolled, 4,785 MW</text>
+<text x="24" y="454" font-size="12" fill="#52514e">actual peak demand savings, giving 0.449 kW each. The 222,700 figure is that rate scaled to 100 MW; the arithmetic is mine.</text>
+<text x="24" y="467" font-size="12" fill="#52514e">Cost allocation: distribution capital in Canada is recovered through regulated rates paid by all customers of the utility, while</text>
+<text x="24" y="480" font-size="12" fill="#52514e">large-load customers are generally subject to connection deposits and contributions in aid of construction for upgrades they trigger.</text>
+</svg>
