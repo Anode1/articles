@@ -1,0 +1,33 @@
+{
+  "model": "claude-sonnet-5",
+  "polls": 3,
+  "interval": 2.0,
+  "arms": [
+    {
+      "label": "warm",
+      "mode": "warm",
+      "polls": 3,
+      "context_tokens": 62310,
+      "totals": {
+        "input": 111,
+        "output": 24,
+        "cache_read": 124546,
+        "cache_write": 62273
+      },
+      "usd": 0.27158055
+    },
+    {
+      "label": "cold",
+      "mode": "cold",
+      "polls": 3,
+      "context_tokens": 62310,
+      "totals": {
+        "input": 186930,
+        "output": 24,
+        "cache_read": 0,
+        "cache_write": 0
+      },
+      "usd": 0.56115
+    }
+  ]
+}

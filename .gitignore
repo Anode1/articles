@@ -1,9 +1,11 @@
+# Everything in this directory is published to https://github.com/Anode1/articles.
+# Anything that must not be published lives in ~/articles-local instead, which says why.
+# The only things ignored here are files a build regenerates, and a credential pattern as a
+# backstop.
+
 # LaTeX build artifacts
 *.aux
 *.log
-
-# Per-generation run data behind the emergence paper. Not build logs.
-!smbpann/data/*.log
 *.out
 *.fls
 *.fdb_latexmk
@@ -17,19 +19,12 @@
 __pycache__/
 *.pyc
 
-# Credentials. Never commit.
+# Per-generation run data behind the emergence paper. Not build logs.
+!smbpann/data/*.log
+
+# Credentials, as a backstop. Nothing matching this should ever be in this tree.
 .apikey
 *.key
 
-# Local, not for publication: a LinkedIn profile export.
-Profile.pdf
-
-# Draft, held back deliberately.
-locality_principle/
-
-# Has its own repository: https://github.com/Anode1/context-renormalization
-context-renormalization/
-
-# Private correspondence and live credentials. Kept locally, never published.
-intelligence_compressors/SESSION_STATE.md
-smbpann/endorsement_letters.md
+# Local agent config, not content.
+.claude/
