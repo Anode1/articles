@@ -21,10 +21,7 @@ __pycache__/
 .apikey
 *.key
 
-# Not mine to redistribute: a third-party published paper, kept locally for reference.
-s12911-023-02307-z.pdf
-
-# Local, not for publication.
+# Local, not for publication: a LinkedIn profile export.
 Profile.pdf
 
 # Draft, held back deliberately.
