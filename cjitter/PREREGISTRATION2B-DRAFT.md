@@ -10,6 +10,20 @@ through the resulting curves. The refuted GA prediction feeds a second direction
 prediction: recombination's known theoretical advantage is noise robustness (a population
 implicitly averages), so the sigma = 0 ordering climb over ga may invert as r grows.
 
+## Prior art, fact-checked 2026-08-16
+
+The destination conclusion is already the literature's qualitative position: random
+search matches NAS methods (Li and Talwalkar, UAI 2019; Yu et al. and Yang et al., ICLR
+2020), tabular benchmarks carry seed variance large enough to reorder architectures
+(NAS-Bench-101; NAS-Bench-301), and Dushatskiy et al. (GECCO companion 2022) measured
+rank correlation under 0.1 among top architectures across seeds. Noise thresholds exist
+in EA theory as runtime phase transitions (Droste 2004; Qian, Bian and Yu 2019), not as
+a comparison against sampling. What our search found nowhere: measured sigma*(method,
+budget) crossover curves against uniform random at matched budget under exact paired
+tests, and the transfer step reading a real benchmark's measured noise floor off those
+curves. The quantitative bridge is the claim; the conclusion it lands on is cited, not
+claimed.
+
 ## Freeze
 
 One cjitter commit adding a noise wrapper on the objective: noise enters only the feedback

@@ -25,47 +25,35 @@ Placing the nodes of a graph in the plane with few edge crossings is NP-complete
 layout tool runs heuristics, and the heuristics are rarely explicit about three things: what
 objective they optimize, whether that objective measures the drawing the reader actually
 sees, and whether the search spends its budget any better than uniform random sampling
-would. We treat all three. The problem is formulated incrementally: a graph grows by $k$
-nodes and the existing drawing is frozen, which keeps the reader's mental map, bounds the
-search space at $2k$ variables, and contains the classic full redraw as the limit of an
-anchor term that prices the displacement of frozen nodes. The objective reads the drawing's
-real medium, orthogonally routed connectors rather than the straight center-to-center
-segments most objectives score, and the metric is calibrated: the router's shortfall against
-a reference layout of certified on-screen quality is measured and printed beside every
-number that depends on it. Four families of stochastic search (hill climbing with restarts,
-simulated annealing, a genetic algorithm, and uniform random sampling as the matched-budget
-control) are compared by exact sign tests on paired seed panels, deterministically
-reproducible to the byte across platforms. The motivating application is the
-entity--relationship diagram, which mainstream tools still place badly enough that
-maintainers redraw by hand; a proof of concept places the tables added by eight real
-consecutive schema migrations of a production database, each with a human-accepted answer,
-under a pre-registered analysis. The genetic algorithm and hill climbing each beat a
-centroid placement heuristic on all eight migrations (exact Wilcoxon, Holm-corrected
-$p = 0.023$), though so does the control, so those comparisons measure budget against no
-budget; the comparison with teeth is against the control, and there the pre-registered
-refutation clause fired: the genetic algorithm did not separate from uniform sampling.
-Hill climbing, not the genetic algorithm the author predicted, is the budget-efficient
-method, directionally ahead of it on every non-tied migration and separating from the
-control on seven of eight pairs, six of them by 2000 evaluations; on single-table
-migrations every method's margin over sampling is under three tenths of a percent, so the
-first deployable rule is to count the new nodes before reaching for a search. One general
-argument: under this objective the searches outscore the human reference, which measures
-the objective's blindness to what maintainers optimize rather than any superiority of the
-tool, and we argue this gap is why automatic graph layout has stayed bad in practice.
+would. We treat all three and report what the treatment measured on eight consecutive
+migrations of a production database schema, each with a maintainer's accepted layout as the
+human reference, under a pre-registered analysis. Every budgeted search beats a centroid
+placement heuristic on all eight migrations (exact Wilcoxon, Holm-corrected $p = 0.023$),
+but uniform random sampling beats it on all eight too, so such comparisons measure a budget
+of evaluations against none; against the control at matched budget the genetic algorithm
+did not separate, the pre-registered refutation clause firing against the author's own
+prediction, and hill climbing is the budget-efficient method, separating from the control
+on seven of eight migrations, six of them by 2000 evaluations. On single-table migrations
+every method's margin over sampling is under three tenths of a percent, so the first
+deployable rule is to count the new nodes before reaching for a search. Under this
+objective the searches outscore the human reference, which measures the objective's
+blindness to what maintainers optimize rather than any superiority of the tool, and we
+argue this gap is why automatic graph layout has stayed bad in practice. The machinery
+behind the verdicts: the problem formulated incrementally (a graph grows by $k$ nodes, the
+existing drawing frozen, which keeps the reader's mental map, bounds the search at $2k$
+variables, and contains the classic full redraw as the limit of an anchor term); an
+objective that reads the drawing's real medium, orthogonally routed connectors rather than
+the straight center-to-center segments most objectives score, calibrated against a
+reference layout of certified on-screen quality with the router's shortfall printed beside
+every number that depends on it; and four families of stochastic search (hill climbing
+with restarts, simulated annealing, a genetic algorithm, and uniform random sampling as
+the matched-budget control) compared by exact sign tests on paired seed panels,
+deterministically reproducible to the byte across platforms.
 \end{abstract}
 
 \section{Introduction}
 
-For most of two decades the author maintained the entity--relationship diagram of a
-production database by hand. Every reverse-engineering of the schema replaced the diagram's
-positions with the tool's own placement, and restoring a 44-table diagram to readability
-cost about an hour each time. This is not a defect of one tool. MySQL Workbench's placement
-algorithm is undocumented (its manual names only the menu item), and its failure mode is on
-the record: bug \#42600 reports a 353-table schema autoplaced with some ninety tables
-stacked into one pile. Commercial tools exist that draw entity--relationship diagrams with
-straight diagonal edges, a representation no maintainer draws by hand.
-
-The underlying task is hard in the formal sense: placing the nodes of a graph in the plane
+Placing the nodes of a graph in the plane
 with the fewest edge crossings is NP-complete \cite{gj83}, so every tool runs heuristics.
 Our claim is that the practical failure is not the hardness but three things the heuristics
 leave unstated. First, the objective: what quantity, exactly, is being improved. Second,
@@ -78,18 +66,102 @@ doctrine in hyperparameter search \cite{bergstra12}; in graph layout we have not
 study that runs the control at matched budget, and without it the claim ``our method
 improves layout'' is unfalsifiable at any fixed cost.
 
-This paper treats all three, on the practical version of the problem, which is incremental:
-a migration adds $k$ tables to a diagram whose other tables must not move, because a reader
-who knows where a table sits should still find it there. Section 2 formulates the problem
-and its one-parameter generalization to the classic full redraw. Section 3 makes the
-objective read the drawing's real medium and calibrates the metric against the one
-certified fact available; Section 4 defines the metrics and the statistics. Sections 5 and
-6 describe the search harness and a benchmark of real consecutive migrations with
-human-accepted answers. Section 7 reports a pre-registered experiment whose refutation
-clause fired against its own author's prediction, which we regard as the methodology
-working; Section 8 examines what beating the human reference does and does not mean.
+This paper treats all three and leads with what the treatment measured. The benchmark
+(Section~\ref{sec:application}) is eight consecutive migrations of a production database
+schema, each with the maintainer's accepted layout as the human reference, scored under an
+analysis whose primary comparison, declared families, refutation criteria and the author's
+directional prediction were committed, timestamped, before any non-pilot instance was
+scored. The findings:
+\begin{enumerate}
+\item Every budgeted search beats the centroid placement heuristic (each new table at its
+  neighbours' centroid) on all eight migrations, exact Wilcoxon, Holm-corrected
+  $p = 0.023$ --- and uniform random sampling beats it on all eight as well, so a
+  method-versus-heuristic table measures a budget of evaluations against none. The
+  comparison with teeth is against the matched-budget control.
+\item Against that control the genetic algorithm did not separate ($p = 0.109$): the
+  pre-registered refutation clause fired, against the author's own recorded prediction.
+  Hill climbing is the budget-efficient method, directionally ahead of the genetic
+  algorithm on every non-tied migration and separating from the control on seven of eight,
+  six of them by 2000 evaluations.
+\item The margins collapse with the task: on single-table migrations no method clears the
+  control by more than three tenths of a percent, so the deployable rule is to count the
+  new nodes before reaching for a search.
+\item Optimizing the wrong medium has a measured price (a layout optimized under the
+  straight-edge model retains 830 units of routed penetration on the pilot instance), and
+  under the routed objective the searches outscore the certified human layouts, which
+  measures the objective's blindness to what maintainers optimize rather than any
+  superiority of the tool. We argue this gap, between what layout objectives score and
+  what maintainers accept, is why automatic layout has stayed bad in practice.
+\end{enumerate}
 
-\section{The problem}
+The machinery that produced the verdicts comes first, because it is not specific to
+layout: Section~\ref{sec:harness} the four searches and the control,
+Section~\ref{sec:stats} the statistics. Section~\ref{sec:application} then gives the
+application in full: the industry task, its name in algorithmics, the problem, the routed
+and calibrated objective, the benchmark of real migrations, the pre-registered experiment,
+and what the comparison against the human reference does and does not mean. Related work
+and a conclusion close.
+
+\section{The searches and the control}\label{sec:harness}
+
+The harness, cjitter,\footnote{C99, no dependencies beyond libm; the repository carries the
+suites, the data and every number in this paper.} runs four methods behind one fitness
+interface: hill climbing with restarts, simulated annealing, a genetic algorithm with
+tournament selection and blend crossover, and uniform random sampling as the matched-budget
+control. Every evaluation passes through one counter, so no method can spend more than
+another; the budget is exact by construction, and an internal guard turns any violation
+into an immediate failure rather than a silently unfair comparison. All four run on the
+same seed panel, and the verdict against the control is an exact one-sided sign test on the
+paired per-seed differences: ``better'' requires the wins to be explainable by a fair coin
+with probability at most five percent, and anything else prints as ``not shown,'' a failure
+to demonstrate, not evidence of equality.
+
+Two design choices carry the paper. First, determinism: every trajectory uses integer
+arithmetic and the two libm calls IEEE~754 computes exactly or rounds correctly (fabs,
+sqrt); the gaussian step is a sum of uniforms rather than Box--Muller, the annealing
+schedule uses an arithmetic exponential, and a run reproduces byte for byte across
+compilers and platforms, which is what lets this paper pin every reported number as a
+regression test. Second, the control: the first genetic algorithm shipped in this harness
+mutated at a fixed scale, re-scattering whatever the population had converged to, and the
+control's verdict read ``no better than uniform sampling at equal cost.'' An outside review
+traced the verdict to the fixed scale; with mutation decaying over the run, the same
+algorithm became the best method on the harness's label-placement example (90 rectangles in
+a container, minimum overlap). A method-versus-method table without a random control cannot
+distinguish a weak method from a mis-tuned one.
+
+\section{The statistics}\label{sec:stats}
+
+Within an instance the verdict of Section~\ref{sec:harness} is the exact one-sided sign
+test on the paired per-seed differences. Across instances, the pre-registered comparisons
+use the exact Wilcoxon signed-rank test with Holm correction over the declared family,
+exact McNemar on the solve-count binary, Hodges--Lehmann shifts with distribution-free
+confidence intervals, and a minimum detectable effect wherever a null is reported, so a
+null bounds rather than asserts.
+
+One derived quantity summarizes efficiency. The \emph{separation budget} $B^{*}$ is the
+smallest evaluation budget at which a method beats the control on every seed of the panel,
+the one-sided sign test's only route to $p \le 0.05$ at five seeds. $B^{*}$ is
+descriptive: it detects sweeps (probability $q^{5}$ at per-seed win rate $q$), is censored
+to the tested budget grid, and a finite value can rest on tie-breaker margins, so
+$\infty$ marks non-detection at that power, never equivalence.
+
+\section{The application: a production schema and its migrations}\label{sec:application}
+
+For most of two decades the author maintained the entity--relationship diagram of a
+production database by hand. Every reverse-engineering of the schema replaced the diagram's
+positions with the tool's own placement, and restoring a 44-table diagram to readability
+cost about an hour each time. This is not a defect of one tool. MySQL Workbench's placement
+algorithm is undocumented (its manual names only the menu item), and its failure mode is on
+the record: bug \#42600 reports a 353-table schema autoplaced with some ninety tables
+stacked into one pile. Commercial tools exist that draw entity--relationship diagrams with
+straight diagonal edges, a representation no maintainer draws by hand.
+
+In algorithmics the general task is graph drawing by crossing minimization, NP-complete
+\cite{gj83}; the version with a drawing already on screen is layout adjustment under the
+mental map \cite{misue95}; and the version measured here is its geometric incremental
+instance, defined next.
+
+\subsection{The problem}\label{sec:problem}
 
 Let $G$ be a graph with a drawing $D$ that assigns each node an axis-aligned rectangle in a
 bounded canvas, and let $G'$ be a supergraph adding $k$ nodes and their edges. The
@@ -116,7 +188,7 @@ geography in the objective's own units. This paper measures the $\lambda \to \in
 where the practical need is; the continuum is the natural sequel, with thirty years of
 force-directed practice \cite{kobourov} as the control at the unfrozen end.
 
-\section{The routed objective}
+\subsection{The routed objective}\label{sec:objective}
 
 Entity--relationship tools draw orthogonal connectors: polylines at 0 and 90 degrees,
 leaving a table's border, bending once or twice. An objective over straight
@@ -155,9 +227,9 @@ penetration at the first orthogonal router to the present values. The same drawi
 the straight-segment model charges the certified layout 20 crossings and 1944 penetration,
 which quantifies how far the diagonal representation misdescribes what the maintainer made.
 
-\section{Metrics and statistics}
+\subsection{The metrics}\label{sec:metrics}
 
-The score is $S$ of Section 3, computed identically for the straight model by substituting
+The score is the $S$ of Section~\ref{sec:objective}, computed identically for the straight model by substituting
 the direct segment for the route. Beside $S$:
 \begin{itemize}
 \item the \emph{feasibility pair} $(C, P)$, ordered lexicographically: the part of the
@@ -170,49 +242,11 @@ the direct segment for the route. Beside $S$:
   $\Delta = S_{\mathrm{routed}}(\hat v_{\mathrm{straight}}) -
              S_{\mathrm{routed}}(\hat v_{\mathrm{routed}})$,
   the routed cost of having optimized the straight model (the pilot's penetration version
-  appears in Section 3);
-\item the \emph{separation budget} $B^{*}$: the smallest evaluation budget at which the
-  method beats the control on every one of the five shared seeds, the one-sided sign
-  test's only route to $p \le 0.05$ at that panel size. $B^{*}$ is descriptive: it detects
-  sweeps (probability $q^{5}$ at per-seed win rate $q$), is censored to the tested budget
-  grid, and a finite value can rest on tie-breaker margins, so $\infty$ marks
-  non-detection at that power, never equivalence.
+  appears in Section~\ref{sec:objective});
 \end{itemize}
-Within an instance, methods share one seed panel and are judged by the exact one-sided sign
-test on paired per-seed differences. Across instances, the pre-registered comparisons use
-the exact Wilcoxon signed-rank test with Holm correction over the declared family, exact
-McNemar on the solve-count binary, Hodges--Lehmann shifts with distribution-free intervals,
-and a minimum detectable effect wherever a null is reported, so a null bounds rather than
-asserts. Realized: $n = 8$ pairs (Section 6), five seeds per method per pair.
+Realized: $n = 8$ pairs (Section~\ref{sec:benchmark}), five seeds per method per pair.
 
-\section{The searches and the control}
-
-The harness, cjitter,\footnote{C99, no dependencies beyond libm; the repository carries the
-suites, the data and every number in this paper.} runs four methods behind one fitness
-interface: hill climbing with restarts, simulated annealing, a genetic algorithm with
-tournament selection and blend crossover, and uniform random sampling as the matched-budget
-control. Every evaluation passes through one counter, so no method can spend more than
-another; the budget is exact by construction, and an internal guard turns any violation
-into an immediate failure rather than a silently unfair comparison. All four run on the
-same seed panel, and the verdict against the control is an exact one-sided sign test on the
-paired per-seed differences: ``better'' requires the wins to be explainable by a fair coin
-with probability at most five percent, and anything else prints as ``not shown,'' a failure
-to demonstrate, not evidence of equality.
-
-Two design choices carry the paper. First, determinism: every trajectory uses integer
-arithmetic and the two libm calls IEEE~754 computes exactly or rounds correctly (fabs,
-sqrt); the gaussian step is a sum of uniforms rather than Box--Muller, the annealing
-schedule uses an arithmetic exponential, and a run reproduces byte for byte across
-compilers and platforms, which is what lets this paper pin every reported number as a
-regression test. Second, the control: the first genetic algorithm shipped in this harness
-mutated at a fixed scale, re-scattering whatever the population had converged to, and the
-control's verdict read ``no better than uniform sampling at equal cost.'' An outside review
-traced the verdict to the fixed scale; with mutation decaying over the run, the same
-algorithm became the best method on the harness's label-placement example (90 rectangles in
-a container, minimum overlap). A method-versus-method table without a random control cannot
-distinguish a weak method from a mis-tuned one.
-
-\section{The benchmark}
+\subsection{The benchmark}\label{sec:benchmark}
 
 The instances are real. One production schema's version history holds seventeen revisions
 of its MySQL Workbench model, sixteen consecutive pairs, each a migration whose diagram a
@@ -257,13 +291,13 @@ table renamed to a letter, business column names neutralized down into the view 
 machine identifier that v1-style UUIDs embed scrubbed, and the geometry, which is the
 ground truth, untouched. The mapping back to the schema is deliberately stored nowhere.
 
-\section{Pre-registered experiment}
+\subsection{The pre-registered experiment}\label{sec:experiment}
 
 The analysis was committed, timestamped, before any non-pilot pair was scored: primary
 comparison, declared families, refutation criterion, and the author's own directional
 prediction. Per pair and method, five seeds at the shipped budget of 8000 evaluations (with
 500, 2000 and 32000 for the separation-budget table), the per-pair value the median over
-seeds; the statistics of Section 4 throughout.
+seeds; the statistics of Sections~\ref{sec:stats} and~\ref{sec:metrics} throughout.
 
 The primary comparison succeeded, and we state at once how far it reaches. The genetic
 algorithm beats the centroid heuristic (each new table at its neighbours' centroid) on
@@ -287,7 +321,7 @@ redundant to the reported pairwise family, a declared deviation.
 \caption{Per-pair medians of the routed objective at budget 8000 (five seeds), log scale,
 with the centroid heuristic and the human reference. On the single-table pairs the four
 methods nearly coincide; the heuristic loses everywhere on $S$ (on the feasibility order
-the comparison reverses; Section 7); the human reference carries the router's calibration
+the comparison reverses; Section~\ref{sec:experiment}); the human reference carries the router's calibration
 error and is a reference, never a target.}
 \label{fig:results}
 \end{figure}
@@ -337,7 +371,7 @@ had pointed the other way, GA first; the surviving hypothesis, that recombinatio
 only when there are enough modules to recombine, is the successor pre-registration, and
 it will be scored the same way this one was.
 
-\section{What the human comparison measures}
+\subsection{The human comparison}\label{sec:human}
 
 Under the routed objective the searches outscore the maintainer's accepted layouts on most
 pairs. Read through the calibration line, this is not a claim that the tool out-draws a
@@ -382,7 +416,12 @@ Purchase's line \cite{purchase02}.
 
 Against that background the novelty claim is narrow and we state it narrowly. Interactive
 tools place into frozen drawings and route connectors \cite{pt98,dunnart}; evaluations
-have included random baselines \cite{cms95}; each ingredient exists somewhere. What we
+have included random baselines \cite{cms95}; each ingredient exists somewhere. Outside
+layout, head-to-head comparisons of exactly these search methods are abundant
+(\cite{talbi93} is an early one; \cite{baluja95} found the simple methods winning), and a
+uniform-random baseline at matched budget is prescribed practice in search-based software
+engineering \cite{arcuri14}, so the harness's control is an application of doctrine, not an
+invention. What we
 have not found together is the evaluation half: an objective calibrated against a
 certified human layout with its error printed, a random control at matched budget in graph
 layout, exact paired inference over real migration instances with human answers, and a
@@ -443,6 +482,15 @@ carried anonymized; the anonymization mapping is stored nowhere.
 \bibitem{cigdp2025} An Efficient Hybridization of Graph Representation Learning and
  Metaheuristics for the Constrained Incremental Graph Drawing Problem. arXiv:2508.15949,
  2025.
+\bibitem{talbi93} E.-G. Talbi, T.~Muntean. Hill-Climbing, Simulated Annealing and
+ Genetic Algorithms: a Comparative Study and Application to the Mapping Problem.
+ \emph{Proc.\ 26th Hawaii International Conference on System Sciences}, 1993.
+\bibitem{baluja95} S.~Baluja. An Empirical Comparison of Seven Iterative and
+ Evolutionary Function Optimization Heuristics. Technical Report CMU-CS-95-193,
+ Carnegie Mellon University, 1995.
+\bibitem{arcuri14} A.~Arcuri, L.~Briand. A Hitchhiker's Guide to Statistical Tests for
+ Assessing Randomized Algorithms in Software Engineering. \emph{Software Testing,
+ Verification and Reliability} 24(3):219--250, 2014.
 \bibitem{purchase02} H.~C. Purchase. Metrics for Graph Drawing Aesthetics. \emph{Journal
  of Visual Languages and Computing} 13(5):501--516, 2002.
 \bibitem{archambault12} D.~Archambault, H.~C. Purchase. The Mental Map and Memorability

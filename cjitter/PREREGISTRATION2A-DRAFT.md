@@ -9,6 +9,23 @@ The pilot pair (k = 10, GA first) suggested it; the sweep (k <= 5, climb first) 
 test it. This experiment puts k and modularity under control and adds the rotation test that
 separates "recombination works" from "the problem is modular."
 
+## Prior art, fact-checked 2026-08-16
+
+The mechanism this experiment tests is not new and the claim must not say it is. Salomon
+(BioSystems 39(3), 1996) showed genetic-algorithm performance collapsing under coordinate
+rotation of the classic benchmarks, attributing their success to separability, and rotation
+has been standard diagnostic practice in the CEC and BBOB suites since; correlated and
+block mutations run from Schwefel's evolution strategies through CMA-ES and the linkage
+learning line, and layout GAs already mutate a node's x and y as one move. What our search
+did not find published: rotation used as a pre-registered attribution instrument on a real
+application instance, at matched budget with a random control, paired panels and exact
+tests. That protocol is the claim, and the write-up frames every outcome as a
+Salomon-class result operationalized, not discovered. One confound the design must
+control, flagged by the same check: bound handling breaks rotation invariance (a rotated
+box is a different feasible region), so the rotated arms optimize in the rotated
+coordinates over the pre-image of the original box, and the report states how boundary
+repairs are counted.
+
 ## Instrument fixes carried from experiment one
 
 - n is derived, not inherited: 12 instances per factorial cell, so confirmatory strata carry
