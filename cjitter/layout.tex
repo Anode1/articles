@@ -260,24 +260,87 @@ recombination pays only when there are enough modules to recombine, is the succe
 pre-registration, and it will be scored the same way this one was.
 
 \section{What the human comparison measures}
-% Searches beat the human's score; feasibility pairs disagree; the router owns the gap.
-% The general claim: layout objectives that cannot see semantic grouping will beat humans
-% on themselves and lose on the screen, and that is the state of the tools.
-\pending{discussion}
+
+Under the routed objective the searches outscore the maintainer's accepted layouts on most
+pairs. Read through the calibration line, this is not a claim that the tool out-draws a
+person. Much of the human reference's score is the router failing to reproduce connectors
+the maintainer's tool routed cleanly; and the feasibility pairs disagree with the scores,
+the searches reaching zero penetration while the human's on-screen crossings stay lower.
+Person and tool jointly achieved zero and zero; each automated party wins a different half
+of that, and the router owns the remaining gap.
+
+The general reading is the paper's closing argument. A layout objective of this family sees
+crossings, penetration and length; a maintainer optimizes semantic grouping, aligned rows
+and room to grow. Any such objective will therefore beat the human on itself and lose on the
+screen, and a tool that trusts its objective ships the drawing the reader then spends an
+hour repairing. That gap, between what layout objectives score and what maintainers accept,
+is our explanation for why automatic diagram layout has stayed bad in practice despite
+methods that demonstrably beat their controls: the searches are fine, and the objectives are
+not yet describing the job. Objectives anchored to certified human layouts, with their
+approximation error measured and printed, are the repair this paper proposes and practices.
 
 \section{Related work}
-% Crossing minimization complexity (Garey-Johnson 1983); orthogonal drawing and bend
-% minimization (Tamassia); the mental map (Misue, Eades, Lai, Sugiyama 1995); stochastic
-% layout: Davidson & Harel (SA, ACM TOG 1996), TimGA (Eloranta & Makinen), recent Jaya-vs-
-% HC/SA comparisons; the named neighbor problem: Constrained Incremental Graph Drawing
-% (Marti et al.: GRASP, Tabu; arXiv 2508.15949 adds representation learning), which is
-% LAYERED drawing with position-shift constraints on synthetic instances. None of that line
-% runs a matched-budget random control, scores a routed medium, calibrates against a
-% certified human layout, or pre-registers; geometric frozen-context placement with those
-% four properties is the open slot. Graphviz neato -n as the standing full-redraw baseline.
-\pending{related}
+
+Crossing minimization is NP-complete \cite{gj83}, and orthogonal drawing with bend
+minimization is a literature of its own \cite{tamassia87}. Stochastic search for layout
+begins in earnest with Davidson and Harel's simulated annealing over aesthetic criteria
+\cite{dh96}, continues through genetic approaches such as TimGA \cite{timga}, and remains
+active in metaheuristic comparisons that report final quality and time. The mental map was
+named and formalized by Misue, Eades, Lai and Sugiyama \cite{misue95}, and incremental
+drawing under constraints is an established optimization line: the Constrained Incremental
+Graph Drawing Problem \cite{cigdp} and its successors, most recently hybridized with graph
+representation learning \cite{cigdp2025}, place vertices on layers under position-shift
+constraints over synthetic instance sets. Force-directed practice is surveyed in
+\cite{kobourov}, and graphviz's \texttt{neato}, which honors pinned positions, stands as
+the thirty-year baseline our anchor-term sequel must face.
+
+Against that background, the combination here appears unoccupied: geometric frozen-context
+placement, an objective that routes the medium before measuring it, a metric calibrated
+against a certified human layout with its error printed, a matched-budget random control,
+exact paired inference, and a pre-registration whose refutation clauses were allowed to
+fire. Each ingredient exists somewhere; we have not found the ensemble.
 
 \section{Conclusion}
-\pending{conclusion}
+
+An hour of hand repair per reverse-engineering, for years, was a measurement nobody wrote
+down. Written down properly, it became: a formulation (frozen context, $2k$ variables, an
+anchor term to the classic problem), an objective that reads routed connectors and confesses
+its calibration, a harness in which four searches spend identical budgets against a random
+control and are judged by exact paired tests, a benchmark of eight real migrations with
+human-accepted answers, and a pre-registered experiment that promoted the searches over the
+deployed-style heuristic, demoted the author's favored method, and produced the field's
+plainest deployable rule: count the new nodes first. The successor questions are declared
+and waiting: whether recombination's advantage returns with the module count, whether the
+2001 per-label climber that started this line holds its own inside the harness that finally
+names it, and at what objective noise any search stops being worth its budget.
+
+\section*{Reproducibility}
+
+Every number in this paper regenerates from the repository at the frozen commit: the
+per-seed data, the extraction and analysis code, the pre-registration with its addenda and
+this paper's source live together, and the harness's own test suite pins the shipped
+example's every printed digit. The benchmark geometry derives from a private schema and is
+carried anonymized; the anonymization mapping is stored nowhere.
+
+\begin{thebibliography}{9}
+\bibitem{gj83} M.~R. Garey, D.~S. Johnson. Crossing Number is NP-Complete. \emph{SIAM
+ Journal on Algebraic and Discrete Methods} 4(3):312--316, 1983.
+\bibitem{dh96} R.~Davidson, D.~Harel. Drawing Graphs Nicely Using Simulated Annealing.
+ \emph{ACM Transactions on Graphics} 15(4):301--331, 1996.
+\bibitem{misue95} K.~Misue, P.~Eades, W.~Lai, K.~Sugiyama. Layout Adjustment and the Mental
+ Map. \emph{Journal of Visual Languages and Computing} 6(2):183--210, 1995.
+\bibitem{tamassia87} R.~Tamassia. On Embedding a Graph in the Grid with the Minimum Number
+ of Bends. \emph{SIAM Journal on Computing} 16(3):421--444, 1987.
+\bibitem{timga} T.~Eloranta, E.~M\"akinen. TimGA: A Genetic Algorithm for Drawing
+ Undirected Graphs. \emph{Divulgaciones Matem\'aticas} 9(2):155--171, 2001.
+\bibitem{cigdp} R.~Mart\'i, V.~Campos, A.~Hoff, J.~Peir\'o. Heuristics for the
+ Min-Max Arc Crossing Problem and Incremental Graph Drawing. \emph{European Journal of
+ Operational Research}, 2018 onward; and successors.
+\bibitem{cigdp2025} An Efficient Hybridization of Graph Representation Learning and
+ Metaheuristics for the Constrained Incremental Graph Drawing Problem. arXiv:2508.15949,
+ 2025.
+\bibitem{kobourov} S.~G. Kobourov. Force-Directed Drawing Algorithms. In \emph{Handbook of
+ Graph Drawing and Visualization}, CRC Press, 2013.
+\end{thebibliography}
 
 \end{document}
