@@ -84,16 +84,22 @@ instrument for search itself. Layout is its first subject, not its definition.
    care); dashboards and node editors adding panels. Cheap to encode, each is one fitness
    and one repair.
 
-8. **Method-wise Bergstra-Bengio constants.** Bergstra and Bengio's case for random search
-   in hyperparameter optimization rests on an analytic constant: N uniform draws land in the
-   top-q quantile with probability 1 - (1-q)^N, which is where "sixty random draws" comes
-   from. That constant is known only for random. The harness can derive the empirical
-   counterparts for the other methods, the budget each needs to match random's quantile
-   coverage as a function of q, dimension and landscape, with exact paired verdicts, all
-   four methods plus the control. This was among smbpann2's goals before that line closed;
-   its surviving finding, that the binding constraint was the variance of the fitness
-   estimate, connects it to question 1's noise axis: the constants presumably degrade with r,
-   and one sweep can measure both. Vasili flagged this as paper material in its own right.
+8. **The sixty-draws constant, tested at last, and its method-wise counterparts.**
+   Fact-checked 2026-08-16 before writing this down. The "rule of 59/60" (n uniform draws
+   land in the top-q quantile of the sampling distribution with probability 1 - (1-q)^n;
+   q = 5% gives n = 59) circulates in tutorials and practice; our search could not attribute
+   it to Bergstra and Bengio's 2012 paper itself, which argues from experiments and low
+   effective dimensionality. The arithmetic is trivial and not the question. The untested
+   part is the equation the rule quietly makes: that the top 5% of the SAMPLING DISTRIBUTION
+   is a good model, which is a claim about landscapes, and no published tests of it across
+   real objective families surfaced. The harness can measure exactly that: at n draws, what
+   outcome quality does random actually deliver per landscape, dimension and noise level,
+   against what the quantile promises; and the method-wise counterparts, the n at which each
+   search matches random's n = 60 outcome, with exact paired verdicts. Not a goal anyone set
+   out with: it surfaced during smbpann2, the way applications do, while studying something
+   else; smbpann2's surviving finding, that the binding constraint was the variance of the
+   fitness estimate, ties it to question 1's noise axis, and Vasili was already considering
+   computing the constant when that line closed. Paper material in its own right.
 
 ## What is published next door, and the open slot
 
