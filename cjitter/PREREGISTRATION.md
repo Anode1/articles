@@ -46,7 +46,7 @@ Everything else is exploratory.
 
 - Success: ga beats centroid, Holm-corrected p <= 0.05.
 - Refutation: ga fails to separate from RANDOM (comparison 2 not significant in ga's favor,
-  or significant against it). Then the honest conclusion is that at this budget the search
+  or significant against it). Then the conclusion is that at this budget the search
   adds nothing over sampling, and the paper says so.
 - Equivalence: if comparison 1 is not significant, the result is reported as "not shown"
   with pairstat's minimum detectable effect, never as equivalence.
