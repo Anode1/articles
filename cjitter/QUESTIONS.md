@@ -33,7 +33,12 @@ instrument for search itself. Layout is its first subject, not its definition.
    matched budget, same panel, exact verdict. If the grouping advantage reappears on
    placement, partitioning and the synthetic families, it is a statement about the operator
    rather than about networks, and it is the direct continuation of that paper's result
-   inside the new line of work. The tuning API makes it one field per variant.
+   inside the new line of work. The tuning API makes it one field per variant. The same
+   experiment has a sibling: SMBPANN fused the two methods, a GA whose mutation carried an
+   annealing schedule, where cjitter keeps them sealed so a verdict names a family. Adding
+   the fusion as a fifth named method and running it against pure GA and pure annealing at
+   matched budget asks whether the hybrid beats the best of its parts, a question the
+   memetic-algorithm literature argues and does not test against a control.
 
 4. **How much of the published method-vs-method literature survives a tuning ablation?**
    The GA here flipped from losing against random to best-of-four by one field
