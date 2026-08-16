@@ -66,7 +66,10 @@ reaching for a search.
 climb versus anneal, asked after the results were seen and labeled accordingly: exact
 Wilcoxon p = 0.578, Hodges-Lehmann +11 [-1334, +726], MDE 1326. No difference is
 demonstrated, and none larger than about 1300 score units (a tenth of the primary effect)
-could have hidden at this n. The supportable ordering across the whole sweep: climb and
-anneal indistinguishable, both ahead of the GA, the GA not separable from random at these
-migration sizes. The locality half of the pre-registered prediction survived; the
-recombination half did not.
+could have hidden at this n. Corrected after the statistician's review: the supportable
+ordering is climb and anneal indistinguishable from each other, climb directionally ahead
+of the GA (with the dust-pair sensitivity the paper states), and anneal versus GA not
+shown (declared test p = 0.297). The GA did not separate from random at these migration
+sizes; the paper's Section 7 carries the full 6/1/1 decomposition, with the loss on the
+rename-flagged pair carrying the verdict. The locality half of the pre-registered
+prediction survived; the recombination half did not.
