@@ -180,23 +180,84 @@ detectable effect wherever a null is reported, so a null bounds rather than asse
 Realized: $n = 8$ of 16 consecutive pairs (seven added no tables, one was the pilot), five seeds per method per pair, RESULTS.md beside this file carrying the full battery.
 
 \section{The searches and the control}
-% cjitter: four methods behind one fitness interface, identical budgets enforced by
-% construction, uniform random as the control, verdicts by exact one-sided sign test on
-% paired per-seed differences. Determinism: integer arithmetic, fabs and sqrt only;
-% the fixed-mutation GA episode as a worked example of what the control catches.
-\pending{library}
+
+The harness, cjitter,\footnote{C99, no dependencies beyond libm; the repository carries the
+suites, the data and every number in this paper.} runs four methods behind one fitness
+interface: hill climbing with restarts, simulated annealing, a genetic algorithm with
+tournament selection and blend crossover, and uniform random sampling as the matched-budget
+control. Every evaluation passes through one counter, so no method can spend more than
+another; the budget is exact by construction, and an internal guard turns any violation into
+an immediate failure rather than a silently unfair comparison. All four run on the same seed
+panel, and the verdict against the control is an exact one-sided sign test on the paired
+per-seed differences: ``better'' requires the wins to be explainable by a fair coin with
+probability at most five percent, and anything else prints as ``not shown,'' a failure to
+demonstrate that says nothing about equality.
+
+Two design choices earn their keep in practice. First, determinism: every trajectory uses
+integer arithmetic and the two libm calls IEEE~754 computes exactly or rounds correctly
+(fabs, sqrt); the gaussian step is a sum of uniforms rather than Box--Muller, the annealing
+schedule uses an arithmetic exponential, and a run reproduces byte for byte across compilers
+and platforms, which is what lets this paper pin every reported number as a regression test.
+Second, the control catches what tuning hides. The first genetic algorithm shipped in this
+harness mutated at a fixed scale, re-scattering whatever the population had converged to,
+and the control's verdict read ``no better than uniform sampling at equal cost.'' An outside
+review traced the verdict to the fixed scale; with mutation decaying over the run, the same
+algorithm became the best method on the label-placement example. Both halves of that episode
+are the point: a method-versus-method table without a random control cannot distinguish a
+weak method from a mis-tuned one.
 
 \section{The benchmark}
-% n consecutive migration pairs from one production schema's git history, each a real
-% migration with a human-accepted layout on both sides. Anonymization: tables to letters,
-% columns neutralized down into view SQL, MAC node ids scrubbed; geometry untouched.
-\pending{benchmark}
+
+The instances are real. One production schema's version history holds seventeen revisions of
+its MySQL Workbench model, sixteen consecutive pairs, each a migration whose diagram a
+maintainer restored by hand and accepted on both sides. Per pair, the task is the previous
+revision's diagram frozen as drawn, the added tables to place, and the maintainer's accepted
+coordinates in the next revision as the human reference; the median displacement of
+surviving tables between revisions is recorded per pair, since the human answered in a
+context that sometimes moved. Seven of the sixteen pairs added no tables (documentation
+edits, pure re-layouts) and are excluded with that reason; one pair served as the pilot and
+is excluded from the primary analysis; eight remain. One threat is recorded rather than
+repaired: matching is by table name, so a migration that renames tables can count renames as
+additions.
+
+The current pair ships with the harness as its example, anonymized for publication: every
+table renamed to a letter, business column names neutralized down into the view SQL, the
+machine identifier that v1-style UUIDs embed scrubbed, and the geometry, which is the ground
+truth, untouched. The mapping back to the schema is deliberately stored nowhere.
 
 \section{Pre-registered experiment}
-% PREREGISTRATION.md, committed before the sweep: primary = ga vs centroid on the routed
-% objective, paired Wilcoxon via pairstat, Holm over three declared comparisons;
-% refutation = ga fails to separate from random.
-\pending{results}
+
+The analysis was committed, timestamped, before any non-pilot pair was scored: primary
+comparison, declared families, refutation criterion, and the author's own directional
+prediction. Per pair and method, five seeds at the shipped budget of 8000 evaluations (with
+500, 2000 and 32000 for the efficiency curves), the per-pair value the median over seeds.
+Across pairs, exact Wilcoxon signed-rank tests with Holm correction within each declared
+family, Hodges--Lehmann shifts with distribution-free intervals, a Friedman omnibus over the
+four methods gating the pairwise family, exact McNemar on the solve-count binary (whether
+the method's median-seed layout routes to zero penetration), and a minimum detectable effect
+beside every null.
+
+The primary comparison succeeded: the genetic algorithm beats the centroid heuristic (each
+new table at its neighbours' centroid, the deployed-tool stand-in) on eight of eight
+migrations, exact Wilcoxon $p = 0.0078$, Holm-corrected $0.023$, Hodges--Lehmann shift
+$-72{,}287$ $[-150{,}515, -20{,}728]$; hill climbing against the centroid reads the same.
+The Friedman omnibus rejects at $p = 0.00045$ with mean ranks climb $1.44$, anneal $2.19$,
+GA $2.69$, random $3.69$.
+
+Two declared clauses then fired against the experimenters, which we report with the same
+prominence. The refutation clause: the GA did not separate from uniform random sampling
+($p = 0.109$; six wins of eight), because half of real migrations add one or two tables, and
+at $k \le 2$ every method including the control reaches the same optimum to five digits.
+Trivial instances cannot discriminate, and the first deployable rule of this paper is to
+count the new nodes before reaching for a search. And the author's pre-registered
+prediction, that the GA would be the most efficient search, was refuted by its own
+experiment: hill climbing beats the GA on every non-tied migration (seven of seven, exact
+$p = 0.016$, Holm $0.031$), separates from the control by 2000 evaluations on most pairs
+(seven of eight, against the GA's five of eight), and an exploratory bound finds climbing
+and annealing indistinguishable to within a tenth of the primary effect. The pilot pair,
+with $k = 10$, had pointed the other way, GA first; the surviving hypothesis, that
+recombination pays only when there are enough modules to recombine, is the successor
+pre-registration, and it will be scored the same way this one was.
 
 \section{What the human comparison measures}
 % Searches beat the human's score; feasibility pairs disagree; the router owns the gap.
