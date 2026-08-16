@@ -15,7 +15,7 @@
 a Routed Objective, a Calibrated Metric, and a Matched-Budget Control}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, data and derived tables:
 \url{https://github.com/Anode1/cjitter}.}}
-\date{\pending{month} 2026}
+\date{August 2026}
 
 \begin{document}
 \maketitle
@@ -69,6 +69,42 @@ this gap is why automatic graph layout has stayed bad in practice.
 % report the shortfall with every score. Current router: \pending{calibration numbers}.
 \pending{objective}
 
+\section{Metrics and statistics}
+
+The objective over a placement $v$ of the $k$ new nodes is
+\[
+S(v) \;=\; 100\,P(v) \;+\; 100\,C(v) \;+\; L(v),
+\]
+with $P$ the total length of routed connector lying inside a node it does not join, $C$ the
+count of proper crossings between routed connectors of disjoint node pairs, and $L$ the total
+routed length; the weights are tiers two orders of magnitude apart, so length only breaks
+ties and no weight is tuned. The same $S$ is defined for the straight edge model by replacing
+the router with the direct segment. Beside $S$:
+\begin{itemize}
+\item the \emph{feasibility pair} $(C, P)$, ordered lexicographically: the part of the
+  score a reader can verify by looking at the drawing;
+\item the \emph{calibration} $\chi = (C_{\mathrm{ref}}, P_{\mathrm{ref}})$, the metric
+  applied to a reference layout whose on-screen quality is certified as zero and zero. The
+  gap between $\chi$ and $(0,0)$ is the metric's own error, printed beside every number
+  that depends on it;
+\item the \emph{transfer gap}
+  $\Delta = S_{\mathrm{routed}}(\hat v_{\mathrm{straight}}) -
+             S_{\mathrm{routed}}(\hat v_{\mathrm{routed}})$:
+  the routed cost of having optimized the straight model, what scoring the wrong medium
+  costs;
+\item the \emph{separation budget} $B^{*}$: the smallest evaluation budget at which a
+  method's exact one-sided sign test against the matched-budget control reaches
+  $p \le 0.05$ on the shared seed panel. A method that never separates gets
+  $B^{*} = \infty$, a verdict the layout literature does not risk because it does not run
+  the control.
+\end{itemize}
+Within an instance, methods share one seed panel and are judged by the exact one-sided sign
+test on paired per-seed differences. Across instances, the pre-registered comparisons use
+the exact Wilcoxon signed-rank test with Holm correction over the declared family, Hodges--
+Lehmann estimates with distribution-free intervals for effect sizes, and a minimum
+detectable effect wherever a null is reported, so a null bounds rather than asserts.
+\pending{realized n and panel}
+
 \section{The searches and the control}
 % cjitter: four methods behind one fitness interface, identical budgets enforced by
 % construction, uniform random as the control, verdicts by exact one-sided sign test on
@@ -95,9 +131,15 @@ this gap is why automatic graph layout has stayed bad in practice.
 \pending{discussion}
 
 \section{Related work}
-% Crossing minimization complexity; orthogonal drawing and bend minimization (Tamassia);
-% dynamic/incremental graph drawing and the mental map; simulated annealing for layout
-% (Davidson & Harel); graphviz as the standing baseline.
+% Crossing minimization complexity (Garey-Johnson 1983); orthogonal drawing and bend
+% minimization (Tamassia); the mental map (Misue, Eades, Lai, Sugiyama 1995); stochastic
+% layout: Davidson & Harel (SA, ACM TOG 1996), TimGA (Eloranta & Makinen), recent Jaya-vs-
+% HC/SA comparisons; the named neighbor problem: Constrained Incremental Graph Drawing
+% (Marti et al.: GRASP, Tabu; arXiv 2508.15949 adds representation learning), which is
+% LAYERED drawing with position-shift constraints on synthetic instances. None of that line
+% runs a matched-budget random control, scores a routed medium, calibrates against a
+% certified human layout, or pre-registers; geometric frozen-context placement with those
+% four properties is the open slot. Graphviz neato -n as the standing full-redraw baseline.
 \pending{related}
 
 \section{Conclusion}
