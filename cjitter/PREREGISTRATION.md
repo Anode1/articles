@@ -95,3 +95,13 @@ consistent with the prediction and proves nothing at one budget on one instance.
   seeded), the per-pair context displacement, and the router calibration per pair.
 - Variance components: spread across seeds within pair versus across pairs, reported so the
   reader sees which noise the seed panel absorbs.
+
+## Addendum 3, 2026-08-15: the freeze
+
+cjitter is frozen for the sweep at commit 942e713 ("The 2001 debugging view, recreated as
+the README's moving figure"); the router last changed in 8d42d0d (sequential, crossing-aware,
+border anchors, per-edge attachment slots; calibration on the pilot pair 27 crossings, 323
+penetration against the hand layout's certified 0 and 0). Budgets for the efficiency curves
+as declared in Addendum 1: 500, 2000, 8000, 32000; the primary comparison reads the 8000
+column. Extraction and analysis code runs against this commit; any later cjitter commit does
+not enter the sweep.
