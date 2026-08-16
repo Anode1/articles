@@ -52,28 +52,96 @@ this gap is why automatic graph layout has stayed bad in practice.
 \end{abstract}
 
 \section{Introduction}
-% The hour; Workbench; the Oracle observation (rich commercial tools drawing diagonal
-% ERD edges); Garey & Johnson 1983 crossing number NP-completeness; heuristics everywhere,
-% none stating their objective. Workbench's placement algorithm is undocumented (the manual
-% names only the menu item) and its failure mode is on record: MySQL bug #42600, ~90 of 353
-% tables autoplaced into one stacked pile. Cite the bug, not a guess at the algorithm.
-\pending{introduction}
+
+For most of two decades one of us maintained the entity--relationship diagram of a production
+database by hand. Every reverse-engineering of the schema replaced the diagram's positions
+with the tool's own placement, and restoring a 44-table diagram to readability cost about an
+hour each time. This is not a defect of one tool. MySQL Workbench's placement algorithm is
+undocumented (its manual names only the menu item), and its failure mode is on the record:
+bug \#42600 reports a 353-table schema autoplaced with some ninety tables stacked into one
+pile. Commercial tools costing more do not necessarily do better; several draw
+entity--relationship diagrams with straight diagonal edges, a representation no maintainer
+draws by hand.
+
+The underlying task is hard in the formal sense: placing the nodes of a graph in the plane
+with the fewest edge crossings is NP-complete \cite{gj83}, so every tool runs heuristics.
+Our claim is that the practical failure is not the hardness but three things the heuristics
+leave unstated. First, the objective: what quantity, exactly, is being improved. Second, the
+medium: whether that quantity is measured on the drawing the reader sees. A tool that
+optimizes straight center-to-center segments while rendering orthogonal connectors improves a
+drawing nobody is shown. Third, the control: whether the search spends its evaluation budget
+any better than uniform random sampling would. In the graph-drawing literature stochastic
+methods have been compared with one another on quality and time since Davidson and Harel
+\cite{dh96}, but we have not found a study that runs the random control at matched budget,
+and without it the claim ``our method improves layout'' is unfalsifiable at any fixed cost.
+
+This paper treats all three, on the practical version of the problem, which is incremental: a
+migration adds $k$ tables to a diagram whose other tables must not move, because a reader who
+knows where a table sits should still find it there. Section 2 formulates the problem and its
+one-parameter generalization to the classic full redraw. Section 3 makes the objective read
+the drawing's real medium and calibrates the metric against the one certified fact available.
+Sections 4 and 5 describe the search harness and a benchmark of real consecutive migrations
+with human-accepted answers. Section 6 reports a pre-registered experiment whose refutation
+clause fired against its own author's prediction, which we regard as the methodology working;
+Section 7 examines what beating the human reference does and does not mean.
 
 \section{The problem}
-% Incremental layout under frozen context: given a drawing of G and a supergraph G',
-% place V(G') \ V(G), old drawing fixed. The mental-map literature (Misue, Eades, Lai,
-% Sugiyama) named the constraint; migrations give it a budget: 2k variables.
-% The anchor term: frozen tables allowed to move at squared-displacement cost lambda;
-% lambda -> infinity recovers the incremental case, lambda -> 0 the classic redraw.
-\pending{formulation}
+
+Let $G$ be a graph with a drawing $D$ that assigns each node an axis-aligned rectangle in a
+bounded canvas, and let $G'$ be a supergraph adding $k$ nodes and their edges. The
+\emph{incremental placement problem} is to position the $k$ new rectangles, with $D$ frozen,
+minimizing an objective over the resulting drawing, subject to two hard constraints enforced
+by construction: no two rectangles overlap, and every rectangle lies on the canvas. The
+search space is $2k$ real variables however large $G$ is.
+
+The frozen context is not a concession to tractability. The dynamic-graph-drawing literature
+names the reason the \emph{mental map} \cite{misue95}: a reader who has learned a drawing
+owns its geography, and a layout that moves what the reader knows destroys more value than it
+adds. Database migrations sharpen the constraint into an economy: each migration adds a few
+tables, the diagram's owner accepts a placement, and the accepted drawing becomes the frozen
+context of the next migration. A version-controlled schema therefore accumulates ground
+truth: every revision pair is an instance, and the human's accepted answer for it.
+
+One parameter connects this problem to the classic one. Add to the objective an anchor term
+$\lambda \sum_i \lVert p_i - p_i^0 \rVert^2$ over the frozen nodes' displacements from
+their accepted positions and let them move: $\lambda \to \infty$ recovers the incremental
+problem, $\lambda = 0$ the full redraw, and intermediate values price the reader's geography
+in the objective's own units. This paper measures the $\lambda \to \infty$ end, where the
+practical need is; the continuum is the natural sequel, with thirty years of force-directed
+practice \cite{kobourov} as the control at the unfrozen end.
 
 \section{The objective is the medium}
-% Routed orthogonal connectors: L and Z candidates, deterministic choice, penetration as
-% interval overlap, crossings on routed polylines. Score by penetration, not by count:
-% gradient for the search. Tiers by orders of magnitude, no tuned weights.
-% Router calibration methodology: the human layout's certified 0/0 as the router's oracle;
-% report the shortfall with every score. Current router: \pending{calibration numbers}.
-\pending{objective}
+
+Entity--relationship tools draw orthogonal connectors: polylines at 0 and 90 degrees, leaving
+a table's border, bending once or twice. An objective over straight center-to-center segments
+scores penetrations and crossings that do not exist on screen and misses ones that do. We
+therefore route before we measure. Each edge is routed as the cheapest of 24 orthogonal
+candidates (two L shapes and Z shapes whose middle segment slides across the channel between
+the endpoints and steps beyond it), anchored on the facing borders at an attachment point
+unique to that edge, so no two connectors ever share a segment. Routing is sequential and
+aware: an edge's candidates pay for crossings against every connector already placed, so each
+pair of edges is priced exactly once and a route can dodge a connector instead of crossing
+it. The choice is deterministic, ties resolved by declaration order.
+
+The objective is then $S = 100P + 100C + L$ over the routed drawing: penetration $P$ as the
+total length of connector lying inside tables it does not join (a length, never a count,
+because a count is flat under small moves and gives a search nothing to follow), crossings
+$C$ as a count at the same tier, and routed length $L$ two orders of magnitude below, so
+length breaks ties and no weight is tuned. Node overlap and canvas containment are not terms:
+they are enforced by a repair callback before any candidate is scored, so no infeasible
+drawing can be returned as anyone's best.
+
+A routed metric is itself an approximation of the tool's rendering, so we calibrate it
+against the one certified fact available: the maintainer's accepted layout achieved zero
+crossings and zero edges under tables on screen. Our router, applied to that layout,
+measures 27 crossings and 323 units of penetration; the shortfall is the router's, it is
+printed beside every number that depends on it, and no comparison against the human
+reference is read past it. The calibration also disciplines development: each router
+improvement (border anchors, attachment slots, crossing-aware sequencing) was accepted
+because this number fell, from 36 and 491 at the first orthogonal router to the present
+values. The same drawing under the straight-segment model charges the certified layout 20
+crossings and 1944 penetration, which quantifies how far the diagonal representation
+misdescribes what the maintainer actually made.
 
 \section{Metrics and statistics}
 
