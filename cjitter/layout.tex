@@ -37,10 +37,16 @@ simulated annealing, a genetic algorithm, and uniform random sampling as the mat
 control) are compared by exact sign tests on paired seed panels, deterministically
 reproducible to the byte across platforms. The motivating application is the
 entity--relationship diagram, which mainstream tools still place badly enough that
-maintainers redraw by hand; a proof of concept places the tables added by \pending{n} real
-consecutive schema migrations, each with a human-accepted answer, under a pre-registered
-analysis. \pending{primary result sentence}. One general finding: under any objective of
-this family the searches outscore the human reference, which measures the objective's
+maintainers redraw by hand; a proof of concept places the tables added by eight real
+consecutive schema migrations of a production database, each with a human-accepted answer,
+under a pre-registered analysis. The searches beat the deployed-style centroid heuristic on
+every migration (exact Wilcoxon, Holm-corrected $p = 0.023$); hill climbing, not the genetic
+algorithm the pre-registration predicted, is the budget-efficient method (it wins every
+non-tied migration against the GA, $p = 0.016$, and separates from the control by 2000
+evaluations on most pairs); and on the half of real migrations that add only one or two
+tables, no search separates from uniform sampling at all, so the first deployable rule is to
+count the new nodes before reaching for a search. One general finding: under any objective
+of this family the searches outscore the human reference, which measures the objective's
 blindness to what maintainers optimize rather than any superiority of the tool, and we argue
 this gap is why automatic graph layout has stayed bad in practice.
 \end{abstract}
@@ -103,7 +109,7 @@ test on paired per-seed differences. Across instances, the pre-registered compar
 the exact Wilcoxon signed-rank test with Holm correction over the declared family, Hodges--
 Lehmann estimates with distribution-free intervals for effect sizes, and a minimum
 detectable effect wherever a null is reported, so a null bounds rather than asserts.
-\pending{realized n and panel}
+Realized: $n = 8$ of 16 consecutive pairs (seven added no tables, one was the pilot), five seeds per method per pair, RESULTS.md beside this file carrying the full battery.
 
 \section{The searches and the control}
 % cjitter: four methods behind one fitness interface, identical budgets enforced by
