@@ -57,3 +57,13 @@ efficient method at realistic migration sizes, the GA's pilot advantage did not 
 contact with the benchmark it was predicted on, and half of real migrations are too small to
 need anything beyond sampling, which is itself a deployable observation: check k before
 reaching for a search.
+
+## Exploratory, post-hoc, author-prompted
+
+climb versus anneal, asked after the results were seen and labeled accordingly: exact
+Wilcoxon p = 0.578, Hodges-Lehmann +11 [-1334, +726], MDE 1326. No difference is
+demonstrated, and none larger than about 1300 score units (a tenth of the primary effect)
+could have hidden at this n. The supportable ordering across the whole sweep: climb and
+anneal indistinguishable, both ahead of the GA, the GA not separable from random at these
+migration sizes. The locality half of the pre-registered prediction survived; the
+recombination half did not.
