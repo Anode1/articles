@@ -33,7 +33,11 @@ instrument for search itself. Layout is its first subject, not its definition.
    matched budget, same panel, exact verdict. If the grouping advantage reappears on
    placement, partitioning and the synthetic families, it is a statement about the operator
    rather than about networks, and it is the direct continuation of that paper's result
-   inside the new line of work. The tuning API makes it one field per variant. The same
+   inside the new line of work. The tuning API makes it one field per variant. The 2001
+   label placer, the author now recalls precisely, WAS the grouped operator: hill climbing
+   per label under the one summed cost. Resurrecting it as a named fifth method (pick a
+   group, jitter it, keep if the total improves) puts the original solver into the harness
+   against its modern descendants. The same
    experiment has a sibling: SMBPANN fused the two methods, a GA whose mutation carried an
    annealing schedule, where cjitter keeps them sealed so a verdict names a family. Adding
    the fusion as a fifth named method and running it against pure GA and pure annealing at
