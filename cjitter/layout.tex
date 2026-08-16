@@ -1,0 +1,101 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\pending}[1]{\textcolor{red}{\textbf{[PENDING: #1]}}}
+
+\title{\textbf{Placing the New Tables: Incremental Diagram Layout\\
+with a Routed Objective and an Honest Control}}
+\author{Vasili Gavrilov\thanks{Independent researcher. Code, data and derived tables:
+\url{https://github.com/Anode1/cjitter}.}}
+\date{\pending{month} 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Every mainstream database tool lays out its entity--relationship diagrams badly, and the
+author of this paper spent about an hour re-drawing one 44-table diagram by hand after each
+reverse-engineering for years. The underlying task is NP-complete, so the tools run
+heuristics, but the heuristics fail at a specific, avoidable place: they optimize straight
+center-to-center edges while drawing orthogonal connectors, so the quantity they improve is
+not the quantity the reader sees. We formulate the practical version of the problem, which
+is incremental: a migration adds $k$ tables to a diagram whose other tables must not move,
+because a reader who knows where a table sits should still find it there. The search space is
+$2k$ variables, the objective reads orthogonally routed connectors, and the router is
+calibrated against the one certain fact available: a human-maintained layout that achieved
+zero crossings and zero edges under tables on screen. Four stochastic searches, run at
+identical budgets against uniform random sampling and judged by an exact sign test on paired
+seeds, place the tables of \pending{n} real consecutive migrations of a production schema,
+each with a human-accepted answer, under a pre-registered analysis.
+\pending{primary result sentence}. A finding we did not seek: under the routed objective the
+searches outscore the human's own layout, which measures the objective's blindness to
+semantic grouping rather than any superiority of the tool, and we argue this gap, between
+what layout objectives score and what maintainers optimize, is why automatic diagram layout
+has stayed bad in practice.
+\end{abstract}
+
+\section{Introduction}
+% The hour; Workbench; the Oracle observation (rich commercial tools drawing diagonal
+% ERD edges); Garey & Johnson 1983 crossing number NP-completeness; heuristics everywhere,
+% none honest about their objective.
+\pending{introduction}
+
+\section{The problem}
+% Incremental layout under frozen context: given a drawing of G and a supergraph G',
+% place V(G') \ V(G), old drawing fixed. The mental-map literature (Misue, Eades, Lai,
+% Sugiyama) named the constraint; migrations give it a budget: 2k variables.
+% The anchor term: frozen tables allowed to move at squared-displacement cost lambda;
+% lambda -> infinity recovers the incremental case, lambda -> 0 the classic redraw.
+\pending{formulation}
+
+\section{The objective is the medium}
+% Routed orthogonal connectors: L and Z candidates, deterministic choice, penetration as
+% interval overlap, crossings on routed polylines. Score by penetration, not by count:
+% gradient for the search. Tiers by orders of magnitude, no tuned weights.
+% Router calibration methodology: the human layout's certified 0/0 as the router's oracle;
+% report the shortfall with every score. Current router: \pending{calibration numbers}.
+\pending{objective}
+
+\section{The searches and the control}
+% cjitter: four methods behind one fitness interface, identical budgets enforced by
+% construction, uniform random as the control, verdicts by exact one-sided sign test on
+% paired per-seed differences. Determinism: integer arithmetic, fabs and sqrt only;
+% the fixed-mutation GA episode as a worked example of what the control catches.
+\pending{library}
+
+\section{The benchmark}
+% n consecutive migration pairs from one production schema's git history, each a real
+% migration with a human-accepted layout on both sides. Anonymization: tables to letters,
+% columns neutralized down into view SQL, MAC node ids scrubbed; geometry untouched.
+\pending{benchmark}
+
+\section{Pre-registered experiment}
+% PREREGISTRATION.md, committed before the sweep: primary = ga vs centroid on the routed
+% objective, paired Wilcoxon via pairstat, Holm over three declared comparisons;
+% refutation = ga fails to separate from random.
+\pending{results}
+
+\section{What the human comparison measures}
+% Searches beat the human's score; feasibility pairs disagree; the router owns the gap.
+% The general claim: layout objectives that cannot see semantic grouping will beat humans
+% on themselves and lose on the screen, and that is the state of the tools.
+\pending{discussion}
+
+\section{Related work}
+% Crossing minimization complexity; orthogonal drawing and bend minimization (Tamassia);
+% dynamic/incremental graph drawing and the mental map; simulated annealing for layout
+% (Davidson & Harel); graphviz as the standing baseline.
+\pending{related}
+
+\section{Conclusion}
+\pending{conclusion}
+
+\end{document}
