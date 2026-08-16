@@ -131,6 +131,16 @@ length breaks ties and no weight is tuned. Node overlap and canvas containment a
 they are enforced by a repair callback before any candidate is scored, so no infeasible
 drawing can be returned as anyone's best.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.49\textwidth]{figures/ERD_straight.png}\hfill
+\includegraphics[width=0.49\textwidth]{figures/ERD_routed.png}
+\caption{The same drawing under the two edge models: straight center-to-center segments
+(left), the representation several commercial tools draw, and routed orthogonal connectors
+(right), what the maintainer's tool draws and this paper's objective reads.}
+\label{fig:medium}
+\end{figure}
+
 A routed metric is itself an approximation of the tool's rendering, so we calibrate it
 against the one certified fact available: the maintainer's accepted layout achieved zero
 crossings and zero edges under tables on screen. Our router, applied to that layout,
@@ -220,6 +230,16 @@ is excluded from the primary analysis; eight remain. One threat is recorded rath
 repaired: matching is by table name, so a migration that renames tables can count renames as
 additions.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.49\textwidth]{figures/ERD_prev_routed.png}\hfill
+\includegraphics[width=0.49\textwidth]{figures/ERD_routed.png}
+\caption{One benchmark instance, anonymized. Left: the frozen diagram before the migration
+(36 tables). Right: after it, the ten added tables in amber, connectors routed orthogonally.
+The maintainer's accepted coordinates for the added tables are the human reference.}
+\label{fig:pair}
+\end{figure}
+
 The current pair ships with the harness as its example, anonymized for publication: every
 table renamed to a letter, business column names neutralized down into the view SQL, the
 machine identifier that v1-style UUIDs embed scrubbed, and the geometry, which is the ground
@@ -243,6 +263,33 @@ migrations, exact Wilcoxon $p = 0.0078$, Holm-corrected $0.023$, Hodges--Lehmann
 $-72{,}287$ $[-150{,}515, -20{,}728]$; hill climbing against the centroid reads the same.
 The Friedman omnibus rejects at $p = 0.00045$ with mean ranks climb $1.44$, anneal $2.19$,
 GA $2.69$, random $3.69$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/results.pdf}
+\caption{Per-pair medians of the routed objective at budget 8000 (five seeds), log scale,
+with the centroid heuristic and the human reference. On the pairs adding one or two tables
+the four methods coincide; the heuristic loses everywhere; the human reference carries the
+router's calibration error and is a reference, never a target.}
+\label{fig:results}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\caption{Separation budget $B^{*}$ per pair: the smallest budget (of 500, 2000, 8000,
+32000) at which the five-seed sign test against the matched-budget control reaches
+$p \le 0.05$; $\infty$ means never, a verdict only a run control can produce.}
+\label{tab:bstar}
+\begin{tabular}{lrrrrrrrr|r}
+\toprule
+pair & 3 & 4 & 6 & 7 & 12 & 13 & 14 & 15 & median \\
+\midrule
+climb  & $\infty$ & 2000 & 2000 & 2000 & 2000 & 8000 & 2000 & 500 & 2000 \\
+anneal & $\infty$ & 2000 & $\infty$ & 32000 & 500 & 8000 & 500 & 500 & 1250 \\
+ga     & $\infty$ & 32000 & 2000 & 500 & 500 & $\infty$ & $\infty$ & 8000 & 2000 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Two declared clauses then fired against the experimenters, which we report with the same
 prominence. The refutation clause: the GA did not separate from uniform random sampling
