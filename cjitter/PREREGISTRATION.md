@@ -79,3 +79,19 @@ against the control reaches 5% on the shared panel) as the efficiency curve, at 
 500, 2000, 8000 and 32000. For the record, the pilot's shipped tables have the GA at the
 best median in all three (labels, and both edge models of the ERD pair), which is
 consistent with the prediction and proves nothing at one budget on one instance.
+
+## Addendum 2, 2026-08-15: the fuller battery, declared before the sweep
+
+- Omnibus first: Friedman test across the four methods on the primary outcome over pairs,
+  exact or permutation null at this n. Only if it rejects at 5% do the pairwise tests above
+  carry their Holm-corrected weight; post-hoc Nemenyi mean-rank differences are reported as
+  exploratory either way.
+- Every Wilcoxon reports its matched-pairs rank-biserial correlation as the effect size,
+  beside the Hodges-Lehmann shift and its distribution-free interval.
+- Feasibility as a paired binary: per pair, does the method's median-seed layout route to
+  zero penetration? ga versus centroid on that binary by exact McNemar (two-sided binomial
+  on the discordant pairs), the test bpnn's notes prescribe for paired binary outcomes.
+- Descriptive, no tests: per-method medians with bootstrap 95% intervals (10^4 resamples,
+  seeded), the per-pair context displacement, and the router calibration per pair.
+- Variance components: spread across seeds within pair versus across pairs, reported so the
+  reader sees which noise the seed panel absorbs.
