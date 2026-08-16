@@ -84,6 +84,17 @@ instrument for search itself. Layout is its first subject, not its definition.
    care); dashboards and node editors adding panels. Cheap to encode, each is one fitness
    and one repair.
 
+8. **Method-wise Bergstra-Bengio constants.** Bergstra and Bengio's case for random search
+   in hyperparameter optimization rests on an analytic constant: N uniform draws land in the
+   top-q quantile with probability 1 - (1-q)^N, which is where "sixty random draws" comes
+   from. That constant is known only for random. The harness can derive the empirical
+   counterparts for the other methods, the budget each needs to match random's quantile
+   coverage as a function of q, dimension and landscape, with exact paired verdicts, all
+   four methods plus the control. This was among smbpann2's goals before that line closed;
+   its surviving finding, that the binding constraint was the variance of the fitness
+   estimate, connects it to question 1's noise axis: the constants presumably degrade with r,
+   and one sweep can measure both. Vasili flagged this as paper material in its own right.
+
 ## What is published next door, and the open slot
 
 Stochastic layout: Davidson and Harel (simulated annealing, ACM TOG 1996, straight edges,
