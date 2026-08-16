@@ -67,3 +67,15 @@ cjitter commit hash, router included; the extraction pipeline (gen_data.py per p
 file. The seeds are the shipped panel (base 1, stride 7919). Nothing here changes after the
 first non-pilot pair is scored; if something must change, the change and its reason are
 appended below with a date, and the analysis reports both versions.
+
+## Addendum, 2026-08-15: a directional prediction, recorded before the sweep
+
+The author predicts the GA is the most efficient of the three searches on incremental
+placement. This is a feeling, and it is being written down so it can be scored either way.
+Added to the pre-registered secondary family: ga vs climb and ga vs anneal, paired across
+pairs on the primary outcome, exact Wilcoxon signed-rank, Holm within this pair of
+comparisons; and the separation budget B* per method (smallest budget whose sign test
+against the control reaches 5% on the shared panel) as the efficiency curve, at budgets
+500, 2000, 8000 and 32000. For the record, the pilot's shipped tables have the GA at the
+best median in all three (labels, and both edge models of the ERD pair), which is
+consistent with the prediction and proves nothing at one budget on one instance.
