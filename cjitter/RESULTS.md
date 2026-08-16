@@ -35,9 +35,12 @@ recombine. That is a new pre-registration, not a footnote to this one.
 
 ## The declared secondaries
 
-- Separation budgets B* (five-seed sign test against random at the same budget): climb
-  separates on 7 of 8 pairs, median B* 2000 evaluations; anneal 6 of 8, median 1250; ga 5 of
-  8, median 2000.
+- Separation budgets B* (five-seed sign test against random at the same budget; the test
+  reaches 5% only on a 5-for-0 sweep, so B* detects sweeps and nothing weaker): climb
+  separates on 7 of 8 pairs, anneal 6, ga 5. Medians with the never-separating pairs ranked
+  above every finite budget: climb 2000, anneal 5000, ga 20000; over finite entries only:
+  2000, 1250, 2000. The first convention is the table's, disclosed after a reviewer found
+  the second silently flattering the method that most often never separates.
 - McNemar, ga versus centroid on reaching zero routed penetration: discordant 2 versus 0 in
   the GA's favor, exact p = 0.50; the binary is underpowered at n = 8.
 - Bootstrap 95% intervals on the across-pair median at 8000: random 18424 [15256, 44749],
