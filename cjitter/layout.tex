@@ -443,6 +443,43 @@ whether recombination's advantage returns with the module count, whether the per
 climber that started this line in 2001 holds its own inside the harness that finally names
 it, and at what objective noise any search stops being worth its budget.
 
+\section*{Appendix: leave-one-out robustness}
+
+The eight pairs are consecutive migrations of one schema, so the exact tests'
+independence assumption is stated rather than satisfied
+(Section~\ref{sec:benchmark}). As a post-hoc sensitivity check (the pre-registered
+analysis is Section~\ref{sec:experiment}), Table~\ref{tab:loo} recomputes each declared
+comparison's exact two-sided Wilcoxon signed-rank $p$, on the per-pair medians at budget
+8000 with zero differences dropped, once on all eight pairs and once with each pair
+excluded. Three readings. Every search-versus-centroid sweep survives every exclusion
+(a seven-pair sweep's exact $p$ is $0.016$). Hill climbing's two verdicts, against the
+genetic algorithm and against the control, stay at or below $0.031$ under every
+exclusion. The genetic algorithm against the control moves between $0.031$ and $0.219$:
+excluding the rename-flagged pair 14 is the one exclusion under which the GA would
+separate, which confirms, by exclusion rather than by the sign flip reported in
+Section~\ref{sec:experiment}, that the refutation verdict is carried by that single
+suspect instance and by $n$.
+
+\begin{table}[h]
+\centering
+\caption{Exact two-sided Wilcoxon signed-rank $p$ per comparison: all eight pairs, then
+with the named pair excluded.}
+\label{tab:loo}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lr|rrrrrrrr}
+\toprule
+comparison & all & $-3$ & $-4$ & $-6$ & $-7$ & $-12$ & $-13$ & $-14$ & $-15$ \\
+\midrule
+GA vs.\ centroid     & 0.0078 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 \\
+climb vs.\ centroid  & 0.0078 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 \\
+random vs.\ centroid & 0.0078 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 & 0.016 \\
+GA vs.\ random       & 0.1094 & 0.109 & 0.219 & 0.156 & 0.156 & 0.219 & 0.156 & 0.031 & 0.219 \\
+climb vs.\ GA        & 0.0156 & 0.016 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 \\
+climb vs.\ random    & 0.0156 & 0.016 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section*{Reproducibility}
 
 Every number in this paper regenerates from the repository at the frozen commit: the
