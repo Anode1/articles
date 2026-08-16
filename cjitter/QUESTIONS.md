@@ -40,6 +40,17 @@ instrument for search itself. Layout is its first subject, not its definition.
    matched budget asks whether the hybrid beats the best of its parts, a question the
    memetic-algorithm literature argues and does not test against a control.
 
+   And the mechanism behind the author's GA prediction is itself testable. The prediction's
+   reasoning: localized Markovian processes beat memoryless global sampling when the run is
+   long and the variables many, because a move inherits every coordinate it does not touch.
+   That separates local methods from random, but not the GA from climb and anneal; what the
+   GA adds is recombination, whose known edge is modularity, and whose known failure is a
+   rotated landscape where no coordinate subset means anything alone. So: the same placement
+   problem through a fixed orthogonal rotation of the variables, all four methods, matched
+   budget. If the GA's lead survives rotation, the prediction is about the GA; if it
+   vanishes, the prediction was about modularity, placement is modular, and grouped
+   mutations, recombination and the author's feeling are one finding wearing three coats.
+
 4. **How much of the published method-vs-method literature survives a tuning ablation?**
    The GA here flipped from losing against random to best-of-four by one field
    (ga_mutate_decay 0 -> 0.9). The tuning API makes that systematic: take a claimed ordering,
