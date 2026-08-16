@@ -11,8 +11,8 @@
 
 \newcommand{\pending}[1]{\textcolor{red}{\textbf{[PENDING: #1]}}}
 
-\title{\textbf{Placing the New Tables: Incremental Diagram Layout\\
-with a Routed Objective and an Honest Control}}
+\title{\textbf{Incremental Graph Layout by Stochastic Search:\\
+a Routed Objective, a Calibrated Metric, and an Honest Control}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, data and derived tables:
 \url{https://github.com/Anode1/cjitter}.}}
 \date{\pending{month} 2026}
@@ -21,25 +21,28 @@ with a Routed Objective and an Honest Control}}
 \maketitle
 
 \begin{abstract}
-Every mainstream database tool lays out its entity--relationship diagrams badly, and the
-author of this paper spent about an hour re-drawing one 44-table diagram by hand after each
-reverse-engineering for years. The underlying task is NP-complete, so the tools run
-heuristics, but the heuristics fail at a specific, avoidable place: they optimize straight
-center-to-center edges while drawing orthogonal connectors, so the quantity they improve is
-not the quantity the reader sees. We formulate the practical version of the problem, which
-is incremental: a migration adds $k$ tables to a diagram whose other tables must not move,
-because a reader who knows where a table sits should still find it there. The search space is
-$2k$ variables, the objective reads orthogonally routed connectors, and the router is
-calibrated against the one certain fact available: a human-maintained layout that achieved
-zero crossings and zero edges under tables on screen. Four stochastic searches, run at
-identical budgets against uniform random sampling and judged by an exact sign test on paired
-seeds, place the tables of \pending{n} real consecutive migrations of a production schema,
-each with a human-accepted answer, under a pre-registered analysis.
-\pending{primary result sentence}. A finding we did not seek: under the routed objective the
-searches outscore the human's own layout, which measures the objective's blindness to
-semantic grouping rather than any superiority of the tool, and we argue this gap, between
-what layout objectives score and what maintainers optimize, is why automatic diagram layout
-has stayed bad in practice.
+Placing the nodes of a graph in the plane with few edge crossings is NP-complete, so every
+layout tool runs heuristics, and the heuristics are rarely honest about three things: what
+objective they optimize, whether that objective measures the drawing the reader actually
+sees, and whether the search spends its budget any better than uniform random sampling
+would. We treat all three. The problem is formulated incrementally: a graph grows by $k$
+nodes and the existing drawing is frozen, which keeps the reader's mental map, bounds the
+search space at $2k$ variables, and contains the classic full redraw as the limit of an
+anchor term that prices the displacement of frozen nodes. The objective reads the drawing's
+real medium, orthogonally routed connectors rather than the straight center-to-center
+segments most objectives score, and the metric is calibrated: the router's shortfall against
+a reference layout of certified on-screen quality is measured and printed beside every
+number that depends on it. Four families of stochastic search (hill climbing with restarts,
+simulated annealing, a genetic algorithm, and uniform random sampling as the matched-budget
+control) are compared by exact sign tests on paired seed panels, deterministically
+reproducible to the byte across platforms. The motivating application is the
+entity--relationship diagram, which mainstream tools still place badly enough that
+maintainers redraw by hand; a proof of concept places the tables added by \pending{n} real
+consecutive schema migrations, each with a human-accepted answer, under a pre-registered
+analysis. \pending{primary result sentence}. One general finding: under any objective of
+this family the searches outscore the human reference, which measures the objective's
+blindness to what maintainers optimize rather than any superiority of the tool, and we argue
+this gap is why automatic graph layout has stayed bad in practice.
 \end{abstract}
 
 \section{Introduction}
