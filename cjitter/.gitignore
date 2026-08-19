@@ -1,3 +1,6 @@
 NIGHT_PLAN.md
 MORNING.md
 TODO.md
+data/pair*.h
+data/sweep_bin
+data/erd_data.h

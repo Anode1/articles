@@ -73,3 +73,43 @@ shown (declared test p = 0.297). The GA did not separate from random at these mi
 sizes; the paper's Section 7 carries the full 6/1/1 decomposition, with the loss on the
 rename-flagged pair carrying the verdict. The locality half of the pre-registered
 prediction survived; the recombination half did not.
+
+## The block arm (2026-08-19, exploratory, not pre-registered)
+
+Run after everything above was known, so the p-values are descriptive. Raw data in
+`data/block_results.csv`, code in `data/sweep_block.c`, `data/run_sweep_block.sh` and
+`data/block_analysis.py`; the paper carries it as Section 4.6.
+
+Every method above perturbs all 2k variables per proposal. cjitter 0.10.0 adds
+`cjitter_tuning.block`, the number of variables one proposal moves, defaulting to the whole
+vector. Block 2 moves one table.
+
+**The reproduction that licenses the comparison.** Re-running the whole pre-registered sweep
+on the block-carrying harness with the block at its default reproduces all 640 per-seed
+values of `results.csv` exactly. The two arms differ in the parameter and in nothing else.
+
+**Power first.** Three of the eight pairs add one table, where 2k = 2 and block 2 *is* the
+whole vector: identical by construction, so only five pairs can differ. At n = 5 the exact
+two-sided Wilcoxon floor is 0.0625, so nothing here can reach 0.05 two-sided.
+
+- climb improves on 5 of 5 affected pairs, exact two-sided p = 0.0625 (the floor), HL -436.
+- anneal 4 of 5 (p = 0.31), ga 4 of 5 (p = 0.125).
+- B* does not clearly improve: climb's median stays 2000, three pairs falling, one rising.
+- **ga versus random moves from p = 0.109 to p = 0.0156**, by flipping exactly pair 14, the
+  instance the appendix's leave-one-out already named as the hinge (45277 -> 34208 against
+  the control's 44749). The pre-registered verdict stands as recorded; what the block shows
+  is that it was a verdict about a method family at one proposal shape.
+
+**Where it is not marginal**, quoted as illustration and not as evidence, both outside the
+pre-registered eight: the 90-rectangle packing example goes from climb 12.8 / anneal 128 /
+ga 1.38 to *exactly 0 on all seven seeds for all three*, a clean layout no method reaches at
+any budget tried with whole-vector proposals; and on the shipped k = 10 instance climb's
+median falls 46134 -> 32293 with its five-seed range falling 18662 -> 178.
+
+**The hypothesis, declared not concluded.** Incremental placement is a sum over weakly
+coupled objects (in the shipped instance no edge joins two added tables at all), so a
+whole-vector proposal that seats one object well and another badly is rejected for the
+second: acceptance on that instance is 47 of 8000 at whole vector against 124 at block 2. If
+so the block's value grows with the number of such objects, which puts this benchmark's
+k <= 5 instances at the bottom of the range. Testing it needs larger k than this schema
+supplies. Margins here run 0.01 to 8.5 percent and do not order by k within that range.

@@ -48,7 +48,13 @@ reference layout of certified on-screen quality with the router's shortfall prin
 every number that depends on it; and four families of stochastic search (hill climbing
 with restarts, simulated annealing, a genetic algorithm, and uniform random sampling as
 the matched-budget control) compared by exact sign tests on paired seed panels,
-deterministically reproducible to the byte across platforms.
+deterministically reproducible to the byte across platforms. One exploratory result, run
+after the pre-registered ones and reported as descriptive, is that the comparison between
+search families may be less consequential than the shape of a single proposal: letting a
+proposal move one node rather than all of them leaves every pre-registered run reproducing
+value for value, improves hill climbing on all five benchmark instances that can differ, and
+moves the genetic algorithm's refutation verdict by flipping exactly the instance the
+pre-registered analysis had identified as carrying it.
 \end{abstract}
 
 \section{Introduction}
@@ -94,6 +100,17 @@ scored. The findings:
   what maintainers accept, is why automatic layout has stayed bad in practice.
 \end{enumerate}
 
+One exploratory result is reported after those four, kept separate because it was not
+pre-registered and was run once they were known (Section~\ref{sec:block}). All four methods
+above move every variable on every proposal; the label-placement system this line descends
+from moved one label at a time. Giving the harness that choice as a parameter leaves the
+pre-registered runs reproducing value for value, improves hill climbing on all five benchmark
+instances that can differ at all, and moves the genetic algorithm's refutation verdict by
+flipping precisely the one instance the pre-registered analysis had already named as its
+hinge. The comparison this paper set out to make was between search families; the shape of
+their proposals appears to be the larger lever, and saying so is a claim about where to look
+next, not a demonstration.
+
 The machinery that produced the verdicts comes first, because it is not specific to
 layout: Section~\ref{sec:harness} the four searches and the control,
 Section~\ref{sec:stats} the statistics. Section~\ref{sec:application} then gives the
@@ -128,6 +145,11 @@ traced the verdict to the fixed scale; with mutation decaying over the run, the 
 algorithm became the best method on the harness's label-placement example (90 rectangles in
 a container, minimum overlap). A method-versus-method table without a random control cannot
 distinguish a weak method from a mis-tuned one.
+
+The three non-control methods share one more thing, which the pre-registered comparison holds
+fixed and Section~\ref{sec:block} then varies: every proposal they make perturbs all $n$
+variables. The harness exposes that as a tuning parameter, the block, defaulting to the whole
+vector; everything reported before Section~\ref{sec:block} is at that default.
 
 \section{The statistics}\label{sec:stats}
 
@@ -371,6 +393,88 @@ had pointed the other way, GA first; the surviving hypothesis, that recombinatio
 only when there are enough modules to recombine, is the successor pre-registration, and
 it will be scored the same way this one was.
 
+\subsection{Exploratory: the shape of the proposal}\label{sec:block}
+
+Everything above compares search \emph{families} at one fixed proposal shape: each of the
+four methods, on every step, perturbs all $2k$ variables at once. That was never argued for,
+and it is not what the label-placement system this line descends from did in 2001, which
+moved one label at a time under the one summed cost. We therefore added a single tuning
+parameter, the \emph{block}: the number of variables one proposal may move, taken in blocks
+that tile the vector and cycle, with the whole vector as the default. Setting it to 2 makes
+each proposal move one table.
+
+The analysis in this subsection is exploratory. It was not pre-registered, it was run after
+the pre-registered results above were known, and its $p$-values are descriptive. What it does
+not do is disturb them: at block $=2k$ all 640 runs of the pre-registered sweep reproduce
+value for value, so the parameter is an addition to the harness rather than a revision of it.
+
+Two structural facts bound what the benchmark can say. Three of the eight pairs add a single
+table, where $2k = 2$ and a block of 2 \emph{is} the whole vector, so those instances are
+identical by construction; only five pairs can differ at all. At $n = 5$ the exact two-sided
+Wilcoxon test's smallest attainable value is $0.0625$, so no result here can reach $0.05$
+two-sided, whatever the data.
+
+On those five pairs, blocked proposals improve hill climbing on five of five
+(Table~\ref{tab:block}), exact two-sided $p = 0.0625$ --- a clean sweep sitting exactly on
+the power floor --- with a Hodges--Lehmann shift of $-436$ score units. Annealing improves on
+four of five ($p = 0.31$) and the genetic algorithm on four of five ($p = 0.125$). The
+separation budgets of Table~\ref{tab:bstar} do not clearly improve: climbing's median $B^{*}$
+is 2000 under both shapes, three pairs falling and one rising.
+
+The one verdict that moves is the refutation clause. Against the matched-budget control at
+budget 8000 the genetic algorithm goes from $p = 0.109$ to $p = 0.0156$, and it does so by
+flipping exactly the instance Section~\ref{sec:experiment} and the appendix both identified
+as the hinge: pair 14, the rename-flagged pair, where the GA loses to the control at whole
+vector proposals ($45{,}277$ against $44{,}749$) and beats it at block 2 ($34{,}208$). We
+report this as what it is. The pre-registered verdict stands as recorded; the exploratory
+finding is that it was a verdict about a method family \emph{at one proposal shape}, and that
+the shape was the larger lever.
+
+\begin{table}[t]
+\centering
+\caption{Per-pair medians of the routed objective at budget 8000, whole-vector proposals
+$\rightarrow$ one table per proposal, on the five pre-registered pairs with $k \ge 2$. The
+three $k = 1$ pairs are identical by construction and omitted. The control is unaffected by
+the block, as it must be: uniform sampling makes no proposals.}
+\label{tab:block}
+\begin{tabular}{rr|rr|rr|rr|r}
+\toprule
+pair & $k$ & \multicolumn{2}{c|}{climb} & \multicolumn{2}{c|}{anneal} &
+\multicolumn{2}{c|}{ga} & random \\
+ & & $2k$ & 2 & $2k$ & 2 & $2k$ & 2 & \\
+\midrule
+ 4 & 5 & 11266 & 10459 & 11623 & 10485 & 13091 & 12459 & 14394 \\
+12 & 5 & 14778 & 14776 & 16224 & 15398 & 15986 & 15830 & 19500 \\
+13 & 2 & 16745 & 16656 & 16707 & 16700 & 17210 & 17218 & 17347 \\
+14 & 4 & 33653 & 30784 & 30985 & 31209 & 45277 & 34208 & 44749 \\
+15 & 4 & 54560 & 54494 & 54633 & 54584 & 54642 & 54632 & 55308 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The margins in Table~\ref{tab:block} are mostly small, between $0.01$ and $8.5$ percent, and
+they do not order by $k$ within this range. Two instances outside the pre-registered eight
+show what the parameter does where there is more to decompose, and we quote them as
+illustrations rather than as evidence. On the harness's packing example, 90 rectangles at 36
+percent area coverage, whole-vector proposals leave climbing at a median overlap of $12.8$,
+annealing at $128$ and the GA at $1.38$ after 20{,}000 evaluations; at block 2 all three
+reach exactly zero on all seven seeds, the clean layout, which no method reaches at any
+budget we tried with whole-vector proposals. On the $k = 10$ instance shipped with the
+harness, climbing's median falls from $46{,}134$ to $32{,}293$ and its range across five
+seeds falls from $18{,}662$ to $178$: the blocked search returns substantially the same
+drawing from every seed, which for a tool run once matters more than the median.
+
+The mechanism we propose, and do not claim to have established, is that incremental placement
+is a sum over objects that interact weakly --- in the shipped instance no edge joins two added
+tables at all, so the $k$ placements couple only through overlap and crossings. On such an
+objective a whole-vector proposal that seats one object well and another badly is rejected for
+the second, and the acceptance rate collapses: on the shipped instance climbing accepts 47 of
+8000 proposals at whole vector and 124 at block 2. If that is right, the block's value grows
+with the number of weakly coupled objects, which would put the benchmark's $k \le 5$
+instances near the bottom of its range and is the same $k$-dependence the pre-registered
+analysis found for search-versus-control margins. Testing it needs instances with larger $k$
+than this schema's migrations supply, and it is declared as such rather than concluded.
+
 \subsection{The human comparison}\label{sec:human}
 
 Under the routed objective the searches outscore the maintainer's accepted layouts on most
@@ -438,10 +542,18 @@ budgets against a random control and are judged by exact paired tests, a benchma
 eight real migrations with human-accepted answers, and a pre-registered experiment that
 ranked the searches above the centroid heuristic, refuted the author's own prediction, and
 produced one deployable rule, from eight migrations of one schema and stated with that
-scope: count the new nodes first. The successor questions are declared and waiting:
-whether recombination's advantage returns with the module count, whether the per-label
-climber that started this line in 2001 holds its own inside the harness that finally names
-it, and at what objective noise any search stops being worth its budget.
+scope: count the new nodes first. One of the successor questions has since been answered
+inside the harness rather than left waiting: the per-label climber that started this line in
+2001 does hold its own, and more than that (Section~\ref{sec:block}). Expressed as a block
+size on the proposal it improves hill climbing on every benchmark instance that can differ,
+solves the packing example outright where whole-vector proposals never do, and moves the one
+verdict this paper reported against its author. We draw the methodological moral rather than
+the layout one: a comparison between search families holds the proposal shape fixed without
+saying so, and a parameter nobody varied turned out to matter more than the parameter
+everybody did. The questions still declared and waiting are whether recombination's advantage
+returns with the module count, whether the block's value grows with the number of weakly
+coupled objects as we suspect and this benchmark is too small to show, and at what objective
+noise any search stops being worth its budget.
 
 \section*{Appendix: leave-one-out robustness}
 
@@ -485,7 +597,11 @@ climb vs.\ random    & 0.0156 & 0.016 & 0.031 & 0.031 & 0.031 & 0.031 & 0.031 & 
 Every number in this paper regenerates from the repository at the frozen commit: the
 per-seed data, the extraction and analysis code, the pre-registration with its addenda and
 this paper's source live together, and the harness's own test suite pins the shipped
-example's every printed digit. The benchmark geometry derives from a private schema and is
+example's every printed digit. The exploratory arm of Section~\ref{sec:block} was run on a
+later harness carrying the block parameter, and the reproduction is the check that licenses
+comparing the two: re-running the whole pre-registered sweep on that harness with the block
+at its default reproduces all 640 per-seed values of the frozen \texttt{results.csv}, so the
+two arms differ in the parameter and in nothing else. The benchmark geometry derives from a private schema and is
 carried anonymized; the anonymization mapping is stored nowhere.
 
 \begin{thebibliography}{99}
