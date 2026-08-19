@@ -111,6 +111,14 @@ hinge. The comparison this paper set out to make was between search families; th
 their proposals appears to be the larger lever, and saying so is a claim about where to look
 next, not a demonstration.
 
+A defect found after those results is reported with them rather than quietly repaired
+(Section~\ref{sec:repair}): the callback meant to make node overlap a hard constraint did not
+always discharge it, so some scored and reported drawings contain overlapping nodes. Because
+overlap carries no cost in the objective while shortening connectors, which the objective
+rewards, the search sought those failures rather than merely tolerating them. The repair is
+fixed, the whole sweep re-run under it, and every verdict above survives; the comparison is
+Table~\ref{tab:repair}.
+
 The machinery that produced the verdicts comes first, because it is not specific to
 layout: Section~\ref{sec:harness} the four searches and the control,
 Section~\ref{sec:stats} the statistics. Section~\ref{sec:application} then gives the
@@ -229,7 +237,9 @@ total length of connector lying inside tables it does not join (a length, never 
 because a count is flat under small moves and gives a search nothing to follow), crossings
 $C$ as a count at the same tier, and routed length $L$ two orders of magnitude below. Node
 overlap and canvas containment are not terms: they are enforced by a repair callback before
-any candidate is scored, so no infeasible drawing can be returned as anyone's best.
+any candidate is scored. That construction makes a constraint hard only if the repair
+enforces it, and ours did not; Section~\ref{sec:repair} reports the defect, its scope, and
+the re-run that bounds its effect on everything above.
 Optimizing the wrong medium has a measurable price: on the pilot pair, a layout optimized
 under the straight model retains 830 units of routed penetration where the routed optimizer
 reaches zero.
@@ -474,6 +484,68 @@ with the number of weakly coupled objects, which would put the benchmark's $k \l
 instances near the bottom of its range and is the same $k$-dependence the pre-registered
 analysis found for search-versus-control margins. Testing it needs instances with larger $k$
 than this schema's migrations supply, and it is declared as such rather than concluded.
+
+
+\subsection{A defect in the repair, and what it did not change}\label{sec:repair}
+
+Constraints put in a repair are hard by construction only if the repair discharges them. Ours
+pushed each added table out of its neighbours in a single ordered walk of four passes, so a
+table repaired early could be pushed back into an overlap by one repaired later with nothing
+looking again. It returned infeasible drawings as answers. On the instance shipped with the
+harness, four of five seeds returned a best layout with tables overlapping, the deepest by 121
+canvas units; the centroid heuristic's own repaired layout overlapped by 91; and of 1000
+uniformly drawn layouts put through it, 965 came out still overlapping, every residual case an
+added table inside a \emph{frozen} one, which is precisely the case a pairwise push cannot
+resolve because the frozen side cannot yield.
+
+The defect interacts with Section~\ref{sec:objective} in the direction that makes it worst.
+Overlap carries no term in the objective, and overlapping tables have short connectors, which
+is what the objective's surviving term rewards. The search was therefore not tolerating the
+failures but seeking them. A repair that fails silently does not weaken a hard constraint; it
+pays for breaking it.
+
+The repair now relaxes the whole layout until a sweep moves nothing, pushes against the
+resultant of a table's overlaps rather than snapping out of each neighbour in turn, and seats
+anything still stuck by searching outward for the nearest free position; it also keeps 12
+units of clearance rather than zero, that being the tightest gap in the maintainer's own
+accepted layout. Under it, no overlap survives in any of the 1000 random layouts or in any
+returned best across methods, seeds and both proposal shapes, and the harness now prints the
+closest pair of tables beside every layout it reports, with its test suite pinning that value
+at or above the gap. The check is cheap and its absence is what let a visible defect survive
+every gate, four reviews and this paper's first version.
+
+We re-ran the entire sweep under the corrected repair. Every verdict this paper reports
+survives, which bounds the defect's effect on our conclusions but does not excuse it:
+
+\begin{table}[h]
+\centering
+\caption{Exact two-sided Wilcoxon signed-rank $p$ over the eight pairs at budget 8000, as
+reported (defective repair) and after the correction.}
+\label{tab:repair}
+\begin{tabular}{lrr}
+\toprule
+comparison & as reported & corrected \\
+\midrule
+GA vs.\ centroid      & 0.0078 & 0.0078 \\
+climb vs.\ centroid   & 0.0078 & 0.0078 \\
+random vs.\ centroid  & 0.0078 & 0.0078 \\
+climb vs.\ random     & 0.0156 & 0.0312 \\
+climb vs.\ GA         & 0.0156 & 0.0312 \\
+GA vs.\ random        & 0.1094 & 0.4375 \\
+GA vs.\ annealing     & 0.2969 & 0.3125 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The primary comparison is unmoved, hill climbing still separates from the control and still
+leads the genetic algorithm, and the refutation clause still fires against the GA, further
+from significance than before rather than nearer. Section~\ref{sec:block}'s exploratory
+findings survive too: climbing still improves on five of five affected pairs at
+$p = 0.0625$ with a Hodges--Lehmann shift of $-306$ rather than $-436$, and the GA still
+separates from the control under blocked proposals ($p = 0.0312$) where it does not under
+whole-vector ones. The numbers printed elsewhere in this paper are the ones the defective
+repair produced, because they are what the pre-registered analysis was run on; this section
+is the correction, and the repository carries both sweeps.
 
 \subsection{The human comparison}\label{sec:human}
 

@@ -106,6 +106,40 @@ ga 1.38 to *exactly 0 on all seven seeds for all three*, a clean layout no metho
 any budget tried with whole-vector proposals; and on the shipped k = 10 instance climb's
 median falls 46134 -> 32293 with its five-seed range falling 18662 -> 178.
 
+## The repair defect (found 2026-08-19, disclosed, fixed, re-run)
+
+The callback that makes node overlap a hard constraint did not discharge it. It pushed each
+added table out of its neighbours in one ordered walk of four passes, so a table repaired
+early could be pushed back by one repaired later with nothing looking again. Scope: on the
+shipped instance four of five seeds returned a best layout with tables overlapping, deepest
+121 units; the centroid heuristic's own repaired layout overlapped by 91; 965 of 1000 random
+layouts came out still overlapping, every residual case an added table inside a FROZEN one.
+Overlap has no term in the objective and overlapping tables have short connectors, which is
+what the objective's surviving term rewards, so the search was mining the failure, not
+tolerating it.
+
+Fixed: sweep the whole layout until nothing moves, push against the resultant rather than
+snapping out of each neighbour in turn, seat anything still stuck by searching outward for the
+nearest free position, and keep 12 units of clearance (the tightest gap in the maintainer's
+own accepted layout). erd now prints the closest pair beside every layout and cli.sh pins it.
+
+**Every verdict survives.** Whole sweep re-run (`data/block_results_fixed.csv`; the defective
+one is `data/block_results.csv`), exact two-sided Wilcoxon at 8000 over the eight pairs:
+
+    comparison            as reported   corrected
+    ga vs centroid             0.0078      0.0078
+    climb vs centroid          0.0078      0.0078
+    random vs centroid         0.0078      0.0078
+    climb vs random            0.0156      0.0312
+    climb vs ga                0.0156      0.0312
+    ga vs random               0.1094      0.4375
+    ga vs anneal               0.2969      0.3125
+
+The primary is unmoved, climb still separates and still leads the GA, and the refutation
+clause still fires against the GA further from significance than before. The block findings
+survive too: climb still 5/5 at p = 0.0625 (HL -306 rather than -436), and the GA still
+separates under blocked proposals (0.0312) where it does not under whole-vector ones.
+
 **The hypothesis, declared not concluded.** Incremental placement is a sum over weakly
 coupled objects (in the shipped instance no edge joins two added tables at all), so a
 whole-vector proposal that seats one object well and another badly is rejected for the
