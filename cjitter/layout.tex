@@ -67,7 +67,9 @@ the medium: whether that quantity is measured on the drawing the reader sees. A 
 optimizes straight center-to-center segments while rendering orthogonal connectors improves
 a drawing nobody is shown. Third, and the one no study in graph layout runs: the control.
 Label placement, the adjacent field this work descends from, included a random baseline in
-its landmark evaluation \cite{cms95}, and matched-budget random controls are standard
+its landmark evaluation \cite{cms95}, stochastic hillclimbing at matched evaluation budgets
+was prescribed as the baseline for genetic algorithms in 1995 \cite{jw95}, and
+matched-budget random controls are standard
 doctrine in hyperparameter search \cite{bergstra12}; in graph layout we have not found a
 study that runs the control at matched budget, and without it the claim ``our method
 improves layout'' is unfalsifiable at any fixed cost.
@@ -214,7 +216,11 @@ One parameter connects this problem to the classic one. Add to the objective an 
 $\lambda \sum_i \lVert p_i - p_i^0 \rVert^2$ over the frozen nodes' displacements from
 their accepted positions and let them move: $\lambda \to \infty$ recovers the incremental
 problem, $\lambda = 0$ the full redraw, and intermediate values price the reader's
-geography in the objective's own units. This paper measures the $\lambda \to \infty$ end,
+geography in the objective's own units. The term is not ours: it instantiates Brandes and
+Wagner's Bayesian anchoring model \cite{bw97}, a Gaussian likelihood centered at the
+previous layout whose energy is exactly a weighted sum of squared displacements, with
+$\lambda = 1/(2\sigma^2)$ tuning the classical compromise between stability and
+readability. This paper measures the $\lambda \to \infty$ end,
 where the practical need is; the continuum is the natural sequel, with thirty years of
 force-directed practice \cite{kobourov} as the control at the unfrozen end.
 
@@ -407,8 +413,13 @@ it will be scored the same way this one was.
 
 Everything above compares search \emph{families} at one fixed proposal shape: each of the
 four methods, on every step, perturbs all $2k$ variables at once. That was never argued for,
-and it is not what the label-placement system this line descends from did in 2001, which
-moved one label at a time under the one summed cost. We therefore added a single tuning
+and it is not the field's practice: Davidson and Harel's annealer moves a single vertex per
+step \cite{dh96}, single-object moves are the standard neighbourhood in layout annealing
+generally, and the label-placement system this line descends from moved one label at a time
+under the one summed cost in 2001. The whole-vector proposal was this harness's own anomaly,
+so what follows is not the discovery of a move --- the field had it first --- but a
+measurement of what the anomaly cost, and of how much a verdict between families can turn on
+an operator choice the comparison held fixed without declaring. We added a single tuning
 parameter, the \emph{block}: the number of variables one proposal may move, taken in blocks
 that tile the vector and cycle, with the whole vector as the default. Setting it to 2 makes
 each proposal move one table.
@@ -566,8 +577,10 @@ drawing metrics and human judgment has an empirical literature of its own
 recorded outcome. That gap, between what layout objectives score and what maintainers
 accept, is our explanation for why automatic diagram layout has stayed bad in practice
 despite methods that demonstrably beat their controls: the searches are fine; the
-objectives do not yet describe the job. Objectives anchored to certified human layouts,
-with their approximation error measured and printed, are the repair this paper proposes.
+objectives do not yet describe the job. HOLA \cite{hola16} walked the design-time half of
+this road, deriving its criteria from studies of human-drawn layouts; the measurement half,
+objectives anchored to certified human layouts with their approximation error measured and
+printed, is the repair this paper proposes.
 
 \section{Related work}
 
@@ -587,17 +600,29 @@ Incremental Graph Drawing Problem carries the metaheuristics line \cite{marti18,
 most recently hybridized with graph representation learning \cite{cigdp2025}, over
 synthetic instance sets. Force-directed practice is surveyed in \cite{kobourov};
 graphviz's \texttt{neato}, honoring pinned positions, is the baseline the anchor-term
-sequel must face. The empirical gap between drawing metrics and human judgment is
-Purchase's line \cite{purchase02}.
+sequel must face, and the anchor term itself is Brandes and Wagner's \cite{bw97}. The
+empirical gap between drawing metrics and human judgment is
+Purchase's line \cite{purchase02}. The closest human-anchored layout work is HOLA
+\cite{hola16}, which derived its orthogonal-layout criteria from studies of human-drawn
+layouts and evaluated its output directly against the best human drawings, reaching
+statistical parity with them on small graphs; there the human drawings inform the algorithm
+as qualitative design-time criteria, where here a certified human layout enters the
+measurement itself, calibrating a numerical objective read on routed connectors.
 
 Against that background the novelty claim is narrow and we state it narrowly. Interactive
 tools place into frozen drawings and route connectors \cite{pt98,dunnart}; evaluations
 have included random baselines \cite{cms95}; each ingredient exists somewhere. Outside
 layout, head-to-head comparisons of exactly these search methods are abundant
-(\cite{talbi93} is an early one; \cite{baluja95} found the simple methods winning), and a
+(\cite{talbi93} is an early one; \cite{baluja95} found the simple methods winning), a
+stochastic hillclimbing baseline at matched evaluation budgets was prescribed for
+evaluating genetic algorithms thirty years ago \cite{jw95}, the question of when a genetic
+algorithm should outperform hill climbing at all was answered then too --- when there are
+enough building blocks for recombination's factor-of-$N$ speedup to matter \cite{mhf93},
+which is the hypothesis our refuted prediction survives as --- and a
 uniform-random baseline at matched budget is prescribed practice in search-based software
 engineering \cite{arcuri14}, so the harness's control is an application of doctrine, not an
-invention. What we
+invention. Pre-registration itself remains, at most, a prospective proposal in
+evolutionary computation \cite{lbp21}. What we
 have not found together is the evaluation half: an objective calibrated against a
 certified human layout with its error printed, a random control at matched budget in graph
 layout, exact paired inference over real migration instances with human answers, and a
@@ -726,6 +751,20 @@ carried anonymized; the anonymization mapping is stored nowhere.
  of Graph Drawing and Visualization}, CRC Press, 2013.
 \bibitem{bergstra12} J.~Bergstra, Y.~Bengio. Random Search for Hyper-Parameter
  Optimization. \emph{Journal of Machine Learning Research} 13:281--305, 2012.
+\bibitem{jw95} A.~Juels, M.~Wattenberg. Stochastic Hillclimbing as a Baseline Method for
+ Evaluating Genetic Algorithms. \emph{Advances in Neural Information Processing Systems 8}
+ (NIPS 1995), MIT Press, 430--436, 1996.
+\bibitem{mhf93} M.~Mitchell, J.~H. Holland, S.~Forrest. When Will a Genetic Algorithm
+ Outperform Hill Climbing? \emph{Advances in Neural Information Processing Systems 6}
+ (NIPS 1993), Morgan Kaufmann, 51--58, 1994.
+\bibitem{hola16} S.~Kieffer, T.~Dwyer, K.~Marriott, M.~Wybrow. HOLA: Human-like Orthogonal
+ Network Layout. \emph{IEEE Transactions on Visualization and Computer Graphics}
+ 22(1):349--358, 2016.
+\bibitem{bw97} U.~Brandes, D.~Wagner. A Bayesian Paradigm for Dynamic Graph Layout.
+ \emph{Graph Drawing (GD '97)}, LNCS 1353:236--247, Springer, 1997.
+\bibitem{lbp21} M.~L\'opez-Ib\'a\~nez, J.~Branke, L.~Paquete. Reproducibility in
+ Evolutionary Computation. \emph{ACM Transactions on Evolutionary Learning and
+ Optimization} 1(4):14:1--14:21, 2021.
 \end{thebibliography}
 
 \end{document}
