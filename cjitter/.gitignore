@@ -4,3 +4,8 @@ TODO.md
 data/pair*.h
 data/sweep_bin
 data/erd_data.h
+data/pair*_seen.h
+data/c
+data/example/
+data/sweep_bin*
+data/stat*

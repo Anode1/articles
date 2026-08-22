@@ -1,3 +1,9 @@
+# SUPERSEDED. This reads results.csv, which was produced under the repair defect that
+# Section "the repair" documents: the callback did not discharge the non-overlap
+# constraint, and correcting it changed 1118 of 1200 per-seed values. Kept because
+# it is what the published numbers were computed with. For anything current use
+# corrected_analysis.py, which reproduces these numbers first and then reports the
+# corrected sweep.
 """The pre-registered analysis over results.csv. Pairwise families go through bpnn's
 pairstat (exact Wilcoxon, sign test, Hodges-Lehmann, Holm, MDE); this script adds the
 Friedman omnibus (permutation null), rank-biserial effects, exact McNemar on the

@@ -9,6 +9,20 @@ median move of surviving tables) and an inventory line per pair.
 """
 import json, os, re, subprocess, sys, zipfile, io, statistics
 
+# Which drawing the surviving tables are frozen at.
+#   'prev' (default): the previous revision's coordinates. This is the deployment-realistic
+#     task, and it is what produced results.csv and every published number. Its defect is that
+#     the human's answer for the added tables was made in a DIFFERENT drawing, the one after
+#     the migration, where the survivors had also moved; transplanted back, that answer
+#     overlaps a frozen table on 8 of 8 instances and is not a feasible point of the problem.
+#   'seen': the current revision's coordinates, which is the drawing the maintainer was
+#     actually looking at when they placed the added tables. The reference is then feasible
+#     by construction, and displacement to the human's coordinates becomes a metric whose
+#     target is the human by definition.
+CONTEXT = os.environ.get('CONTEXT', 'prev')
+assert CONTEXT in ('prev', 'seen')
+SUFFIX = '' if CONTEXT == 'prev' else '_seen'
+
 KUL = os.path.expanduser('~/kul')
 OUT = os.path.dirname(os.path.abspath(__file__))
 
@@ -68,8 +82,12 @@ def emit(idx, prev_figs, cur_figs, cur_edges, path):
     edges = [(a, b) for a, b in cur_edges if a in keep and b in keep]
     order = surviving + added
     io_of = {n: i for i, n in enumerate(order)}
-    # frozen at PREVIOUS coordinates; added at current (the human's answer)
-    geo = {n: (prev_figs[n] if n in set(surviving) else cur_figs[n]) for n in order}
+    # added tables always at current coordinates: that is the human's answer. The surviving
+    # tables are frozen at whichever drawing CONTEXT names; see the note at the top.
+    if CONTEXT == 'prev':
+        geo = {n: (prev_figs[n] if n in set(surviving) else cur_figs[n]) for n in order}
+    else:
+        geo = {n: cur_figs[n] for n in order}
     disp = statistics.median(
         abs(prev_figs[n][0] - cur_figs[n][0]) + abs(prev_figs[n][1] - cur_figs[n][1])
         for n in surviving) if surviving else 0.0
@@ -111,7 +129,7 @@ for i in range(1, len(revs)):
             xml_cache[r] = parse(load_xml(r))
     prev_figs, _ = xml_cache[ra]
     cur_figs, cur_edges = xml_cache[rb]
-    info = emit(i, prev_figs, cur_figs, cur_edges, f'{OUT}/pair{i:02d}.h')
+    info = emit(i, prev_figs, cur_figs, cur_edges, f'{OUT}/pair{i:02d}{SUFFIX}.h')
     label = sb[:44]
     if info:
         inventory.append(info)
@@ -119,5 +137,5 @@ for i in range(1, len(revs)):
               f'edges {info["nedge"]:3d} disp {info["disp"]:7.1f}  "{label}"')
     else:
         print(f'pair{i:02d}: EXCLUDED, no tables added                        "{label}"')
-json.dump(inventory, open(f'{OUT}/inventory.json', 'w'), indent=1)
+json.dump(inventory, open(f'{OUT}/inventory{SUFFIX}.json', 'w'), indent=1)
 print(f'{len(inventory)} usable pairs')

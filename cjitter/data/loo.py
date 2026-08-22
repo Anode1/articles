@@ -1,3 +1,9 @@
+# SUPERSEDED. This reads results.csv, which was produced under the repair defect that
+# Section "the repair" documents: the callback did not discharge the non-overlap
+# constraint, and correcting it changed 1118 of 1200 per-seed values. Kept because
+# it is what the published numbers were computed with. For anything current use
+# corrected_analysis.py, which reproduces these numbers first and then reports the
+# corrected sweep.
 """Leave-one-out robustness of the headline verdicts. For each declared comparison,
 the exact two-sided Wilcoxon signed-rank p on the per-pair medians at budget 8000,
 computed on all eight pairs and then with each pair dropped in turn. Zero differences

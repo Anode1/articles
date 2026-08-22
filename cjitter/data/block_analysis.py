@@ -1,3 +1,9 @@
+# SUPERSEDED. This reads block_results.csv, which was produced under the repair defect that
+# Section "the repair" documents: the callback did not discharge the non-overlap
+# constraint, and correcting it changed 1118 of 1200 per-seed values. Kept because
+# it is what the published numbers were computed with. For anything current use
+# corrected_analysis.py, which reproduces these numbers first and then reports the
+# corrected sweep.
 """Exact statistics for the block arm, matching the paper's declared tests.
 Validated first by reproducing the published numbers from the frozen results.csv."""
 import csv, itertools, math, os

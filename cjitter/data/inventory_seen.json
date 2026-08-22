@@ -1,0 +1,65 @@
+[
+ {
+  "pair": 3,
+  "nfixed": 18,
+  "nnew": 1,
+  "nedge": 25,
+  "disp": 160.0
+ },
+ {
+  "pair": 4,
+  "nfixed": 19,
+  "nnew": 5,
+  "nedge": 31,
+  "disp": 650.0
+ },
+ {
+  "pair": 6,
+  "nfixed": 24,
+  "nnew": 1,
+  "nedge": 32,
+  "disp": 226.5
+ },
+ {
+  "pair": 7,
+  "nfixed": 24,
+  "nnew": 1,
+  "nedge": 31,
+  "disp": 129.5
+ },
+ {
+  "pair": 12,
+  "nfixed": 24,
+  "nnew": 5,
+  "nedge": 35,
+  "disp": 118.5
+ },
+ {
+  "pair": 13,
+  "nfixed": 29,
+  "nnew": 2,
+  "nedge": 39,
+  "disp": 36.0
+ },
+ {
+  "pair": 14,
+  "nfixed": 28,
+  "nnew": 4,
+  "nedge": 43,
+  "disp": 437.0
+ },
+ {
+  "pair": 15,
+  "nfixed": 32,
+  "nnew": 4,
+  "nedge": 46,
+  "disp": 1254.5
+ },
+ {
+  "pair": 16,
+  "nfixed": 34,
+  "nnew": 10,
+  "nedge": 59,
+  "disp": 1754.0
+ }
+]
