@@ -277,12 +277,13 @@ the reference length of Section~\ref{sec:foundations}, fitted to the layout unde
 \toprule
 term & definition & zero when \\
 \midrule
-$T_C$ crossings & crossing pairs of edges with no shared endpoint, $/m$ & planar \\
+$T_C$ crossings & proper crossings between segments of two routes with no shared endpoint, $/m$ & planar \\
 $T_O$ overlap & overlap area of boxes $/$ total box area & no overlap \\
 $T_L$ length uniformity & mean over edges of $((\ell - L)/L)^2$ & all edges of length $L$ \\
-$T_R$ orthogonality & mean over edges of $\min(|\Delta x|,|\Delta y|)/(|\Delta x|+|\Delta y|)$ & edges axis-aligned \\
+$T_R$ orthogonality & mean over edges of the length-weighted mean over its segments of $\min(|\Delta x|,|\Delta y|)/(|\Delta x|+|\Delta y|)$ & routes axis-aligned \\
 $T_A$ alignment & $1 -$ fraction of nodes in an alignment of $\ge 3$ (tol.\ 0.005) & every node aligned \\
-$T_N$ node--edge & squared shortfall of node to foreign edge distance below $(w+h)/4$ & none within \\
+$T_N$ node--edge & squared shortfall of node to foreign route distance below $(w+h)/4$ & none within \\
+$T_F$ flow & mean over directed edges of the backward component along the reading direction $u$, over length & no edge runs back \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -301,10 +302,23 @@ has a corner at exact alignment; A2, rows and columns priced separately; A3, a G
 kernel of width $s = 0.02$, smooth. The corner is what holds a box: A1 holds 0.52 of
 WikiPathways boxes and A3 holds 0.20.
 
-All terms are evaluated here on straight centre-to-centre segments. GPML and SBGN store
-waypoints and BPMN routes edges orthogonally, so crossings, orthogonality and node--edge
-separation are measured on a drawing the person did not see. \pending{the same terms on
-the stored polylines, with the fraction of edges that have waypoints per corpus}
+\paragraph{Routes.} An edge is the polyline the file stores: the attachment point on the
+source box, the interior waypoints, the attachment point on the target box; where the file
+stores nothing it is the chord between the centres. Crossings, orthogonality and node--edge
+separation are evaluated on the route; length and stress on the centres. When a node moves
+its attachment points move with it and the waypoints stay. The attachment point matters:
+closed at the centres, 29\% of BPMN routes with a waypoint are axis-aligned, closed at the
+stored attachments 86\%. What each format stores, as a fraction of the edges in the band:
+\pending{the route table from make\_corpus.py}. GPML's Elbow and Curved connectors store
+their endpoints only and PathVisio computes the bends at draw time, so those routes read as
+chords; a quarter of WikiPathways edges end on an anchor of another interaction, where the
+person drew no segment to the node and the last segment is manufactured. The chords are the
+sensitivity.
+
+\paragraph{Reading direction.} $T_F$ needs a direction $u$. It is one of the four axis
+directions, the one under which $T_F$ is least for the layout as loaded, fixed before any
+move, the same rule as for $L$. Undirected edge kinds (GPML graphical lines, BPMN undirected
+associations) do not enter it.
 
 \paragraph{Directional test.} Radius $d \in \{0.005, 0.01, 0.02, 0.05\}$ of the drawing
 width, sixteen directions, every node, each term alone and the sums of the tables. Primary cell
@@ -315,37 +329,54 @@ the shift that error made as an improvement and read alignment lower by up to 0.
 Deterministic: no seed, no budget. Every median carries a 95\% bootstrap interval over
 diagrams (1000 resamples).
 
-\paragraph{Tool controls.} The same graphs with the same box sizes laid out by
-\texttt{neato} (\texttt{-Gstart=1}, so the file reproduces), by \texttt{neato} with
-\texttt{-Goverlap=false} (prism), and by \texttt{dot}; a check in the binary confirms each
-control is the same graphs. ELK, the layered tool the BPMN editors use, was not available.
+\paragraph{Tool controls.} The same graphs with the same box sizes and edge directions
+laid out by \texttt{neato} (\texttt{-Gstart=1}, so the file reproduces), by \texttt{neato}
+with \texttt{-Goverlap=false} (prism), by \texttt{dot}, and by ELK layered 0.12.0
+(\texttt{elkjs}, direction RIGHT, every other option at its default), the engine the BPMN
+and KIELER editors run; a check in the binary confirms each control is the same graphs.
 
-\paragraph{Descent, secondary.} Hill climbing, one node per proposal, initial step set
-from the cap, each node clipped to a disc of radius $d$ around its start, 4000 energy
-evaluations, 15 seeds per instance; reported as the fraction of the cap used and the
-fraction of energy removed. The exploratory runs used a step of $0.1$, five times the cap,
-so that nearly every proposal landed on the cap circle; the base-energy result did not
-depend on it (98.5 to 95.9\% of the cap used as the step fell from 0.1 to 0.005) and the
-alignment result did (47 to 18\%), which is why the directional test is primary.
+\paragraph{Descent, secondary.} Through the library: hill climbing from the hand layout,
+one node per proposal, first step $d/2$ per coordinate, the step halved after 200 rejected
+proposals, each node kept within a disc of radius $d$ about its start by the repair, 4000
+energy evaluations, 15 seeds per instance; and uniform sampling in the same cap at the same
+budget on the same seeds, the matched-budget control. Reported per instance: the fraction
+of the cap used (mean over nodes of the distance moved over $d$), the fraction of energy
+removed, for the climber and for the control, and the number of seeds on which the climber
+ends lower than the control with its exact sign test. The climber pilot used a step of
+$0.1$, five times the cap, so that nearly every proposal landed on the cap circle; the
+base-energy result did not depend on it (98.5 to 95.9\% of the cap used as the step fell
+from 0.1 to 0.005) and the alignment result did (47 to 18\%), which is why the directional
+test is primary. The converged reference is the same climber uncapped, 60{,}000
+evaluations, with $q_d$ measured where it stops.
 
 \paragraph{Fitting.} Weights on the simplex, the linear program of
-Section~\ref{sec:foundations} on a training half of each corpus, residual reported on the
-held-out half; the random search of the pilot (200 log-uniform draws \cite{bergstra12})
-beside it as a check. One candidate term added to the base at a time, then all six.
+Section~\ref{sec:foundations} over every node and direction of a corpus (about 120{,}000
+inequalities, HiGHS), the residual its value per node; because the residual depends on
+the terms' scales and $q$ does not, $q$ under the fitted weights is reported beside it, on
+the fitting diagrams and held out under $5 \times 2$ cross-validation (five seeded halvings,
+each half fitted and scored on the other). Inverse optimisation is degenerate whenever a
+term is satisfied exactly: overlap holds every node, so any weight vector with all its
+weight on overlap has residual zero and the program returns it. The informative output is
+the sweep, $q$ as the weight on one term grows from 0 with the rest on crossings and
+overlap, which is the test of whether any positive weight on that term can be carried.
 
 \paragraph{Statistics.} The unit of inference is the diagram. Per corpus, the paired
-comparison of $q_d$ between two energies, or between the hand layout and the tool control,
-is the exact Wilcoxon signed-rank test with the exact sign test beside it, Hodges--Lehmann
-shift and distribution-free interval. The families, Holm-corrected within each corpus: hand
-against each tool control under each single term (seven terms, three controls); hand
-against each control under the sums. Equivalence claims (``no reweighting repairs it'') are
-two one-sided tests against a margin stated with the claim, never a failure to reject.
-\pending{the tests; every table so far is medians and intervals}
+comparison of $q_d$ between the hand layout and a tool control is the Wilcoxon signed-rank
+test, zeros dropped, ties by midranks, exact on the observed ranks up to 50 non-zero pairs
+and the normal approximation with continuity and tie corrections above, with the exact sign
+test beside it and the Hodges--Lehmann shift with its distribution-free 95\% interval; the
+family is the terms compared against one control within one corpus, Holm-corrected. The
+script carries 630 self-checks against enumeration and against R. Equivalence claims (``no
+reweighting repairs it'') are read off the sweep, never off a failure to reject.
 
 \section{Measurements}\label{sec:results}
 
 The directional test's numbers are from one deterministic run over the whole 15 to 40 node
-band on 2026-08-22; the climber numbers are the pilot's.
+band on 2026-08-22, on chords, with the earlier BPMN corpus (147 graphs, two fifths of them
+EPC and Petri-net models read as bipartite graphs); the climber numbers are the pilot's.
+\pending{every table below is replaced from \texttt{example/diagrams/results/} (the
+battery of \texttt{run\_all.sh}: routes, the flow term, ELK, the 300 BPMN models, the
+descent with its control, the fit and its sweeps, the paired tests)}
 
 \paragraph{Each criterion alone.} $q_{0.02}$ on the hand layout, with its 95\% bootstrap
 interval over diagrams, and on the three tool layouts of the same graphs; in parentheses

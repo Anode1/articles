@@ -105,7 +105,39 @@ cache inside the fitness; exp_neg instead of exp. Thirteen tests, all under a se
 pinned in make check; the full panel (about 13 minutes) and the fit run by hand and are
 committed under data/results/.
 
-## 6. Order of work
+## 6. Next session, in order
+
+Everything below reads ~/cjitter/example/diagrams/results/, written by results/run_all.sh
+(started detached 2026-08-23 09:35; full.md, tex.txt, chords.md, sweep.md, median.md, then
+fit/report.txt, then desc/*.csv; the marker files profiles_done, fit/done, desc/done say
+what has landed; run_all.log has errors). If a file is missing, rerun the line of
+run_all.sh that makes it from ~/cjitter.
+
+1. Paste results/tex.txt into stationary.tex in place of the two measurement tables
+   (scratch script paste.py did it last time: split rows into single terms and sums, one
+   block per corpus) and results/full.md into example/diagrams/README.md. Rewrite the
+   abstract, the findings and the Measurements prose from the new numbers: routes change
+   crossings, orthogonality and node-edge; the BPMN corpus is 300 pure models; ELK is a
+   column; flow is a row. Put the chords.md rows in as the sensitivity and the route
+   fractions (README has them) in the Routes paragraph's pending mark.
+2. The descent: desc/<corpus>_<energy>.csv, columns in station.c's header. Report per
+   corpus the median cap used and energy removed for climber and control, the share of
+   graphs where the climber beats the control on at least 12 of 15 seeds, and the
+   converged reference's q (must be near 1, or say which energy it failed). This replaces
+   the Chance paragraph and the pilot's reweighting table.
+3. The fit: fit/report.txt. The LP puts all weight on overlap (degenerate, said in Method);
+   report the sweeps: q as the weight on L, S, A, F grows on C+O. Fill the LP pending mark.
+4. The tests: for each corpus and control, analyse.py --family over the single terms with
+   the CSVs in results/cells/ (hs_hand_crossings_alone.csv against hs_elk_crossings_alone.csv
+   and so on, --alternative two-sided, --md). One table per corpus in the paper.
+5. Remaining pending marks: BPMN file count (the archive has 29,810 models, 21,784 pass the
+   pilot filter, 13,435 are pure BPMN, 7,953 in the band, 300 taken), deduplication (not
+   done; say so), the 41 to 100 band (not done), the commit hash.
+6. Then the referee list in the session notes: reframe the introduction around the
+   learning-from-examples assumption, cut the tool lineage to one sentence, title on the
+   positive finding (hand = layered with partial alignment), half-grid jitter, HOLA corpus.
+
+## 7. Order of work, as it stood before
 
 1. Done 2026-08-22: example/diagrams/ on the library, the directional test, the terms
    including stress, the full-band profile, neato, prism and dot controls on every
