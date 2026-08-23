@@ -12,13 +12,13 @@
 \newcommand{\pending}[1]{\textcolor{red}{\textbf{[PENDING: #1]}}}
 \newcommand{\pilot}{\textsuperscript{p}}
 
-\title{\textbf{A Hand-Drawn Diagram Is a Local Minimum of Crossings and Overlap,\\
-and Nowhere Near One of Edge Length}}
+\title{\textbf{Which Aesthetic Criteria Hold a Hand-Drawn Diagram,\\
+Tested One at a Time Against a Tool's Layout of the Same Graph}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and scripts:
 \url{https://github.com/Anode1/cjitter}, directory \texttt{example/diagrams}.}}
-\date{Draft, August 2026. Numbers marked\pilot{} are from the exploratory runs of
-2026-08-21 and 2026-08-22 (one seed, 40 to 60 diagrams per corpus) and are replaced by the
-pre-registered run.}
+\date{Draft, August 2026. Numbers marked\pilot{} are from the climber pilot of 2026-08-21
+(40 to 60 diagrams per corpus, one seed) and are replaced when the descent is rerun on the
+library; the directional test's numbers are from the whole 15 to 40 node band.}
 
 \begin{document}
 \maketitle
@@ -28,26 +28,30 @@ Automatic layout tools place the boxes of a diagram by minimising a weighted sum
 aesthetic criteria: few edge crossings, no overlapping boxes, edges of similar length. If
 people drew the same way, a diagram laid out by hand would be a local minimum of that sum
 and a tool started from it would find nothing to change. We test each criterion separately
-on 1{,}571 diagrams whose coordinates a person chose: 571 WikiPathways biological pathways,
-701 Reactome SBGN maps and 299 BPMN process models, three communities with different
-authoring tools. The test is direct: move each box a small distance in each of sixteen
-directions and ask whether any move lowers the criterion. Under crossings and overlap
-together, every box in a hand layout is held in two corpora and 94\% are in the third
-\pilot: the hand layout is a local minimum. Under uniform edge length, the criterion that
-carries 94\% of the energy as tools weight it, no box is held\pilot. A stress layout of the
-same graphs by \texttt{neato} has the opposite profile: held under edge length, free under
-crossings and overlap. Fitting the weights by inverse optimisation returns weight zero for
-edge length on every corpus, which this explains: any positive weight on it makes the hand
-layout non-stationary. Of three further criteria, alignment of boxes into shared rows and
-columns holds half the boxes in pathways and three quarters in process models\pilot{}
-and almost none in the tool's layouts; orthogonality of edges holds fewer; separation of
-boxes from edges holds none. The diagrams people draw are near-trees (median edges per box
-1.06, 0.96 and 1.03, against 1.30 for the Rome benchmark), so crossings, the criterion the
-field's theory is built on, have almost nothing to remove. A tool builder has two changes
-to make: stop spending the energy on edge length, and add alignment. The measurement runs
-on a small C library for stochastic search whose distinctive feature is a matched-budget
-random control, the latest of a series of tools by the author that report when their own
-answer should not be trusted.
+on 700 diagrams of 15 to 40 boxes whose coordinates a person chose, from 1{,}571 parsed:
+305 WikiPathways biological pathways, 248 Reactome SBGN maps and 147 BPMN process models,
+three communities with different authoring tools. The test is direct: move each box 2\% of
+the drawing width in each of sixteen directions and ask whether any move lowers the
+criterion; the same test is run on layouts of the same graphs by three tools,
+\texttt{neato}, \texttt{neato} with overlap removal, and \texttt{dot}. Under overlap every
+hand-placed box is held and the term is zero; so is every box in a layout by a tool
+that removes overlaps. Under uniform edge length and under stress no hand-placed box is
+held in any corpus, while \texttt{neato}'s layouts are held under stress at 1.00, so
+the test has power. The hand layout is nowhere near a minimum of any criterion that prices
+distance, and the three-term energy tools use, which spends 94\% of its value on edge
+length, holds none of it; fitting the weights by inverse optimisation returns weight zero
+for edge length on every corpus for that reason. Alignment of boxes into shared rows and
+columns holds 0.52, 0.21 and 0.82 of hand-placed boxes, against 0.06 in
+\texttt{neato}'s layouts and 1.00 in \texttt{dot}'s; by HOLA's gridiness 58\%, 36\% and
+77\% of hand-placed boxes are in an alignment of three or more, none of \texttt{neato}'s
+and 94\%, 94\% and 89\% of \texttt{dot}'s. On every criterion but alignment the hand
+layout's profile is the layered tool's; the person aligns part of the drawing where
+\texttt{dot} aligns all of it. Crossings hold every box in every layout at this radius,
+because no single move of 2\% removes one; the diagrams people draw are near-trees (median
+edges per box 1.06, 0.96 and 1.03, against 1.30 for the Rome benchmark) and WikiPathways
+authors leave about one crossing per 26 edges where \texttt{neato} leaves none. The
+measurement is deterministic and runs on a small C library for stochastic search whose
+descents and matched-budget random control supply the secondary estimand.
 \end{abstract}
 
 \section{Introduction}
@@ -63,46 +67,55 @@ the drawing they accept is one a tool would also accept.
 The premise has a direct test, one criterion at a time. Take a diagram a person drew. Move
 one box a small distance in each of several directions and ask whether any of the moves
 lowers the criterion. If none does, the box is \emph{held}: the person has put it where the
-criterion wants it. Do this for every box and the fraction held says how much of the layout
-is a local minimum of that criterion. A criterion that holds every box is one the person
-satisfied; one that holds no box is one the person did not consider, or traded away.
+criterion wants it, or where the criterion has stopped caring. Do this for every box and
+the fraction held says how much of the layout is a local minimum of that criterion; the
+criterion's value says how well it is met. A criterion that holds every box at value zero
+is one the person satisfied; one that holds no box is one the person did not consider, or
+traded away.
 
-We ran the test on 1{,}571 diagrams from three unrelated communities
-(Section~\ref{sec:corpora}) under a pre-registered analysis
-(\texttt{PREREGISTRATION-STATIONARITY.md} in the repository). The findings, with the
-exploratory numbers:
+We ran the test on 700 diagrams of 15 to 40 boxes from three unrelated communities
+(Section~\ref{sec:corpora}), and on layouts of the same graphs by three tools. The
+findings:
 
 \begin{enumerate}
-\item Under crossings and overlap together the hand layout is a local minimum: the
-  fraction of boxes held is 1.00, 1.00 and 0.94\pilot{} on the three corpora. Under uniform
-  edge length it is not: 0.00, 0.06 and 0.10\pilot. Under the three criteria summed with the
-  usual equal weights the length term dominates and 0.03 to 0.10\pilot{} are held, which is
-  what an earlier version of this study, using a capped descent rather than the directional
-  test, reported as ``hand layouts are not stationary''. They are not stationary in edge
-  length, and in nothing else among the base criteria.
-\item A stress layout of the same graphs with the same box sizes (\texttt{neato}) is the
-  mirror image: held under edge length on 0.26 to 0.47\pilot{} of boxes, held under
-  crossings and overlap on only 0.51 to 0.84\pilot.
-\item Fitting the energy's weights by inverse optimisation gives uniform edge length the
-  weight 0.00 on every corpus. Finding 1 says why: any positive weight on a criterion that
+\item Under overlap every hand-placed box is held and the term is zero in every corpus. Every box in a layout by a tool that removes overlaps is held too; \texttt{neato}
+  without overlap removal holds 0.39 to 0.76. Overlap is a criterion people satisfy
+  exactly, in common with every tool that tries.
+\item Under uniform edge length and under stress no hand-placed box is held: 0.00 in every
+  corpus under either. The test has power: \texttt{neato}'s stress layouts are held
+  under stress at 1.00 in every corpus. Under the three base criteria summed with the usual
+  equal weights the length term dominates and no box is held, which is what an earlier
+  version of this study, using a capped descent, reported as ``hand layouts are not
+  stationary''. Fitting the weights by inverse optimisation gives uniform edge length the
+  weight 0.00 on every corpus for the same reason: any positive weight on a criterion that
   holds no box makes the sum hold no box.
-\item Of three candidate criteria not in the base energy, alignment of boxes into shared
-  rows and columns holds 0.53, 0.28 and 0.79\pilot{} of boxes in hand layouts and under
-  0.06 in \texttt{neato}'s; orthogonality of edges holds 0.19, 0.13 and 0.45\pilot;
-  separation of boxes from edges they do not join holds none. In WikiPathways a third of
-  boxes share an exact coordinate with another box while only 2\% of coordinates are
-  integers, so the alignment is the person's act and not the editor's grid; in BPMN it is
+\item Alignment of boxes into shared rows and columns, HOLA's gridiness, puts 58\%, 36\% and
+  77\% of hand-placed boxes in an alignment of three or more; \texttt{neato} puts
+  none, \texttt{dot} 94\%, 94\% and 89\%. The continuous form A1 holds 0.52, 0.21 and
+  0.82 of hand-placed boxes against 0.06 for \texttt{neato} and 1.00 for \texttt{dot}.
+  Orthogonality of edges holds 0.16, 0.05 and 0.41, more than any tool; separation
+  of boxes from foreign edges is nearly satisfied everywhere (value 0.006 to 0.022) and
+  holds 0.76 to 0.86, which is the flatness of a term with little to act on. In
+  WikiPathways a third of boxes share an exact coordinate with another box while 2\% of
+  coordinates are integers, so the alignment there is the person's act; in BPMN it is
   partly the grid and mostly the lanes.
-\item The diagrams people draw are near-trees: median edges per box 1.06, 0.96 and 1.03,
-  against 1.30 in the Rome benchmark the field tests on \cite{rome}. Crossings are what the
-  theory is about \cite{gj83}; on the diagrams people actually draw there are almost none
-  to remove, which is part of why finding 1 holds.
+\item On every criterion but alignment the hand layout's profile is \texttt{dot}'s: held
+  under overlap, free under length and stress, partly held under orthogonality. The person
+  draws like a layered tool that aligns part of the drawing.
+\item Crossings hold every box in every layout at radius 0.02, because no single move of
+  that length removes one, so the count is flat. The value separates: WikiPathways authors
+  leave one crossing per 26 edges (0.038 of $m$), \texttt{neato} none, \texttt{dot} one
+  per 8. The diagrams people draw are near-trees, median edges per box 1.06, 0.96 and
+  1.03 against 1.30 in the Rome benchmark \cite{rome}; crossings are what the theory is
+  about \cite{gj83}, and on these diagrams there are few to remove.
 \end{enumerate}
 
 The rest of the paper is the foundation behind the test (Section~\ref{sec:foundations}),
 the instrument (Section~\ref{sec:instrument}), the corpora, the method, the measurements,
 the alternatives not yet excluded (Section~\ref{sec:alternatives}), and what is already
-known (Section~\ref{sec:related}).
+known (Section~\ref{sec:related}). A tool builder reading only this far has the changes:
+take the weight off edge length, add alignment, and print the fraction of boxes the energy
+holds when started from a layout a person accepted.
 
 \section{Foundations}\label{sec:foundations}
 
@@ -135,10 +148,10 @@ q_d(x) = \frac{1}{N}\,\#\{\,i : \text{node } i \text{ is held at radius } d\,\}.
 \end{equation}
 $q_d = 1$ says the layout is a local minimum of $E$ over single-node moves of length $d$;
 for smooth $E$ and small $d$ it says $\nabla E(x) = 0$ to within the resolution of $V$.
-Because~\eqref{eq:held} is a comparison of two energies, it is defined for every term, and
+Because~\eqref{eq:held} is a comparison of two energies it is defined for every term, and
 because it is evaluated per term it separates the criteria a person satisfied from those
 they did not. A descent-based measure (how far a capped descent moves the layout, the
-estimand of the first version of this study) answers the same question for the sum but
+estimand of the first version of this study) answers the same question for the sum and
 cannot separate the terms; it is retained as a secondary.
 
 \paragraph{The inverse problem.} Given layouts $x^{(1)}, \dots, x^{(G)}$ that people
@@ -152,14 +165,32 @@ $D_{iv} T_k < 0$ for some $v$ at almost every node (uniform edge length, at any 
 whose edges are not all the same length) cannot take positive weight without violating the
 inequalities at those nodes, which is the zero weight the random-search fit found.
 
-\paragraph{The null and the control.} A test that can only succeed is not a test. The
+\paragraph{Step terms.} A term that is a count (crossings) or a step function of position
+(gridiness, Section~\ref{sec:method}) is flat almost everywhere, so it holds a node
+wherever no single move of length $d$ changes it. For such a term $q_d$ says how much of the
+layout the criterion has stopped acting on, which is a different thing from how well the
+criterion is met, and the term's value at the layout is reported beside $q_d$.
+
+\paragraph{The reference length.} The length and stress terms compare distances with a
+reference $L$. Fixed at the layout's median edge length, $L$ is in general not the scale at
+which the term is least for that layout, so at a true minimum every node still has a
+scaling direction that lowers the term and the converged reference is not held (neato's
+stress layouts: $q_{0.02} = 0.07$ to $0.12$). $L$ is therefore the value at which the term is
+least for the layout as loaded, $\sum \ell^2 / \sum \ell$ over edges for length and the same
+over $\|x_i - x_j\| / \delta_{ij}$ for stress, fixed before any move; neato's stress
+layouts are then held at $1.00$ in every corpus. The median and $1/\sqrt{N}$ are
+sensitivities.
+
+\paragraph{The null and the controls.} A test that can only succeed is not a test. The
 \emph{stationarity reference}: $q_d$ on a layout a descent has converged on must be near
-one, and it is (0.94 to 1.00\pilot{} on every corpus and energy). The \emph{tool control}:
-$q_d$ on a layout produced by a real tool from the same graph, which says what a layout
-that does minimise something scores on each term. The \emph{matched-budget control}:
-uniform random placement at the same number of energy evaluations, which the hand layout
-must beat, or ``held under crossings'' would be a property of sparse graphs and not of the
-person.
+one, or the test lacks power for that energy; neato's layouts are the reference for stress
+(1.00in every corpus) and the capped descents of the pilot for the sums (0.94 to
+1.00\pilot). The \emph{tool controls}: $q_d$ on layouts of the same graph with the same box
+sizes by \texttt{neato} (stress, boxes left where they overlap), \texttt{prism} (neato
+followed by its overlap removal) and \texttt{dot} (layered), which say what a layout that
+does minimise something scores on each term. The \emph{matched-budget control}: uniform
+random placement at the same number of energy evaluations, which the hand layout must beat,
+or ``held under overlap'' would be a property of sparse graphs and not of the person.
 
 \section{The instrument}\label{sec:instrument}
 
@@ -171,8 +202,8 @@ field, and \texttt{cjitter\_compare} runs all four at the same budget on the sam
 reports an exact paired sign test, Holm-corrected, against the control. ``Better than
 uniform sampling at equal cost'' is the only claim it lets a search make.
 
-It is the latest of a series of small tools by the author, each of which reports the
-condition under which its own answer is wrong:
+It is the latest of a series of small tools by the author, each reporting the condition
+under which its own answer is wrong:
 
 \begin{center}\small
 \begin{tabular}{lll}
@@ -194,64 +225,64 @@ random step and the step kept when the total cost fell. That operator, a proposa
 one object and is judged on the summed energy, is the \texttt{block} field of the library,
 and the directional test of equation~\eqref{eq:held} is the same proposal made
 exhaustive: every direction tried, none accepted, the answer read off. The present paper
-turns the instrument around: instead of descending an energy to place objects, it starts
-from where a person placed them and reads which terms pull.
+starts from where a person placed the objects and reads which terms pull.
 
 \section{The corpora}\label{sec:corpora}
 
 Three collections of diagrams whose node coordinates a person chose, from three communities
 with different authoring tools, all redistributable.
 
-\begin{center}\small
+\begin{center}\footnotesize
 \begin{tabular}{llrrrr}
 \toprule
 corpus & licence & files & parsed & 15--40 nodes & median $m/n$ \\
 \midrule
-WikiPathways GPML, \emph{Homo sapiens} & CC0 & 1016 & 571 & 306 & 1.06 \\
-Reactome SBGN-ML & CC0 & 1382 & 701 & 180 & 0.96 \\
-BPMN Academic Initiative & academic & \pending{n} & 299 & 161 & 1.03 \\
+WikiPathways GPML, \emph{Homo sapiens} & CC0 & 1016 & 571 & 305 & 1.06 \\
+Reactome SBGN-ML & CC0 & 1382 & 701 & 248 & 0.96 \\
+BPMN Academic Initiative & academic & \pending{n} & 299 & 147 & 1.03 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-The layouts are working documents, not aesthetic submissions: Reactome diagrams are laid
-out by curators \cite{fabregat18}, WikiPathways pathways are drawn in PathVisio
-\cite{agrawal24}, and the BPMN models are students' work in Signavio \cite{kunze11,
-sola23}. Nobody was asked to draw nicely. The three tools share no layout code. Two
+The layouts are working documents: Reactome diagrams are laid out by curators
+\cite{fabregat18}, WikiPathways pathways are drawn in PathVisio \cite{agrawal24}, and the
+BPMN models are students' work in Signavio \cite{kunze11, sola23}. Nobody was asked to draw
+nicely. The three tools share no layout code. Two
 WikiPathways files (WP5037, WP3391) carry coordinates converted from Reactome
 \cite{bohler16} and are dropped.
 
-A diagram enters as its largest connected component; container glyphs (SBGN compartments,
-BPMN pools and lanes) are not nodes; SBGN process glyphs are nodes, so the Reactome graphs
-are bipartite and their $m/n$ is the process graph's; each layout is rescaled so that its
-bounding box fits the unit square, box sizes scaled with it. The pre-registered run
-restricts to 15 to 40 nodes; the pilot used 10 to 400. Duplicate pathways (ortholog copies
-of one human pathway) are removed by model identity. \pending{counts after deduplication;
-the 41 to 100 node sensitivity}
+A diagram enters as its largest connected component (194 of the 248 Reactome graphs and
+54 of the 147 BPMN graphs in the band are the component of a larger diagram); container
+glyphs (SBGN compartments, BPMN pools and lanes) are not nodes; SBGN process glyphs are
+nodes, so the Reactome graphs are bipartite and their $m/n$ is the process graph's; each
+layout is rescaled so that its bounding box fits the unit square, box sizes scaled with it.
+The directional test runs on 15 to 40 nodes; the climber pilot used 10 to 400.
+Duplicate pathways (ortholog copies of one human pathway) are removed by model identity.
+\pending{counts after deduplication; the 41 to 100 node sensitivity}
 
 How the coordinates were made matters for the alignment criterion. Of the raw coordinates,
 2\% are integers in WikiPathways, 69\% in Reactome and 71\% in BPMN (46\% multiples of
 five); the fraction of boxes sharing an exact $x$ with another box is 0.33, 0.06 and 0.47,
 an exact $y$ 0.28, 0.12 and 0.73. WikiPathways authors align by hand on a continuous
-canvas; BPMN authors work on a grid inside lanes; Reactome's curation tool rounds but its
+canvas; BPMN authors work on a grid inside lanes; Reactome's curation tool rounds and its
 authors align little.
 
 \section{The method}\label{sec:method}
 
 \paragraph{Terms.} With $n$ nodes, $m$ edges, box $i$ of width $w_i$ and height $h_i$, $L$
-the median edge length of the layout under test:
+the reference length of Section~\ref{sec:foundations}, fitted to the layout under test:
 
-\begin{center}\small
-\begin{tabular}{lll}
+\begin{center}\footnotesize
+\begin{tabular}{lp{8.2cm}l}
 \toprule
 term & definition & zero when \\
 \midrule
-$T_C$ crossings & pairs of edges with no shared endpoint that cross, $/m$ & planar drawing \\
-$T_O$ overlap & total overlap area of boxes $/$ total box area & no two boxes overlap \\
+$T_C$ crossings & crossing pairs of edges with no shared endpoint, $/m$ & planar \\
+$T_O$ overlap & overlap area of boxes $/$ total box area & no overlap \\
 $T_L$ length uniformity & mean over edges of $((\ell - L)/L)^2$ & all edges of length $L$ \\
-$T_R$ orthogonality & mean over edges of $\min(|\Delta x|,|\Delta y|)/(|\Delta x|+|\Delta y|)$ & every edge axis-aligned \\
-$T_A$ alignment & mean over nodes of $1/(1 + \sum_{j \ne i} e^{-(\Delta x/s)^2} + e^{-(\Delta y/s)^2})$, $s = 0.02$ & every node shares a row and a column \\
-$T_N$ node--edge & penalty for a node within $(w+h)/4$ of an edge it does not join & no node sits on a foreign edge \\
+$T_R$ orthogonality & mean over edges of $\min(|\Delta x|,|\Delta y|)/(|\Delta x|+|\Delta y|)$ & edges axis-aligned \\
+$T_A$ alignment & $1 -$ fraction of nodes in an alignment of $\ge 3$ (tol.\ 0.005) & every node aligned \\
+$T_N$ node--edge & squared shortfall of node to foreign edge distance below $(w+h)/4$ & none within \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -262,14 +293,13 @@ tradition since \cite{ahmed20}. The field's other default is stress \cite{kamada
 gansner05}, $\sum_{i<j} (\|x_i - x_j\| - L\,\delta_{ij})^2 / \delta_{ij}^2$ with
 $\delta_{ij}$ the graph distance, which force-directed tools and \texttt{neato} minimise
 and which Dwyer et al.\ \cite{dwyer09} found human choices track; it is the second base
-energy of the pre-registered run. \pending{stress row in every table} $T_R$, $T_A$ and
-$T_N$ are the candidates for what the base energy misses. The alignment definition above
-is the kernel form A3; two simpler forms, A1 (distance to the nearest node sharing a row
-or column) and A2 (rows and columns priced separately), are reported as sensitivities,
-together with HOLA's gridiness \cite{hola16}, the fraction of nodes in some alignment of
-three or more, which is the published form. A1 has a corner at exact alignment and A3 does
-not, and the corner is what holds a box: A1 holds 0.53 of WikiPathways boxes and A3 holds
-0.25\pilot. Which form is primary is declared before the run.
+energy. $T_R$, $T_A$ and $T_N$ are the candidates for what the
+base energy misses. The alignment definition above is HOLA's gridiness \cite{hola16}, the
+published form, a step function of position. Three continuous forms are the sensitivities:
+A1, per node the distance to the nearest other node along whichever axis is nearer, which
+has a corner at exact alignment; A2, rows and columns priced separately; A3, a Gaussian
+kernel of width $s = 0.02$, smooth. The corner is what holds a box: A1 holds 0.52 of
+WikiPathways boxes and A3 holds 0.20.
 
 All terms are evaluated here on straight centre-to-centre segments. GPML and SBGN store
 waypoints and BPMN routes edges orthogonally, so crossings, orthogonality and node--edge
@@ -277,8 +307,18 @@ separation are measured on a drawing the person did not see. \pending{the same t
 the stored polylines, with the fraction of edges that have waypoints per corpus}
 
 \paragraph{Directional test.} Radius $d \in \{0.005, 0.01, 0.02, 0.05\}$ of the drawing
-width, sixteen directions, every node, each term alone and the declared sums. Primary cell
-$d = 0.02$. Deterministic: no seed, no budget.
+width, sixteen directions, every node, each term alone and the sums of the tables. Primary cell
+$d = 0.02$. The directions are exact to double precision (a series evaluated in the first
+quadrant and rotated), and a move that lowers the energy by less than $10^{-12}$ of its
+value is a tie; an earlier build with directions off by up to $4 \times 10^{-6}$ counted
+the shift that error made as an improvement and read alignment lower by up to 0.04.
+Deterministic: no seed, no budget. Every median carries a 95\% bootstrap interval over
+diagrams (1000 resamples).
+
+\paragraph{Tool controls.} The same graphs with the same box sizes laid out by
+\texttt{neato} (\texttt{-Gstart=1}, so the file reproduces), by \texttt{neato} with
+\texttt{-Goverlap=false} (prism), and by \texttt{dot}; a check in the binary confirms each
+control is the same graphs. ELK, the layered tool the BPMN editors use, was not available.
 
 \paragraph{Descent, secondary.} Hill climbing, one node per proposal, initial step set
 from the cap, each node clipped to a disc of radius $d$ around its start, 4000 energy
@@ -296,60 +336,163 @@ beside it as a check. One candidate term added to the base at a time, then all s
 \paragraph{Statistics.} The unit of inference is the diagram. Per corpus, the paired
 comparison of $q_d$ between two energies, or between the hand layout and the tool control,
 is the exact Wilcoxon signed-rank test with the exact sign test beside it, Hodges--Lehmann
-shift and distribution-free interval; Holm correction over the declared family within each
-corpus. Equivalence claims (``no reweighting repairs it'') are two one-sided tests against
-a declared margin, never a failure to reject. \pending{the families, as declared in the
-signed pre-registration}
+shift and distribution-free interval. The families, Holm-corrected within each corpus: hand
+against each tool control under each single term (seven terms, three controls); hand
+against each control under the sums. Equivalence claims (``no reweighting repairs it'') are
+two one-sided tests against a margin stated with the claim, never a failure to reject.
+\pending{the tests; every table so far is medians and intervals}
 
 \section{Measurements}\label{sec:results}
 
-All numbers here are exploratory (one seed, 60 diagrams of 15 to 40 nodes per corpus
-for the directional test, 40 per split for the fits) and are replaced cell by cell by the
-pre-registered run. \pending{confirmatory tables}
+The directional test's numbers are from one deterministic run over the whole 15 to 40 node
+band on 2026-08-22; the climber numbers are the pilot's.
 
-\paragraph{Which criteria hold the hand layout.} $q_{0.02}$, the fraction of boxes with no
-improving direction among sixteen, on the hand layout, on the same layout after an
-uncapped descent under the same energy (the stationarity reference), and on
-\texttt{neato}'s layout of the same graph with the same box sizes (the tool control).
+\paragraph{Each criterion alone.} $q_{0.02}$ on the hand layout, with its 95\% bootstrap
+interval over diagrams, and on the three tool layouts of the same graphs; in parentheses
+the median value of the term at the layout, 0 when satisfied.
 
-\begin{center}\small
-\begin{tabular}{llrrr}
+\begin{center}\footnotesize
+\begin{tabular}{llrrrr}
 \toprule
-corpus & energy & hand\pilot & converged\pilot & \texttt{neato}\pilot \\
+corpus & energy & hand & \texttt{neato} & \texttt{prism} & \texttt{dot} \\
 \midrule
-WikiPathways & crossings $+$ overlap & 1.00 & 1.00 & 0.55 \\
- & length only & 0.00 & & 0.26 \\
- & $(1,1,1)$ & 0.03 & 0.96 & 0.19 \\
- & crossings $+$ overlap $+$ alignment A1 & 0.53 & 1.00 & 0.06 \\
- & crossings $+$ overlap $+$ orthogonality & 0.19 & & 0.00 \\
+WikiPathways & crossings alone & 1.00 [1.00, 1.00] (0.038) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.118) \\
+ & overlap alone & 1.00 [1.00, 1.00] (0.000) & 0.60 (0.030) & 1.00 (0.000) & 1.00 (0.000) \\
+ & length alone & 0.00 [0.00, 0.00] (0.219) & 0.24 (0.011) & 0.19 (0.014) & 0.00 (0.301) \\
+ & stress alone & 0.00 [0.00, 0.00] (0.217) & 1.00 (0.042) & 0.94 (0.044) & 0.00 (0.239) \\
+ & orthogonality alone & 0.16 [0.13, 0.19] (0.193) & 0.00 (0.280) & 0.00 (0.281) & 0.14 (0.251) \\
+ & alignment A1 alone & 0.52 [0.48, 0.54] (0.003) & 0.06 (0.011) & 0.07 (0.010) & 1.00 (0.000) \\
+ & alignment A3 alone & 0.20 [0.18, 0.23] (0.284) & 0.03 (0.446) & 0.03 (0.451) & 0.40 (0.159) \\
+ & gridiness alone & 0.87 [0.84, 0.89] (0.424) & 0.78 (1.000) & 0.79 (1.000) & 1.00 (0.059) \\
+ & node-edge alone & 0.76 [0.71, 0.81] (0.022) & 0.89 (0.000) & 1.00 (0.000) & 0.62 (0.029) \\
 \midrule
-Reactome & crossings $+$ overlap & 1.00 & 1.00 & 0.84 \\
- & length only & 0.06 & & 0.47 \\
- & $(1,1,1)$ & 0.06 & 0.97 & 0.43 \\
- & crossings $+$ overlap $+$ alignment A1 & 0.28 & 1.00 & 0.05 \\
- & crossings $+$ overlap $+$ orthogonality & 0.13 & & 0.01 \\
+Reactome & crossings alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.120) \\
+ & overlap alone & 1.00 [1.00, 1.00] (0.000) & 0.76 (0.022) & 1.00 (0.000) & 1.00 (0.000) \\
+ & length alone & 0.00 [0.00, 0.00] (0.234) & 0.35 (0.005) & 0.26 (0.009) & 0.00 (0.301) \\
+ & stress alone & 0.00 [0.00, 0.00] (0.212) & 1.00 (0.034) & 0.85 (0.042) & 0.00 (0.239) \\
+ & orthogonality alone & 0.05 [0.04, 0.06] (0.225) & 0.00 (0.277) & 0.00 (0.277) & 0.13 (0.262) \\
+ & alignment A1 alone & 0.21 [0.19, 0.24] (0.004) & 0.06 (0.009) & 0.06 (0.010) & 1.00 (0.000) \\
+ & alignment A3 alone & 0.10 [0.08, 0.12] (0.300) & 0.03 (0.430) & 0.03 (0.428) & 0.35 (0.142) \\
+ & gridiness alone & 0.65 [0.62, 0.68] (0.640) & 0.77 (1.000) & 0.75 (1.000) & 1.00 (0.062) \\
+ & node-edge alone & 0.85 [0.82, 0.88] (0.006) & 0.93 (0.000) & 1.00 (0.000) & 0.65 (0.023) \\
 \midrule
-BPMN & crossings $+$ overlap & 0.94 & 1.00 & 0.51 \\
- & length only & 0.10 & & 0.46 \\
- & $(1,1,1)$ & 0.10 & 1.00 & 0.31 \\
- & crossings $+$ overlap $+$ alignment A1 & 0.79 & 1.00 & 0.05 \\
- & crossings $+$ overlap $+$ orthogonality & 0.45 & & 0.00 \\
+BPMN & crossings alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.065) \\
+ & overlap alone & 1.00 [1.00, 1.00] (0.000) & 0.39 (0.082) & 1.00 (0.000) & 1.00 (0.000) \\
+ & length alone & 0.00 [0.00, 0.00] (0.244) & 0.39 (0.005) & 0.27 (0.010) & 0.00 (0.150) \\
+ & stress alone & 0.00 [0.00, 0.00] (0.189) & 1.00 (0.017) & 0.86 (0.023) & 0.00 (0.188) \\
+ & orthogonality alone & 0.41 [0.36, 0.44] (0.140) & 0.00 (0.286) & 0.00 (0.286) & 0.14 (0.225) \\
+ & alignment A1 alone & 0.82 [0.76, 0.91] (0.001) & 0.07 (0.011) & 0.07 (0.011) & 1.00 (0.000) \\
+ & alignment A3 alone & 0.27 [0.23, 0.32] (0.214) & 0.00 (0.452) & 0.00 (0.450) & 0.38 (0.188) \\
+ & gridiness alone & 0.90 [0.85, 0.93] (0.231) & 0.78 (1.000) & 0.79 (1.000) & 1.00 (0.111) \\
+ & node-edge alone & 0.86 [0.82, 0.88] (0.006) & 0.91 (0.000) & 1.00 (0.000) & 0.81 (0.006) \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-At the hand layout the three base terms share the energy as length 0.94, crossings 0.06,
-overlap 0.00. The converged column is near one everywhere the descent converged within its
-budget, so the test has power; the \texttt{neato} column is a layout that is a minimum of
-something else, and it reads as one.
+\paragraph{The sums.} The same test under the summed energies, equal weights.
 
-\paragraph{Chance.} The hand layout beats uniform random placement at the same evaluation
-budget on 350 of 373\pilot{} pathways, and descent from the hand layout ends lower than
-descent from a random start on 313 of 373\pilot. Being held under crossings is not a
-property of sparse graphs alone.
+\begin{center}\footnotesize
+\begin{tabular}{llrrrr}
+\toprule
+corpus & energy & hand & \texttt{neato} & \texttt{prism} & \texttt{dot} \\
+\midrule
+WikiPathways & C$+$O & 1.00 [1.00, 1.00] & 0.60 & 1.00 & 1.00 \\
+ & C$+$O$+$L & 0.00 [0.00, 0.00] & 0.17 & 0.19 & 0.00 \\
+ & C$+$O$+$S & 0.00 [0.00, 0.00] & 0.60 & 0.94 & 0.00 \\
+ & C$+$O$+$R & 0.17 [0.14, 0.19] & 0.00 & 0.00 & 0.15 \\
+ & C$+$O$+$A1 & 0.50 [0.48, 0.53] & 0.04 & 0.07 & 0.94 \\
+ & C$+$O$+$A3 & 0.25 [0.21, 0.28] & 0.03 & 0.03 & 0.53 \\
+ & C$+$O$+$grid & 0.84 [0.81, 0.87] & 0.45 & 0.79 & 0.97 \\
+ & C$+$O$+$N & 0.76 [0.71, 0.80] & 0.55 & 1.00 & 0.64 \\
+\midrule
+Reactome & C$+$O & 1.00 [1.00, 1.00] & 0.76 & 1.00 & 1.00 \\
+ & C$+$O$+$L & 0.00 [0.00, 0.00] & 0.33 & 0.27 & 0.00 \\
+ & C$+$O$+$S & 0.00 [0.00, 0.00] & 0.76 & 0.89 & 0.00 \\
+ & C$+$O$+$R & 0.06 [0.05, 0.07] & 0.00 & 0.00 & 0.14 \\
+ & C$+$O$+$A1 & 0.22 [0.20, 0.25] & 0.05 & 0.07 & 0.93 \\
+ & C$+$O$+$A3 & 0.11 [0.09, 0.12] & 0.03 & 0.03 & 0.58 \\
+ & C$+$O$+$grid & 0.64 [0.61, 0.67] & 0.52 & 0.75 & 0.97 \\
+ & C$+$O$+$N & 0.84 [0.81, 0.88] & 0.71 & 1.00 & 0.65 \\
+\midrule
+BPMN & C$+$O & 1.00 [0.94, 1.00] & 0.39 & 1.00 & 1.00 \\
+ & C$+$O$+$L & 0.00 [0.00, 0.00] & 0.23 & 0.27 & 0.00 \\
+ & C$+$O$+$S & 0.00 [0.00, 0.03] & 0.43 & 0.91 & 0.00 \\
+ & C$+$O$+$R & 0.41 [0.36, 0.47] & 0.00 & 0.00 & 0.14 \\
+ & C$+$O$+$A1 & 0.75 [0.69, 0.82] & 0.05 & 0.09 & 1.00 \\
+ & C$+$O$+$A3 & 0.33 [0.29, 0.40] & 0.03 & 0.03 & 0.50 \\
+ & C$+$O$+$grid & 0.83 [0.79, 0.88] & 0.30 & 0.79 & 0.94 \\
+ & C$+$O$+$N & 0.81 [0.74, 0.84] & 0.38 & 1.00 & 0.82 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Read down a hand column. Overlap holds every box at value zero; so it does in every tool
+layout that removes overlaps, and \texttt{neato} without removal is the only layout it does
+not hold, so crossings and overlap together separate a hand layout from that configuration
+and from nothing else. Length and stress hold no hand-placed box, and \texttt{neato}'s
+stress layouts are held under stress at 1.00, so the zero is the layout's and not the
+test's; \texttt{dot}, which is layered and prices no distance, scores 0.00 on both as the
+hand layouts do. At the hand layout the three base terms share the energy as length 0.94,
+crossings 0.06, overlap 0.00, and $C+O+L$ inherits the length term's zero. Alignment A1
+holds 0.52, 0.21 and 0.82 of hand-placed boxes, 0.06 of \texttt{neato}'s and, because a
+layer is a row, 1.00 of \texttt{dot}'s; the gridiness value puts 58\%, 36\% and 77\% of
+hand-placed boxes in an alignment of three or more, none of \texttt{neato}'s, 94\%, 94\%
+and 89\% of \texttt{dot}'s. The gridiness $q$ of 0.77 to 0.78 on \texttt{neato}'s
+layouts, at value 1.000, is the step term's flatness, which is why alignment is compared
+on the value. Node--edge separation is nearly satisfied in
+every layout (0.000 to 0.029) and holds 0.62 to 1.00 for the same reason. Crossings hold
+every box at this radius; the value is 0.038, 0.000 and 0.000 by hand, 0.000 for
+\texttt{neato}, 0.118, 0.120 and 0.065 for \texttt{dot}.
+
+\paragraph{Radius.} $q_d$ at $d \in \{0.005, 0.01, 0.02, 0.05\}$, hand layouts, then
+\texttt{neato}'s (\texttt{profile.py --sweep}):
+
+\begin{center}\footnotesize
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+ & \multicolumn{4}{c}{WikiPathways} & \multicolumn{4}{c}{Reactome} & \multicolumn{4}{c}{BPMN} \\
+energy & .005 & .01 & .02 & .05 & .005 & .01 & .02 & .05 & .005 & .01 & .02 & .05 \\
+\midrule
+overlap, hand & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+length, hand & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+stress, hand & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+alignment A1, hand & 0.52 & 0.54 & 0.52 & 0.44 & 0.12 & 0.17 & 0.21 & 0.19 & 0.86 & 0.86 & 0.82 & 0.75 \\
+gridiness, hand & 0.94 & 0.91 & 0.87 & 0.75 & 0.82 & 0.75 & 0.65 & 0.57 & 1.00 & 0.97 & 0.90 & 0.82 \\
+\midrule
+overlap, \texttt{neato} & 0.60 & 0.60 & 0.60 & 0.60 & 0.75 & 0.76 & 0.76 & 0.76 & 0.39 & 0.39 & 0.39 & 0.40 \\
+length, \texttt{neato} & 0.04 & 0.12 & 0.24 & 0.47 & 0.07 & 0.19 & 0.35 & 0.58 & 0.08 & 0.21 & 0.39 & 0.70 \\
+stress, \texttt{neato} & 0.90 & 0.96 & 1.00 & 1.00 & 0.96 & 1.00 & 1.00 & 1.00 & 0.94 & 0.97 & 1.00 & 1.00 \\
+alignment A1, \texttt{neato} & 0.04 & 0.05 & 0.06 & 0.06 & 0.03 & 0.05 & 0.06 & 0.07 & 0.04 & 0.06 & 0.07 & 0.06 \\
+gridiness, \texttt{neato} & 0.93 & 0.86 & 0.78 & 0.65 & 0.90 & 0.83 & 0.77 & 0.61 & 0.92 & 0.87 & 0.78 & 0.68 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The hand verdicts do not move with the radius. \texttt{neato}'s under length do: a smooth
+term near a minimum with gradient $g$ and curvature $\lambda$ holds a node when
+$|g| < d\lambda/2$, so a layout that is nearly a minimum is held at a large radius and
+free at a small one, and \texttt{neato}'s layouts, which minimise stress and not length
+uniformity, read as nearly uniform at $d = 0.05$ (0.47 to 0.70) and not at $d = 0.005$
+(0.04 to 0.08). A hand layout at 0.00 across the range is far from the minimum at every
+scale the test resolves. Gridiness falls with $d$ in every layout because a larger move
+reaches an alignment from further away.
+
+\paragraph{Reference length.} Under the median edge length instead of the fitted $L$,
+\texttt{neato}'s stress layouts score 0.07, 0.08 and 0.12 under stress and the hand
+layouts 0.00; under length the hand layouts score 0.03, 0.04 and 0.06 and \texttt{neato}'s
+0.26, 0.41 and 0.43. Under $L = 1/\sqrt{N}$ no box of any layout is held under either term, the
+scale being wrong for every layout. The hand verdicts do not depend on the choice; the
+control's does, which is why the fit is primary (Section~\ref{sec:foundations}).
+
+\paragraph{Chance.} From the climber pilot on the 10 to 400 node band: the hand layout
+beats uniform random placement at the same evaluation budget on 350 of 373\pilot{}
+pathways, and descent from the hand layout ends lower than descent from a random start on
+313 of 373\pilot. \pending{the in-cap matched-budget control through
+\texttt{cjitter\_compare} on the 15 to 40 band}
 
 \paragraph{Reweighting.} Held-out fraction of the cap a capped descent still uses (the
-secondary estimand; 0 would be stationary), from the pilot's random-search fit:
+secondary estimand; 0 would be stationary), from the pilot's random-search fit on 40
+diagrams per split:
 
 \begin{center}\small
 \begin{tabular}{lrrr}
@@ -376,8 +519,11 @@ $T_L$}
 \begin{enumerate}
 \item \textbf{The editor snapped to a grid}, so alignment is the tool's. WikiPathways has
   2\% integer coordinates and a third of boxes exactly aligned, so there it is the
-  person's. BPMN is snapped. Test, declared: jitter every box by half a grid cell and
+  person's. BPMN is snapped. Test: jitter every box by half a grid cell and
   repeat; the alignment that survives is the person's.
+\item \textbf{The reference length.} A distance term's verdict could be its scale's. Tested:
+  under the median edge length and under $1/\sqrt{N}$ the hand layouts are held under
+  length and stress on 0.00 to 0.06 of boxes, as under the fit; only the control moves.
 \item \textbf{Straight segments where the person drew polylines.} GPML and SBGN store
   waypoints and BPMN routes edges orthogonally; crossings, orthogonality and node--edge
   separation are here evaluated on centre-to-centre segments the person never saw. Test:
@@ -388,10 +534,14 @@ $T_L$}
   containment as a hard constraint, added as candidates. \pending{}
 \item \textbf{The radius.} At $d = 0.02$ on a thousand-pixel canvas the move is twenty
   pixels, about one grid step; a person cannot be stationary below the resolution they
-  control. Test: the table at every cap, and at $d$ in units of box width and of median
-  edge length.
-\item \textbf{Selection.} Near-trees make crossings easy. Test: $q_d$ against $m/n$ within
-  each corpus.
+  control. Test: the table at every cap (the sweep above), and at $d$ in units of box
+  width and of median edge length. \pending{}
+\item \textbf{Selection.} Near-trees make overlap and crossings easy. Test: $q_d$ against
+  $m/n$ within each corpus; and the tool controls, which are the same graphs and are held
+  under overlap wherever the tool removes it.
+\item \textbf{The tools are the wrong tools.} \texttt{dot} and \texttt{neato} are not what
+  any of the three communities' editors run. Test: ELK layered, the BPMN editors' engine,
+  when it is available. \pending{}
 \end{enumerate}
 
 \section{Related work}\label{sec:related}
@@ -445,18 +595,19 @@ Parsers, the energy (one function per term), the directional test, the descent, 
 fitting scripts, the parsed corpora and every table's script are in the repository under
 \texttt{example/diagrams}. The directional test is deterministic; the descents are
 deterministic from their seed on every platform. Raw corpus archives are fetched by a
-script and checked by hash. \pending{commit hash frozen for the run}
+script and checked by hash. \pending{the commit hash of the run}
 
 \section{Conclusion}
 
-People draw at a local minimum of the criteria that are either satisfied or not: no box on
-another, no crossing a small move removes. They draw nowhere near a minimum of uniform
-edge length, the smooth criterion that carries most of the energy in the tools, and a
-tool's own layouts show the opposite profile. What people do that the base energy does not
-price is align boxes into rows and columns, by hand where the canvas is continuous. A tool
-builder reading this has two changes to make and one number to report: take the weight off
-edge length, add alignment, and print the fraction of boxes the energy holds when started
-from a layout a person accepted.
+People draw at a minimum of overlap, exactly, as every tool that removes overlaps does.
+They draw nowhere near a minimum of uniform edge length or of stress, the criteria that
+carry the energy in force-directed tools, whose own layouts the test holds. What they do
+that the base energy does not price is align boxes into rows and columns, for about half
+the boxes, by hand where the canvas is continuous; the layered tool aligns all of them.
+On every criterion measured here a hand layout reads as a layered layout with partial
+alignment. A tool builder has two changes to make and one number to report: take the
+weight off edge length, add alignment, and print the fraction of boxes the energy holds
+when started from a layout a person accepted.
 
 \begin{thebibliography}{99}
 \bibitem{gj83} M.~R. Garey, D.~S. Johnson. Crossing Number is NP-Complete. \emph{SIAM

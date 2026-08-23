@@ -114,10 +114,33 @@ test; the directional test has no seed.
 A1 primary, energy-fraction estimand). 2026-08-22: the step sensitivity, the grid
 diagnostic, and the directional test on 60 diagrams per corpus against neato
 (review/checks-2026-08-22.md): q_0.02 under C+O 1.00, 1.00, 0.94; under T_L 0.00, 0.06,
-0.10; alignment A1 0.53, 0.28, 0.79. Those numbers fixed the hypotheses above and are
-superseded by anything this file produces.
+0.10; alignment A1 0.53, 0.28, 0.79. Those numbers fixed the hypotheses above. 2026-08-22,
+evening, after signing: the directional test over the whole 15 to 40 band (305, 248, 147
+graphs after the component fix) on straight chords, every term alone and the declared
+sums, against neato, prism and dot (example/diagrams/README.md in cjitter). It is what
+found the three deviations below. All of it is superseded by anything this file produces.
 
 ## 10. Deviations
 
 Any departure from this file is recorded here, dated, with the reason, before the affected
 analysis is run.
+
+2026-08-22, before the confirmatory run.
+
+1. Reference length. Section 3 fixed L at the layout's median edge length. Under that L a
+   converged stress layout is not held: neato's layouts score q_0.02 = 0.07, 0.08, 0.12
+   under T_S, so the stress reference fails the 0.95 power requirement of section 5, because
+   at a true minimum every node still has a scaling direction that lowers a term whose L is
+   not the layout's own. L is now the value at which the term is least for the layout as
+   loaded, sum(l^2)/sum(l) over edges for T_L and the same over r_ij/d_ij for T_S, fixed
+   before any move; neato's layouts then score 1.00, 1.00, 1.00 under T_S and hand layouts
+   0.00, 0.00, 0.00 either way. The median and 1/sqrt(N) are the sensitivities.
+2. H4 under gridiness. q under a step term holds a node wherever the term is flat: neato's
+   layouts score q = 0.78, 0.77, 0.78 under gridiness with no node in any alignment (value
+   1.000). H4 is evaluated on the term's value, the fraction of nodes in an alignment of
+   three or more, hand against each tool control, bootstrap intervals as in section 8; q is
+   reported beside it. A1 keeps the directional test and is the sensitivity.
+3. Tool controls. neato leaves boxes where they overlap, so it is not a control for T_O.
+   Added: prism (neato followed by its overlap removal, -Goverlap=false) and dot. ELK is
+   not available; BPMN's layered control is dot. `station check` confirms each control is
+   the same graphs with the same box sizes.

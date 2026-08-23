@@ -2,8 +2,9 @@
 
 Three independent reviews (review/methodologist.md, review/referee.md, review/code.md) and
 two days of checks (review/checks-2026-08-22.md) read against the pilot. This file is what
-they agree on and what to do, ranked. The pre-registration stays unsigned until the
-amendments in section 4 are accepted or refused.
+they agree on and what to do, ranked. The pre-registration written that day is withdrawn
+(withdrawn/PREREGISTRATION-STATIONARITY.md): the paper goes to JGAA or another online
+journal, and the analysis below is declared in the paper itself.
 
 ## 1. The finding, as it now stands
 
@@ -66,7 +67,7 @@ count with a tool control beside it.
 10. GD Contest manual submissions as a positive control (humans minimising crossings
     alone), if the files are downloadable.
 
-## 4. Pre-registration amendments proposed
+## 4. The analysis, as the paper declares it
 
 1. Primary estimand: q_d, the fraction of nodes held under the directional test at
    d = 0.02 with 16 directions, reported per term and per declared energy. Climber-based
@@ -106,9 +107,13 @@ committed under data/results/.
 
 ## 6. Order of work
 
-1. example/diagrams/ skeleton on the library, directional test first, tests 1, 2, 5, 9,
-   11 from review/code.md. Pin the 60-graph numbers above as the fixture.
+1. Done 2026-08-22: example/diagrams/ on the library, the directional test, the terms
+   including stress, the full-band profile, neato, prism and dot controls on every
+   instance with `station check`, the fitted reference length, bootstrap intervals and the radius sweep in profile.py, 87 checks in
+   tests/diagrams.sh including the corpus heads. ELK is not installed.
 2. Polyline parsers and the waypoint fraction; rerun the profile.
-3. Stress; neato and dot controls on every instance; ELK on BPMN.
+3. Descent through the library (start, compare_raw, public sign_p and holm, method mask):
+   the converged reference per term, the matched-budget control, the secondary estimand.
+   The LP weight fit and analyse.py (Wilcoxon, sign, Holm, Hodges-Lehmann).
 4. Half-grid jitter; flow and containment terms; HOLA corpus.
-5. Sign the amended pre-registration; freeze; run; write the measurements section.
+5. Run the descent and the fit; the Wilcoxon tables; the measurements section from them.
