@@ -29,7 +29,8 @@ length and stress hold no hand-placed box in any corpus, while \texttt{neato}'s 
 layouts are held at 1.00, so the test has power; a weight of 0.001 on either term drops
 the held fraction below 0.015. The criterion that holds a hand layout and that the energy
 omits is alignment into rows and columns: 0.52, 0.21 and 0.91 of boxes, against 0.06 for
-\texttt{neato} and 1.00 for \texttt{dot}. A hand layout is a layered layout with partial
+\texttt{neato}, 1.00 for \texttt{dot}, and 0.07 for a layout snapped to the same grid with
+no author. A hand layout is a layered layout with partial
 alignment; the assumption is false for the energy in use, and the repair is one term.
 \end{abstract}
 
@@ -237,7 +238,8 @@ BPMN models submitted twice. The 41 to 100 node band was not run.
 How the coordinates were made matters for the alignment criterion. Of the raw coordinates,
 17\% are integers in WikiPathways, 67\% in Reactome and 63\% in BPMN (44\% multiples of
 five); the fraction of boxes sharing an exact $x$ with another box is 0.37, 0.06 and 0.42,
-an exact $y$ 0.29, 0.12 and 0.76. In WikiPathways exact alignment is twice as common as
+an exact $y$ 0.29, 0.12 and 0.76, and either 0.49, 0.19 and 0.88, which is the figure the
+alignment row of Section~\ref{sec:results} should be read against. In WikiPathways exact alignment is twice as common as
 integer coordinates, so it is the person's act and not a rounding grid's; BPMN authors work
 on a grid inside lanes, which is where the $y$ figure of 0.76 comes from; Reactome's
 curation tool rounds and its authors align little.
@@ -438,8 +440,16 @@ the zero is the layout's and not the test's; \texttt{dot}, which is layered and 
 distance, scores 0.00 on both as the hand layouts do. At the hand layout the three base terms
 share the energy as length 0.99, crossings 0.01, overlap 0.00, and $C+O+L$ inherits the
 length term's zero. Alignment A1 holds 0.52, 0.21 and 0.91 of hand-placed boxes, 0.06 of
-\texttt{neato}'s and, because a layer is a row, 1.00, 1.00 and 0.89 of \texttt{dot}'s and
-0.57, 0.42 and 0.62 of ELK's; the gridiness value puts 58\%, 36\% and 82\% of hand-placed
+\texttt{neato}'s, 0.065, 0.075 and 0.067 of a layout snapped to the same grid with the same
+boxes in the same bounding box and no author (Section~\ref{sec:alternatives}), and, because
+a layer is a row, 1.00, 1.00 and 0.89 of \texttt{dot}'s and 0.57, 0.42 and 0.62 of ELK's.
+What $q$ counts under $T_A$ is the fraction of boxes lying within $d/2$ of sharing a
+coordinate, not the fraction lying exactly on one, the term having its corner there, which
+is why it tracks the exact-tie fractions of Section~\ref{sec:corpora} to within a few
+points. The magnitude beside it is small: the mean best decrease one box can take is 0.066,
+0.069 and 0.032 of the alignment energy, so what the hand layouts hold is a criterion with
+little left on the table.
+The gridiness value puts 58\%, 36\% and 82\% of hand-placed
 boxes in an alignment of three or more, none of \texttt{neato}'s, 88\%, 82\% and 78\% of
 \texttt{dot}'s. The gridiness $q$ of 0.77 to 0.78 on \texttt{neato}'s layouts, at value
 1.000, is the step term's flatness, which is why alignment is compared on the value.
@@ -621,10 +631,21 @@ orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
 \section{What else could produce this}\label{sec:alternatives}
 
 \begin{enumerate}
-\item \textbf{The editor snapped to a grid}, so alignment is the tool's. WikiPathways has
-  17\% integer coordinates and 0.37 of boxes exactly aligned in $x$, so there it is the
-  person's. BPMN is snapped (63\% integers, 44\% multiples of five). The half-grid jitter
-  test, perturb every box by half a cell and repeat, was not run.
+\item \textbf{The editor snapped to a grid}, so alignment is the tool's. Excluded, by the
+  control the pre-registration named and by a stronger one it did not. The detected pitch
+  is one unit in Reactome and BPMN (67\% and 63\% integer coordinates) and none in
+  WikiPathways (17\%, against 0.37 of boxes exactly aligned in $x$). Displacing every box
+  by up to half a pitch leaves the held fraction at 0.500, 0.206 and 0.889 against 0.520,
+  0.207 and 0.912. That test cannot fail at this pitch, and the reason is the instrument:
+  $T_A$ is $\min_j\min(|\Delta x|,|\Delta y|)$, so a box offset by $\epsilon$ from its
+  nearest agreement is released only when a move of radius $d$ lowers the term, and moving
+  $d$ toward the agreement lands at $d-\epsilon$, which is worse whenever $\epsilon < d/2$.
+  Half a pitch is 0.5 units against a $d/2$ of 8, 8 and 13. The control that does
+  discriminate is a layout snapped to the same grid, with the same boxes and the same
+  bounding box and no author: it holds 0.065, 0.075 and 0.067. Displacing the hand layouts
+  past $d/2$ takes them to that same level (0.097, 0.095 and 0.200 at a half-width of 15,
+  0.065, 0.061 and 0.062 at 120). The grid is available to the random layout and does not
+  produce the effect.
 \item \textbf{The reference length.} A distance term's verdict could be its scale's. Tested:
   under the median edge length and under $1/\sqrt{N}$ the hand layouts are held under
   length and stress on 0.00 to 0.06 of boxes, as under the fit; only the control moves.
