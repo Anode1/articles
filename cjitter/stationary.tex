@@ -19,48 +19,34 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \maketitle
 
 \begin{abstract}
-Automatic layout tools place the boxes of a diagram by minimising a weighted sum of
-aesthetic criteria: few edge crossings, no overlapping boxes, edges of similar length. If
-people drew the same way, a diagram laid out by hand would be a local minimum of that sum
-and a tool started from it would find nothing to change. We test each criterion separately
-on 853 diagrams of 15 to 40 boxes whose coordinates a person chose: 305 WikiPathways
-biological pathways, 248 Reactome SBGN maps and 300 BPMN process models, three communities
-with different authoring tools. The test is direct: move each box 2\% of the drawing width
-in each of sixteen directions and ask whether any move lowers the criterion, edges taken as
-the polylines the files store; the same test runs on layouts of the same graphs by four
-tools, \texttt{neato}, \texttt{neato} with overlap removal, \texttt{dot} and ELK layered.
-Under overlap every box of the median hand diagram is held at term value zero, as in every
-tool layout that removes overlaps. Under uniform edge length and under stress no hand-placed
-box is held in any corpus, while \texttt{neato}'s layouts are held under stress at 1.00, so
-the test has power; the three-term energy tools use, which at the hand layout is 99\% edge
-length by value, holds none of it, and no reweighting repairs it: a weight of 0.001 on
-length or stress drops the held fraction below 0.015 in every corpus. Alignment of boxes
-into shared rows and columns holds 0.52, 0.21 and 0.91 of hand-placed boxes, against 0.06
-in \texttt{neato}'s layouts, 0.89 to 1.00 in \texttt{dot}'s and 0.42 to 0.62 in ELK's. The
-BPMN lanes do not explain it: 43\% of the held boxes are held by a column or by a row
-shared across lanes, which a horizontal lane cannot impose, and the lanes of the rest are
-a median 6.3 box heights tall, room the person did not use. Orthogonality on the drawn
-routes holds 0.73 of BPMN boxes; reading direction holds 0.59 to 0.85 by hand against 1.00
-for the layered tools; crossings hold every box in every layout at this radius, the
-diagrams being near-trees (median edges per box 1.06, 1.04 and 1.11 against 1.30 for the
-Rome benchmark) with no crossing to remove on the median hand diagram's routes. On every
-criterion the hand profile is the layered tools': held under overlap, free under length
-and stress, aligned in part where \texttt{dot} is exact. The measurement is deterministic,
-and an uncapped descent from each hand layout confirms the test's power, ending held at
-1.00 under every energy it reports on.
+Every method that learns a layout energy from human examples assumes the examples are
+minima of some weighted sum of the standard criteria. We test the assumption one criterion
+at a time on 853 hand-drawn diagrams of 15 to 40 boxes (WikiPathways, Reactome, BPMN): move
+each box 2\% of the drawing width in sixteen directions and ask whether any move lowers the
+criterion, \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs as controls.
+Overlap holds every box at zero, by hand and in every tool that removes it. Uniform edge
+length and stress hold no hand-placed box in any corpus, while \texttt{neato}'s stress
+layouts are held at 1.00, so the test has power; a weight of 0.001 on either term drops
+the held fraction below 0.015. The criterion that holds a hand layout and that the energy
+omits is alignment into rows and columns: 0.52, 0.21 and 0.91 of boxes, against 0.06 for
+\texttt{neato} and 1.00 for \texttt{dot}. A hand layout is a layered layout with partial
+alignment; the assumption is false for the energy in use, and the repair is one term.
 \end{abstract}
 
 \section{Introduction}
 
-A diagram is a graph with a drawing: boxes for the nodes, lines for the edges, and a
-position for every box. When a program chooses the positions it minimises an
-\emph{energy}, a weighted sum of quantities the field has agreed are bad: edges that cross,
-boxes that overlap, edges of very unequal length, boxes that sit on edges they do not belong
-to \cite{tdb88, dh96, purchase02, kobourov}. The weights are asserted by the tool's author.
-The premise is that a person drawing by hand is doing the same thing more slowly, so that
-the drawing they accept is one a tool would also accept.
+A layout program places the boxes of a diagram by minimising an \emph{energy}, a weighted
+sum of quantities the field has agreed are bad: edges that cross, boxes that overlap, edges
+of very unequal length, boxes that sit on edges they do not belong to \cite{tdb88, dh96,
+purchase02, kobourov}. The weights are asserted by the tool's author, and since 1994 the
+proposal has been to learn them instead, from layouts people made or preferred
+\cite{masui94, spoenemann14, klammler19, flud22, zhang26}. Every such method rests on one
+assumption: that a drawing a person accepted is a minimum, or near one, of some weighting
+of those criteria. Nobody has tested it against human coordinates. If it is false, the
+learned weights fit the criteria's mutual trade-offs and not the person, and the term the
+person did optimise stays unlearned because it was never offered.
 
-The premise has a direct test, one criterion at a time. Take a diagram a person drew. Move
+The assumption has a direct test, one criterion at a time. Take a diagram a person drew. Move
 one box a small distance in each of several directions and ask whether any of the moves
 lowers the criterion. If none does, the box is \emph{held}: the person has put it where the
 criterion wants it, or where the criterion has stopped caring. Do this for every box and
@@ -70,8 +56,8 @@ is one the person satisfied; one that holds no box is one the person did not con
 traded away.
 
 We ran the test on 853 diagrams of 15 to 40 boxes from three unrelated communities
-(Section~\ref{sec:corpora}), and on layouts of the same graphs by four tools. The
-findings:
+(Section~\ref{sec:corpora}), and on layouts of the same graphs by four tools, which say
+what a layout that does minimise something scores. The findings:
 
 \begin{enumerate}
 \item Under overlap every box of the median hand diagram is held and the term is zero in
@@ -202,30 +188,10 @@ field, and \texttt{cjitter\_compare} runs all four at the same budget on the sam
 reports an exact paired sign test, Holm-corrected, against the control. ``Better than
 uniform sampling at equal cost'' is the only claim it lets a search make.
 
-It is the latest of a series of small tools by the author, each reporting the condition
-under which its own answer is wrong:
-
-\begin{center}\small
-\begin{tabular}{lll}
-\toprule
-year & tool & what it reports against itself \\
-\midrule
-1997 & backpropagation thesis \cite{bpfnn97} & descent on an error energy, derived \\
-2001 & label placer & per-label random steps, kept if the summed overlap fell \\
-2011 & least squares, now \texttt{linearr} & when a line is the wrong shape \\
-2025 & \texttt{bpnn} & when the network has memorised the rows \\
-2026 & \texttt{cjitter} & when a search does no better than sampling \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-The 1997 thesis derives backpropagation as gradient descent on an error surface; the 2001
-placer, deployed in industry, is the same descent without a gradient, one label moved a
-random step and the step kept when the total cost fell. That operator, a proposal that moves
-one object and is judged on the summed energy, is the \texttt{block} field of the library,
-and the directional test of equation~\eqref{eq:held} is the same proposal made
-exhaustive: every direction tried, none accepted, the answer read off. The present paper
-starts from where a person placed the objects and reads which terms pull.
+Its \texttt{block} operator, one object moved a random step and the step kept when the
+summed energy fell, is the operator of a label placer the author deployed in 2001; the
+directional test of equation~\eqref{eq:held} is that proposal made exhaustive, every
+direction tried, none accepted, the answer read off.
 
 \section{The corpora}\label{sec:corpora}
 
@@ -715,7 +681,9 @@ three raw archives and of the eighteen corpus files as measured.
 
 \section{Conclusion}
 
-People draw at a minimum of overlap, exactly, as every tool that removes overlaps does.
+The assumption behind learning a layout energy from examples is false for the energy in
+use. People draw at a minimum of overlap, exactly, as every tool that removes overlaps
+does.
 They draw nowhere near a minimum of uniform edge length or of stress, the criteria that
 carry the energy in force-directed tools, whose own layouts the test holds. What they do
 that the base energy does not price is align boxes into rows and columns, for a fifth of
@@ -723,9 +691,11 @@ the boxes in Reactome, half in WikiPathways and nine tenths in BPMN, by hand whe
 canvas is continuous and beyond anything the lanes impose where it is not, and point
 directed edges the reading way, for three fifths to six sevenths of the boxes; the
 layered tools do both exactly. On every criterion measured here a hand layout reads as a
-layered layout with partial alignment and partial flow. A tool builder has two changes to
-make and one number to report: take the weight off edge length, add alignment, and print
-the fraction of boxes the energy holds when started from a layout a person accepted.
+layered layout with partial alignment and partial flow. A method that learns weights from
+such layouts must offer alignment among its terms or it fits nothing the person did. A
+tool builder has two changes to make and one number to report: take the weight off edge
+length, add alignment, and print the fraction of boxes the energy holds when started from
+a layout a person accepted.
 
 \begin{thebibliography}{99}
 \bibitem{gj83} M.~R. Garey, D.~S. Johnson. Crossing Number is NP-Complete. \emph{SIAM
