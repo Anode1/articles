@@ -1,0 +1,44 @@
+{
+ "visible": {
+  "find_exact": 2,
+  "find_icase": 11,
+  "and": 4,
+  "only": 5
+ },
+ "hidden": {
+  "find_exact": 32,
+  "find_icase": 144,
+  "pairs": {
+   "p1_random": {
+    "common": 25,
+    "only": 375,
+    "first": 564,
+    "last": 4720
+   },
+   "p2_identical": {
+    "common": 120,
+    "only": 0,
+    "first": 9,
+    "last": 2988
+   },
+   "p3_disjoint": {
+    "common": 0,
+    "only": 199,
+    "first": "none",
+    "last": "none"
+   },
+   "p4_empty_second": {
+    "common": 0,
+    "only": 10,
+    "first": "none",
+    "last": "none"
+   },
+   "p5_last_only": {
+    "common": 1,
+    "only": 6,
+    "first": 49,
+    "last": 49
+   }
+  }
+ }
+}

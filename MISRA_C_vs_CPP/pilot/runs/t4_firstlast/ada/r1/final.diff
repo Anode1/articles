@@ -1,0 +1,55 @@
+ bench.adb | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+diff --git a/bench.adb b/bench.adb
+index 25471b7..3b1cd03 100644
+--- a/bench.adb
++++ b/bench.adb
+@@ -100,6 +100,40 @@ procedure Bench is
+       Put_Line (Tag & " iter" & Integer'Image (It) & " " &
+                 Integer'Image (US) & " us  " & Extra);
+    end Row;
++
++   function Img (V : Long_Long_Integer) return String is
++      S : constant String := Long_Long_Integer'Image (V);
++   begin
++      if S (S'First) = ' ' then
++         return S (S'First + 1 .. S'Last);
++      else
++         return S;
++      end if;
++   end Img;
++
++   procedure Print_First_Last (A : Id_Array; NA : Natural; B : Id_Array; NB : Natural) is
++      I, J     : Natural := 0;
++      Found    : Boolean := False;
++      First_Id : Long_Long_Integer := 0;
++      Last_Id  : Long_Long_Integer := 0;
++   begin
++      while I < NA and then J < NB loop
++         if A (I) = B (J) then
++            if not Found then First_Id := A (I); Found := True; end if;
++            Last_Id := A (I);
++            I := I + 1; J := J + 1;
++         elsif A (I) < B (J) then
++            I := I + 1;
++         else
++            J := J + 1;
++         end if;
++      end loop;
++      if Found then
++         Put_Line ("first=" & Img (First_Id) & " last=" & Img (Last_Id));
++      else
++         Put_Line ("first=none last=none");
++      end if;
++   end Print_First_Last;
+ begin
+    if Argument (1) = "find" then
+       declare
+@@ -128,6 +162,7 @@ begin
+                     C  : constant Natural := Intersect (A.all, NA, B.all, NB);
+             begin Row ("and ", It, T0, "common=" & Integer'Image (C)); end;
+          end loop;
++         Print_First_Last (A.all, NA, B.all, NB);
+       end;
+    end if;
+ end Bench;

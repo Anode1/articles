@@ -1,0 +1,17 @@
+ bench.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/bench.rs b/bench.rs
+index c57f651..02207f1 100644
+--- a/bench.rs
++++ b/bench.rs
+@@ -44,8 +44,8 @@ fn intersect(a: &[i64], b: &[i64]) -> usize {
+     while i < a.len() && j < b.len() {
+         let (x, y) = (a[i], b[j]);
+         if x == y { c += 1; i += 1; j += 1; }
+-        else if x < y { j += 1; }
+-        else { i += 1; }
++        else if x < y { i += 1; }
++        else { j += 1; }
+     }
+     c
+ }

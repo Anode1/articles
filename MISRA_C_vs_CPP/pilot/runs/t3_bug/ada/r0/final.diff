@@ -1,0 +1,17 @@
+ bench.adb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/bench.adb b/bench.adb
+index a94d033..25471b7 100644
+--- a/bench.adb
++++ b/bench.adb
+@@ -87,8 +87,8 @@ procedure Bench is
+    begin
+       while I < NA and then J < NB loop
+          if A (I) = B (J) then C := C + 1; I := I + 1; J := J + 1;
+-         elsif A (I) < B (J) then J := J + 1;
+-         else I := I + 1;
++         elsif A (I) < B (J) then I := I + 1;
++         else J := J + 1;
+          end if;
+       end loop;
+       return C;

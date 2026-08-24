@@ -1,0 +1,45 @@
+ bench.adb | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+diff --git a/bench.adb b/bench.adb
+index 25471b7..221ac2d 100644
+--- a/bench.adb
++++ b/bench.adb
+@@ -29,22 +29,35 @@ procedure Bench is
+       return Buf;
+    end Slurp;
+ 
++   function Lower (B : Stream_Element) return Stream_Element is
++      A_Pos : constant Stream_Element := Character'Pos ('A');
++      Z_Pos : constant Stream_Element := Character'Pos ('Z');
++   begin
++      if B >= A_Pos and then B <= Z_Pos then
++         return B + (Character'Pos ('a') - Character'Pos ('A'));
++      else
++         return B;
++      end if;
++   end Lower;
++
+    function Count_Lines (S : Stream_Element_Array; Last : Stream_Element_Offset;
+                          Pat : Stream_Element_Array) return Natural is
+       Hits : Natural := 0;
+       Line : Boolean := False;
+       PL   : constant Stream_Element_Offset := Pat'Length;
+-      P0   : constant Stream_Element := Pat (Pat'First);
++      P0   : constant Stream_Element := Lower (Pat (Pat'First));
+    begin
+       for I in 1 .. Last loop
+          declare B : constant Stream_Element := S (I); begin
+             if B = LF then
+                if Line then Hits := Hits + 1; end if;
+                Line := False;
+-            elsif (not Line) and then B = P0 and then I + PL - 1 <= Last then
++            elsif (not Line) and then Lower (B) = P0 and then I + PL - 1 <= Last then
+                declare Match : Boolean := True; begin
+                   for J in 1 .. PL - 1 loop
+-                     if S (I + J) /= Pat (Pat'First + J) then Match := False; exit; end if;
++                     if Lower (S (I + J)) /= Lower (Pat (Pat'First + J)) then
++                        Match := False; exit;
++                     end if;
+                   end loop;
+                   if Match then Line := True; end if;
+                end;

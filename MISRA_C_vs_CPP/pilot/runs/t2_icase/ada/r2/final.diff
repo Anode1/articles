@@ -1,0 +1,47 @@
+ bench.adb | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+diff --git a/bench.adb b/bench.adb
+index 25471b7..ae536cf 100644
+--- a/bench.adb
++++ b/bench.adb
+@@ -29,22 +29,36 @@ procedure Bench is
+       return Buf;
+    end Slurp;
+ 
++   function Fold (B : Stream_Element) return Stream_Element is
++   begin
++      if B in Character'Pos ('A') .. Character'Pos ('Z') then
++         return B + (Character'Pos ('a') - Character'Pos ('A'));
++      else
++         return B;
++      end if;
++   end Fold;
++
+    function Count_Lines (S : Stream_Element_Array; Last : Stream_Element_Offset;
+                          Pat : Stream_Element_Array) return Natural is
+       Hits : Natural := 0;
+       Line : Boolean := False;
+       PL   : constant Stream_Element_Offset := Pat'Length;
+-      P0   : constant Stream_Element := Pat (Pat'First);
++      NPat : Stream_Element_Array (Pat'Range);
++      P0   : Stream_Element;
+    begin
++      for K in Pat'Range loop
++         NPat (K) := Fold (Pat (K));
++      end loop;
++      P0 := NPat (NPat'First);
+       for I in 1 .. Last loop
+-         declare B : constant Stream_Element := S (I); begin
+-            if B = LF then
++         declare B : constant Stream_Element := Fold (S (I)); begin
++            if S (I) = LF then
+                if Line then Hits := Hits + 1; end if;
+                Line := False;
+             elsif (not Line) and then B = P0 and then I + PL - 1 <= Last then
+                declare Match : Boolean := True; begin
+                   for J in 1 .. PL - 1 loop
+-                     if S (I + J) /= Pat (Pat'First + J) then Match := False; exit; end if;
++                     if Fold (S (I + J)) /= NPat (NPat'First + J) then Match := False; exit; end if;
+                   end loop;
+                   if Match then Line := True; end if;
+                end;

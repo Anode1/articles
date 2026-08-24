@@ -1,0 +1,38 @@
+ bench.rs | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+diff --git a/bench.rs b/bench.rs
+index 02207f1..8dd9b11 100644
+--- a/bench.rs
++++ b/bench.rs
+@@ -5,16 +5,29 @@ use std::env;
+ use std::fs;
+ use std::time::Instant;
+ 
++fn eq_icase(a: u8, b: u8) -> bool {
++    a.to_ascii_lowercase() == b.to_ascii_lowercase()
++}
++
++fn matches_at(s: &[u8], i: usize, pat: &[u8]) -> bool {
++    let pl = pat.len();
++    if i + pl > s.len() { return false; }
++    for k in 0..pl {
++        if !eq_icase(s[i + k], pat[k]) { return false; }
++    }
++    true
++}
++
+ fn count_lines(s: &[u8], pat: &[u8]) -> usize {
+     let (mut hits, mut line) = (0usize, false);
+-    let (pl, p0, n) = (pat.len(), pat[0], s.len());
++    let (p0, n) = (pat[0], s.len());
+     let mut i = 0;
+     while i < n {
+         let b = s[i];
+         if b == b'\n' {
+             if line { hits += 1; }
+             line = false;
+-        } else if !line && b == p0 && i + pl <= n && &s[i..i + pl] == pat {
++        } else if !line && eq_icase(b, p0) && matches_at(s, i, pat) {
+             line = true;
+         }
+         i += 1;

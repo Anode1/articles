@@ -1,0 +1,20 @@
+ bench.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+diff --git a/bench.c b/bench.c
+index ecdf6f7..3f2d052 100644
+--- a/bench.c
++++ b/bench.c
+@@ -10,10 +10,11 @@ static double ms(struct timespec a){struct timespec b;clock_gettime(CLOCK_MONOTO
+ static char*slurp(const char*p,size_t*len){int fd=open(p,O_RDONLY);if(fd<0){perror(p);exit(1);}
+   struct stat st;fstat(fd,&st);size_t n=st.st_size;char*b=malloc(n);size_t got=0;ssize_t r;
+   while(got<n&&(r=read(fd,b+got,n-got))>0)got+=r;close(fd);*len=n;return b;}
+-static int countlines(const char*s,size_t n,const char*p){size_t pl=strlen(p);int h=0,ln=0;char p0=p[0];
++static char lc(char c){return(c>='A'&&c<='Z')?c+32:c;}
++static int countlines(const char*s,size_t n,const char*p){size_t pl=strlen(p);int h=0,ln=0;char p0=lc(p[0]);
+   for(size_t i=0;i<n;i++){char b=s[i];
+     if(b=='\n'){if(ln)h++;ln=0;}
+-    else if(!ln&&b==p0&&i+pl<=n){size_t j=1;while(j<pl&&s[i+j]==p[j])j++;if(j==pl)ln=1;}}
++    else if(!ln&&lc(b)==p0&&i+pl<=n){size_t j=1;while(j<pl&&lc(s[i+j])==lc(p[j]))j++;if(j==pl)ln=1;}}
+   if(ln)h++;return h;}
+ static long*readpost(const char*p,size_t*cnt){size_t n;char*d=slurp(p,&n);size_t L=0;
+   for(size_t i=0;i<n;i++)if(d[i]=='\n')L++;long*o=malloc(L*sizeof(long));size_t k=0;long c=0;int any=0;

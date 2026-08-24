@@ -1,0 +1,13 @@
+ bench.py | 3 +++
+ 1 file changed, 3 insertions(+)
+diff --git a/bench.py b/bench.py
+index 3d9acf4..88fcb7c 100644
+--- a/bench.py
++++ b/bench.py
+@@ -23,3 +23,6 @@ else:
+             elif x<y: i+=1
+             else: j+=1
+         print(f"and.2ptr  iter{it} {(t()-s)*1e3:7.0f} ms  common={c}")
++    common=set(LA)&set(LB)
++    if common: print(f"first={min(common)} last={max(common)}")
++    else: print("first=none last=none")

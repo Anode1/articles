@@ -1,0 +1,52 @@
+{
+ "task": "t2_icase",
+ "lang": "rust",
+ "rep": 1,
+ "model": "claude-sonnet-5",
+ "wall_s": 26.6,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 8,
+ "cost_usd": 0.107577,
+ "duration_api_ms": 25758,
+ "stop": "success",
+ "input_tokens": 12,
+ "cache_read": 189085,
+ "cache_create": 11759,
+ "output_tokens": 2155,
+ "final_text": "Correctly matches \"outputs\", \"OUTPUTS\", \"OutPuts x\" (3 hits), while skipping \"no match\" and \"Output\" (missing the `s`).\n\nThe scan in bench.rs now does ASCII case-insensitive substring matching (letters fold, all other bytes match exactly), verified with `check.sh` and a manual mixed-case test.",
+ "context_tokens": 200856,
+ "tool_calls": 7,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r1/work/bench.rs",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r1/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r1/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | sort",
+  "sh check.sh",
+  "printf 'outputs\\nOUTPUTS\\nOutPuts x\\nno match\\nOutput\\n' > /tmp/case_test.txt && ./bench find /tmp/case_test.txt Outputs"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "bench.rs",
+  "+    a == b",
+  "+            && s[i..i + pl].iter().zip(pat).all("
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

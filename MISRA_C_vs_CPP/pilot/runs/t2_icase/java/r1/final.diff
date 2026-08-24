@@ -1,0 +1,31 @@
+ Bench.java | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+diff --git a/Bench.java b/Bench.java
+index 5a736dd..b8d7e2b 100644
+--- a/Bench.java
++++ b/Bench.java
+@@ -34,8 +34,8 @@ public class Bench {
+     for (int i = 0; i < n; i++) {
+       byte b = s[i];
+       if (b == '\n') { if (line) hits++; line = false; }
+-      else if (!line && b == p0 && i + pl <= n) {
+-        int j = 1; while (j < pl && s[i+j] == p[j]) j++;
++      else if (!line && eqCI(b, p0) && i + pl <= n) {
++        int j = 1; while (j < pl && eqCI(s[i+j], p[j])) j++;
+         if (j == pl) line = true;
+       }
+     }
+@@ -43,6 +43,13 @@ public class Bench {
+     return hits;
+   }
+ 
++  static boolean eqCI(byte x, byte y) {
++    if (x == y) return true;
++    if (x >= 'A' && x <= 'Z') x += 32;
++    if (y >= 'A' && y <= 'Z') y += 32;
++    return x == y;
++  }
++
+   static long[] readPostings(String path) throws Exception {
+     byte[] d = Files.readAllBytes(Paths.get(path));
+     int lines = 0; for (byte b : d) if (b == '\n') lines++;

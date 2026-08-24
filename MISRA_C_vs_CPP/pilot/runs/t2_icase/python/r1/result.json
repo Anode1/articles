@@ -1,0 +1,51 @@
+{
+ "task": "t2_icase",
+ "lang": "python",
+ "rep": 1,
+ "model": "claude-sonnet-5",
+ "wall_s": 57.2,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 9,
+ "cost_usd": 0.1533124,
+ "duration_api_ms": 56349,
+ "stop": "success",
+ "input_tokens": 14,
+ "cache_read": 225792,
+ "cache_create": 14609,
+ "output_tokens": 4854,
+ "final_text": "hits=11 matches the expected manual count and the `and` operation is unaffected. check.sh passes cleanly.\n\n**Change:** in `bench.py`, the `find` mode now ASCII-case-folds both `data` and `pat` (via `bytes.maketrans` mapping only `a-z`\u2192`A-Z`) before splitting/counting, so matching is case-insensitive for letters while all other bytes still require an exact match; line counting semantics (counted at most once per line) are unchanged.",
+ "context_tokens": 240415,
+ "tool_calls": 8,
+ "tools": {
+  "Bash": 3,
+  "Read": 4,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/bench.py",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/check.sh",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/fixtures/store.txt"
+ ],
+ "bash": [
+  "find . -maxdepth 3 -type f | grep -v '^\\./\\.git' | sort",
+  "sh check.sh",
+  "sh check.sh"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "bench.py"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

@@ -1,0 +1,15 @@
+ bench.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/bench.py b/bench.py
+index fef99d9..3d9acf4 100644
+--- a/bench.py
++++ b/bench.py
+@@ -20,6 +20,6 @@ else:
+         while i<na and j<nb:
+             x=LA[i]; y=LB[j]
+             if x==y: c+=1; i+=1; j+=1
+-            elif x<y: j+=1
+-            else: i+=1
++            elif x<y: i+=1
++            else: j+=1
+         print(f"and.2ptr  iter{it} {(t()-s)*1e3:7.0f} ms  common={c}")

@@ -1,0 +1,72 @@
+ README.md |  6 ++++--
+ bench.rs  | 19 +++++++++++++++++++
+ check.sh  |  1 +
+ 3 files changed, 24 insertions(+), 2 deletions(-)
+diff --git a/README.md b/README.md
+index 772104c..edb8ecc 100644
+--- a/README.md
++++ b/README.md
+@@ -1,13 +1,15 @@
+ # bench
+ 
+-A two-operation benchmark over an index of plain-text files.
++A three-operation benchmark over an index of plain-text files.
+ 
+     ./bench find <store> <substr>    count the lines of <store> that contain <substr>
+     ./bench and  <listA> <listB>     count the ids common to two posting lists
+                                    (one integer id per line, ascending, no duplicates)
++    ./bench diff <listA> <listB>     count the ids in <listA> absent from <listB>
++                                   (same posting-list format)
+ 
+ Each operation prints one row per timed iteration.
+ 
+ Build: `rustc -O bench.rs -o bench`
+ 
+-`sh check.sh` builds the program and runs both operations on the files in `fixtures/`.
++`sh check.sh` builds the program and runs all three operations on the files in `fixtures/`.
+diff --git a/bench.rs b/bench.rs
+index 02207f1..78b7d05 100644
+--- a/bench.rs
++++ b/bench.rs
+@@ -50,6 +50,17 @@ fn intersect(a: &[i64], b: &[i64]) -> usize {
+     c
+ }
+ 
++fn diff(a: &[i64], b: &[i64]) -> usize {
++    let (mut i, mut j, mut c) = (0usize, 0usize, 0usize);
++    while i < a.len() && j < b.len() {
++        let (x, y) = (a[i], b[j]);
++        if x == y { i += 1; j += 1; }
++        else if x < y { c += 1; i += 1; }
++        else { j += 1; }
++    }
++    c + (a.len() - i)
++}
++
+ fn main() {
+     let a: Vec<String> = env::args().collect();
+     let k = 7;
+@@ -61,6 +72,14 @@ fn main() {
+             let h = count_lines(&s, pat);
+             println!("find  iter{}  {:5.0} ms  hits={}", it, t.elapsed().as_secs_f64() * 1e3, h);
+         }
++    } else if a[1] == "diff" {
++        let (pa, pb) = (read_postings(&a[2]), read_postings(&a[3]));
++        for it in 0..k {
++            let t = Instant::now();
++            let c = diff(&pa, &pb);
++            println!("diff  iter{}  {:6.1} ms  only={} |A|={} |B|={}",
++                     it, t.elapsed().as_secs_f64() * 1e3, c, pa.len(), pb.len());
++        }
+     } else {
+         let (pa, pb) = (read_postings(&a[2]), read_postings(&a[3]));
+         for it in 0..k {
+diff --git a/check.sh b/check.sh
+index a831226..a2dba86 100644
+--- a/check.sh
++++ b/check.sh
+@@ -5,3 +5,4 @@ cd "$(dirname "$0")"
+ rustc -O bench.rs -o bench
+ ./bench find fixtures/store.txt Outputs
+ ./bench and fixtures/a.txt fixtures/b.txt
++./bench diff fixtures/a.txt fixtures/b.txt

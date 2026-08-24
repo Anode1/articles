@@ -1,0 +1,95 @@
+ Bench.java | 23 +++++++++++++++++++++--
+ README.md  |  6 ++++--
+ check.sh   |  3 ++-
+ 3 files changed, 27 insertions(+), 5 deletions(-)
+diff --git a/Bench.java b/Bench.java
+index 5a736dd..ee4aec7 100644
+--- a/Bench.java
++++ b/Bench.java
+@@ -1,9 +1,10 @@
+ import java.nio.file.*;
+ import java.nio.charset.StandardCharsets;
+ 
+-// Deliberately terse. Two ops the C engine does:
++// Deliberately terse. Three ops the C engine does:
+ //   find <store> <substr>   full scan of the store, count records that match
+ //   and  <post1> <post2>    intersect two sorted posting lists (the AND of keys)
++//   diff <post1> <post2>    ids in post1 but not in post2
+ // Byte-level, no per-line String allocation, whole file pulled from page cache
+ // (warm) so we measure CPU+RAM like C's warm scan, not the disk.
+ public class Bench {
+@@ -18,7 +19,7 @@ public class Bench {
+         int hits = countMatchingLines(s, p);
+         System.out.printf("find  iter%d  %5.0f ms  hits=%d%n", it, (System.nanoTime()-t0)/1e6, hits);
+       }
+-    } else { // and
++    } else if (a[0].equals("and")) {
+       long[] A = readPostings(a[1]), B = readPostings(a[2]);
+       for (int it = 0; it < K; it++) {
+         long t0 = System.nanoTime();
+@@ -26,6 +27,14 @@ public class Bench {
+         System.out.printf("and   iter%d  %6.1f ms  common=%d  |A|=%d |B|=%d%n",
+                           it, (System.nanoTime()-t0)/1e6, c, A.length, B.length);
+       }
++    } else { // diff
++      long[] A = readPostings(a[1]), B = readPostings(a[2]);
++      for (int it = 0; it < K; it++) {
++        long t0 = System.nanoTime();
++        int c = diff(A, B);
++        System.out.printf("diff  iter%d  %6.1f ms  only=%d  |A|=%d |B|=%d%n",
++                          it, (System.nanoTime()-t0)/1e6, c, A.length, B.length);
++      }
+     }
+   }
+ 
+@@ -63,4 +72,14 @@ public class Bench {
+     }
+     return c;
+   }
++
++  static int diff(long[] A, long[] B) {
++    int i=0,j=0,c=0;
++    while (i<A.length && j<B.length) {
++      long x=A[i], y=B[j];
++      if (x==y){i++;j++;} else if (x<y){c++;i++;} else j++;
++    }
++    c += A.length - i;
++    return c;
++  }
+ }
+diff --git a/README.md b/README.md
+index 3b4d5c7..1ad1b21 100644
+--- a/README.md
++++ b/README.md
+@@ -1,13 +1,15 @@
+ # bench
+ 
+-A two-operation benchmark over an index of plain-text files.
++A three-operation benchmark over an index of plain-text files.
+ 
+     java -cp . Bench find <store> <substr>    count the lines of <store> that contain <substr>
+     java -cp . Bench and  <listA> <listB>     count the ids common to two posting lists
+                                    (one integer id per line, ascending, no duplicates)
++    java -cp . Bench diff <listA> <listB>     count the ids in <listA> but not in <listB>
++                                   (same posting-list format as `and`)
+ 
+ Each operation prints one row per timed iteration.
+ 
+ Build: `javac -d . *.java`
+ 
+-`sh check.sh` builds the program and runs both operations on the files in `fixtures/`.
++`sh check.sh` builds the program and runs all three operations on the files in `fixtures/`.
+diff --git a/check.sh b/check.sh
+index 236bf31..b063088 100644
+--- a/check.sh
++++ b/check.sh
+@@ -1,7 +1,8 @@
+ #!/bin/sh
+-# builds, then runs both operations on the visible fixtures
++# builds, then runs all three operations on the visible fixtures
+ set -e
+ cd "$(dirname "$0")"
+ javac -d . *.java
+ java -cp . Bench find fixtures/store.txt Outputs
+ java -cp . Bench and fixtures/a.txt fixtures/b.txt
++java -cp . Bench diff fixtures/a.txt fixtures/b.txt

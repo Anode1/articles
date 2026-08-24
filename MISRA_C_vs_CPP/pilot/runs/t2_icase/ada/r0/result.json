@@ -1,0 +1,50 @@
+{
+ "task": "t2_icase",
+ "lang": "ada",
+ "rep": 0,
+ "model": "claude-sonnet-5",
+ "wall_s": 26.1,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 8,
+ "cost_usd": 0.1140026,
+ "duration_api_ms": 25256,
+ "stop": "success",
+ "input_tokens": 12,
+ "cache_read": 192813,
+ "cache_create": 12924,
+ "output_tokens": 2258,
+ "final_text": "All variants (`outputs`, `OUTPUTS`, `OuTpUts`) match the same 11 lines as `grep -ic`, matching the case-sensitive original's 11-hit count on `Outputs` too \u2014 confirming the case-insensitive scan works correctly and `check.sh` passes.",
+ "context_tokens": 205749,
+ "tool_calls": 7,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r0/work/bench.adb",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r0/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r0/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | sort",
+  "sh check.sh",
+  "grep -ic \"outputs\" fixtures/store.txt; ./bench find fixtures/store.txt outputs 2>&1 | head -1; ./bench find fixtures/store.txt OUTPUTS 2>&1 | head -1; ./bench find fixtures/store.txt OuTpUts 2>&1 | head -1"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "bench.adb"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

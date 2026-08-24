@@ -1,0 +1,22 @@
+ bench.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+diff --git a/bench.py b/bench.py
+index 3d9acf4..513ed8c 100644
+--- a/bench.py
++++ b/bench.py
+@@ -5,11 +5,12 @@ mode=sys.argv[1]; K=5
+ def t(): return time.perf_counter()
+ if mode=="find":
+     data=slurp(sys.argv[2]); pat=sys.argv[3].encode()
+-    lines=data.split(b'\n')                         # pre-split (the "parse"), outside timing
++    data_ci=data.lower(); pat_ci=pat.lower()         # ASCII-letters-only case fold, other bytes untouched
++    lines=data_ci.split(b'\n')                       # pre-split (the "parse"), outside timing
+     for it in range(K):                             # idiomatic: C-backed substring count
+-        s=t(); h=data.count(pat); print(f"find.count iter{it} {(t()-s)*1e3:7.0f} ms  hits={h}")
++        s=t(); h=data_ci.count(pat_ci); print(f"find.count iter{it} {(t()-s)*1e3:7.0f} ms  hits={h}")
+     for it in range(3):                             # explicit loop, same idea as C/Java
+-        s=t(); h=sum(1 for ln in lines if pat in ln); print(f"find.loop  iter{it} {(t()-s)*1e3:7.0f} ms  hits={h}")
++        s=t(); h=sum(1 for ln in lines if pat_ci in ln); print(f"find.loop  iter{it} {(t()-s)*1e3:7.0f} ms  hits={h}")
+ else:
+     A=set(slurp(sys.argv[2]).split()); B=set(slurp(sys.argv[3]).split())   # sets, outside timing
+     LA=list(map(int,slurp(sys.argv[2]).split())); LB=list(map(int,slurp(sys.argv[3]).split()))  # sorted int lists

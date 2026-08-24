@@ -1,0 +1,51 @@
+{
+ "task": "t2_icase",
+ "lang": "python",
+ "rep": 0,
+ "model": "claude-sonnet-5",
+ "wall_s": 46.5,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 9,
+ "cost_usd": 0.1359034,
+ "duration_api_ms": 45587,
+ "stop": "success",
+ "input_tokens": 14,
+ "cache_read": 226847,
+ "cache_create": 13229,
+ "output_tokens": 3645,
+ "final_text": "Done. The scan in `bench.py` now ASCII case-folds both the store data and the search pattern (A\u2013Z \u2192 a\u2013z, all other bytes untouched) once outside the timed loops, so `find` matches case-insensitively while non-letter bytes still require exact matches and each line is still counted at most once. Verified with `sh check.sh` \u2014 `hits=11` correctly picks up all case variants of \"Outputs\" in `fixtures/store.txt`, and the `and` operation output is unchanged.",
+ "context_tokens": 240090,
+ "tool_calls": 8,
+ "tools": {
+  "Bash": 4,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r0/work/bench.py",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r0/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r0/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | head -100",
+  "sh check.sh",
+  "grep -ni \"outputs\" fixtures/store.txt",
+  "git diff"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "bench.py"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

@@ -1,0 +1,20 @@
+ bench.py | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+diff --git a/bench.py b/bench.py
+index 3d9acf4..e4013d8 100644
+--- a/bench.py
++++ b/bench.py
+@@ -23,3 +23,13 @@ else:
+             elif x<y: i+=1
+             else: j+=1
+         print(f"and.2ptr  iter{it} {(t()-s)*1e3:7.0f} ms  common={c}")
++    first=last=None
++    i=j=0; na=len(LA); nb=len(LB)
++    while i<na and j<nb:
++        x=LA[i]; y=LB[j]
++        if x==y:
++            if first is None: first=x
++            last=x; i+=1; j+=1
++        elif x<y: i+=1
++        else: j+=1
++    print(f"first={first if first is not None else 'none'} last={last if last is not None else 'none'}")

@@ -1,0 +1,33 @@
+ Bench.java | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+diff --git a/Bench.java b/Bench.java
+index 5a736dd..6d4e9b4 100644
+--- a/Bench.java
++++ b/Bench.java
+@@ -30,12 +30,12 @@ public class Bench {
+   }
+ 
+   static int countMatchingLines(byte[] s, byte[] p) {
+-    int hits = 0, pl = p.length, n = s.length; boolean line = false; byte p0 = p[0];
++    int hits = 0, pl = p.length, n = s.length; boolean line = false; byte p0 = lower(p[0]);
+     for (int i = 0; i < n; i++) {
+       byte b = s[i];
+       if (b == '\n') { if (line) hits++; line = false; }
+-      else if (!line && b == p0 && i + pl <= n) {
+-        int j = 1; while (j < pl && s[i+j] == p[j]) j++;
++      else if (!line && lower(b) == p0 && i + pl <= n) {
++        int j = 1; while (j < pl && lower(s[i+j]) == lower(p[j])) j++;
+         if (j == pl) line = true;
+       }
+     }
+@@ -43,6 +43,10 @@ public class Bench {
+     return hits;
+   }
+ 
++  static byte lower(byte b) {
++    return (b >= 'A' && b <= 'Z') ? (byte)(b + 32) : b;
++  }
++
+   static long[] readPostings(String path) throws Exception {
+     byte[] d = Files.readAllBytes(Paths.get(path));
+     int lines = 0; for (byte b : d) if (b == '\n') lines++;

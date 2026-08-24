@@ -1,0 +1,51 @@
+ bench.rs | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+diff --git a/bench.rs b/bench.rs
+index 02207f1..53d7953 100644
+--- a/bench.rs
++++ b/bench.rs
+@@ -39,15 +39,21 @@ fn read_postings(path: &str) -> Vec<i64> {
+     out // idx posting lists are already sorted ascending
+ }
+ 
+-fn intersect(a: &[i64], b: &[i64]) -> usize {
++fn intersect(a: &[i64], b: &[i64]) -> (usize, Option<i64>, Option<i64>) {
+     let (mut i, mut j, mut c) = (0usize, 0usize, 0usize);
++    let (mut first, mut last) = (None, None);
+     while i < a.len() && j < b.len() {
+         let (x, y) = (a[i], b[j]);
+-        if x == y { c += 1; i += 1; j += 1; }
++        if x == y {
++            c += 1;
++            if first.is_none() { first = Some(x); }
++            last = Some(x);
++            i += 1; j += 1;
++        }
+         else if x < y { i += 1; }
+         else { j += 1; }
+     }
+-    c
++    (c, first, last)
+ }
+ 
+ fn main() {
+@@ -63,11 +69,18 @@ fn main() {
+         }
+     } else {
+         let (pa, pb) = (read_postings(&a[2]), read_postings(&a[3]));
++        let (mut first, mut last) = (None, None);
+         for it in 0..k {
+             let t = Instant::now();
+-            let c = intersect(&pa, &pb);
++            let (c, f, l) = intersect(&pa, &pb);
+             println!("and   iter{}  {:6.1} ms  common={} |A|={} |B|={}",
+                      it, t.elapsed().as_secs_f64() * 1e3, c, pa.len(), pb.len());
++            first = f;
++            last = l;
++        }
++        match (first, last) {
++            (Some(f), Some(l)) => println!("first={} last={}", f, l),
++            _ => println!("first=none last=none"),
+         }
+     }
+ }

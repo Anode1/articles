@@ -1,0 +1,525 @@
+﻿When Abstraction Becomes Indirection:
+Measuring Programming-Language Complexity for AI Software Agents
+Abstract
+Programming-language abstractions have traditionally been designed primarily around human cognitive limitations. Classes, inheritance, generic programming, frameworks, and other abstraction mechanisms allow programmers to manage complexity by hiding implementation details and reducing the amount of information that must be considered simultaneously.
+AI coding agents change this relationship.
+Large language models already operate by processing large quantities of symbolic information. Consequently, abstractions that reduce the amount of detail visible to a human programmer may introduce additional semantic indirection that an AI system must reconstruct before it can safely modify a program.
+This work investigates whether source-code compactness and AI comprehension complexity are distinct quantities. We compare a restricted, explicit C programming style with modern C++ implementations of behaviorally equivalent software components. The C style is derived from the ais project and emphasizes MISRA-oriented programming, explicit state, bounded data structures, minimal preprocessing, limited pointer use, small modules, explicit control flow, and local documentation of invariants.
+A preliminary source-level comparison of an ais subsystem found that the C++ implementation was approximately 26% smaller in lexical token count than the corresponding C implementation. This result immediately demonstrates that source-token count alone cannot establish AI friendliness.
+The proposed primary experiment instead measures the amount of context and repository exploration required by AI coding agents to correctly understand, modify, and debug equivalent implementations. Measurements include context tokens, files inspected, tool calls, iterations, compilation failures, regression rate, and hidden-test correctness.
+The central hypothesis is not that C is intrinsically superior to C++, but that explicitness and reduced semantic indirection may reduce AI maintenance cost even when they increase source-level verbosity.
+The results of the agent experiment are intentionally left open until the experiment is executed.
+1. Introduction
+For decades, programming-language evolution has followed a broadly human-centered trajectory.
+Assembly language exposes machine operations directly. C introduces higher-level data structures and procedures. C++ adds classes, encapsulation, inheritance, generic programming, RAII, operator overloading, templates, and increasingly sophisticated type-system facilities. Higher-level languages and frameworks continue the same trend.
+The motivation is clear: humans have limited working memory.
+A programmer cannot simultaneously reason about every memory address, data representation, control-flow path, resource lifetime, and implementation detail in a large software system. Abstraction allows irrelevant detail to be hidden.
+A class can hide representation.
+An interface can hide implementation.
+A generic container can hide memory management.
+A framework can hide control flow.
+These abstractions are extraordinarily valuable to humans.
+AI coding agents create a different environment.
+A large language model does not have the same cognitive bottleneck as a human programmer. It can process large textual contexts, retrieve source fragments, and repeatedly traverse a repository. Its limitation is not simply the amount of detail it can theoretically process. Rather, its practical limitations include context-window cost, retrieval cost, attention dilution, tool-call cost, uncertainty about hidden relationships, and the number of semantic dependencies that must be resolved before an action can safely be taken.
+This raises a question:
+Do abstractions that reduce human cognitive load necessarily reduce AI reasoning cost?
+The answer is not obvious.
+A short C++ statement may encode significantly more semantic behavior than a C statement. Conversely, the C++ statement may eliminate large amounts of repetitive source code.
+Therefore, raw source-code size is not sufficient to answer the question.
+This study proposes to distinguish between:
+    1. source representation complexity, and 
+    2. AI comprehension and maintenance complexity. 
+The distinction is central to the experiment.
+2. Research Question
+The primary research question is:
+For equivalent software behavior, does a programming style emphasizing explicit state and control flow require less AI-agent context and repository exploration to correctly maintain than a more abstract modern C++ implementation?
+Secondary questions include:
+    1. Does lexical source size correlate with AI maintenance cost? 
+    2. Does semantic indirection correlate better with AI maintenance cost than LOC or token count? 
+    3. Does C++ abstraction reduce or increase the number of files and declarations an AI must inspect? 
+    4. Does improved code retrieval eliminate differences caused by programming-language abstraction? 
+    5. Which C++ language features contribute most strongly to AI exploration cost? 
+    6. Does the effect increase with project size and task complexity? 
+3. Hypotheses
+The experiment should be capable of falsifying the original intuition rather than being designed to confirm it.
+H1 — Explicitness hypothesis
+A restricted, explicit C implementation will require fewer AI-agent exploration steps and less context to perform equivalent maintenance tasks than idiomatic modern C++.
+H2 — Source-size independence hypothesis
+AI maintenance cost will not be strongly predicted by lexical source size.
+A C++ implementation may contain fewer source tokens while requiring more contextual reasoning.
+H3 — Semantic-indirection hypothesis
+Semantic indirection will be a stronger predictor of AI maintenance cost than LOC or lexical token count.
+H4 — Retrieval interaction hypothesis
+High-quality repository retrieval will reduce the absolute difference between C and C++, but may not eliminate the effect of semantic indirection.
+H5 — Feature hypothesis
+Specific C++ mechanisms such as inheritance, templates, overloaded operators, implicit conversions, RAII, and framework-level abstractions will contribute disproportionately to exploration cost.
+4. The ais Case Study
+The experimental starting point is the ais project.
+ais is an associative-memory/indexing engine implemented primarily in C. The project deliberately uses a restricted programming style influenced by MISRA-oriented principles.
+The relevant characteristics include:
+    • explicit data structures 
+    • small functions 
+    • explicit error propagation 
+    • bounded buffers 
+    • minimal preprocessing 
+    • no application-level macro programming 
+    • limited pointer use 
+    • no inheritance 
+    • no templates 
+    • no operator overloading 
+    • no exception-based control flow 
+    • explicit resource management 
+    • relatively shallow module relationships 
+    • comments documenting important invariants 
+The project therefore provides a useful real-world example of a programming style in which implementation details remain visible rather than being systematically hidden behind abstraction layers.
+The goal is not to claim that all C code has these properties.
+Nor is it to claim that all C++ code is highly abstract.
+Instead, the experiment isolates a particular design choice:
+explicitness versus abstraction and semantic indirection.
+5. Benchmark Subsystem
+The initial benchmark uses the key and posting components of ais.
+The subsystem contains:
+    • key encoding 
+    • posting storage 
+    • posting insertion 
+    • duplicate handling 
+    • ordered insertion 
+    • streaming access 
+    • temporary-file rewriting 
+    • error propagation 
+This is sufficiently small to permit a faithful independent implementation while being sufficiently realistic to contain meaningful state and cross-function behavior.
+The C implementation exposes operations such as:
+    • key_encode 
+    • post_open 
+    • post_next 
+    • post_close 
+    • post_insert 
+The posting stream state is represented explicitly rather than through an object hierarchy.
+This is important to the experiment because the question is not whether C can implement the same behavior. It clearly can.
+The question is whether an AI agent can reason about that behavior more efficiently when the relationships are explicit.
+6. Equivalent C++ Implementation
+A corresponding C++17 implementation is constructed to provide identical externally observable behavior.
+The C++ implementation is not intentionally made poor.
+It is allowed to use normal modern C++ mechanisms, including:
+    • std::string 
+    • std::filesystem 
+    • streams 
+    • RAII 
+    • classes 
+    • constructors and destructors 
+    • standard-library containers where appropriate 
+The purpose is to compare a realistic C++ implementation with the explicit C implementation rather than constructing a deliberately inferior C++ straw man.
+A second C++ variant may subsequently be introduced using substantially more abstraction, including interfaces, inheritance, generic components, and additional indirection.
+7. Preliminary Source-Level Result
+The first source-level comparison produces an important result.
+For the benchmark fixture:
+Metric                  C          C++17
+Physical LOC            292        218
+Nonblank LOC             282        214
+Lexical tokens          1,863      1,369
+Identifiers              804        624
+The C++ implementation therefore contains approximately:
+    • 25% fewer physical lines, 
+    • 24% fewer nonblank lines, 
+    • 26.5% fewer lexical tokens. 
+This result rejects a simplistic version of the original hypothesis:
+"C is more token-efficient than C++."
+It is not.
+At least for this implementation, C++ produces a significantly more compact textual representation.
+This is precisely why source token count is not an adequate measure of AI programming complexity.
+8. Why Source Tokens May Be Misleading
+Consider a simplified operation such as:
+x += value;
+In C++, the model may need to determine:
+    • the type of x 
+    • whether operator+= is overloaded 
+    • whether inheritance is involved 
+    • whether an implicit conversion occurs 
+    • whether x is a proxy object 
+    • whether the operation invokes a library implementation 
+    • whether templates affect the selected implementation 
+In ordinary C, the same expression generally has a much smaller semantic search space.
+The important distinction is therefore:
+source representation
+        !=
+semantic representation
+A language can compress source code while increasing the number of relationships that must be resolved to understand its behavior.
+9. Semantic Indirection
+We propose measuring a concept called Semantic Indirection Distance (SID).
+SID is not intended to be a universal language-complexity metric. It is an experimental measure of how many intermediate declarations, types, implementations, or modules must be traversed to establish the behavior relevant to a requested change.
+For example:
+C:
+
+operation
+   |
+implementation
+   |
+result
+may require fewer resolution steps than:
+C++:
+
+method
+   |
+class
+   |
+base class
+   |
+virtual interface
+   |
+implementation
+   |
+template
+   |
+library type
+   |
+runtime behavior
+A first implementation of SID can count:
+    • declaration hops 
+    • file transitions 
+    • type-resolution hops 
+    • call-graph depth 
+    • inheritance edges 
+    • virtual dispatch possibilities 
+    • template relationships 
+    • callback edges 
+    • indirect resource ownership 
+The final metric should be refined empirically.
+10. AI Maintenance Benchmark
+The core experiment should measure AI agents performing actual software maintenance.
+Each language implementation receives the same behavioral task.
+The agent is not told where the relevant implementation is located.
+Tasks include:
+Local modifications
+    1. Add a key-validation rule. 
+    2. Change key encoding behavior. 
+    3. Change duplicate insertion behavior. 
+    4. Add a posting-count operation. 
+Cross-module modifications
+    5. Change path layout. 
+    6. Change posting ordering behavior. 
+    7. Modify posting-stream semantics. 
+    8. Change error propagation across modules. 
+Debugging
+    9. Repair a duplicate-handling bug. 
+    10. Repair a failure-path/resource-management bug. 
+Additional tasks should be generated as the experiment progresses.
+11. Task Construction
+Tasks must satisfy several conditions.
+They must:
+    • have objectively testable behavior 
+    • require actual source comprehension 
+    • avoid dependence on undocumented model knowledge 
+    • be independent enough to provide statistical observations 
+    • include hidden tests 
+    • avoid giving the agent the location of the change 
+The benchmark should contain both easy and difficult tasks.
+A task that can be solved by a simple textual replacement is not a useful measure of semantic understanding.
+12. Hidden Tests
+Every maintenance task should have tests unavailable to the agent.
+For example, key handling can include:
+    • empty keys 
+    • leading dots 
+    • path separators 
+    • whitespace 
+    • control characters 
+    • unusual Unicode 
+    • maximum-length input 
+Posting operations can include:
+    • empty postings 
+    • duplicate IDs 
+    • ordered insertion 
+    • out-of-order insertion 
+    • insertion at beginning 
+    • insertion at middle 
+    • insertion at end 
+    • deletion of the only element 
+    • deletion of the first element 
+    • deletion of the last element 
+    • nonexistent entries 
+    • simulated I/O failure 
+The hidden tests prevent an agent from optimizing only for visible examples.
+13. Measurements
+The experiment records four major classes of measurements.
+Source measurements
+    • physical LOC 
+    • nonblank LOC 
+    • lexical tokens 
+    • identifiers 
+    • functions/methods 
+    • types 
+    • classes 
+    • files 
+    • dependency edges 
+    • call-graph depth 
+AI exploration measurements
+    • input/context tokens 
+    • output tokens 
+    • files inspected 
+    • lines inspected 
+    • tool calls 
+    • search operations 
+    • compilation iterations 
+    • test iterations 
+Outcome measurements
+    • task success 
+    • hidden-test success 
+    • compilation failures 
+    • regression count 
+    • unrelated modifications 
+    • final correctness 
+Time measurements
+    • wall-clock duration 
+    • model execution time 
+    • time spent in tool operations 
+14. Retrieval as an Experimental Variable
+The ais project provides a second dimension to the experiment.
+AI agents can be tested with:
+    1. ordinary repository exploration 
+    2. associative retrieval through ais 
+This produces a factorial experiment:
+Implementation          Normal retrieval       AIS retrieval
+Restricted C                  ?                     ?
+Conventional C                ?                     ?
+Simple C++                    ?                     ?
+Modern C++                    ?                     ?
+Abstract C++                  ?                     ?
+This allows a more interesting question:
+Does improved retrieval compensate for semantic indirection?
+If retrieval eliminates the difference, then semantic indirection may primarily be a retrieval problem.
+If retrieval improves both implementations but the relative difference remains, the result supports the hypothesis that representation itself affects AI reasoning cost.
+15. Experimental Design
+The initial target is:
+    • 20 or more independent maintenance tasks 
+    • 5 or more repetitions per task 
+    • at least two language implementations 
+    • multiple difficulty levels 
+For two implementations and 20 tasks:
+20 tasks × 5 repetitions × 2 implementations
+= 200 agent runs
+A larger experiment can include multiple models.
+The model identity, version, temperature, tool configuration, context window, and system instructions must be recorded.
+No result should be reported without these parameters.
+16. Statistical Analysis
+The primary outcome should be AI maintenance context cost.
+Because individual tasks may have highly non-normal distributions, non-parametric methods such as the Mann–Whitney U test may be appropriate for initial comparisons.
+Effect sizes should accompany significance tests.
+Confidence intervals should be reported.
+Where repeated observations are available for the same task, paired or mixed-effects approaches should be considered.
+The experiment should report both:
+absolute difference
+and:
+relative difference
+For example:
+C++ / C context ratio = 1.42
+would mean that the C++ implementation required 42% more AI context under the measured conditions.
+17. Avoiding Confirmation Bias
+The experiment must not assume that C will win.
+Possible outcomes include:
+Outcome A
+C has fewer source tokens and lower AI context cost.
+This would support the strongest version of the hypothesis.
+Outcome B
+C has more source tokens but lower AI context cost.
+This would be particularly interesting and would support the semantic-indirection hypothesis.
+Outcome C
+C++ has fewer source tokens and lower AI context cost.
+The hypothesis would be weakened or rejected.
+Outcome D
+There is no meaningful difference.
+The conclusion would be that language-level abstraction may matter less than other factors.
+Outcome E
+The result depends strongly on task type.
+This may be the most realistic outcome.
+18. Expected Relationship Between Metrics
+A central analysis should compare:
+LOC
+lexical tokens
+semantic indirection
+AI context tokens
+If lexical tokens strongly predict AI context cost, then traditional source-size measures may remain useful.
+If semantic indirection predicts AI context cost more strongly, then conventional source metrics are inadequate for AI-oriented software engineering.
+This distinction is one of the most important objectives of the experiment.
+19. Why C May Be Different for AI
+The argument is not that C is inherently simpler in every respect.
+C often requires more explicit code.
+The argument is that explicitness can reduce the number of alternative interpretations available to the model.
+For example:
+explicit data
+     |
+explicit function
+     |
+explicit state transition
+     |
+explicit result
+provides a relatively direct semantic path.
+By contrast:
+object
+  |
+method
+  |
+interface
+  |
+implementation
+  |
+template
+  |
+library
+  |
+runtime behavior
+requires additional reconstruction.
+Humans may prefer the second representation because it hides details.
+An AI system may not obtain the same benefit from hiding those details.
+20. Abstraction Is Not the Enemy
+The experiment should not conclude that abstraction is bad.
+Abstraction performs several different functions.
+Some abstractions:
+    • eliminate duplication 
+    • enforce invariants 
+    • prevent bugs 
+    • constrain invalid states 
+    • provide reusable algorithms 
+These may benefit both humans and AI.
+Other abstractions primarily:
+    • hide implementation details 
+    • reduce human working-memory requirements 
+    • provide conceptual organization 
+These may have a different cost for AI agents.
+The important distinction is therefore:
+abstraction that encodes useful semantics
+versus:
+abstraction that merely hides semantics.
+This distinction should be examined experimentally.
+21. Implications for AI-Oriented Programming
+If the hypothesis is supported, programming practices may evolve.
+AI-oriented code could favor:
+    • explicit state transitions 
+    • small functions 
+    • shallow call graphs 
+    • predictable naming 
+    • bounded data structures 
+    • local invariants 
+    • minimal implicit behavior 
+    • minimal preprocessing 
+    • limited language-feature diversity 
+    • explicit ownership 
+    • explicit error paths 
+    • machine-readable specifications near implementation 
+This does not imply returning to assembly language.
+The objective would instead be:
+maximize semantic transparency per unit of AI context.
+22. A Possible AI-Oriented Complexity Metric
+The experiment may lead to a metric based on:
+AI Maintenance Cost
+=
+context consumed
++
+repository exploration
++
+tool calls
++
+iterations
++
+failure cost
+normalized by task complexity.
+A more refined metric could combine:
+Semantic Indirection
+Dependency Distance
+Context Consumption
+Modification Difficulty
+This could provide a new way to evaluate programming languages and software architectures in the age of AI coding agents.
+23. Relation to Retrieval
+An important observation from the ais project is that source retrieval itself can be dramatically improved by associative indexing.
+The project was motivated in part by reducing the amount of repository content an AI must retrieve before answering a question.
+This suggests two independent optimization dimensions:
+program representation
+         +
+information retrieval
+A system may therefore become AI-efficient in two different ways:
+    1. make the code easier to reason about; 
+    2. retrieve less but more relevant information. 
+The combination may be multiplicative rather than additive.
+24. Threats to Validity
+Language bias
+The benchmark begins with a C project.
+This may favor the C representation.
+A broader benchmark should eventually include projects originally written in C++ and other languages.
+Author bias
+The C style is derived from the author's own design principles.
+A second independent C implementation should reduce this concern.
+C++ style bias
+Different C++ programmers may produce significantly different designs.
+The benchmark should therefore include multiple C++ styles.
+Model bias
+Different AI models may have different familiarity with C and C++.
+The experiment should use multiple models where possible.
+Task bias
+Tasks may accidentally favor one language.
+Tasks should therefore be diverse and behaviorally specified.
+Benchmark size
+A small subsystem cannot establish conclusions about all software.
+The first benchmark should therefore be considered a controlled case study.
+Tokenizer dependence
+Different AI models use different tokenizers.
+Token counts must therefore be reported per model rather than treated as universal.
+25. Preliminary Observation
+The first source-level measurement already produced an unexpected result.
+The C++ implementation is substantially shorter in lexical terms than the C implementation.
+This demonstrates why the article should not be based on the intuitive argument:
+"C is cleaner, therefore C uses fewer tokens."
+The more defensible claim is:
+"C may expose more source-level detail while exposing fewer semantic relationships."
+Whether this actually benefits AI agents is an empirical question.
+26. Future Work
+The benchmark should eventually expand from the initial key and post subsystem to larger components.
+Candidate scales include:
+    • approximately 5,000 LOC 
+    • approximately 20,000 LOC 
+    • approximately 50,000 LOC 
+    • approximately 100,000 LOC 
+At larger scales, repository navigation is likely to dominate local source comprehension.
+The experiment should therefore investigate whether the effect grows with project size.
+A particularly valuable experiment would compare:
+small project
+medium project
+large project
+against:
+C semantic indirection
+C++ semantic indirection
+to determine whether abstraction cost becomes increasingly significant as the repository exceeds the agent's practical working context.
+27. Conclusion
+AI coding agents change the economics of software abstraction.
+Traditional software engineering has largely optimized source code for human cognition. Humans benefit enormously from abstraction because abstraction hides details they do not want to keep in working memory.
+AI systems operate differently.
+They can process and retrieve large amounts of symbolic information, but they must reconstruct relationships between declarations, implementations, types, modules, libraries, and runtime behavior.
+This creates a potential inversion:
+An abstraction that reduces the information a human must consciously hold may increase the number of relationships an AI must reconstruct.
+The preliminary comparison of the ais subsystem demonstrates that this question cannot be reduced to source-code size. The C++ implementation used approximately 26% fewer lexical tokens than the C implementation.
+If subsequent agent experiments demonstrate that the C implementation nevertheless requires less context, fewer repository explorations, or fewer corrective iterations, this would provide evidence for a fundamental distinction between textual compression and semantic compression.
+If the C++ implementation performs equally well or better, the proposed hypothesis will be weakened, and the experiment will help identify which forms of abstraction are genuinely useful to AI systems.
+Either outcome is valuable.
+The important question for future programming-language design may therefore no longer be:
+How much complexity can we hide from the programmer?
+but:
+How much semantic complexity can an AI agent understand without having to rediscover it?
+As AI systems become active participants in software development, programming languages and coding conventions may increasingly need to optimize not only for human readability and machine execution, but also for machine-assisted comprehension.
+Reproducibility
+The benchmark should be released with:
+    • source implementations 
+    • build scripts 
+    • behavioral tests 
+    • hidden tests 
+    • maintenance-task definitions 
+    • agent prompts 
+    • raw agent traces 
+    • token counts 
+    • tool-call logs 
+    • statistical-analysis scripts 
+    • exact model/version information 
+No experimental result should be considered final until it can be reproduced from the released benchmark.
+Status of This Draft
+This document is a reconstructed research article based on the benchmark design and preliminary measurements established during the development of the experiment.
+The source-level C/C++ measurements reported above are preliminary.
+The AI-agent maintenance measurements are intentionally not reported here because they have not yet been executed under controlled experimental conditions.
+Consequently, this document does not claim that C is superior to C++ for AI programming.
+It defines a falsifiable experiment to determine whether explicitness and reduced semantic indirection provide a measurable advantage to AI software agents.
+

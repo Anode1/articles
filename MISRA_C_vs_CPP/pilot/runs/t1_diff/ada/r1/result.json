@@ -1,0 +1,56 @@
+{
+ "task": "t1_diff",
+ "lang": "ada",
+ "rep": 1,
+ "model": "claude-sonnet-5",
+ "wall_s": 48.3,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 12,
+ "cost_usd": 0.17237080000000002,
+ "duration_api_ms": 47363,
+ "stop": "success",
+ "input_tokens": 18,
+ "cache_read": 308884,
+ "cache_create": 15988,
+ "output_tokens": 4545,
+ "final_text": "Build and check.sh pass. `diff iter N ... only=5` rows appear correctly (a.txt has 9 ids, 4 shared with b.txt per the `and` result, leaving 5 only-in-a, which matches).\n\nSummary: added a `Diff` function (single forward two-pointer pass, no sets/maps) and wired up `./bench diff <listA> <listB>` in bench.adb, updated README.md to document the new operation, and added a `diff` invocation to check.sh. Verified via `sh check.sh`.",
+ "context_tokens": 324890,
+ "tool_calls": 11,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 5
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/bench.adb",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/check.sh",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/README.md"
+ ],
+ "bash": [
+  "find . -maxdepth 3 -type f | grep -v '^./.git' | sort",
+  "cat /tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/fixtures/a.txt; echo ---; cat /tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/fixtures/b.txt",
+  "sh check.sh"
+ ],
+ "edits": 5,
+ "diff_files": [
+  "README.md",
+  "bench.adb",
+  "check.sh"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "and_p1_random": true,
+  "diff_p1_random": true,
+  "and_p2_identical": true,
+  "diff_p2_identical": true,
+  "and_p3_disjoint": true,
+  "diff_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "diff_p4_empty_second": true,
+  "and_p5_last_only": true,
+  "diff_p5_last_only": true
+ }
+}

@@ -1,0 +1,3134 @@
+[
+ {
+  "task": "t2_icase",
+  "lang": "java",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 27.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.102359,
+  "duration_api_ms": 23482,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188515,
+  "cache_create": 11383,
+  "output_tokens": 1796,
+  "final_text": "Confirmed: case-insensitive count (11) now matches `grep -ic`, versus exact-match count (2) previously. The scan in `Bench.java:32-49` now folds ASCII letter case while keeping all other bytes exact-match; `check.sh` passes.",
+  "context_tokens": 199910,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r2/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "sh check.sh",
+   "grep -ic \"outputs\" fixtures/store.txt; grep -c \"Outputs\" fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "Bench.java"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "python",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 24.6,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.0913414,
+  "duration_api_ms": 23974,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 152632,
+  "cache_create": 10752,
+  "output_tokens": 1665,
+  "final_text": "check.sh runs clean and the final `first=3 last=13` line appears after the timed `and` rows, matching the required format. The `find` mode is unaffected.",
+  "context_tokens": 163394,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r2/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r2/work\" && sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "rust",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 30.4,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.106762,
+  "duration_api_ms": 29778,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188900,
+  "cache_create": 11537,
+  "output_tokens": 2166,
+  "final_text": "Confirms the fix: exact-match would give 2 hits, case-insensitive gives 11, matching `grep -ci`. check.sh builds and runs cleanly with hits=11.\n\nChanged `count_lines` in bench.rs to compare bytes case-insensitively for ASCII letters (via `to_ascii_lowercase`) while still requiring exact matches for non-letter bytes; verified against `grep -ci` and `sh check.sh`.",
+  "context_tokens": 200449,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r2/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh",
+   "grep -ci \"outputs\" fixtures/store.txt; grep -c \"Outputs\" fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.rs",
+   "+    a.len() == b.len() && a.iter().zip(b).all("
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "java",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 31.7,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 11,
+  "cost_usd": 0.1219072,
+  "duration_api_ms": 30938,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 190826,
+  "cache_create": 13438,
+  "output_tokens": 2879,
+  "final_text": "9 - 4 common = 5 only in A, which matches. `check.sh` passes with all three operations.\n\nAdded the `diff` operation (single forward pass, no set/map) to Bench.java, and updated README.md and check.sh accordingly. Verified with `sh check.sh` \u2014 output shows `diff` rows with `only=5` (9 - 4 common), consistent with the fixtures.",
+  "context_tokens": 204276,
+  "tool_calls": 10,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 5
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r0/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 5,
+  "diff_files": [
+   "Bench.java",
+   "README.md",
+   "check.sh",
+   "System.out.printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+        System.out.printf(\"diff  iter%d  %6.1f ms  only=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "c",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 29.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.121386,
+  "duration_api_ms": 28775,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 190500,
+  "cache_create": 13144,
+  "output_tokens": 2953,
+  "final_text": "|A|=9, common=4, only=5 checks out (9-4=5). check.sh passes cleanly with the new `diff` operation added to bench.c, README.md, and check.sh.",
+  "context_tokens": 203656,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 3
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r2/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -not -path './.git*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 3,
+  "diff_files": [
+   "README.md",
+   "bench.c",
+   "check.sh",
+   "int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+      int c=diffcount(A,na,B,nb);printf(\"diff  iter%d  %6.1f ms  only=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "ada",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 36.4,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 12,
+  "cost_usd": 0.1432488,
+  "duration_api_ms": 35380,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 234474,
+  "cache_create": 15260,
+  "output_tokens": 3413,
+  "final_text": "`diff` operation added and verified \u2014 `only=5` matches the expected count (a.txt has 1,7,9,12,20 absent from b.txt). `check.sh` passes cleanly for all three operations.",
+  "context_tokens": 249748,
+  "tool_calls": 11,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 5
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r2/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r2/work/check.sh"
+  ],
+  "bash": [
+   "ls -la && find . -maxdepth 3 -type f | grep -v .git",
+   "sh check.sh",
+   "echo \"a.txt:\"; cat fixtures/a.txt; echo \"b.txt:\"; cat fixtures/b.txt; comm -23 fixtures/a.txt fixtures/b.txt | wc -l"
+  ],
+  "edits": 5,
+  "diff_files": [
+   "README.md",
+   "bench.adb",
+   "check.sh"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "ada",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 26.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1140026,
+  "duration_api_ms": 25256,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 192813,
+  "cache_create": 12924,
+  "output_tokens": 2258,
+  "final_text": "All variants (`outputs`, `OUTPUTS`, `OuTpUts`) match the same 11 lines as `grep -ic`, matching the case-sensitive original's 11-hit count on `Outputs` too \u2014 confirming the case-insensitive scan works correctly and `check.sh` passes.",
+  "context_tokens": 205749,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r0/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh",
+   "grep -ic \"outputs\" fixtures/store.txt; ./bench find fixtures/store.txt outputs 2>&1 | head -1; ./bench find fixtures/store.txt OUTPUTS 2>&1 | head -1; ./bench find fixtures/store.txt OuTpUts 2>&1 | head -1"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "python",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 22.7,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.08880160000000001,
+  "duration_api_ms": 21939,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 152893,
+  "cache_create": 10553,
+  "output_tokens": 1486,
+  "final_text": "`and.2ptr` now reports `common=4`, matching the correct intersection count. The bug was swapped pointer advances in the two-pointer intersection loop in `bench.py:23-24` \u2014 `check.sh` confirms both operations now behave correctly.",
+  "context_tokens": 163456,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 5,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r1/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r1/work/fixtures/a.txt",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r1/work/fixtures/b.txt"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "c",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 31.4,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.11630879999999999,
+  "duration_api_ms": 31431,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 223784,
+  "cache_create": 11938,
+  "output_tokens": 2263,
+  "final_text": "Confirmed correct: common ids are {3,5,11,13}, matching `common=4`, `first=3 last=13`. The change adds an `interbounds` helper and a final untimed `first=<id> last=<id>` line after the `and` operation's timed rows, leaving everything else unchanged. `check.sh` builds and runs cleanly.",
+  "context_tokens": 235736,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r2/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r2/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r2/work/README.md"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -type f | grep -v '\\.git/' | sort",
+   "sh check.sh",
+   "echo \"A:\"; cat fixtures/a.txt; echo \"B:\"; cat fixtures/b.txt; echo \"common:\"; comm -12 fixtures/a.txt fixtures/b.txt"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.c",
+   "-      int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+      int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "rust",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 26.6,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.107577,
+  "duration_api_ms": 25758,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 189085,
+  "cache_create": 11759,
+  "output_tokens": 2155,
+  "final_text": "Correctly matches \"outputs\", \"OUTPUTS\", \"OutPuts x\" (3 hits), while skipping \"no match\" and \"Output\" (missing the `s`).\n\nThe scan in bench.rs now does ASCII case-insensitive substring matching (letters fold, all other bytes match exactly), verified with `check.sh` and a manual mixed-case test.",
+  "context_tokens": 200856,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r1/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh",
+   "printf 'outputs\\nOUTPUTS\\nOutPuts x\\nno match\\nOutput\\n' > /tmp/case_test.txt && ./bench find /tmp/case_test.txt Outputs"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.rs",
+   "+    a == b",
+   "+            && s[i..i + pl].iter().zip(pat).all("
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "python",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 25.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.10407920000000001,
+  "duration_api_ms": 25049,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 220716,
+  "cache_create": 11214,
+  "output_tokens": 1391,
+  "final_text": "Now correctly outputs `first=3 last=13` (int-based min/max). Verified 4 common ids match, check.sh passes cleanly.\n\nThe final `first=<id> last=<id>` line (or `first=none last=none`) is now appended after the `and` timed rows in bench.py:15-27, computed from integer sets so ordering is numeric rather than lexicographic. `check.sh` runs clean.",
+  "context_tokens": 231944,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 4,
+   "Read": 1,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r0/work/bench.py"
+  ],
+  "bash": [
+   "ls -la && cat README.md",
+   "cat check.sh && ls fixtures/",
+   "sh check.sh",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "java",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 25.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.10270199999999999,
+  "duration_api_ms": 23325,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188505,
+  "cache_create": 11448,
+  "output_tokens": 1804,
+  "final_text": "That's 9 lines listed but grep -c reports 11 (case-insensitive substring match count matches `Bench find` output of hits=11), confirming the fix works correctly \u2014 case-insensitive matching now catches all variants (OUTPUTS, Outputs, outputs), matching grep -i's count.\n\nChange complete: `Bench.java` now does ASCII case-insensitive substring matching for the scan (non-letter bytes still require exact match), verified via `check.sh` and cross-checked against `grep -ic`.",
+  "context_tokens": 199965,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r1/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh",
+   "grep -nc -i 'outputs' fixtures/store.txt; grep -n 'outputs\\|Outputs\\|OUTPUTS\\|OutPuts' fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "Bench.java"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "ada",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 31.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.12163080000000001,
+  "duration_api_ms": 30141,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 193839,
+  "cache_create": 13441,
+  "output_tokens": 2793,
+  "final_text": "Confirmed: case-insensitive count is 11 (matching `grep -ic`), versus 2 exact-case matches previously. `check.sh` builds and runs cleanly.\n\nChanged `Count_Lines` in bench.adb to compare bytes via a new `Lower` helper that folds ASCII `A`-`Z` to lowercase and passes all other bytes through unchanged, so substring matching is now case-insensitive for letters only, with the \"at most one hit per line\" and output format unchanged.",
+  "context_tokens": 207292,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r1/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r1/work\" && sh check.sh",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r1/work\" && grep -ic \"outputs\" fixtures/store.txt; grep -c \"Outputs\" fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "java",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 34.2,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 12,
+  "cost_usd": 0.13110059999999998,
+  "duration_api_ms": 32208,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 192403,
+  "cache_create": 14235,
+  "output_tokens": 3450,
+  "final_text": "check.sh passes: 9 - 4 common = 5 only-in-A, which matches. The `diff` operation is implemented as a single forward pass with two pointers (no set/map), added to Bench.java, README.md, and check.sh.",
+  "context_tokens": 206650,
+  "tool_calls": 11,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 6
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r1/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 6,
+  "diff_files": [
+   "Bench.java",
+   "README.md",
+   "check.sh",
+   "System.out.printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+        System.out.printf(\"diff  iter%d  %6.1f ms  only=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "ada",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 34.6,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 11,
+  "cost_usd": 0.13771819999999999,
+  "duration_api_ms": 33259,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 232216,
+  "cache_create": 14509,
+  "output_tokens": 3205,
+  "final_text": "Added the `diff` operation to `bench.adb` (single forward pass, no auxiliary set/map), wired it into the CLI dispatch, and updated `README.md` and `check.sh`. Verified manually: a={1,3,5,7,9,11,12,13,20}, b={2,3,5,6,11,13,21} \u2192 ids only in a = {1,7,9,12,20} = 5, matching the program's `only=5` output. `check.sh` builds and runs all three operations successfully.",
+  "context_tokens": 246739,
+  "tool_calls": 10,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 4
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r0/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -type f | grep -v .git | sort",
+   "sh check.sh",
+   "cat fixtures/a.txt; echo ---; cat fixtures/b.txt; echo ---; comm -23 fixtures/a.txt fixtures/b.txt | wc -l"
+  ],
+  "edits": 4,
+  "diff_files": [
+   "README.md",
+   "bench.adb",
+   "check.sh"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "java",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 35.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 11,
+  "cost_usd": 0.14982439999999997,
+  "duration_api_ms": 33961,
+  "stop": "success",
+  "input_tokens": 18,
+  "cache_read": 297567,
+  "cache_create": 14001,
+  "output_tokens": 3310,
+  "final_text": "9 in A, 4 common, 5 only-in-A \u2014 checks out. Build passes and `check.sh` runs all three operations cleanly.\n\nAdded the `diff` operation to `Bench.java` (single forward-pass merge, no sets/maps), updated `README.md` and `check.sh` to document/exercise it, and verified with `sh check.sh`.",
+  "context_tokens": 311586,
+  "tool_calls": 10,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 5
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r2/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/java/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 5,
+  "diff_files": [
+   "Bench.java",
+   "README.md",
+   "check.sh",
+   "System.out.printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+        System.out.printf(\"diff  iter%d  %6.1f ms  only=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "python",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 46.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1315102,
+  "duration_api_ms": 45930,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 190916,
+  "cache_create": 12972,
+  "output_tokens": 4027,
+  "final_text": "All three casings (`outputs`, `OUTPUTS`, `Outputs`) now yield the same `hits=11`, matching `grep -ic`, confirming case-insensitive ASCII matching works correctly while `check.sh` passes.\n\n**Summary:** In `bench.py`'s `find` mode, both the `data.count` and per-line loop paths now fold ASCII letters via `bytes.lower()` (which only remaps `A`\u2013`Z`, leaving all other bytes byte-exact) before matching, making the substring scan case-insensitive for ASCII letters while preserving exact matching for everything else and the once-per-line counting in `find.loop`. Verified with `sh check.sh` and manual case-variant checks against `fixtures/store.txt`.",
+  "context_tokens": 203900,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r2/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "python3 -c \"\nb = bytes(range(256))\nprint(b.lower() == bytes((c+32 if 65<=c<=90 else c) for c in range(256)))\n\"\nsh check.sh",
+   "grep -ic \"outputs\" fixtures/store.txt\npython3 bench.py find fixtures/store.txt outputs | head -1\npython3 bench.py find fixtures/store.txt OUTPUTS | head -1\npython3 bench.py find fixtures/store.txt Outputs | head -1"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "rust",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 17.5,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.0850516,
+  "duration_api_ms": 16420,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 153743,
+  "cache_create": 10738,
+  "output_tokens": 1021,
+  "final_text": "Fixed: `intersect` in bench.rs had the advance branches swapped (advancing `j` when `x < y` instead of `i`), which skipped elements incorrectly. Swapped them back; `check.sh` now reports `common=4` as expected.",
+  "context_tokens": 164491,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r1/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r1/work/README.md"
+  ],
+  "bash": [
+   "ls -la && find . -maxdepth 2 -type f | head -50",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.rs"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "c",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 25.0,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1043808,
+  "duration_api_ms": 24320,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188664,
+  "cache_create": 11416,
+  "output_tokens": 1982,
+  "final_text": "Matches `grep -i` (11 hits), confirming case-insensitive matching works correctly. `check.sh` builds and runs cleanly.\n\nChanged `bench.c`: `countlines` now compares bytes via a small `lc()` helper that folds ASCII `A`\u2013`Z` to lowercase before comparison, so `find` matches the substring case-insensitively for letters while all other bytes still require an exact match. Output format and everything else unchanged.",
+  "context_tokens": 200092,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r0/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -type f | grep -v '^\\./\\.git' | sort",
+   "sh check.sh",
+   "grep -ico 'outputs' fixtures/store.txt; grep -c -i 'outputs' fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.c"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "ada",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 17.2,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 6,
+  "cost_usd": 0.09634540000000001,
+  "duration_api_ms": 16105,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 190542,
+  "cache_create": 11778,
+  "output_tokens": 997,
+  "final_text": "Fixed. The `Intersect` function in `bench.adb` had its advance branches swapped: when `A(I) < B(J)`, it was incrementing `J` instead of `I` (and vice versa), so the pointers walked the wrong lists and missed matches. Swapped the two branches to advance the pointer belonging to the smaller value. `check.sh` now reports `common= 4`, matching the expected count.",
+  "context_tokens": 202332,
+  "tool_calls": 5,
+  "tools": {
+   "Bash": 3,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/ada/r2/work/bench.adb"
+  ],
+  "bash": [
+   "ls -la && cat README.md && echo --- && cat check.sh",
+   "cat fixtures/a.txt; echo ---; cat fixtures/b.txt",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "rust",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 31.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.104686,
+  "duration_api_ms": 31362,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188230,
+  "cache_create": 11536,
+  "output_tokens": 1973,
+  "final_text": "Verified fixtures/a.txt and b.txt for correctness, and check.sh passes with the expected output. The change adds an `intersect_first_last` function and prints `first=<id> last=<id>` (or `first=none last=none`) once after the timed `and` rows, leaving all timed output unchanged.",
+  "context_tokens": 199778,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r1/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.rs",
+   "println!(\"and   iter{}  {:6.1} ms  common={}"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "rust",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 25.6,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.10577879999999999,
+  "duration_api_ms": 25173,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188534,
+  "cache_create": 11699,
+  "output_tokens": 2012,
+  "final_text": "Works as expected. Added `intersect_first_last` and print the `first=<id> last=<id>` line after the timed `and` rows in bench.rs; `sh check.sh` builds and runs cleanly.",
+  "context_tokens": 200245,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r2/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r2/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r2/work/README.md"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.rs",
+   "println!(\"and   iter{}  {:6.1} ms  common={}"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "java",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 27.0,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 10,
+  "cost_usd": 0.10644920000000001,
+  "duration_api_ms": 24830,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 189581,
+  "cache_create": 11942,
+  "output_tokens": 1961,
+  "final_text": "`common=4` now, matching the expected count. Fixed the swapped pointer-advance branches in `intersect()` (Bench.java:62) and verified with `check.sh`.",
+  "context_tokens": 201535,
+  "tool_calls": 9,
+  "tools": {
+   "Bash": 3,
+   "Read": 5,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work/fixtures/a.txt",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work/fixtures/b.txt"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work\" && sh check.sh 2>&1 | tail -10",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r1/work\" && sh check.sh 2>&1 | tail -10"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "Bench.java"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "c",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 24.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.10404340000000001,
+  "duration_api_ms": 23380,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188842,
+  "cache_create": 11726,
+  "output_tokens": 1820,
+  "final_text": "Build succeeds and check.sh runs cleanly, with the new `first=3 last=13` line printed after the timed `and` rows.",
+  "context_tokens": 200580,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 2,
+   "Read": 2,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r0/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r0/work/check.sh"
+  ],
+  "bash": [
+   "ls -la && echo --- && cat README.md",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.c",
+   "-      int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+      int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "ada",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 15.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.09294179999999999,
+  "duration_api_ms": 14774,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 155684,
+  "cache_create": 11986,
+  "output_tokens": 1272,
+  "final_text": "`common= 4` now, matching the expected count. Fixed and verified with `check.sh`.",
+  "context_tokens": 167680,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 5,
+   "Edit": 1
+  },
+  "reads": [
+   "./bench.adb",
+   "./README.md",
+   "./check.sh",
+   "./fixtures/a.txt",
+   "./fixtures/b.txt"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "rust",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 26.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.11377780000000001,
+  "duration_api_ms": 24878,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 223849,
+  "cache_create": 12080,
+  "output_tokens": 1952,
+  "final_text": "Clean build, no warnings, `check.sh` passes. The scan now matches ASCII letters case-insensitively (via `eq_icase`) while every other byte still requires an exact match, output format is unchanged.",
+  "context_tokens": 235943,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r0/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/rust/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "sh check.sh",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.rs"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "python",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 29.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.1162512,
+  "duration_api_ms": 28842,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188546,
+  "cache_create": 12308,
+  "output_tokens": 2812,
+  "final_text": "Added the `diff` operation in bench.py:15,28-37 using a single two-pointer forward pass (no set/map), updated README.md and check.sh, and `sh check.sh` runs cleanly \u2014 `diff` reports `only=5` (9 in A, 4 common, matching `and`'s result).",
+  "context_tokens": 200866,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 3
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r0/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r0/work\" && sh check.sh"
+  ],
+  "edits": 3,
+  "diff_files": [
+   "README.md",
+   "bench.py",
+   "check.sh"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "ada",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 34.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.133532,
+  "duration_api_ms": 33761,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 231270,
+  "cache_create": 14082,
+  "output_tokens": 2979,
+  "final_text": "Both cases work correctly (`first=3 last=13` for overlapping lists, `first=none last=none` for disjoint ones), and `check.sh` builds and runs cleanly. Task complete.",
+  "context_tokens": 245366,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r2/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r2/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r2/work/README.md"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -not -path '*/.git*' | sort",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r2/work\" && sh check.sh",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r2/work\" && printf '1\\n2\\n' > /tmp/x.txt && printf '3\\n4\\n' > /tmp/y.txt && ./bench and /tmp/x.txt /tmp/y.txt"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "python",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 35.5,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.11306460000000002,
+  "duration_api_ms": 34797,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 221848,
+  "cache_create": 11520,
+  "output_tokens": 2145,
+  "final_text": "Common ids are 3, 5, 11, 13 \u2192 first=3, last=13, matching the output. check.sh passes and everything else is unchanged.",
+  "context_tokens": 233382,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r1/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/python/r1/work/README.md"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -not -path './.git*' | sort",
+   "sh check.sh",
+   "cat fixtures/a.txt; echo ---; cat fixtures/b.txt"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "ada",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 19.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 6,
+  "cost_usd": 0.09676219999999999,
+  "duration_api_ms": 19032,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 190596,
+  "cache_create": 11832,
+  "output_tokens": 1017,
+  "final_text": "`common=4` now, matching the expected count. Fixed by swapping the two increment branches in `Intersect` (bench.adb:90-91), which had `I`/`J` reversed, causing the merge-walk to skip past matches. Output format unchanged; `check.sh` passes.",
+  "context_tokens": 202440,
+  "tool_calls": 5,
+  "tools": {
+   "Bash": 3,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/ada/r0/work/bench.adb"
+  ],
+  "bash": [
+   "ls -la && echo --- && cat README.md 2>/dev/null && echo --- && cat check.sh",
+   "cat fixtures/a.txt; echo ---; cat fixtures/b.txt",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "java",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 22.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.0963254,
+  "duration_api_ms": 21765,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 187842,
+  "cache_create": 11098,
+  "output_tokens": 1321,
+  "final_text": "`common=4` now, matching the correct answer. The bug was in `intersect()` (Bench.java:62): the merge-advance branch was swapped \u2014 it advanced pointer `j` when `x<y` instead of `i`, causing the smaller-valued list to fall behind and mismatched comparisons that skipped valid matches. Fixed by swapping to `if (x<y) i++; else j++;`. Verified with `sh check.sh`.",
+  "context_tokens": 198952,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 3,
+   "Read": 2,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r0/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r0/work/check.sh"
+  ],
+  "bash": [
+   "ls -la && cat README.md 2>/dev/null | head -100",
+   "cat -A fixtures/a.txt | head -20; echo ---; cat -A fixtures/b.txt | head -20",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "Bench.java"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "c",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 20.4,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 6,
+  "cost_usd": 0.08985560000000001,
+  "duration_api_ms": 19337,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 153823,
+  "cache_create": 11035,
+  "output_tokens": 1380,
+  "final_text": "`common=4` now, matching the expected count. Fixed by swapping the advance direction in `inter()` (bench.c:23) \u2014 it was advancing the pointer for the *larger* value instead of the smaller one.",
+  "context_tokens": 164868,
+  "tool_calls": 5,
+  "tools": {
+   "Bash": 3,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r2/work/bench.c"
+  ],
+  "bash": [
+   "ls -la && cat README.md",
+   "cat check.sh && echo --- && cat fixtures/a.txt && echo --- && cat fixtures/b.txt",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.c"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "python",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 21.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.0928726,
+  "duration_api_ms": 20945,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 186398,
+  "cache_create": 10447,
+  "output_tokens": 1266,
+  "final_text": "Fixed the two-pointer intersection in `bench.py`: the advance branches were swapped (`x<y` was moving `j` instead of `i`, and vice versa), which caused pointers to walk in the wrong direction and undercount matches to 0. Both `and.set` and `and.2ptr` now correctly report `common=4`, and `check.sh` passes.",
+  "context_tokens": 196857,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 4,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r0/work/bench.py"
+  ],
+  "bash": [
+   "ls -la && echo --- && cat README.md",
+   "cat check.sh && echo --- && cat fixtures/a.txt && echo --- && cat fixtures/b.txt",
+   "sh check.sh 2>&1 | tail -10",
+   "sh check.sh 2>&1 | tail -5"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "ada",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 33.2,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.12278700000000001,
+  "duration_api_ms": 32422,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 194065,
+  "cache_create": 13505,
+  "output_tokens": 2879,
+  "final_text": "Matches `grep -ic`, confirming case-insensitive matching works correctly. The scan now folds ASCII letter case (via `Fold`) for both the pattern and the searched bytes while leaving all non-letter bytes compared exactly; `check.sh` builds and runs cleanly.",
+  "context_tokens": 207582,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r2/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh",
+   "grep -ic \"Outputs\" fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "python",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 19.5,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.0985984,
+  "duration_api_ms": 18352,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 219127,
+  "cache_create": 10716,
+  "output_tokens": 1076,
+  "final_text": "`and.2ptr` now correctly reports `common=4`. Fixed a swapped pointer-advance in the two-pointer intersection (`bench.py:23-24`): it was advancing `j` when `x<y` and `i` when `x>y`, backwards from correct \u2014 now `i` advances when `x<y`, `j` when `x>y`. Output format unchanged; `check.sh` passes.",
+  "context_tokens": 229857,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 4,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/python/r2/work/bench.py"
+  ],
+  "bash": [
+   "ls -la && echo --- && cat README.md",
+   "cat check.sh; echo ---; cat fixtures/a.txt; echo ---; cat fixtures/b.txt",
+   "sh check.sh",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "python",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 30.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.12406160000000001,
+  "duration_api_ms": 29047,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 224228,
+  "cache_create": 12488,
+  "output_tokens": 2808,
+  "final_text": "check.sh passes. 9 - 4 = 5 matches expected `only=5` (|A|=9, common=4). Added a `diff` operation (bench.py) using a single two-pointer forward pass with no set/map/hash, updated README.md and check.sh accordingly, and verified with `sh check.sh`.",
+  "context_tokens": 236730,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 2,
+   "Read": 1,
+   "Edit": 3
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r2/work/bench.py"
+  ],
+  "bash": [
+   "cd \"$PWD\" && ls -la && echo \"---README---\" && cat README.md && echo \"---check.sh---\" && cat check.sh",
+   "cd \"$PWD\" && sh check.sh"
+  ],
+  "edits": 3,
+  "diff_files": [
+   "README.md",
+   "bench.py",
+   "check.sh"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "c",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 23.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.10563440000000002,
+  "duration_api_ms": 22139,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 222222,
+  "cache_create": 11338,
+  "output_tokens": 1467,
+  "final_text": "11 case-insensitive matches confirms the fix works correctly (previously only 2 exact-case matches would count). check.sh passes and builds cleanly.\n\nChanged `countlines` in bench.c to compare bytes case-insensitively for ASCII letters (via a small `lc()` helper) while keeping non-letter bytes as exact matches; verified with `sh check.sh` and cross-checked hit count against `grep -ic`.",
+  "context_tokens": 233574,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 4,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r2/work/bench.c"
+  ],
+  "bash": [
+   "ls -la && cat README.md",
+   "cat check.sh",
+   "sh check.sh",
+   "grep -ic outputs fixtures/store.txt; grep -c 'Outputs' fixtures/store.txt; grep -n -i 'outputs' fixtures/store.txt | head -20"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.c"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "ada",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 36.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 10,
+  "cost_usd": 0.1455688,
+  "duration_api_ms": 35120,
+  "stop": "success",
+  "input_tokens": 16,
+  "cache_read": 269009,
+  "cache_create": 14442,
+  "output_tokens": 3284,
+  "final_text": "Both cases work correctly: overlapping lists print `first=<id> last=<id>` and disjoint lists print `first=none last=none`. Task complete.",
+  "context_tokens": 283467,
+  "tool_calls": 9,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 3
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r1/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r1/work/README.md"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r1/work\" && sh check.sh",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r1/work\" && printf '1\\n3\\n5\\n' > /tmp/x.txt && printf '2\\n4\\n6\\n' > /tmp/y.txt && ./bench and /tmp/x.txt /tmp/y.txt | tail -1"
+  ],
+  "edits": 3,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "c",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 32.0,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 10,
+  "cost_usd": 0.1238282,
+  "duration_api_ms": 31439,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 191291,
+  "cache_create": 13475,
+  "output_tokens": 3049,
+  "final_text": "Added the `diff` operation to `bench.c` (single forward pass, no set/map), updated `README.md` and `check.sh` accordingly. `sh check.sh` builds and runs all three operations successfully \u2014 `diff` reports `only=5` for `|A|=9`, `common=4`, which is consistent (9\u22124=5).",
+  "context_tokens": 204778,
+  "tool_calls": 9,
+  "tools": {
+   "Bash": 3,
+   "Read": 2,
+   "Edit": 4
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r0/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r0/work/check.sh"
+  ],
+  "bash": [
+   "ls -la && echo --- && cat README.md",
+   "ls fixtures/",
+   "sh check.sh"
+  ],
+  "edits": 4,
+  "diff_files": [
+   "README.md",
+   "bench.c",
+   "check.sh",
+   "int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+      int c=diff(A,na,B,nb);printf(\"diff  iter%d  %6.1f ms  only=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "rust",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 17.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 6,
+  "cost_usd": 0.0896902,
+  "duration_api_ms": 16674,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 186566,
+  "cache_create": 10528,
+  "output_tokens": 912,
+  "final_text": "`common=4` now, matching the expected result. Fixed the swapped advance branches in `intersect` (bench.rs:47-48) \u2014 when `x < y`, the pointer into the array holding the smaller value (`i`) must advance, not `j`.",
+  "context_tokens": 197106,
+  "tool_calls": 5,
+  "tools": {
+   "Bash": 3,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r2/work/bench.rs"
+  ],
+  "bash": [
+   "ls -la && cat README.md && echo --- && cat check.sh",
+   "cat fixtures/a.txt; echo ---; cat fixtures/b.txt",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.rs"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "python",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 46.5,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.1359034,
+  "duration_api_ms": 45587,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 226847,
+  "cache_create": 13229,
+  "output_tokens": 3645,
+  "final_text": "Done. The scan in `bench.py` now ASCII case-folds both the store data and the search pattern (A\u2013Z \u2192 a\u2013z, all other bytes untouched) once outside the timed loops, so `find` matches case-insensitively while non-letter bytes still require exact matches and each line is still counted at most once. Verified with `sh check.sh` \u2014 `hits=11` correctly picks up all case variants of \"Outputs\" in `fixtures/store.txt`, and the `and` operation output is unchanged.",
+  "context_tokens": 240090,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 4,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r0/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "sh check.sh",
+   "grep -ni \"outputs\" fixtures/store.txt",
+   "git diff"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "c",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 29.7,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1109096,
+  "duration_api_ms": 28803,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 189383,
+  "cache_create": 12083,
+  "output_tokens": 2353,
+  "final_text": "Verified with `sh check.sh`: build succeeds and the `and` operation now prints `first=3 last=13` after the timed rows, with the timed rows themselves unchanged. Correctly falls back to `first=none last=none` when there's no overlap.",
+  "context_tokens": 201478,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r1/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/c/r1/work/README.md"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.c",
+   "-      int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d",
+   "+      int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "c",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 31.4,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 10,
+  "cost_usd": 0.12535020000000002,
+  "duration_api_ms": 30314,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 191001,
+  "cache_create": 13545,
+  "output_tokens": 3178,
+  "final_text": "9 in A, 4 common, 5 only-in-A \u2014 checks out. `check.sh` passes with the new `diff` operation added to bench.c, README.md, and check.sh.",
+  "context_tokens": 204558,
+  "tool_calls": 9,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 4
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r1/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/c/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -not -path '*/.git*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 4,
+  "diff_files": [
+   "README.md",
+   "bench.c",
+   "check.sh",
+   "+      int c=diffcount(A,na,B,nb);printf(\"diff  iter%d  %6.1f ms  only=%d",
+   "int c=inter(A,na,B,nb);printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "java",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 23.4,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1035158,
+  "duration_api_ms": 22124,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188354,
+  "cache_create": 11601,
+  "output_tokens": 1828,
+  "final_text": "Verified against `fixtures/a.txt`/`b.txt` \u2014 common ids match `first=3 last=13`. check.sh builds and runs cleanly.\n\nAdded a `firstLast` helper to `Bench.java` that runs once after the timed iterations of the `and` op and prints `first=<id> last=<id>` (or `first=none last=none` if no overlap); the `find` op and timed rows are untouched.",
+  "context_tokens": 199967,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r2/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "Bench.java",
+   "System.out.printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "rust",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 32.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.133148,
+  "duration_api_ms": 31210,
+  "stop": "success",
+  "input_tokens": 16,
+  "cache_read": 261165,
+  "cache_create": 13113,
+  "output_tokens": 2727,
+  "final_text": "|A|=9, common=4, so only should be 5 \u2014 matches. check.sh passes and all rows print correctly.\n\nAdded the `diff` operation to bench.rs (single forward pass, no set/map), updated README.md and check.sh, and verified with `sh check.sh` \u2014 output shows `diff` rows with correct `only=5` counts.",
+  "context_tokens": 274294,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 1,
+   "Edit": 4
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r0/work/bench.rs"
+  ],
+  "bash": [
+   "ls -la && echo --- && cat README.md 2>/dev/null && echo --- && cat check.sh 2>/dev/null",
+   "sh check.sh"
+  ],
+  "edits": 4,
+  "diff_files": [
+   "README.md",
+   "bench.rs",
+   "check.sh",
+   "println!(\"and   iter{}  {:6.1} ms  common={}",
+   "+            println!(\"diff  iter{}  {:6.1} ms  only={}"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "python",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 40.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.1395982,
+  "duration_api_ms": 39969,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 227031,
+  "cache_create": 13482,
+  "output_tokens": 3907,
+  "final_text": "check.sh passes. Added the `diff` operation to `bench.py` (single forward two-pointer pass, no set/map/hash), updated `README.md` and `check.sh` to document and exercise it \u2014 verified `only=5` matches `|A|=9` minus `common=4`.",
+  "context_tokens": 240527,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 3
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r1/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/python/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 3,
+  "diff_files": [
+   "README.md",
+   "bench.py",
+   "check.sh"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "java",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 29.7,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.10802520000000002,
+  "duration_api_ms": 28244,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 189316,
+  "cache_create": 11792,
+  "output_tokens": 2183,
+  "final_text": "Case-insensitive count matches `grep -i` (11 hits vs 2 exact-case before). Build and check.sh pass.\n\nI updated `countMatchingLines` in Bench.java to compare bytes via a new `lower()` helper that folds ASCII `A-Z` to lowercase and leaves all other bytes untouched, so letters match case-insensitively while everything else still requires an exact byte match. Verified with `sh check.sh` and cross-checked against `grep -i`.",
+  "context_tokens": 201120,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work\" && sh check.sh",
+   "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work\" && grep -ic \"outputs\" fixtures/store.txt; grep -c \"Outputs\" fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "Bench.java"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "java",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 19.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 6,
+  "cost_usd": 0.09260860000000001,
+  "duration_api_ms": 17863,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 187218,
+  "cache_create": 10845,
+  "output_tokens": 1063,
+  "final_text": "Fixed: `common=4` now, matching the expected value. The bug was swapped branches in `intersect()` (Bench.java:62) \u2014 when `x<y` it was advancing list B's index instead of list A's, so pointers moved past matching pairs and undercounted the intersection.",
+  "context_tokens": 198075,
+  "tool_calls": 5,
+  "tools": {
+   "Bash": 3,
+   "Read": 1,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/java/r2/work/Bench.java"
+  ],
+  "bash": [
+   "ls -la && cat README.md && echo ---CHECK--- && cat check.sh",
+   "cat -A fixtures/a.txt | head -20; echo ---; cat -A fixtures/b.txt | head -20",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "Bench.java"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "c",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 22.7,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.0966022,
+  "duration_api_ms": 21850,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 154266,
+  "cache_create": 11467,
+  "output_tokens": 1874,
+  "final_text": "`common=4` now, matching the correct answer. Fixed by swapping the advance branches in `inter()` (bench.c:23) \u2014 the loop was advancing the pointer of the *larger* list instead of the smaller one, so `i` and `j` skipped past each other without ever landing on a match.",
+  "context_tokens": 165743,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 5,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r0/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r0/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r0/work/fixtures/a.txt",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r0/work/fixtures/b.txt"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.c"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "python",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 57.2,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.1533124,
+  "duration_api_ms": 56349,
+  "stop": "success",
+  "input_tokens": 14,
+  "cache_read": 225792,
+  "cache_create": 14609,
+  "output_tokens": 4854,
+  "final_text": "hits=11 matches the expected manual count and the `and` operation is unaffected. check.sh passes cleanly.\n\n**Change:** in `bench.py`, the `find` mode now ASCII-case-folds both `data` and `pat` (via `bytes.maketrans` mapping only `a-z`\u2192`A-Z`) before splitting/counting, so matching is case-insensitive for letters while all other bytes still require an exact match; line counting semantics (counted at most once per line) are unchanged.",
+  "context_tokens": 240415,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 3,
+   "Read": 4,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/bench.py",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/python/r1/work/fixtures/store.txt"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -type f | grep -v '^\\./\\.git' | sort",
+   "sh check.sh",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.py"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "java",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 26.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.10456580000000001,
+  "duration_api_ms": 24575,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188599,
+  "cache_create": 11720,
+  "output_tokens": 1880,
+  "final_text": "check.sh passes and prints `first=3 last=13` after the timed rows, matching fixtures/a.txt and fixtures/b.txt's common ids. Change is done.",
+  "context_tokens": 200331,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r1/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "Bench.java",
+   "System.out.printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "c",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 25.5,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.09750740000000001,
+  "duration_api_ms": 24686,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 154322,
+  "cache_create": 11458,
+  "output_tokens": 1967,
+  "final_text": "`common=4` now, matching the correct answer. The bug was swapped advance branches in `inter()` (bench.c:23) \u2014 `i` and `j` were incremented on the wrong comparison, so the merge-intersection never tracked correctly. Fixed by swapping them back; `check.sh` confirms correct output.",
+  "context_tokens": 165790,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 5,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r1/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r1/work/fixtures/a.txt",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/c/r1/work/fixtures/b.txt"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.c"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "rust",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 37.2,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 10,
+  "cost_usd": 0.1369732,
+  "duration_api_ms": 35625,
+  "stop": "success",
+  "input_tokens": 16,
+  "cache_read": 260981,
+  "cache_create": 13316,
+  "output_tokens": 3032,
+  "final_text": "|A|=9, common=4, only=5 \u2014 checks out (9-4=5). check.sh passes.\n\nAdded a `diff` operation to bench.rs (single forward pass, no set/map), updated README.md and check.sh accordingly, and verified with `sh check.sh`.",
+  "context_tokens": 274313,
+  "tool_calls": 9,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 4
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r1/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 4,
+  "diff_files": [
+   "README.md",
+   "bench.rs",
+   "check.sh",
+   "+            println!(\"diff  iter{}  {:6.1} ms  only={}"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t2_icase",
+  "lang": "c",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 23.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1045084,
+  "duration_api_ms": 22921,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188962,
+  "cache_create": 11543,
+  "output_tokens": 1937,
+  "final_text": "Case-insensitive matching confirmed: `hits=11` now (case-insensitive count) vs. 2 exact-case matches previously. `check.sh` builds and runs cleanly.",
+  "context_tokens": 200517,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r1/work/bench.c",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r1/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/c/r1/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh",
+   "grep -ic outputs fixtures/store.txt; grep -c Outputs fixtures/store.txt"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.c"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "find_mixed_case": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "ada",
+  "rep": 1,
+  "model": "claude-sonnet-5",
+  "wall_s": 48.3,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 12,
+  "cost_usd": 0.17237080000000002,
+  "duration_api_ms": 47363,
+  "stop": "success",
+  "input_tokens": 18,
+  "cache_read": 308884,
+  "cache_create": 15988,
+  "output_tokens": 4545,
+  "final_text": "Build and check.sh pass. `diff iter N ... only=5` rows appear correctly (a.txt has 9 ids, 4 shared with b.txt per the `and` result, leaving 5 only-in-a, which matches).\n\nSummary: added a `Diff` function (single forward two-pointer pass, no sets/maps) and wired up `./bench diff <listA> <listB>` in bench.adb, updated README.md to document the new operation, and added a `diff` invocation to check.sh. Verified via `sh check.sh`.",
+  "context_tokens": 324890,
+  "tool_calls": 11,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 5
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/README.md"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -type f | grep -v '^./.git' | sort",
+   "cat /tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/fixtures/a.txt; echo ---; cat /tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r1/work/fixtures/b.txt",
+   "sh check.sh"
+  ],
+  "edits": 5,
+  "diff_files": [
+   "README.md",
+   "bench.adb",
+   "check.sh"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "ada",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 34.8,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 10,
+  "cost_usd": 0.14323360000000002,
+  "duration_api_ms": 33829,
+  "stop": "success",
+  "input_tokens": 16,
+  "cache_read": 267853,
+  "cache_create": 14236,
+  "output_tokens": 3156,
+  "final_text": "Common ids are 3, 5, 11, 13 \u2014 first=3, last=13 matches. check.sh passes with the build and output correct.\n\nAdded an `Intersect_Bounds` helper that tracks the first and last common id during the merge, then prints `first=<id> last=<id>` (or `first=none last=none`) after the timed `and` rows, without altering the timed loop itself.",
+  "context_tokens": 282105,
+  "tool_calls": 9,
+  "tools": {
+   "Bash": 3,
+   "Read": 3,
+   "Edit": 3
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r0/work/bench.adb",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r0/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/ada/r0/work/README.md"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -not -path '*/.git*' | sort",
+   "sh check.sh",
+   "cat fixtures/a.txt; echo ---; cat fixtures/b.txt"
+  ],
+  "edits": 3,
+  "diff_files": [
+   "bench.adb"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "rust",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 24.2,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 7,
+  "cost_usd": 0.10385340000000001,
+  "duration_api_ms": 23528,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188657,
+  "cache_create": 11669,
+  "output_tokens": 1828,
+  "final_text": "Build and check.sh pass; the intersection output now ends with `first=3 last=13` for the fixture data, and the timed rows are unchanged.",
+  "context_tokens": 200338,
+  "tool_calls": 6,
+  "tools": {
+   "Bash": 2,
+   "Read": 2,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r0/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/rust/r0/work/check.sh"
+  ],
+  "bash": [
+   "ls -la && cat README.md",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "bench.rs",
+   "println!(\"and   iter{}  {:6.1} ms  common={}"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t4_firstlast",
+  "lang": "java",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 25.5,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 8,
+  "cost_usd": 0.1043126,
+  "duration_api_ms": 23147,
+  "stop": "success",
+  "input_tokens": 12,
+  "cache_read": 188423,
+  "cache_create": 11633,
+  "output_tokens": 1894,
+  "final_text": "Build and check.sh pass. Verified against fixtures/a.txt and fixtures/b.txt manually (common ids intersect to first=3, last=13, common=4), matching output.\n\nAdded a `first=<id> last=<id>` line printed once after the timed `and` rows in Bench.java, computed via a new `firstLast` helper mirroring the existing merge-intersection logic; prints `first=none last=none` when there's no overlap. Timed rows and the `find` operation are untouched. `sh check.sh` builds and runs cleanly.",
+  "context_tokens": 200068,
+  "tool_calls": 7,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 2
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r0/work/Bench.java",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t4_firstlast/java/r0/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | head -100",
+   "sh check.sh"
+  ],
+  "edits": 2,
+  "diff_files": [
+   "Bench.java",
+   "System.out.printf(\"and   iter%d  %6.1f ms  common=%d"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "firstlast_p1_random": true,
+   "and_p2_identical": true,
+   "firstlast_p2_identical": true,
+   "and_p3_disjoint": true,
+   "firstlast_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "firstlast_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "firstlast_p5_last_only": true
+  }
+ },
+ {
+  "task": "t3_bug",
+  "lang": "rust",
+  "rep": 0,
+  "model": "claude-sonnet-5",
+  "wall_s": 19.9,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 9,
+  "cost_usd": 0.0900444,
+  "duration_api_ms": 18419,
+  "stop": "success",
+  "input_tokens": 10,
+  "cache_read": 153782,
+  "cache_create": 10953,
+  "output_tokens": 1434,
+  "final_text": "`common=4` now, matching the expected result. The bug was in `intersect()` in bench.rs: the pointer-advance branches were swapped, so it advanced `j` when `a[i] < b[j]` (should advance `i`, the smaller list) and vice versa. Fixed and verified with `check.sh`.",
+  "context_tokens": 164745,
+  "tool_calls": 8,
+  "tools": {
+   "Bash": 2,
+   "Read": 5,
+   "Edit": 1
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r0/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r0/work/check.sh",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r0/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r0/work/fixtures/a.txt",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t3_bug/rust/r0/work/fixtures/b.txt"
+  ],
+  "bash": [
+   "find . -maxdepth 3 -type f | grep -v '.git/' | sort",
+   "sh check.sh"
+  ],
+  "edits": 1,
+  "diff_files": [
+   "bench.rs"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "and_p2_identical": true,
+   "and_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "and_p5_last_only": true
+  }
+ },
+ {
+  "task": "t1_diff",
+  "lang": "rust",
+  "rep": 2,
+  "model": "claude-sonnet-5",
+  "wall_s": 31.1,
+  "rc": 0,
+  "stderr": "",
+  "num_turns": 11,
+  "cost_usd": 0.1408264,
+  "duration_api_ms": 29725,
+  "stop": "success",
+  "input_tokens": 18,
+  "cache_read": 295482,
+  "cache_create": 13337,
+  "output_tokens": 2719,
+  "final_text": "9 (A) - 4 (common) = 5, which matches `only=5`. check.sh passes with all three operations working correctly.",
+  "context_tokens": 308837,
+  "tool_calls": 10,
+  "tools": {
+   "Bash": 2,
+   "Read": 3,
+   "Edit": 5
+  },
+  "reads": [
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r2/work/bench.rs",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r2/work/README.md",
+   "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r2/work/check.sh"
+  ],
+  "bash": [
+   "find . -type f -not -path './.git/*' | sort",
+   "sh check.sh"
+  ],
+  "edits": 5,
+  "diff_files": [
+   "README.md",
+   "bench.rs",
+   "check.sh",
+   "+            println!(\"diff  iter{}  {:6.1} ms  only={}"
+  ],
+  "build_ok": true,
+  "hidden_pass": true,
+  "hidden_checks": {
+   "find_Outputs": true,
+   "and_p1_random": true,
+   "diff_p1_random": true,
+   "and_p2_identical": true,
+   "diff_p2_identical": true,
+   "and_p3_disjoint": true,
+   "diff_p3_disjoint": true,
+   "and_p4_empty_second": true,
+   "diff_p4_empty_second": true,
+   "and_p5_last_only": true,
+   "diff_p5_last_only": true
+  }
+ }
+]

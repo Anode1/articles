@@ -1,0 +1,50 @@
+{
+ "task": "t3_bug",
+ "lang": "ada",
+ "rep": 1,
+ "model": "claude-sonnet-5",
+ "wall_s": 15.9,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 9,
+ "cost_usd": 0.09294179999999999,
+ "duration_api_ms": 14774,
+ "stop": "success",
+ "input_tokens": 10,
+ "cache_read": 155684,
+ "cache_create": 11986,
+ "output_tokens": 1272,
+ "final_text": "`common= 4` now, matching the expected count. Fixed and verified with `check.sh`.",
+ "context_tokens": 167680,
+ "tool_calls": 8,
+ "tools": {
+  "Bash": 2,
+  "Read": 5,
+  "Edit": 1
+ },
+ "reads": [
+  "./bench.adb",
+  "./README.md",
+  "./check.sh",
+  "./fixtures/a.txt",
+  "./fixtures/b.txt"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | sort",
+  "sh check.sh"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "bench.adb"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

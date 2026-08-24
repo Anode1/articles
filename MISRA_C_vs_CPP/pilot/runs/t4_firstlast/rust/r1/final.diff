@@ -1,0 +1,39 @@
+ bench.rs | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+diff --git a/bench.rs b/bench.rs
+index 02207f1..c51effc 100644
+--- a/bench.rs
++++ b/bench.rs
+@@ -50,6 +50,22 @@ fn intersect(a: &[i64], b: &[i64]) -> usize {
+     c
+ }
+ 
++fn intersect_first_last(a: &[i64], b: &[i64]) -> Option<(i64, i64)> {
++    let (mut i, mut j) = (0usize, 0usize);
++    let (mut first, mut last) = (None, None);
++    while i < a.len() && j < b.len() {
++        let (x, y) = (a[i], b[j]);
++        if x == y {
++            if first.is_none() { first = Some(x); }
++            last = Some(x);
++            i += 1; j += 1;
++        }
++        else if x < y { i += 1; }
++        else { j += 1; }
++    }
++    first.zip(last)
++}
++
+ fn main() {
+     let a: Vec<String> = env::args().collect();
+     let k = 7;
+@@ -69,5 +85,9 @@ fn main() {
+             println!("and   iter{}  {:6.1} ms  common={} |A|={} |B|={}",
+                      it, t.elapsed().as_secs_f64() * 1e3, c, pa.len(), pb.len());
+         }
++        match intersect_first_last(&pa, &pb) {
++            Some((first, last)) => println!("first={} last={}", first, last),
++            None => println!("first=none last=none"),
++        }
+     }
+ }

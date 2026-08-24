@@ -1,0 +1,50 @@
+{
+ "task": "t2_icase",
+ "lang": "java",
+ "rep": 0,
+ "model": "claude-sonnet-5",
+ "wall_s": 29.7,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 8,
+ "cost_usd": 0.10802520000000002,
+ "duration_api_ms": 28244,
+ "stop": "success",
+ "input_tokens": 12,
+ "cache_read": 189316,
+ "cache_create": 11792,
+ "output_tokens": 2183,
+ "final_text": "Case-insensitive count matches `grep -i` (11 hits vs 2 exact-case before). Build and check.sh pass.\n\nI updated `countMatchingLines` in Bench.java to compare bytes via a new `lower()` helper that folds ASCII `A-Z` to lowercase and leaves all other bytes untouched, so letters match case-insensitively while everything else still requires an exact byte match. Verified with `sh check.sh` and cross-checked against `grep -i`.",
+ "context_tokens": 201120,
+ "tool_calls": 7,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work/Bench.java",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | head -100",
+  "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work\" && sh check.sh",
+  "cd \"/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r0/work\" && grep -ic \"outputs\" fixtures/store.txt; grep -c \"Outputs\" fixtures/store.txt"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "Bench.java"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

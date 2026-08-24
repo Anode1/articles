@@ -1,0 +1,25 @@
+ bench.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+diff --git a/bench.c b/bench.c
+index ecdf6f7..5edb562 100644
+--- a/bench.c
++++ b/bench.c
+@@ -21,11 +21,17 @@ static long*readpost(const char*p,size_t*cnt){size_t n;char*d=slurp(p,&n);size_t
+     else if(b>='0'&&b<='9'){c=c*10+(b-'0');any=1;}}free(d);*cnt=k;return o;}
+ static int inter(long*A,size_t na,long*B,size_t nb){size_t i=0,j=0;int c=0;
+   while(i<na&&j<nb){long x=A[i],y=B[j];if(x==y){c++;i++;j++;}else if(x<y)i++;else j++;}return c;}
++static void firstlast(long*A,size_t na,long*B,size_t nb,long*first,long*last,int*found){
++  size_t i=0,j=0;int f=0;long fv=0,lv=0;
++  while(i<na&&j<nb){long x=A[i],y=B[j];if(x==y){if(!f){fv=x;f=1;}lv=x;i++;j++;}else if(x<y)i++;else j++;}
++  *first=fv;*last=lv;*found=f;}
+ int main(int ac,char**av){int K=7;(void)ac;
+   if(!strcmp(av[1],"find")){size_t n;char*s=slurp(av[2],&n);
+     for(int it=0;it<K;it++){struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);
+       int h=countlines(s,n,av[3]);printf("find  iter%d  %5.0f ms  hits=%d\n",it,ms(t),h);}}
+   else{size_t na,nb;long*A=readpost(av[2],&na),*B=readpost(av[3],&nb);
+     for(int it=0;it<K;it++){struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);
+-      int c=inter(A,na,B,nb);printf("and   iter%d  %6.1f ms  common=%d  |A|=%zu |B|=%zu\n",it,ms(t),c,na,nb);}}
++      int c=inter(A,na,B,nb);printf("and   iter%d  %6.1f ms  common=%d  |A|=%zu |B|=%zu\n",it,ms(t),c,na,nb);}
++    long first,last;int found;firstlast(A,na,B,nb,&first,&last,&found);
++    if(found)printf("first=%ld last=%ld\n",first,last);else printf("first=none last=none\n");}
+   return 0;}

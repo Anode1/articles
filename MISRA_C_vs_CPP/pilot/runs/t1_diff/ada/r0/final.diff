@@ -1,0 +1,87 @@
+ README.md |  4 +++-
+ bench.adb | 27 ++++++++++++++++++++++++++-
+ check.sh  |  3 ++-
+ 3 files changed, 31 insertions(+), 3 deletions(-)
+diff --git a/README.md b/README.md
+index ba6d6ca..7748c2a 100644
+--- a/README.md
++++ b/README.md
+@@ -1,10 +1,12 @@
+ # bench
+ 
+-A two-operation benchmark over an index of plain-text files.
++A three-operation benchmark over an index of plain-text files.
+ 
+     ./bench find <store> <substr>    count the lines of <store> that contain <substr>
+     ./bench and  <listA> <listB>     count the ids common to two posting lists
+                                    (one integer id per line, ascending, no duplicates)
++    ./bench diff <listA> <listB>     count the ids present in <listA> and absent from <listB>
++                                   (same posting-list format as `and`)
+ 
+ Each operation prints one row per timed iteration.
+ 
+diff --git a/bench.adb b/bench.adb
+index 25471b7..68d5476 100644
+--- a/bench.adb
++++ b/bench.adb
+@@ -94,6 +94,19 @@ procedure Bench is
+       return C;
+    end Intersect;
+ 
++   function Diff (A : Id_Array; NA : Natural; B : Id_Array; NB : Natural) return Natural is
++      I : Natural := 0; J : Natural := 0; C : Natural := 0;
++   begin
++      while I < NA and then J < NB loop
++         if A (I) = B (J) then I := I + 1; J := J + 1;
++         elsif A (I) < B (J) then C := C + 1; I := I + 1;
++         else J := J + 1;
++         end if;
++      end loop;
++      C := C + (NA - I);
++      return C;
++   end Diff;
++
+    procedure Row (Tag : String; It : Natural; T0 : Time; Extra : String) is
+       US : constant Integer := Integer (Float (To_Duration (Clock - T0)) * 1_000_000.0);
+    begin
+@@ -117,7 +130,7 @@ begin
+             begin Row ("find", It, T0, "hits=" & Integer'Image (H)); end;
+          end loop;
+       end;
+-   else
++   elsif Argument (1) = "and" then
+       declare
+          NA, NB : Natural;
+          A : constant Id_Access := Read_Postings (Argument (2), NA);
+@@ -129,5 +142,17 @@ begin
+             begin Row ("and ", It, T0, "common=" & Integer'Image (C)); end;
+          end loop;
+       end;
++   else
++      declare
++         NA, NB : Natural;
++         A : constant Id_Access := Read_Postings (Argument (2), NA);
++         B : constant Id_Access := Read_Postings (Argument (3), NB);
++      begin
++         for It in 0 .. K - 1 loop
++            declare T0 : constant Time := Clock;
++                    C  : constant Natural := Diff (A.all, NA, B.all, NB);
++            begin Row ("diff", It, T0, "only=" & Integer'Image (C)); end;
++         end loop;
++      end;
+    end if;
+ end Bench;
+diff --git a/check.sh b/check.sh
+index f839d9b..4338716 100644
+--- a/check.sh
++++ b/check.sh
+@@ -1,7 +1,8 @@
+ #!/bin/sh
+-# builds, then runs both operations on the visible fixtures
++# builds, then runs all operations on the visible fixtures
+ set -e
+ cd "$(dirname "$0")"
+ mkdir -p obj && gnatmake -q -O2 -D obj -o bench bench.adb
+ ./bench find fixtures/store.txt Outputs
+ ./bench and fixtures/a.txt fixtures/b.txt
++./bench diff fixtures/a.txt fixtures/b.txt

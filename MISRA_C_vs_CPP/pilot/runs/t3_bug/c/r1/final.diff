@@ -1,0 +1,15 @@
+ bench.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/bench.c b/bench.c
+index caf4411..ecdf6f7 100644
+--- a/bench.c
++++ b/bench.c
+@@ -20,7 +20,7 @@ static long*readpost(const char*p,size_t*cnt){size_t n;char*d=slurp(p,&n);size_t
+   for(size_t i=0;i<n;i++){char b=d[i];if(b=='\n'){if(any)o[k++]=c;c=0;any=0;}
+     else if(b>='0'&&b<='9'){c=c*10+(b-'0');any=1;}}free(d);*cnt=k;return o;}
+ static int inter(long*A,size_t na,long*B,size_t nb){size_t i=0,j=0;int c=0;
+-  while(i<na&&j<nb){long x=A[i],y=B[j];if(x==y){c++;i++;j++;}else if(x<y)j++;else i++;}return c;}
++  while(i<na&&j<nb){long x=A[i],y=B[j];if(x==y){c++;i++;j++;}else if(x<y)i++;else j++;}return c;}
+ int main(int ac,char**av){int K=7;(void)ac;
+   if(!strcmp(av[1],"find")){size_t n;char*s=slurp(av[2],&n);
+     for(int it=0;it<K;it++){struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);

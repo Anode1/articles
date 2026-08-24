@@ -1,0 +1,31 @@
+ Bench.java | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+diff --git a/Bench.java b/Bench.java
+index 5a736dd..30b6830 100644
+--- a/Bench.java
++++ b/Bench.java
+@@ -26,6 +26,9 @@ public class Bench {
+         System.out.printf("and   iter%d  %6.1f ms  common=%d  |A|=%d |B|=%d%n",
+                           it, (System.nanoTime()-t0)/1e6, c, A.length, B.length);
+       }
++      long[] fl = firstLast(A, B);
++      if (fl == null) System.out.println("first=none last=none");
++      else System.out.printf("first=%d last=%d%n", fl[0], fl[1]);
+     }
+   }
+ 
+@@ -63,4 +66,14 @@ public class Bench {
+     }
+     return c;
+   }
++
++  static long[] firstLast(long[] A, long[] B) {
++    int i=0,j=0; long first=0,last=0; boolean any=false;
++    while (i<A.length && j<B.length) {
++      long x=A[i], y=B[j];
++      if (x==y){ if(!any){first=x;any=true;} last=x; i++; j++; }
++      else if (x<y) i++; else j++;
++    }
++    return any ? new long[]{first,last} : null;
++  }
+ }

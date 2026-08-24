@@ -28,3 +28,6 @@ __pycache__/
 
 # Local agent config, not content.
 .claude/
+
+# Python venvs for the measurement scripts. Recreate with the pinned versions in each paper.
+venv/

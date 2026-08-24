@@ -1,0 +1,59 @@
+ bench.adb | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+diff --git a/bench.adb b/bench.adb
+index 25471b7..c1ea38f 100644
+--- a/bench.adb
++++ b/bench.adb
+@@ -4,6 +4,8 @@ with Ada.Streams.Stream_IO;
+ with Ada.Streams;          use Ada.Streams;
+ with Ada.Real_Time;        use Ada.Real_Time;
+ with Ada.Directories;
++with Ada.Strings.Fixed;
++with Ada.Strings;
+ 
+ procedure Bench is
+    package SIO renames Ada.Streams.Stream_IO;
+@@ -94,6 +96,24 @@ procedure Bench is
+       return C;
+    end Intersect;
+ 
++   procedure Intersect_Bounds (A : Id_Array; NA : Natural; B : Id_Array; NB : Natural;
++                               Found : out Boolean; First, Last : out Long_Long_Integer) is
++      I : Natural := 0; J : Natural := 0;
++   begin
++      Found := False;
++      First := 0;
++      Last  := 0;
++      while I < NA and then J < NB loop
++         if A (I) = B (J) then
++            if not Found then First := A (I); Found := True; end if;
++            Last := A (I);
++            I := I + 1; J := J + 1;
++         elsif A (I) < B (J) then I := I + 1;
++         else J := J + 1;
++         end if;
++      end loop;
++   end Intersect_Bounds;
++
+    procedure Row (Tag : String; It : Natural; T0 : Time; Extra : String) is
+       US : constant Integer := Integer (Float (To_Duration (Clock - T0)) * 1_000_000.0);
+    begin
+@@ -128,6 +148,18 @@ begin
+                     C  : constant Natural := Intersect (A.all, NA, B.all, NB);
+             begin Row ("and ", It, T0, "common=" & Integer'Image (C)); end;
+          end loop;
++         declare
++            Found       : Boolean;
++            First, Last : Long_Long_Integer;
++         begin
++            Intersect_Bounds (A.all, NA, B.all, NB, Found, First, Last);
++            if Found then
++               Put_Line ("first=" & Ada.Strings.Fixed.Trim (Long_Long_Integer'Image (First), Ada.Strings.Left) &
++                         " last=" & Ada.Strings.Fixed.Trim (Long_Long_Integer'Image (Last), Ada.Strings.Left));
++            else
++               Put_Line ("first=none last=none");
++            end if;
++         end;
+       end;
+    end if;
+ end Bench;

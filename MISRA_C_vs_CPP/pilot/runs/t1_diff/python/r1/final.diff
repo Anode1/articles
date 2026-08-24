@@ -1,0 +1,62 @@
+ README.md |  5 +++--
+ bench.py  | 13 ++++++++++++-
+ check.sh  |  1 +
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+diff --git a/README.md b/README.md
+index 719eb67..438ffab 100644
+--- a/README.md
++++ b/README.md
+@@ -1,13 +1,14 @@
+ # bench
+ 
+-A two-operation benchmark over an index of plain-text files.
++A three-operation benchmark over an index of plain-text files.
+ 
+     python3 bench.py find <store> <substr>    count the lines of <store> that contain <substr>
+     python3 bench.py and  <listA> <listB>     count the ids common to two posting lists
++    python3 bench.py diff <listA> <listB>     count the ids in <listA> absent from <listB>
+                                    (one integer id per line, ascending, no duplicates)
+ 
+ Each operation prints one row per timed iteration.
+ 
+ Build: `(none: it is a script)`
+ 
+-`sh check.sh` builds the program and runs both operations on the files in `fixtures/`.
++`sh check.sh` builds the program and runs all three operations on the files in `fixtures/`.
+diff --git a/bench.py b/bench.py
+index 3d9acf4..877f900 100644
+--- a/bench.py
++++ b/bench.py
+@@ -10,7 +10,7 @@ if mode=="find":
+         s=t(); h=data.count(pat); print(f"find.count iter{it} {(t()-s)*1e3:7.0f} ms  hits={h}")
+     for it in range(3):                             # explicit loop, same idea as C/Java
+         s=t(); h=sum(1 for ln in lines if pat in ln); print(f"find.loop  iter{it} {(t()-s)*1e3:7.0f} ms  hits={h}")
+-else:
++elif mode=="and":
+     A=set(slurp(sys.argv[2]).split()); B=set(slurp(sys.argv[3]).split())   # sets, outside timing
+     LA=list(map(int,slurp(sys.argv[2]).split())); LB=list(map(int,slurp(sys.argv[3]).split()))  # sorted int lists
+     for it in range(K):                             # idiomatic: C-backed set intersection
+@@ -23,3 +23,14 @@ else:
+             elif x<y: i+=1
+             else: j+=1
+         print(f"and.2ptr  iter{it} {(t()-s)*1e3:7.0f} ms  common={c}")
++else:
++    LA=list(map(int,slurp(sys.argv[2]).split())); LB=list(map(int,slurp(sys.argv[3]).split()))  # sorted int lists
++    for it in range(K):                             # single forward pass, no set/map/hash table
++        s=t(); i=j=only=0; na=len(LA); nb=len(LB)
++        while i<na and j<nb:
++            x=LA[i]; y=LB[j]
++            if x==y: i+=1; j+=1
++            elif x<y: only+=1; i+=1
++            else: j+=1
++        only+=na-i
++        print(f"diff      iter{it} {(t()-s)*1e3:7.0f} ms  only={only}")
+diff --git a/check.sh b/check.sh
+index ae9a336..4158d26 100644
+--- a/check.sh
++++ b/check.sh
+@@ -5,3 +5,4 @@ cd "$(dirname "$0")"
+ 
+ python3 bench.py find fixtures/store.txt Outputs
+ python3 bench.py and fixtures/a.txt fixtures/b.txt
++python3 bench.py diff fixtures/a.txt fixtures/b.txt

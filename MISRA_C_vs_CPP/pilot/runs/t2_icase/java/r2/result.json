@@ -1,0 +1,50 @@
+{
+ "task": "t2_icase",
+ "lang": "java",
+ "rep": 2,
+ "model": "claude-sonnet-5",
+ "wall_s": 27.1,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 8,
+ "cost_usd": 0.102359,
+ "duration_api_ms": 23482,
+ "stop": "success",
+ "input_tokens": 12,
+ "cache_read": 188515,
+ "cache_create": 11383,
+ "output_tokens": 1796,
+ "final_text": "Confirmed: case-insensitive count (11) now matches `grep -ic`, versus exact-match count (2) previously. The scan in `Bench.java:32-49` now folds ASCII letter case while keeping all other bytes exact-match; `check.sh` passes.",
+ "context_tokens": 199910,
+ "tool_calls": 7,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r2/work/Bench.java",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r2/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r2/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | head -100",
+  "sh check.sh",
+  "grep -ic \"outputs\" fixtures/store.txt; grep -c \"Outputs\" fixtures/store.txt"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "Bench.java"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

@@ -1,0 +1,56 @@
+{
+ "task": "t1_diff",
+ "lang": "rust",
+ "rep": 2,
+ "model": "claude-sonnet-5",
+ "wall_s": 31.1,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 11,
+ "cost_usd": 0.1408264,
+ "duration_api_ms": 29725,
+ "stop": "success",
+ "input_tokens": 18,
+ "cache_read": 295482,
+ "cache_create": 13337,
+ "output_tokens": 2719,
+ "final_text": "9 (A) - 4 (common) = 5, which matches `only=5`. check.sh passes with all three operations working correctly.",
+ "context_tokens": 308837,
+ "tool_calls": 10,
+ "tools": {
+  "Bash": 2,
+  "Read": 3,
+  "Edit": 5
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r2/work/bench.rs",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r2/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/rust/r2/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | sort",
+  "sh check.sh"
+ ],
+ "edits": 5,
+ "diff_files": [
+  "README.md",
+  "bench.rs",
+  "check.sh",
+  "+            println!(\"diff  iter{}  {:6.1} ms  only={}"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "and_p1_random": true,
+  "diff_p1_random": true,
+  "and_p2_identical": true,
+  "diff_p2_identical": true,
+  "and_p3_disjoint": true,
+  "diff_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "diff_p4_empty_second": true,
+  "and_p5_last_only": true,
+  "diff_p5_last_only": true
+ }
+}

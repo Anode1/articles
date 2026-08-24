@@ -1,0 +1,50 @@
+{
+ "task": "t2_icase",
+ "lang": "ada",
+ "rep": 2,
+ "model": "claude-sonnet-5",
+ "wall_s": 33.2,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 8,
+ "cost_usd": 0.12278700000000001,
+ "duration_api_ms": 32422,
+ "stop": "success",
+ "input_tokens": 12,
+ "cache_read": 194065,
+ "cache_create": 13505,
+ "output_tokens": 2879,
+ "final_text": "Matches `grep -ic`, confirming case-insensitive matching works correctly. The scan now folds ASCII letter case (via `Fold`) for both the pattern and the searched bytes while leaving all non-letter bytes compared exactly; `check.sh` builds and runs cleanly.",
+ "context_tokens": 207582,
+ "tool_calls": 7,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r2/work/bench.adb",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r2/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/ada/r2/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | sort",
+  "sh check.sh",
+  "grep -ic \"Outputs\" fixtures/store.txt"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "bench.adb"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

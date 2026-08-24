@@ -1,0 +1,50 @@
+{
+ "task": "t2_icase",
+ "lang": "java",
+ "rep": 1,
+ "model": "claude-sonnet-5",
+ "wall_s": 25.1,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 8,
+ "cost_usd": 0.10270199999999999,
+ "duration_api_ms": 23325,
+ "stop": "success",
+ "input_tokens": 12,
+ "cache_read": 188505,
+ "cache_create": 11448,
+ "output_tokens": 1804,
+ "final_text": "That's 9 lines listed but grep -c reports 11 (case-insensitive substring match count matches `Bench find` output of hits=11), confirming the fix works correctly \u2014 case-insensitive matching now catches all variants (OUTPUTS, Outputs, outputs), matching grep -i's count.\n\nChange complete: `Bench.java` now does ASCII case-insensitive substring matching for the scan (non-letter bytes still require exact match), verified via `check.sh` and cross-checked against `grep -ic`.",
+ "context_tokens": 199965,
+ "tool_calls": 7,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 1
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r1/work/Bench.java",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r1/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t2_icase/java/r1/work/check.sh"
+ ],
+ "bash": [
+  "find . -type f -not -path './.git/*' | sort",
+  "sh check.sh",
+  "grep -nc -i 'outputs' fixtures/store.txt; grep -n 'outputs\\|Outputs\\|OUTPUTS\\|OutPuts' fixtures/store.txt"
+ ],
+ "edits": 1,
+ "diff_files": [
+  "Bench.java"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "find_mixed_case": true,
+  "and_p1_random": true,
+  "and_p2_identical": true,
+  "and_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "and_p5_last_only": true
+ }
+}

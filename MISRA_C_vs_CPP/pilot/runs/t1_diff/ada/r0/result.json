@@ -1,0 +1,56 @@
+{
+ "task": "t1_diff",
+ "lang": "ada",
+ "rep": 0,
+ "model": "claude-sonnet-5",
+ "wall_s": 34.6,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 11,
+ "cost_usd": 0.13771819999999999,
+ "duration_api_ms": 33259,
+ "stop": "success",
+ "input_tokens": 14,
+ "cache_read": 232216,
+ "cache_create": 14509,
+ "output_tokens": 3205,
+ "final_text": "Added the `diff` operation to `bench.adb` (single forward pass, no auxiliary set/map), wired it into the CLI dispatch, and updated `README.md` and `check.sh`. Verified manually: a={1,3,5,7,9,11,12,13,20}, b={2,3,5,6,11,13,21} \u2192 ids only in a = {1,7,9,12,20} = 5, matching the program's `only=5` output. `check.sh` builds and runs all three operations successfully.",
+ "context_tokens": 246739,
+ "tool_calls": 10,
+ "tools": {
+  "Bash": 3,
+  "Read": 3,
+  "Edit": 4
+ },
+ "reads": [
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r0/work/bench.adb",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r0/work/README.md",
+  "/tmp/claude-1000/-home-vas-articles-MISRA-C-vs-CPP/56575395-2709-4a7e-a88f-71b5c5c8159f/scratchpad/pilot/runs/t1_diff/ada/r0/work/check.sh"
+ ],
+ "bash": [
+  "find . -maxdepth 3 -type f | grep -v .git | sort",
+  "sh check.sh",
+  "cat fixtures/a.txt; echo ---; cat fixtures/b.txt; echo ---; comm -23 fixtures/a.txt fixtures/b.txt | wc -l"
+ ],
+ "edits": 4,
+ "diff_files": [
+  "README.md",
+  "bench.adb",
+  "check.sh"
+ ],
+ "build_ok": true,
+ "hidden_pass": true,
+ "hidden_checks": {
+  "find_Outputs": true,
+  "and_p1_random": true,
+  "diff_p1_random": true,
+  "and_p2_identical": true,
+  "diff_p2_identical": true,
+  "and_p3_disjoint": true,
+  "diff_p3_disjoint": true,
+  "and_p4_empty_second": true,
+  "diff_p4_empty_second": true,
+  "and_p5_last_only": true,
+  "diff_p5_last_only": true
+ }
+}
