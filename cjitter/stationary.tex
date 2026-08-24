@@ -78,53 +78,27 @@ what they do not draw, and a criterion can be wanted in the result without being
 the coordinates.
 
 We ran the test on 853 diagrams of 15 to 40 boxes from three unrelated communities
-(Section~\ref{sec:corpora}), and on layouts of the same graphs by four tools, which say
-what a layout that does minimise something scores. The findings:
+(Section~\ref{sec:corpora}), and on layouts of the same graphs by four tools, which say what
+a layout that does minimise something scores. Section~\ref{sec:results} carries the numbers;
+the findings are these.
 
-\begin{enumerate}
-\item Under overlap every box of the median hand diagram is held and the term is zero in
-  every corpus (the term is nonzero in 4 to 8\% of hand diagrams). Every box in a layout by
-  a tool that removes overlaps is held too; \texttt{neato} without overlap removal holds
-  0.41 to 0.76. Overlap is a criterion people satisfy exactly, in common with every tool
-  that tries.
-\item Under uniform edge length and under stress no hand-placed box is held: 0.00 in every
-  corpus under either. The test has power: \texttt{neato}'s stress layouts are held
-  under stress at 1.00 in every corpus. Under the three base criteria summed with the usual
-  equal weights the length term carries 99\% of the value and no box is held, which is what
-  an earlier version of this study, using a capped descent, reported as ``hand layouts are
-  not stationary''. The weight sweep says why no reweighting repairs it: a weight of 0.001
-  on length or stress, the rest on crossings and overlap, drops the held fraction of nodes
-  from 0.94--0.98 to below 0.015 in every corpus. Any positive weight on a criterion that
-  holds no box makes the sum hold no box.
-\item Alignment of boxes into shared rows and columns, HOLA's gridiness, puts 58\%, 36\%
-  and 82\% of hand-placed boxes in an alignment of three or more; \texttt{neato} puts none,
-  \texttt{dot} 88\%, 82\% and 78\%, ELK 80\%, 69\% and 75\%. The continuous form A1 holds
-  0.52, 0.21 and 0.87 of hand-placed boxes (BPMN over all 6{,}723 in the band; the 300 in
-  the tables read 0.91) against 0.06 for \texttt{neato}, 1.00, 1.00 and
-  0.89 for \texttt{dot} and 0.57, 0.42 and 0.62 for ELK. The BPMN lanes do not explain the
-  0.91: of the held boxes, 30\% are held by a column and 13\% by a row shared with a box
-  of another lane or of none, neither of which a horizontal lane can impose, and the rows
-  within one lane sit in lanes a median 6.3 box heights tall. Orthogonality of the drawn
-  routes holds 0.19, 0.17 and 0.73, more than any tool; separation of boxes from foreign
-  edges is nearly satisfied everywhere (value 0.000 to 0.004) and holds 0.88 to 1.00, the
-  flatness of a term with little to act on. In WikiPathways 0.37 of boxes share an exact
-  $x$ with another box while 17\% of coordinates are integers, so the alignment there is
-  the person's act.
-\item Reading direction does not close the gap: the flow term holds 0.59, 0.62 and 0.85 of
-  hand-placed boxes at values 0.13, 0.10 and 0.05, where \texttt{dot} and ELK hold 1.00 at
-  0.000 in every corpus. The person tolerates a backward edge the layered tools remove.
-\item On every criterion but alignment and flow the hand layout's profile is the layered
-  tools': held under overlap, free under length and stress, partly held under
-  orthogonality. The person draws like a layered tool that aligns part of the drawing and
-  points most of it one way.
-\item Crossings hold every box in every layout at radius 0.02, because no single move of
-  that length removes one, so the count is flat. On the drawn routes the median hand
-  diagram has no crossing in any corpus (on centre-to-centre chords WikiPathways reads one
-  per 26 edges); \texttt{dot} leaves a median 0.029 and 0.056 per edge on the two
-  biological corpora, ELK 0.036 and 0.066, both 0.000 on BPMN. The diagrams people draw
-  are near-trees, median edges per box 1.06, 1.04 and 1.11 against 1.30 in the Rome
-  benchmark \cite{rome}; crossings are what the theory is about \cite{gj83}, and on these
-  diagrams there are few to remove.
+\begin{enumerate}\itemsep2pt
+\item Overlap holds every box of the median hand diagram at value zero in every corpus, as
+  it does in every tool that removes overlaps; the term is nonzero in 4 to 8\% of hand
+  diagrams. People satisfy it exactly.
+\item Length and stress hold no hand-placed box anywhere, 0.00 in all three corpora, while
+  \texttt{neato}'s stress layouts are held at 1.00. No reweighting repairs it: a weight of
+  0.001 on either term drops the held fraction of the sum below 0.015.
+\item Alignment into rows and columns holds 0.52, 0.21 and 0.87 against \texttt{neato}'s
+  0.06 and 0.07 for a grid-snapped random layout. It is the criterion the base energy omits
+  and the person supplies, and BPMN's lanes cannot impose it.
+\item Reading direction does not close the gap. Flow holds 0.59 to 0.85 by hand where
+  \texttt{dot} and ELK hold 1.00: the person tolerates a backward edge the layered tools
+  remove.
+\item Crossings and node--edge separation hold every box because they are flat at this
+  radius, not because they are met. Only 3 to 30\% of diagrams offer any improving move.
+\item On everything else a hand layout reads as a layered layout: held under overlap, free
+  under distance, partly held under orthogonality.
 \end{enumerate}
 
 The rest of the paper is the foundation behind the test (Section~\ref{sec:foundations}),
@@ -146,11 +120,10 @@ where each term $T_k$ is a quantity to be made small. The tool's author asserts 
 $w_k$; the field of multicriteria layout is the choice of the $T_k$ and the $w_k$
 \cite{dh96, purchase02}.
 
-\paragraph{Local minimum.} A point $x$ is a local minimum of $E$ if there is a radius
-$r > 0$ with $E(y) \ge E(x)$ for every $y$ within distance $r$ of $x$. For a differentiable
-$E$ this implies $\nabla E(x) = 0$. Two of our terms are not differentiable: crossings is a
-count, piecewise constant in $x$, and overlap has corners where boxes touch. So the test
-uses no gradient. Fix a radius $d$ and a set $V$ of unit directions in the plane (sixteen,
+\paragraph{Local minimum.} A point $x$ is a local minimum of $E$ if $E(y) \ge E(x)$ for every $y$
+within some distance $r$ of $x$; for differentiable $E$ this implies $\nabla E(x) = 0$. Two
+terms here are not differentiable, crossings being a count and overlap having corners where
+boxes touch, so the test uses no gradient. Fix a radius $d$ and a set $V$ of unit directions in the plane (sixteen,
 equally spaced). For node $i$ and direction $v$ let $x + d\,v^{(i)}$ be the layout with
 node $i$ moved by $d$ along $v$ and every other node fixed. Node $i$ is \emph{held} at radius $d$ if
 \begin{equation}
@@ -164,21 +137,19 @@ q_d(x) = \frac{1}{N}\,\#\{\,i : \text{node } i \text{ is held at radius } d\,\}.
 \end{equation}
 $q_d = 1$ says the layout is a local minimum of $E$ over single-node moves of length $d$;
 for smooth $E$ and small $d$ it says $\nabla E(x) = 0$ to within the resolution of $V$.
-Because~\eqref{eq:held} is a comparison of two energies it is defined for every term, and
-because it is evaluated per term it separates the criteria a person satisfied from those
-they did not. A descent-based measure (how far a capped descent moves the layout, the
-estimand of the first version of this study) answers the same question for the sum and
-cannot separate the terms; it is retained as a secondary.
+Being a comparison of two energies,~\eqref{eq:held} is defined for every term and, evaluated
+per term, separates the criteria a person satisfied from those they did not. A capped
+descent, this study's first estimand, answers the same question for the sum only; it is
+retained as a secondary.
 
 \paragraph{The inverse problem.} Given layouts $x^{(1)}, \dots, x^{(G)}$ that people
 accepted, inverse optimisation asks for the weights $w$ under which they are nearest to stationary \cite{keshavarz11, chan19}. With the directional differences
 $D_{iv} T_k = T_k(x + d\,v^{(i)}) - T_k(x)$ in hand, node $i$ is held under $w$ exactly when $\sum_k w_k D_{iv} T_k \ge 0$ for all $v$, a set of linear inequalities in $w$. The residual is the smallest total violation over $w$ on the simplex, a linear program, and it is zero only if some weighting of the terms makes the layout a local minimum. A term with $D_{iv} T_k < 0$ for some $v$ at almost every node (uniform edge length, at any layout whose edges are not all the same length) cannot take positive weight without violating the inequalities at those nodes, which is the zero weight the random-search fit found.
 
-\paragraph{Step terms.} A term that is a count (crossings) or a step function of position
-(gridiness, Section~\ref{sec:method}) is flat almost everywhere, so it holds a node
-wherever no single move of length $d$ changes it. For such a term $q_d$ says how much of the
-layout the criterion has stopped acting on, which is a different thing from how well the
-criterion is met, and the term's value at the layout is reported beside $q_d$.
+\paragraph{Step terms.} A count (crossings) or a step function of position (gridiness,
+Section~\ref{sec:method}) is flat almost everywhere and holds a node wherever no move of
+length $d$ changes it. There $q_d$ measures how much of the layout the criterion has stopped
+acting on, not how well it is met, so the term's value is reported beside $q_d$.
 
 \paragraph{The reference length.} The length and stress terms compare distances with a
 reference $L$. Fixed at the layout's median edge length, $L$ is in general not the scale at
@@ -384,8 +355,6 @@ whole band on the stored routes with the fitted $L$.
 interval over diagrams, and on the three tool layouts of the same graphs; in parentheses
 the median value of the term at the layout, 0 when satisfied.
 
-% [CURRENT TABLE RETAINED FROM DRAFT]
-
 \begin{center}\scriptsize\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{llrrrrr}
 \toprule
@@ -475,16 +444,12 @@ no hand-placed box, and \texttt{neato}'s stress layouts are held under stress at
 the zero is the layout's and not the test's; \texttt{dot}, which is layered and prices no
 distance, scores 0.00 on both as the hand layouts do. At the hand layout the three base terms
 share the energy as length 0.99, crossings 0.01, overlap 0.00, and $C+O+L$ inherits the
-length term's zero. Alignment A1 holds 0.52, 0.21 and 0.91 of hand-placed boxes, 0.06 of
-\texttt{neato}'s, 0.065, 0.075 and 0.067 of a layout snapped to the same grid with the same
-boxes in the same bounding box and no author (Section~\ref{sec:alternatives}), and, because
-a layer is a row, 1.00, 1.00 and 0.89 of \texttt{dot}'s and 0.57, 0.42 and 0.62 of ELK's.
-What $q$ counts under $T_A$ is the fraction of boxes lying within $d/2$ of sharing a
-coordinate, not the fraction lying exactly on one, the term having its corner there, which
-is why it tracks the exact-tie fractions of Section~\ref{sec:corpora} to within a few
-points. The magnitude beside it is small: the mean best decrease one box can take is 0.066,
-0.069 and 0.032 of the alignment energy, so what the hand layouts hold is a criterion with
-little left on the table.
+length term's zero. Alignment A1 is where hand and \texttt{neato} part furthest, and a layer being a row is why
+\texttt{dot} and ELK score high on it too; a layout snapped to the same grid with no author
+holds 0.065, 0.075 and 0.067 (Section~\ref{sec:alternatives}). What $q$ counts under $T_A$
+is the fraction of boxes within $d/2$ of sharing a coordinate, not the fraction exactly on
+one, the term having its corner there, which is why it tracks the exact-tie fractions of
+Section~\ref{sec:corpora} to within a few points.
 
 \paragraph{What $q$ counts, term by term.} A held fraction is not commensurable across
 terms of different shape, and reading down a column compares three different things. Beside
@@ -532,7 +497,7 @@ $C{+}O{+}L$ at 0.00, orthogonality 0.733 against 0.726, A3 0.312 against 0.310 a
 controls were generated for; the alignment claim is stated at 0.87, the population value.
 The gridiness value puts 58\%, 36\% and 82\% of hand-placed
 boxes in an alignment of three or more, none of \texttt{neato}'s, 88\%, 82\% and 78\% of
-\texttt{dot}'s. The gridiness $q$ of 0.77 to 0.78 on \texttt{neato}'s layouts, at value
+\texttt{dot}'s and 80\%, 69\% and 75\% of ELK's. The gridiness $q$ of 0.77 to 0.78 on \texttt{neato}'s layouts, at value
 1.000, is the step term's flatness, which is why alignment is compared on the value.
 Node--edge separation is nearly satisfied in every layout (0.000 to 0.021) and holds 0.74
 to 1.00 for the same reason. Crossings hold every box at this radius; the median value on
@@ -731,47 +696,135 @@ orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
   past $d/2$ takes them to that same level (0.097, 0.095 and 0.200 at a half-width of 15,
   0.065, 0.061 and 0.062 at 120). The grid is available to the random layout and does not
   produce the effect.
-\item \textbf{The reference length.} A distance term's verdict could be its scale's. Tested:
-  under the median edge length and under $1/\sqrt{N}$ the hand layouts are held under
-  length and stress on 0.00 to 0.06 of boxes, as under the fit; only the control moves.
-\item \textbf{Straight segments where the person drew polylines.} Excluded: the primary
-  tables are on the stored routes and the Routes paragraph gives the chords beside them;
-  no verdict moves.
-\item \textbf{The person minimised a constrained energy whose constraints are absent}:
-  reading direction, layers, compartments, lanes. Tested both ways. The flow term is in
-  the tables: it holds 0.59 to 0.85 of hand-placed boxes, so reading direction is a
-  criterion people partly satisfy, not the missing constraint that would explain the
-  rest. The Lanes paragraph bounds the containers' share of the BPMN alignment: 43\% of
-  the held boxes are held by an alignment no horizontal lane can impose, and the lanes
-  of the rest leave a median 6.3 box heights of room. Containment as a hard constraint
-  was not added.
-\item \textbf{The radius.} At $d = 0.02$ on a thousand-pixel canvas the move is twenty
-  pixels, about one grid step; a person cannot be stationary below the resolution they
-  control. The Radius table answers it: the hand verdicts are the same at every $d$ from
-  0.005 to 0.05. The table at $d$ in units of box width and of median edge length was
-  not run.
-\item \textbf{Selection.} Near-trees make overlap and crossings easy. Tested over
-  diagrams with \texttt{sparsity.py}: $q$ under crossings does track density, with
-  Spearman $\rho$ against $m/n$ of $-0.37$, $-0.34$ and $-0.11$ by hand and of
-  $-0.48$, $-0.30$ and $-0.41$ for \texttt{dot}, so ``crossings hold every box'' is partly the trees'
-  gift, given to every layout of the same graphs alike. $q$ under overlap does not
-  ($\rho$ $+0.02$, $-0.06$ and $+0.12$), and length and stress are 0.00 in the sparse and
-  the dense half both. Sparsity explains none of the hand--tool differences, which are
-  differences on the same graphs.
-\item \textbf{The tools are the wrong tools.} \texttt{dot} and \texttt{neato} are not what
-  any of the three communities' editors run. Excluded: ELK layered 0.12.0, the engine the
-  BPMN and KIELER editors run, is the fourth control in every table, and its profile is
-  \texttt{dot}'s: length and stress 0.00, flow 1.00 at value 0.000, alignment 0.42 to
-  0.62 where \texttt{dot} reaches 0.89 to 1.00.
 \end{enumerate}
+
+The rest, each with the test that excluded it and the numbers it turned on:
+
+\begin{center}\small
+\begin{tabular}{@{}p{2.5cm}p{4.1cm}p{7.7cm}@{}}
+\toprule
+alternative & test & result \\
+\midrule
+Reference length
+ & $L$ at the median edge length and at $1/\sqrt{N}$
+ & hand held on 0.00 to 0.06 of boxes under length and stress, as under the fit; only the
+   control moves \\[2pt]
+Straight segments where the person drew polylines
+ & primary tables on the stored routes, chords beside them
+ & no verdict moves \\[2pt]
+A constrained energy whose constraints are absent
+ & the flow term in the tables; the BPMN lanes decomposed
+ & flow holds 0.59 to 0.85 of hand-placed boxes, so reading direction is a criterion partly
+   satisfied and not the missing constraint; 43\% of held BPMN boxes are held by an
+   alignment no horizontal lane can impose, and the lanes of the rest leave a median 6.3
+   box heights of room. Containment as a hard constraint was not added \\[2pt]
+The radius
+ & $d \in \{0.005, 0.01, 0.02, 0.05\}$; at $d=0.02$ the move is about one grid step
+ & the hand verdicts are the same at every $d$. The table at $d$ in units of box width and
+   of median edge length was not run \\[2pt]
+Selection: near-trees make overlap and crossings easy
+ & $q$ against $m/n$ over diagrams (\texttt{sparsity.py})
+ & crossings do track density (Spearman $\rho$ $-0.37$, $-0.34$, $-0.11$ by hand and
+   $-0.48$, $-0.30$, $-0.41$ for \texttt{dot}), these being near-trees at $m/n$ 1.06, 1.04
+   and 1.11 against 1.30 in the Rome benchmark \cite{rome}, so ``crossings hold every box''
+   is partly the trees' gift, given to every layout of the same graphs alike; crossings are
+   what the theory is about \cite{gj83}, and on these diagrams there are few to remove. Overlap does
+   not ($+0.02$, $-0.06$, $+0.12$), and length and stress are 0.00 in the sparse and the
+   dense half both. No hand--tool difference is explained \\[2pt]
+The tools are the wrong tools
+ & ELK layered 0.12.0, the engine the BPMN and KIELER editors run, as a fourth control
+ & its profile is \texttt{dot}'s: length and stress 0.00, flow 1.00 at value 0.000,
+   alignment 0.42 to 0.62 where \texttt{dot} reaches 0.89 to 1.00 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 
 \section{Related work}\label{sec:related}
 
 Aesthetic criteria and their weighting go back to Tamassia, Di Battista and Batini
-\cite{tdb88} and were made an explicit energy by Davidson and Harel \cite{dh96}; Purchase
+\cite{tdb88} and were made an explicit energy by Davidson and Harel \cite{dh96}. Purchase
 \cite{purchase02} gave the criteria their metrics, and that list has no alignment metric.
-Whether people agree with the criteria has been asked three ways. By having people draw:
-van Ham and Rogowitz \cite{vanham08} found hand layouts with fewer crossings than the force-directed algorithm produced; Dwyer et al.\ \cite{dwyer09} had 32 participants lay out one graph and 194 judges rank the results against three automatic layouts, and found the judges' choices track stress; Purchase, Pilcher and Plimmer \cite{purchase12} had participants draw from adjacency lists and found crossing removal the strongest aesthetic and alignment to a grid important; Kieffer et al.\ \cite{hola16} collected 17 designers' layouts of 8 small graphs, ranked by 66 judges, and found their gridiness, the fraction of nodes in some alignment of three or more, correlated with rank on all 8 graphs, which is where HOLA's alignment step comes from. Alignment as a human criterion is therefore known since 2012; what is new here is the count of how many hand-placed boxes it holds, on diagrams of 15 to 40 boxes, beside the counts for the criteria tools weight. Mooney et al.\ \cite{mooney25} close the other half of the Dwyer result, finding that people prefer low-stress drawings and locate shortest paths better as stress falls, which is why the conclusion here asks for a term to be added and none removed. The nearest corpus to this one is theirs \cite{gdcoll25}: 4{,}890 drawings harvested automatically from 27 editions of these proceedings, of which they say only that it ``seems to mostly contain manually drawn graphs''. It is not used here, for the reason that makes it valuable to them and not to us: a figure in a graph-drawing paper is as likely to be an algorithm's output as a person's, the provenance is not recorded per drawing, and the extraction keeps no edge directions. By showing people drawings: Purchase et al. \cite{purchase20} ran a Turing test in which hand drawings were distinguishable from algorithmic ones and judged better; Klammler, Mchedlidze and Pak \cite{klammler19} fitted the weights of a linear aesthetic combination by Nelder--Mead to discriminate good from worsened layouts, without human coordinates, and wrote that human-labelled data ``may become a critically important accomplishment in the graph drawing field''. By learning from examples: Masui \cite{masui94} learned a weighted constraint combination from user-supplied good and bad layouts by genetic programming, and Sp\"onemann, Duderstadt and von Hanxleden \cite{spoenemann14} adjusted weights from user selections among candidates; neither tested whether the examples were minima of the learned energy. The closest prior descent from a hand layout is Flud \cite{flud22}: simulated annealing continued from crowd layouts of pathway diagrams raised an asserted five-term score, on three networks, read as a success of the hybrid; the cap, the per-term test, the reference and the controls here are what turn that observation into a measurement of the score. Van Wageningen, Mchedlidze and Telea \cite{wageningen25} show drawings with identical metric values that differ in quality, which is why a fitted energy with no residual would still not be the energy people use, and why the claims here stay on the negative side. Kobourov, Pupyrev and Saket \cite{kobourov14} found crossings matter little on sparse large graphs, consistent with finding 6. The move this paper tests has been made on human artifacts outside graph drawing: O'Donovan, Agarwala and Hertzmann \cite{odonovan14} fit a 122-parameter energy over single-page graphic designs to a handful of human examples by nonlinear inverse optimisation, taking each example as optimal under the unknown parameters, which is exactly the assumption examined here and, as far as we found, the closest prior instance of it. Inverse optimisation, the recovery of an objective from solutions taken as optimal, is due to Ahuja and Orlin \cite{ahuja01} for linear programs and to Keshavarz, Wang and Boyd \cite{keshavarz11} for the convex case; Chan, Lee and Terekhov \cite{chan19} define the goodness-of-fit residual reported here. Matched-budget random controls are standard in hyperparameter search \cite{bergstra12} and were prescribed as the baseline for genetic algorithms in 1995 \cite{jw95}; we have not found them in layout. No paper fitting energy weights to human-placed coordinates was found in four searches of 2024 to 2026 work; the nearest, Zhang et al.\ \cite{zhang26}, learns from 64{,}222 pairwise preference labels, not coordinates.
+Whether people agree with the criteria has been asked three ways.
+
+\begin{center}\small
+\begin{tabular}{@{}p{3.5cm}p{5.2cm}p{5.6cm}@{}}
+\toprule
+work & what it did & what it gives, and what it leaves \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{By having people draw}}\\[2pt]
+van Ham, Rogowitz \cite{vanham08}
+ & hand layouts against a force-directed algorithm
+ & hand layouts carry fewer crossings \\[2pt]
+Dwyer et al.\ \cite{dwyer09}
+ & 32 participants laid out one graph; 194 judges ranked the results against three
+   automatic layouts
+ & judges' choices track stress, over twelve layouts and without a test \\[2pt]
+Purchase, Pilcher, Plimmer \cite{purchase12}
+ & participants drew from adjacency lists
+ & crossing removal the strongest aesthetic, alignment to a grid important \\[2pt]
+Kieffer et al.\ \cite{hola16}
+ & 17 designers' layouts of 8 small graphs, ranked by 66 judges
+ & gridiness correlates with rank on all 8, which is where HOLA's alignment step comes
+   from \\[2pt]
+Mooney et al.\ \cite{mooney25}
+ & preference and shortest-path performance against stress, graphs to 50 nodes
+ & people prefer low stress and perform better as it falls; why the conclusion adds a term
+   and removes none \\[2pt]
+Mooney et al.\ \cite{gdcoll25}
+ & 4{,}890 drawings harvested automatically from 27 editions of these proceedings
+ & the nearest corpus, not used here: a figure in a graph-drawing paper is as likely an
+   algorithm's output, provenance is not per drawing, and edge directions are dropped \\[4pt]
+\multicolumn{3}{@{}l}{\emph{By showing people drawings}}\\[2pt]
+Purchase et al.\ \cite{purchase20}
+ & a Turing test on hand and algorithmic drawings
+ & hand drawings distinguishable, and judged better \\[2pt]
+Klammler, Mchedlidze, Pak \cite{klammler19}
+ & Nelder--Mead fit of a linear aesthetic combination discriminating good from worsened
+   layouts
+ & no human coordinates enter it; they call human-labelled data a critically important
+   accomplishment still to come \\[4pt]
+\multicolumn{3}{@{}l}{\emph{By learning from examples}}\\[2pt]
+Masui \cite{masui94}
+ & a weighted constraint combination from good and bad layouts, by genetic programming
+ & neither tested whether the examples are minima of the learned energy \\[2pt]
+Sp\"onemann et al.\ \cite{spoenemann14}
+ & weights adjusted from user selections among candidates
+ & as above \\[2pt]
+Flud \cite{flud22}
+ & annealing continued from crowd layouts of pathway diagrams, three networks
+ & the closest prior descent from a hand layout; it raised an asserted five-term score and
+   read that as success. The cap, the per-term test, the reference and the controls here
+   are what make it a measurement of the score \\[2pt]
+Zhang et al.\ \cite{zhang26}
+ & 64{,}222 pairwise preference labels
+ & the nearest recent work; it learns from preferences, not coordinates \\[2pt]
+O'Donovan, Agarwala, Hertzmann \cite{odonovan14}
+ & a 122-parameter energy over single-page graphic designs fitted to a handful of human
+   examples by nonlinear inverse optimisation
+ & each example taken as optimal under the unknown parameters: the assumption examined
+   here, and the closest prior instance of it we found \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Alignment as a human criterion is therefore known since 2012. What is new here is the count
+of how many hand-placed boxes it holds, on diagrams of 15 to 40 boxes, beside the counts for
+the criteria tools weight. Two results bound what such a count can mean: van Wageningen,
+Mchedlidze and Telea \cite{wageningen25} show drawings with identical metric values that
+differ in quality, so a fitted energy with no residual would still not be the energy people
+use, which is why the claims here stay on the negative side; and Kobourov, Pupyrev and Saket
+\cite{kobourov14} found crossings matter little on sparse large graphs, consistent with the
+sparsity result.
+
+The machinery is standard elsewhere. Inverse optimisation, the recovery of an objective from
+solutions taken as optimal, is due to Ahuja and Orlin \cite{ahuja01} for linear programs and
+to Keshavarz, Wang and Boyd \cite{keshavarz11} for the convex case; Chan, Lee and Terekhov
+\cite{chan19} define the goodness-of-fit residual reported here. Matched-budget random
+controls are standard in hyperparameter search \cite{bergstra12} and were prescribed as the
+baseline for genetic algorithms in 1995 \cite{jw95}; we have not found them in layout. No
+paper fitting energy weights to human-placed coordinates was found in four searches of 2024
+to 2026 work.
 
 \section{Reproducibility}
 
@@ -788,24 +841,18 @@ three raw archives and of the eighteen corpus files as measured.
 \section{Conclusion}
 
 Coordinates a person accepted are not minima of the energy in use, and the way they fail
-is specific. People draw at a minimum of overlap, exactly, as every tool that removes
-overlaps does.
-They draw nowhere near a minimum of uniform edge length or of stress, the criteria that
-carry the energy in force-directed tools, whose own layouts the test holds. What they do
-that the base energy does not price is align boxes into rows and columns, for a fifth of
-the boxes in Reactome, half in WikiPathways and seven eighths in BPMN, by hand where the
-canvas is continuous and beyond anything the lanes impose where it is not, and point
-directed edges the reading way, for three fifths to six sevenths of the boxes; the
-layered tools do both exactly. On every criterion measured here a hand layout reads as a
-layered layout with partial alignment and partial flow. A method that learns weights from
-such layouts must offer alignment among its terms or it fits nothing the person did. For a
-tool builder this is one addition and one number, not a subtraction. Alignment belongs among
-the terms: it is what holds hand-placed boxes, and no standard energy prices it. Edge length
-and stress should keep their weight. A term this test finds inert at human coordinates is
-not thereby unwanted, and the preference evidence runs the other way \cite{mooney25,
-dwyer09}: coordinates and preferences are different evidence about the same people, and only
-the first is measured here. The number to report is the fraction of boxes the energy holds
-when started from a layout a person accepted.
+is specific: exact under overlap, nowhere near under uniform edge length or stress, and held
+instead by an alignment into rows and columns that no standard energy prices. On every
+criterion measured, a hand layout reads as a layered layout with partial alignment and
+partial flow.
+
+A method that learns weights from such layouts must offer alignment among its terms or it
+fits nothing the person did. For a tool builder that is one addition and one number, not a
+subtraction: edge length and stress keep their weight, since a term inert at human
+coordinates is not thereby unwanted and the preference evidence runs the other way
+\cite{mooney25, dwyer09}. Coordinates and preferences are different evidence about the same
+people, and only the first is measured here. The number to report is the fraction of boxes
+the energy holds when started from a layout a person accepted.
 
 \begin{thebibliography}{99}
 \bibitem{gj83} M.~R. Garey, D.~S. Johnson. Crossing Number is NP-Complete. \emph{SIAM
