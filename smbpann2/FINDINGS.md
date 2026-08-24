@@ -14,7 +14,7 @@ one correction was applied to it and is described below.
 
 The structure-discovery direction failed for a reason that had nothing to do with operators: **the
 objective ranked the hand-built convolution below what the search found unaided**, replicated on three
-models with three energy definitions. A task was then built in which the convolution genuinely *is* the
+models with three energy definitions. A task was then built in which the convolution *is* the
 optimum, verified by enumeration across a 48-fold LAMBDA range. On that task the search converges on a
 structure worth +0.10 over a size-matched random support and still **misses the target by 0.078**, and
 neither the operator set built across this direction nor a twelvefold budget increase recovers it.
@@ -33,7 +33,7 @@ Hand-build the target, score it under the same objective on the same tasks, and 
 preference and not undertraining. Caveats, all conservative: unpaired task-seed streams, and the target
 scored on validation against the search's held-out test.
 
-**Replicated three times** — window genome with prefix-tied weights, offset kernel with an L0 tap
+**Replicated three times**: window genome with prefix-tied weights, offset kernel with an L0 tap
 count, and the same kernel under an L1 relaxation. Every time the search's own answer is smaller than
 K, usually not contiguous, and scores higher.
 
@@ -55,7 +55,7 @@ so optimizers are compared by the structures they hand over, never by their own 
     relax lambda=0.020      12.60     0.20      0.850      0.5502   | tap-matched rnd 0.5540
 
 Relaxation does not find the target, does not come near the GA, and **a tap-matched random support
-matches it at every lambda** — L1's structure does no work, only its size does. The non-organic
+matches it at every lambda**: L1's structure does no work, only its size does. The non-organic
 emergence analogy (crystals and convection cells relaxing an energy functional with no search) does not
 transfer to this landscape.
 
@@ -67,7 +67,7 @@ never-trained positions is what pays for it** (`emerge_gen2` had this, but impos
 why its fitness was flat). Three disjoint position sets: train, select, report.
 
 **The gate passes.** Enumerating all 231 contiguous shared supports, the planted width is rank 1, and
-stays rank 1 across LAMBDA from 0.25 to 12 — a 48-fold range, so the *task* decides, not the tariff.
+stays rank 1 across LAMBDA from 0.25 to 12, a 48-fold range, so the *task* decides, not the tariff.
 
     producer                taps  shared contig  heldout   objective    paired vs ideal
     ideal conv (shared)      3.0    1.00   1.00    0.692      0.6774    --
@@ -85,7 +85,7 @@ The GA chooses sharing in 20/20 seeds while selecting on transfer.
 the motif, so the magnitude multiset is identical between classes and no single tap can discriminate
 (the first version's fixed rearrangement let one tap reach 0.746). A random-shape distractor sits
 adjacent to the motif in both classes, so extra width bleeds into it and loses *accuracy* rather than
-merely costing energy. **Turn the distractor off and width K+1 returns to rank 1 at 0.7530** — the
+merely costing energy. **Turn the distractor off and width K+1 returns to rank 1 at 0.7530**: the
 distractor is demonstrably what makes K optimal.
 
 ## 4. With a valid target, the search falls short of it
@@ -138,10 +138,10 @@ split it never saw.
 
 **So section 4's reading needs narrowing.** It is not the search algorithm, and not the operator set:
 it is that the quantity being selected on is both too noisy to resolve the difference and reused often
-enough to be memorised. That also explains cleanly why no operator and no budget helped — they were all
+enough to be memorised. That also explains cleanly why no operator and no budget helped: they were all
 optimising a signal that does not rank the target first.
 
-**Two fixes tested, and only one works — partially.**
+**Two fixes tested, and only one works, partially.**
 
 *Resampling the selection examples every generation* (`RESAMPLE=1`, now the default) removes any fixed
 set to memorise. It changes nothing: flip-only 0.5998 -> 0.6058, slide 0.5794 -> 0.6043, rewire
@@ -170,8 +170,8 @@ paying compute (roughly 35 draws for a standard error near 0.02) or by reducing 
 directly, and neither has been pushed to the point where the target becomes reachable.
 
 **What this reframes.** Every negative in this direction was measured with a fitness estimator whose
-noise exceeded the effect being selected on. That does not retroactively validate the operators -- they
-were also tested against a target the objective did not want, which is a separate defect -- but it does
+noise exceeded the effect being selected on. That does not retroactively validate the operators (they
+were also tested against a target the objective did not want, which is a separate defect), but it does
 mean no operator claim from this line rests on a signal capable of supporting it.
 
 ---
@@ -190,15 +190,15 @@ Section 5 prescribed ~35 weight draws to resolve a 0.078 gap. That conflated two
 is the target's lead on the REPORTING split, which the search never sees; on the SELECTION split its
 lead was 0.007. The two position sets are exchangeable random draws, so for a structure not chosen
 using them the expected gap is identical on both. It was not. **The excess is therefore
-selection-induced: the GA had overfitted WHICH positions it must transfer to** -- 3 fixed positions
-at N=12 -- which is why `RESAMPLE` (fresh examples, same positions) changed nothing.
+selection-induced: the GA had overfitted WHICH positions it must transfer to**, 3 fixed positions
+at N=12, which is why `RESAMPLE` (fresh examples, same positions) changed nothing.
 
 Measured directly, DIAG's new exchangeability lines: excess (report gap minus selection gap)
 **0.0312 at ROTPOS=0, -0.0140 at ROTPOS=1.** Eliminated, not merely reduced.
 
 ### The fix
 
-`ROTPOS=1` redraws the selection POSITIONS every generation from the whole non-train pool -- the
+`ROTPOS=1` redraws the selection POSITIONS every generation from the whole non-train pool: the
 position analogue of RESAMPLE. No fixed subset to fit, so the selection mean estimates the same
 transfer the report measures. Cheap, and it changes no task constant.
 
@@ -250,8 +250,8 @@ LAMBDA sweep at the repaired setting (ROTPOS=1, FEVAL=12), and `exact` = taps==3
     12         1.7    0.50   4/20      GA BEATS ideal (0.5537 vs 0.5202)
 
 Taps fall monotonically as predicted and exact structural matches rise 0/20 -> 5/20. **The
-contiguity column is confounded** -- a 1-tap support is trivially contiguous -- which is the defect
-NOTES.md flagged for `reg`; the `exact` column is the honest metric and it survives the confound
+contiguity column is confounded** (a 1-tap support is trivially contiguous), which is the defect
+NOTES.md flagged for `reg`; the `exact` column is the unconfounded metric and it survives the confound
 (at LAMBDA=6 a 3-tap support is ABOVE the mean size of 2.5, so it is not a degenerate collapse).
 
 Two limits, both real:
@@ -260,7 +260,7 @@ Two limits, both real:
 - **At LAMBDA=12 the GA beats the hand-built target** (0.5537 vs 0.5202), so the target is not
   GLOBALLY optimal there even though it is rank 1 within its own window. The valid tariff window is
   bounded above somewhere below 12, and the earlier "argmax to LAMBDA=12" claim rested on a
-  contiguous-only scan -- the same flaw `SUBSCAN` was written to close.
+  contiguous-only scan: the same flaw `SUBSCAN` was written to close.
 
 ### What this direction now is
 
@@ -275,8 +275,8 @@ a property of the SEARCH's instrumentation rather than of the architecture space
 
 Written before the 60-seed factorial, the reading here was that alignment never emerges. **The
 factorial overturns that**: with both barriers removed alignment does emerge, in 22% of runs against
-2% at baseline (p=0.0018), and a tap-matched null never produces it. What survives as the honest
-limit is narrower and more interesting -- the planted convolution is a reachable, selectable local
+2% at baseline (p=0.0018), and a tap-matched null never produces it. What survives as the defensible
+limit is narrower and more interesting: the planted convolution is a reachable, selectable local
 optimum rather than the global one, and the majority of runs still prefer a slightly better
 non-aligned support. See the factorial and its two corrections below.
 
@@ -330,7 +330,7 @@ Exact McNemar on the same 60 seeds, all four surviving Holm correction over the 
 
 **Both barriers are independently significant and neither alone suffices.** The tariff raises exact
 matches 2 -> 13 with the fixes in place; the search fixes raise them 6 -> 13 at fixed tariff. The
-outcome I flagged in advance as most worth guarding against -- the tariff alone doing all the work --
+outcome I flagged in advance as most worth guarding against (the tariff alone doing all the work)
 did not happen. Consistent across arms at LAMBDA=6 with fixes: flip 13, slide 11, rewire 14, xover 14
 of 60. **The tap-matched random null is 0/60 in every one of the four cells (0/240 overall)**, so an
 exact match is never a coincidence of tap count.
@@ -347,7 +347,7 @@ first 20 task draws were simply easier: the ideal's own held-out accuracy is 0.6
 and 0.636 over all 60. Every 20-seed number in this section stands as measured but should be read as
 the easy-seed subset.
 
-**And the gate itself was under-resolved -- an ordering inside its own noise.** One draw per seed
+**And the gate itself was under-resolved: an ordering inside its own noise.** One draw per seed
 gives each mask a standard error of 0.13/sqrt(60) = 0.0168, against a margin between the planted
 support and its nearest rival of 0.0108. The rank was therefore not supported by the measurement,
 however clean the number looked. `SUBSCAN` now takes `DRAWS`, averaging weight draws per (mask, seed),
@@ -359,8 +359,8 @@ DRAWS=12 x 60 seeds the error falls to 0.0048 and the picture resolves
     1             0.6082              4            -0.0085  (-1.7 SE)
     6             0.5367              1            +0.0111  (+2.3 SE)
 
-**This answers "why only 22%".** At LAMBDA=1 the planted convolution is *not* the optimum -- it is
-rank 4, beaten by a width-4 and two wider supports -- so a search that does not return it is behaving
+**This answers "why only 22%".** At LAMBDA=1 the planted convolution is *not* the optimum (it is
+rank 4, beaten by a width-4 and two wider supports), so a search that does not return it is behaving
 correctly, and 2/60 is the right answer rather than a failure. At LAMBDA=6 it *is* the optimum,
 resolved at 2.3 SE, and there the search returns it 13/60 with the fixes against 6/60 without.
 **The tariff is what makes the convolution optimal; the signal repair is what makes it findable.**
@@ -377,8 +377,8 @@ rate. It reports 8% at both tariffs with a mean margin of -0.085, and **the numb
 it takes the argmax of one noisy evaluation per mask, and the maximum of 127 noisy estimates is
 whichever mask got lucky. The bias is about the size of the reported margin. Measuring the true
 per-seed ceiling needs the argmax of 127 masks resolved to well under their ~0.01 spacing, i.e. of
-order 1000 draws per mask per seed -- roughly 12 hours at 60 seeds -- so it is not affordable here and
-the honest statement is that the per-seed ceiling is unmeasured. `scratch_perseed_lam{1,6}.out` are
+order 1000 draws per mask per seed (roughly 12 hours at 60 seeds), so it is not affordable here and
+what can be said is that the per-seed ceiling is unmeasured. `scratch_perseed_lam{1,6}.out` are
 kept as the record of the flawed attempt, not as evidence.
 
 ### The overnight runs (2026-08-11 21:09 to 08-12 12:14): stronger AND narrower
@@ -387,7 +387,7 @@ Three jobs, `scripts/overnight_ceiling.sh` then `scripts/overnight_lamwindow.sh`
 cores. My ETA of 07:10 was wrong by four hours (actual 12:14): the 5.77 ms/evaluation figure was
 calibrated on a 4-process run, and at 8 processes memory contention makes every phase ~40% slower.
 
-**Job 2, 240 seeds at LAMBDA=6 -- the weakest link became the strongest.**
+**Job 2, 240 seeds at LAMBDA=6: the weakest link became the strongest.**
 
     exact recovery / 240      no repairs   both repairs   null
     flip-only                  16 (6.7%)    42 (17.5%)     1
@@ -399,7 +399,7 @@ Exact McNemar, same seeds: no repairs -> both is `b=34, c=8, p=0.00007` (was p=0
 null -> flip-only is `b=41, c=0, p<1e-7`. **The null is 1/240 here, not 0**, so the "0 of 240" above is
 true of the 60-seed factorial's four cells only and must not be carried into this run.
 
-**Job 3a, the tariff window -- reading ranks alone would have overstated it badly.**
+**Job 3a, the tariff window: reading ranks alone would have overstated it badly.**
 
     lambda        1      2      3      4      6      8     10
     rank of 127   4      2      1      1      1      1      1
@@ -407,11 +407,11 @@ true of the 60-seed factorial's four cells only and must not be carried into thi
 
 By rank the target is argmax across all of LAMBDA in [3,10]; by margin it is **resolved only at 6 and
 8**, and at 3, 4, 10 it ranks first on an ordering its own noise cannot support. The objective's
-preference for the planted width peaks in a band and decays both ways -- below it wider supports win on
+preference for the planted width peaks in a band and decays both ways: below it wider supports win on
 accuracy, above it narrower ones win on the tariff. Report [6,8]. This also settles the cherry-picking
 question: LAMBDA=8 is equally good, so 6 is not a lone tuned cell.
 
-**Job 3b, a real coherence.** Recovery rate tracks the gate margin -- two independently measured
+**Job 3b, a real coherence.** Recovery rate tracks the gate margin: two independently measured
 quantities rising and plateauing together:
 
     lambda             3        4        6        8
@@ -419,15 +419,15 @@ quantities rising and plateauing together:
     mean taps         3.63     3.12     2.38     1.83
     gate margin(SE)   0.2      1.2      2.3      2.3
 
-**Job 1, the "ceiling" -- and my framing was wrong.** The planted support is the per-seed argmax of its
+**Job 1, the "ceiling", and my framing was wrong.** The planted support is the per-seed argmax of its
 127-support neighbourhood on **8/60 seeds (13%) at LAMBDA=6**, 5/60 (8%) at LAMBDA=1, at 1000 draws per
 candidate. It is *not* a ceiling: the search recovers the structure on 17.5% of runs, i.e. more often
-than it is the best answer for an individual draw. The search never sees one draw -- it selects under
+than it is the best answer for an individual draw. The search never sees one draw: it selects under
 noise over 50 generations with rotating positions and 12-draw averaging, which estimates the objective
 *averaged* over draws, and the planted support is rank 1 in that aggregate. The 13% is also **biased
 downward** (in an argmax over 127 noisy candidates the true optimum loses to lucky rivals): the measured
 rate rose 8% -> 13% as draws went 1 -> 1000, confirming the direction. So 13% is a lower bound, and the
-honest statement is that recovery (17.5%) and per-draw optimality (>=13%) are the same order of
+defensible statement is that recovery (17.5%) and per-draw optimality (>=13%) are the same order of
 magnitude.
 
 ### THE CORRECTION THAT MATTERS: this is not an optimization result
@@ -488,10 +488,10 @@ LAMBDA=6 the GA's mean objective is 0.5593 against the ideal's 0.5502. Since 13 
 ideal exactly, the remaining 47 must average about 0.5618, i.e. **the search finds non-aligned
 supports that score slightly better than the planted one.** Enumeration cannot contradict this: SCAN
 covers 231 contiguous supports and SUBSCAN 127 subsets of the aligned window, against a space of
-2^21. So the honest claim is that the target is the optimum *of its neighbourhood and of the
+2^21. So the defensible claim is that the target is the optimum *of its neighbourhood and of the
 contiguous family*, not of the space, and its emergence is therefore not reducible to "optimisation
 succeeded". What the 1/60 -> 13/60 result says is that the planted structure becomes **reachable and
-selected** once the estimator is unbiased and the per-tap signal clears the noise floor -- while a
+selected** once the estimator is unbiased and the per-tap signal clears the noise floor, while a
 slightly better non-aligned solution remains available and is what the other 78% of runs find.
 
 ---
@@ -500,7 +500,7 @@ slightly better non-aligned solution remains available and is what the other 78%
 
 **Asset.** The composition negative is budget-independent: across 20x in epochs (300 to 6000) and 16x
 in data (192 to 3072) the 0.85 target is reached at no budget. Past 768 examples the peak sits at
-0.785-0.810 and does not move with 4x more data or 4x more epochs; below that the probe is genuinely
+0.785-0.810 and does not move with 4x more data or 4x more epochs; below that the probe is
 budget-limited, so the published claim needs that qualifier. The overshoot converges at +2..+3 for s=6
 and +1 for s=8. **Strengthens a published result.**
 
@@ -538,10 +538,10 @@ five arms I chose" is not what protocol item 9 asks for; "is the argmax of a fam
 
 ## Tooling
 
-- `emerge_rewire2.c` — TASK / GENOME / INNER LEARNER / FITNESS / OUTER SEARCH / PROTOCOL, six arms,
+- `emerge_rewire2.c`: TASK / GENOME / INNER LEARNER / FITNESS / OUTER SEARCH / PROTOCOL, six arms,
   protocol checks run by default and cannot be declined.
-- `emerge_relax.c` — descend versus select on one model with one scorer, carries the tap-matched null.
-- `emerge_transfer.c` — the transfer task, four operator arms, `SCAN` / `SUBSCAN` / `LAMSCAN` / `DIAG`
+- `emerge_relax.c`: descend versus select on one model with one scorer, carries the tap-matched null.
+- `emerge_transfer.c`: the transfer task, four operator arms, `SCAN` / `SUBSCAN` / `LAMSCAN` / `DIAG`
   modes. Knobs added 2026-08-11, every one env-gated with the default preserving archived behaviour:
   `ROTPOS` rotates the selection POSITIONS per generation (the fix of section 6); `SPLIT` chooses
   which split an enumeration scores, so a gate can be checked on the split the search actually sees;
@@ -550,8 +550,8 @@ five arms I chose" is not what protocol item 9 asks for; "is the argmax of a fam
   arm, failed its gate, left in place and off); and `N` is now a compile-time override.
   **The oracle applies to all of it**: a binary built from the unmodified HEAD source produces a
   byte-identical result table, verified twice (once mid-change, once after the last edit).
-- `fsdd_target.c` — the positive control. Runs no search.
-- `common.h`, `ga.h` — shared under *share what cannot change a number, duplicate what can*; `ga.h` is
+- `fsdd_target.c`: the positive control. Runs no search.
+- `common.h`, `ga.h`: shared under *share what cannot change a number, duplicate what can*; `ga.h` is
   a compile-time template, not an interface, so there is no indirection.
 - **An oracle.** `emerge_rewire2` reproduces `emerge_rewire.c` and the archived per-seed data
   byte-for-byte through every refactor, including extraction of the GA and the switch to inline

@@ -218,7 +218,7 @@ term the objective rewards, and slightly on the task. 200 paired seeds, bands $\
 an interval that still reaches zero at the smallest one.
 This is what a directed optimizer should do on an objective it can climb: the large win is on the energy term
 it descends by mutation where random can only sample, a small accuracy gain alongside. At scale it is
-\emph{less diffuse than random}, not compact (on-relevance $0.21$ at $N{=}28$); a compact filter truly emerges
+\emph{less diffuse than random}, not compact (on-relevance $0.21$ at $N{=}28$); a compact filter emerges
 only at $N{=}12$.
 
 \textbf{The edge is direction, not re-evaluation.} The GA re-evaluates each survivor afresh every generation,
@@ -410,7 +410,7 @@ clone collapses to $14$--$87/100$, at lower depth and with heterogeneous filters
 The boundary is \emph{soft}, though: a well-chosen uniform dilation still solves most cases (a coarse block,
 scanned and max-pooled, partially recovers the fine motif), so recombination's edge here is real but modest.
 
-\section{An honest boundary in 2-D}\label{sec:twod}
+\section{The boundary in 2-D}\label{sec:twod}
 
 The composition boundary of Sec.~\ref{subsec:compose} was measured on the channel axis in one
 dimension, where a ``channel'' is an abstraction of the task. In two dimensions the axis has a
@@ -433,7 +433,7 @@ rerun ($2.5\times$ epochs, $2\times$ signal) leaves $K{=}3$ sub-target at every 
 the wall is structural for the channel axis. Per-channel detection error compounds multiplicatively
 ($0.95^3 \approx 0.86$, at the target edge), and no cheap refinement moves a multiplicative wall; real
 vision clears such tasks with scale (depth, normalization, residuals, vast data), not one clever
-pressure. We report this boundary plainly: it is more honest than stopping at small $K$ where the
+pressure. We report this boundary plainly rather than stopping at small $K$ where the
 staircase still looked clean.
 
 \section{Related work, and how we differ}
@@ -499,7 +499,7 @@ compact convolution emerges too, but only once mutation acts on the shared featu
 edge, for a decoupling reason we can state in a line. On top of imposed priors,
 depth grows with the receptive field (overshooting it), reuse beats a free search at equal compute up to
 moderate depth (a heterogeneous search overtakes it on the deepest single-operation task), recombination is
-required outright once a task needs a genuinely different operation, and weight-shared tiling is
+required outright once a task needs a different operation, and weight-shared tiling is
 data-efficient at a degree that grows with scale then saturates. Where the search must \emph{discover} a
 compositional decomposition itself it does not, the parts failing to specialize without supervision
 (Sec.~\ref{subsec:compose}), a boundary we mark rather than paper over. The contribution is the map, the negatives, and

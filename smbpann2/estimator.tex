@@ -37,7 +37,7 @@ measures what it costs.
 The search we were running would not do what it was asked. An earlier paper in this line had shown that
 the compact filter of a convolution appears on its own once mutation acts on a shared feature rather than
 on a single connection; the other half of a convolution, one filter reused at every position, it obtained
-by construction and said so. We built a task where that reuse genuinely pays, gave the search a genome
+by construction and said so. We built a task where that reuse pays, gave the search a genome
 free to refuse it, and waited. The search refused. A larger set of operators did not help, and neither
 did twelve times the generation budget. We assumed for some time that the fault was in the search, and it
 was not. The fault was in the number the search was being judged by.
@@ -106,7 +106,7 @@ because of it. The reported number is consequently too high, and how much too hi
 practitioner can read off the procedure.
 
 An everyday version of the same arithmetic shows what is going on. Give a hundred students one
-examination and crown the highest scorer. That student is genuinely able, and also probably had a good
+examination and crown the highest scorer. That student is able, and also probably had a good
 day. Set a second examination and the score falls, not because the student has deteriorated, but because
 part of what the first examination selected was the good day, and good days do not repeat on demand. A
 student chosen at random rather than by score shows no such fall. The difference between the chosen and
@@ -180,7 +180,7 @@ Draw $K$ designs at random, let the search keep whichever scores best on the fir
 look up that design's score on the sample it was never shown. Here $K$ stands for search effort.
 Alongside the inflation we record two quantities that matter more to somebody actually running a search:
 the true quality of the chosen design, taken as the mean of all three of its runs, and the regret,
-meaning how far short of the best design that was genuinely present in those $K$ the search finished.
+meaning how far short of the best design that was actually present in those $K$ the search finished.
 
 \begin{center}
 \begin{tabular}{rccccc}
@@ -205,8 +205,8 @@ describe as excessive, half a percentage point of the reported accuracy is not r
 area regularly contest differences smaller than that. The inflation also grows with effort, rising
 steadily from $K = 4$ to about $K = 32{,}768$, so the harder the search looks the greater the fraction
 of what it finds that is luck. Past that point it eases off slightly, for a reason we prefer to state
-rather than leave as an anomaly: once the sample approaches the size of the whole table the genuinely
-best designs are nearly always included, so the winner is increasingly a real winner. Averaging two
+rather than leave as an anomaly: once the sample approaches the size of the whole table the true best
+designs are nearly always included, so the winner is increasingly a real winner. Averaging two
 samples helps on both counts at once, removing about a third of the inflation and cutting the regret by
 a factor between two and three. The second of those is the more important, because it means the repair
 changes which design is taken home and not merely what is said about it.
@@ -278,7 +278,7 @@ the first paper left open.
 
 The task is a short strip of numbers containing a small pattern at one of ten positions, and the
 structure being sought is a convolution: one small filter, reused unchanged at every position. Two
-properties make the convolution genuinely the best answer rather than merely a plausible one. Training
+properties make the convolution the best answer rather than merely a plausible one. Training
 uses only three of the ten positions while scoring uses the remainder, so a design that cannot transfer
 to a position it never saw earns nothing, which is what makes reuse worth having. And each stored weight
 carries a price, so a filter wider than the pattern is penalised for the width it does not need. Reuse
@@ -294,7 +294,7 @@ a statistic rather than a fact, since an argmax over noisy scores favours whiche
 luckiest, so we report the winning margin beside the standard error of the scores that produced it and
 believe the ordering only when the margin clears it. Applying that rule, the planted shape is the clear
 winner only when the price per weight falls within a band. Set the price too low and a wider filter
-genuinely wins, in which case a search that declines to return our target is behaving correctly and we
+actually wins, in which case a search that declines to return our target is behaving correctly and we
 would have been wrong to record a failure.
 
 With the price inside that band we compare a search using one fixed held-out sample against a search

@@ -37,7 +37,7 @@ future work originally attributed the spoken-digit null to the optimal filter no
 local, which nothing in that pipeline licensed, and the sentence now says the attempt is inconclusive.
 Paper 1 is under review, so this record must survive until that is resolved.
 
-**The pre-registration files** are the record of predictions scored honestly, including the wrong ones.
+**The pre-registration files** are the record of predictions scored as pre-registered, including the wrong ones.
 
 ## Why this is not deleted
 

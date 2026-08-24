@@ -150,7 +150,7 @@ B. MANUSCRIPT CLEANUP
 1. Remove all old \pilot macros/markers.
 2. Remove internal \pending{} macros.
 3. Replace pilot results where final experiments supersede them.
-4. Keep genuinely pending analyses explicitly marked until Claude returns results.
+4. Keep still-pending analyses explicitly marked until Claude returns results.
 5. Make clear which results are final and which are preliminary.
 6. Ensure no conclusion relies on an experiment that has not yet been run.
 7. Check every number against the generated output.

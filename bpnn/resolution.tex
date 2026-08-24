@@ -55,7 +55,7 @@ without the replicates at scale that almost nobody has.
 Training a network is random. Starting weights are drawn, examples are shuffled, and on the usual
 hardware the reductions are not associative, so the same architecture trained twice gives two different
 accuracies. Any single accuracy is therefore the architecture's quality plus a draw of noise. This is not
-controversial and it is not new; what is missing is a number.
+controversial and it is not new; only the number is missing.
 
 The number is hard to obtain because it requires training the same thing repeatedly, which nobody can
 afford at modern scale. Two public benchmarks, however, already paid that cost for a different reason.
@@ -86,7 +86,7 @@ terms are independent, $\mathrm{Cov}(A_i,B_i) = \sigma_B^2$. Hence
         \;=\; \frac{1}{\sqrt{(1+r^2)(1+r^2/2)}}, \qquad r \equiv \sigma_W/\sigma_B ,
   \label{eq:rho}
 \end{equation}
-and for jointly normal variables Kendall's $\tau = (2/\pi)\arcsin\rho$. Two consequences are worth stating
+and for jointly normal variables Kendall's $\tau = (2/\pi)\arcsin\rho$. Two consequences follow
 before any data is seen.
 
 The ceiling on rank correlation is a function of the single ratio $r$, not an independent property of a
@@ -168,7 +168,7 @@ NAS-Bench-201 ImageNet16-120  & $46.88$ & $15$ of $15{,}625$ \\
 \end{center}
 
 Regret measured against a single reported optimum inherits that width. NAS-Bench-201 is far better
-behaved on this axis than NAS-Bench-101, which is worth stating separately rather than averaging over.
+behaved on this axis than NAS-Bench-101, so the two are reported separately rather than averaged.
 
 \subsection{The ceiling on predictor evaluation}
 
@@ -231,7 +231,7 @@ distribution but a mixture: roughly one architecture in a hundred sometimes trai
 collapses to chance accuracy, with $\sigma_W$ up to $48$ percentage points. Those architectures dominate
 the pooled $\sigma_W$ without dominating the rank correlation, because the well-behaved remainder still
 orders consistently. Excluding them moves $r$ from $0.924$ to $0.246$ and the residual from $+0.41$ to
-$+0.02$. The residual is therefore not merely an error term; it is a detector for heterogeneous training
+$+0.02$. The residual is therefore a detector for heterogeneous training
 noise, and its sign says which way the heterogeneity runs.
 
 \textbf{Why this matters more than the constants.} If the ceiling followed from each benchmark's

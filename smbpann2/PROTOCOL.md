@@ -161,7 +161,7 @@ Item 1 asks whether the objective can **see** the outcome axis. This asks whethe
 target you named.
 
 Hand-build the target genome; score it under the exact objective, on the same tasks, with the same
-trainer, **at the full seed count** -- at n=12 the target's own standard error (0.023) dominated the
+trainer, **at the full seed count**: at n=12 the target's own standard error (0.023) dominated the
 comparison it exists to make, and the estimate moved 0.026 between n=12 and n=40. Hand-build a deliberately worse neighbour and confirm the objective orders the two correctly.
 Compare both against what the search reaches. Sweep the training budget before concluding, so a
 slow-training target is not mistaken for a dispreferred one.

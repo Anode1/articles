@@ -109,7 +109,7 @@ Same artifact
 Different runtime configuration per environment
 \end{lstlisting}
 
-The mechanism can be simple or sophisticated. A Linux service may read a protected file such as \texttt{/etc/<app>/system.properties}. A Windows service may read a protected configuration file from a service-owned directory. A container platform may mount configuration or inject environment variables. Larger platforms may use a parameter store, vault, key vault, managed identity, secret manager, or internal configuration service. Public endpoints can be documented openly when they are truly public. Internal service URLs and other environment coordinates are different: they are not necessarily secrets, but they are still operational configuration and should be supplied by the environment. The architectural rule is the same:
+The mechanism can be simple or sophisticated. A Linux service may read a protected file such as \texttt{/etc/<app>/system.properties}. A Windows service may read a protected configuration file from a service-owned directory. A container platform may mount configuration or inject environment variables. Larger platforms may use a parameter store, vault, key vault, managed identity, secret manager, or internal configuration service. Public endpoints can be documented openly when they are public. Internal service URLs and other environment coordinates are different: they are not necessarily secrets, but they are still operational configuration and should be supplied by the environment. The architectural rule is the same:
 
 \begin{quote}
 Code is in the repository. Built application bits are in the artifact. Secrets and environment-specific operational configuration are supplied at runtime.

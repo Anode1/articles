@@ -122,7 +122,7 @@ Then Section 5's caption changes from "modeled from the cost equation" to "measu
 on the Anthropic API, <date>," and the economy bullet in the abstract stands on a
 receipt rather than arithmetic.
 
-## Honesty notes (kept deliberately conservative)
+## Caveats (kept deliberately conservative)
 
 - The poll is the *cheapest possible* check: full context in, a one-word reply out
   (`max_tokens=8`). A real agent that reasons before answering costs **more**, so the
@@ -130,4 +130,4 @@ receipt rather than arithmetic.
 - Context is padded to a target size with realistic filler; content does not change
   token accounting, only length does, and the script reports the **measured** size.
 - The cold arm models cache eviction / sparse polling by disabling caching; it is an
-  honest upper bound on the bill, not a worst-case fiction.
+  true upper bound on the bill, not a worst-case fiction.

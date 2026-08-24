@@ -18,7 +18,7 @@ different gaps:
 The two splits are exchangeable random position sets, so for an unselected structure the
 expected gap is identical on both. The GA's structure shows 0.007 vs 0.078. The only
 asymmetry is that the GA maximised over ~1200 evaluations on the selection positions.
-Diagnosis: **position overfitting** — the GA overfits WHICH positions it must transfer to
+Diagnosis: **position overfitting**: the GA overfits WHICH positions it must transfer to
 (3 fixed positions at N=12), which RESAMPLE (fresh examples, same positions) cannot touch.
 Verified before this prereg: on the selection split the target is still rank 1 of the
 contiguous family but its margin collapses from 0.0153 to 0.0030 (SCAN SPLIT=1 vs 2,
@@ -67,10 +67,10 @@ seed; outcomes = contiguity fraction, tap count, report-split objective gap to t
 
 The N=16 gate FAILED as pre-registered: at DAMP=0.7 the planted K=3 is rank 5 of 435, argmax
 is width 4. A DAMP sweep (0.9/1.1/1.4, full rescans, archived as `scratch_t16_dampscan_*.out`)
-made it worse — the target leaves the top 8 and the winners extend LEFT. Diagnosis: the
+made it worse: the target leaves the top 8 and the winners extend LEFT. Diagnosis: the
 one-sided distractor's left flank exists only at the last 3 positions (those where the right
-flank does not fit), so left-widening is punished at 3/H of positions — 30% at N=12, 21% at
-N=16 — and no distractor strength can restore an argmax that most positions never defend.
+flank does not fit), so left-widening is punished at 3/H of positions (30% at N=12, 21% at
+N=16), and no distractor strength can restore an argmax that most positions never defend.
 
 Task revision, env-gated (`DBOTH=1`, default 0 preserves all archived behaviour): flank the
 motif on both sides wherever each flank fits. All N=16 experiments in this prereg run with
@@ -183,7 +183,7 @@ the reading recorded earlier the same day that alignment never emerges:
 
 **P2 is retrospectively partly vindicated at the right tariff.** It predicted the target region in
 >=half the seeds, which is still false (22%), but it predicted structural convergence and at
-LAMBDA=1 -- the only tariff it considered -- that was correctly scored as failed. The prediction's
+LAMBDA=1 (the only tariff it considered), that was correctly scored as failed. The prediction's
 error was assuming LAMBDA=1 was the operative setting.
 
 Two corrections the larger n forced, both against my earlier claims:

@@ -13,7 +13,7 @@ measurement." This experiment turns that into a measurement on data referees alr
 ## Why NAS-Bench-101 can carry the argument
 
 NAS-Bench-101 trains every architecture **3 independent times**. Those 3 validation accuracies are
-exchangeable replicates -- same architecture, different init and training seed -- which is precisely
+exchangeable replicates (same architecture, different init and training seed), which is precisely
 what the exchangeability argument needs: for an architecture not chosen using replicate *i*, the
 expected accuracy on replicate *i* equals that on replicate *j*. Any excess is selection-induced.
 
@@ -23,7 +23,7 @@ them. **Oracle:** the mean of the 3 extracted trials reproduces the archived ave
 
 **Replicate noise, measured before designing the experiment:** within-architecture SD of validation
 accuracy is p50 0.328, p90 0.786, **p99 42.68**, max 48.0 percentage points. About 1% of
-architectures are effectively bimodal -- they sometimes train and sometimes collapse to chance. This
+architectures are effectively bimodal: they sometimes train and sometimes collapse to chance. This
 is a strong and entirely real mechanism for a single-measurement search to be misled.
 
 ## Design (E1: selection intensity)
@@ -54,10 +54,10 @@ selection-induced.
   (p99 = 42.7 pp), I expect the reduction to be **larger** than `sqrt(2)`, since averaging
   suppresses the bimodal-collapse cases that dominate the tail.
 - **P3.** AVG2 also finds genuinely better architectures: higher true quality and lower regret than
-  FIXED at equal `K`. This is the practically important claim -- the repair is not merely honest
+  FIXED at equal `K`. This is the practically important claim: the repair is not merely honest
   bookkeeping, it changes what the search returns.
 - **P4.** At large `K` the FIXED arm's *true quality* eventually stops improving, or degrades, while
-  its *believed* score keeps rising -- the search buys more illusion, not more architecture.
+  its *believed* score keeps rising: the search buys more illusion, not more architecture.
 - **P5 (cost).** The inflation at practical budgets (`K` of order 100-1000) exceeds the accuracy
   differences that NAS papers routinely treat as meaningful (a few tenths of a percentage point).
 
@@ -81,11 +81,11 @@ crossover experiment. Three arms differing only in the selection rule:
 
 ROTATE and AVG2 have identical replicate access and differ only in alternating versus averaging, so
 any difference between them isolates that distinction. ROTATE's per-generation signal is exactly as
-noisy as FIXED's, so it is not a variance reduction -- it only removes the fixed sample that could be
+noisy as FIXED's, so it is not a variance reduction: it only removes the fixed sample that could be
 memorised across generations. Report is always `v[perm[2]]`, which no arm selects on.
 
 **A 50-run pilot (recorded, underpowered, SE 0.055 on inflation) suggested ROTATE is inert here while
-AVG2 helps** -- the opposite of the toy task, where rotation was the effective repair. Two readings,
+AVG2 helps**: the opposite of the toy task, where rotation was the effective repair. Two readings,
 and the experiment is designed to separate them:
 
 - **P6 (accumulation).** If rotation matters by preventing accumulation of replicate-lucky
@@ -94,7 +94,7 @@ and the experiment is designed to separate them:
   is near zero at 10-20 generations and positive and growing by 100-200.
 - **P7 (nothing to memorise).** If instead the replicate structure here is pure per-architecture iid
   noise, with no systematic component to memorise, rotation should be inert at **every** generation
-  count, and only averaging -- which actually lowers the variance the winner's curse feeds on --
+  count, and only averaging (which actually lowers the variance the winner's curse feeds on)
   should help. Prediction: ROTATE tracks FIXED at all generation counts, flat in the sweep.
 
 P7 would be a real and reportable difference between the two settings rather than a failure: the toy's
@@ -105,7 +105,7 @@ holds, is more useful to a practitioner than a claim that one repair fixes every
 **Design:** generation sweep {10, 20, 50, 100, 200} at POP=24, and a population sweep {8, 48, 96} at
 GENS=50, 20,000 runs per arm per cell. Runs share the benchmark rather than a per-seed task, so the
 across-arm comparison is two-sample, not paired, and 20,000 runs put the standard error on true
-quality near 0.002 -- far below the ~0.06 differences the pilot showed.
+quality near 0.002, far below the ~0.06 differences the pilot showed.
 
 **Primary outcome for E2 is true quality and regret, not inflation.** With FIXED and ROTATE both
 taking a final argmax over the population on a single noisy replicate, their final-step winner's curse

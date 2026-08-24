@@ -70,7 +70,7 @@ The main features distinguishing a NN from a traditional digital computer are:
   \item Generalization: the ability to deal with patterns not seen during training.
 \end{itemize}
 
-It is worth noting that NN are not more powerful in the formal sense than ordinary digital computers (they compute the same class of computable functions), but they make some tasks much easier than algorithmic programming does. Telling photographs of men from photographs of women, for instance, has no clean rule-based algorithm; yet a five-year-old performs it reliably, even when the woman has short hair. NN are well-suited to that kind of task.
+NN are not more powerful in the formal sense than ordinary digital computers (they compute the same class of computable functions), but they make some tasks much easier than algorithmic programming does. Telling photographs of men from photographs of women, for instance, has no clean rule-based algorithm; yet a five-year-old performs it reliably, even when the woman has short hair. NN are well-suited to that kind of task.
 
 \subsection{Comparison: brain vs.\ computer (1997 estimates)}
 The biological inspiration is concrete in scale terms. \editornote{The orders-of-magnitude comparison below is roughly what the field reported in 1997; modern figures look very different.}
@@ -469,7 +469,7 @@ where $\alpha \in [0,1)$ is the momentum coefficient. Training with a constant $
 \small Convergence paths on a quadratic error surface (contour lines shown) for three learning-rate regimes: a small $r$ inches along the gradient, a too-large $r$ oscillates across the valley, and a large $r$ combined with momentum cuts the fastest path to the minimum.
 \end{center}
 
-It is worth noting that standard backpropagation can be slow, especially with a fixed learning rate. Many modifications have been proposed to speed convergence, including Quickprop and RPROP. \editornote{Modern practice has converged on the Adam optimizer family (Kingma \& Ba, 2014) and SGD with momentum, combined with explicit learning-rate schedules (warmup, cosine decay, step decay). Fixed learning rates are now rare outside of toy examples. Quickprop and RPROP are mostly of historical interest.}
+Standard backpropagation can be slow, especially with a fixed learning rate. Many modifications have been proposed to speed convergence, including Quickprop and RPROP. \editornote{Modern practice has converged on the Adam optimizer family (Kingma \& Ba, 2014) and SGD with momentum, combined with explicit learning-rate schedules (warmup, cosine decay, step decay). Fixed learning rates are now rare outside of toy examples. Quickprop and RPROP are mostly of historical interest.}
 
 \section{Applications}
 Pattern recognition is one of the most elaborated and successful domains for neural networks. Speech recognition, text and character recognition, handwriting recognition, vision tasks, and classification of radar/sonar signals are all examples. Marketing planning, stock-market prediction, and robotics sensing can also be formulated as pattern-recognition problems. Pattern classification can be viewed as a function mapping a domain of images (or feature vectors) to a finite set of output categories.

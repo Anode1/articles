@@ -47,12 +47,12 @@ Immer et al. (NeurIPS 2022) select invariances from the training set alone.
 
 ## Prior art that covers the positive claims
 
-- Nowlan & Hinton, *Simplifying Neural Networks by Soft Weight-Sharing*, Neural Computation 4(4), 1992
-  — a parameter-counting cost rewarding filter reuse, with the MDL derivation in Hinton & van Camp 1993.
+- Nowlan & Hinton, *Simplifying Neural Networks by Soft Weight-Sharing*, Neural Computation 4(4), 1992:
+  a parameter-counting cost rewarding filter reuse, with the MDL derivation in Hinton & van Camp 1993.
   The energy term used throughout this line is a special case, 34 years old.
-- Elsayed et al., *Revisiting Spatial Invariance with Low-Rank Local Connectivity*, ICML 2020 — the
+- Elsayed et al., *Revisiting Spatial Invariance with Low-Rank Local Connectivity*, ICML 2020: the
   locally-connected-to-convolutional continuum, i.e. this genome, already published.
-- d'Ascoli et al., NeurIPS 2019 — the gradient-space version of the reachability story.
+- d'Ascoli et al., NeurIPS 2019: the gradient-space version of the reachability story.
 
 ## Why no better substrate would have helped either
 
@@ -96,10 +96,10 @@ two papers.
 
 ## Keep
 
-- **`PROTOCOL.md`** — eight pre-flight checks, each annotated with the failure it prevents. Items 1
+- **`PROTOCOL.md`**: eight pre-flight checks, each annotated with the failure it prevents. Items 1
   (objective sensitivity) and 5 (rate-matched null as the primary comparison) would have killed both
   probes on day one in ten minutes of compute.
-- **`analyse.py`** — paired per-task differences, Wilcoxon, Hodges-Lehmann with exact CI, bootstrap,
+- **`analyse.py`**: paired per-task differences, Wilcoxon, Hodges-Lehmann with exact CI, bootstrap,
   Holm, TOST against a pre-specified margin, minimum detectable effect. A referee called it better than
   most real submissions. The inference was clean; it was run on confounded contrasts.
 - **Two transferable findings.** A topology search seeded from a fully-occupied mask inherits the order
@@ -108,14 +108,14 @@ two papers.
 
 ## Reusable code, now in the repo
 
-- `validation/emerge_offset_check.c` — paper 1's experiment with `PREM`/`PADD` exposed. Used to verify
+- `validation/emerge_offset_check.c`: paper 1's experiment with `PREM`/`PADD` exposed. Used to verify
   paper 1 against the failure that killed smbpann2; the gap never closed or inverted across a tenfold
   rate sweep, because its mechanism is analytic rather than rate-dependent.
-- `validation/objcheck.c` — **the most transferable artifact from this direction.** Protocol check 1 as
+- `validation/objcheck.c`: **the most transferable artifact from this direction.** Protocol check 1 as
   a standalone tool: build genomes spanning the outcome, ask of each candidate objective whether it
   varies over that range and in which direction. Runs no search, costs an hour, and answers "is this
-  objective worth searching under" for any future experiment, not just this one.
-- `validation/emerge_gen2.c` — carries the two automated protocol checks (objective sensitivity in the
+  objective worth searching under" for any future experiment, not only this one.
+- `validation/emerge_gen2.c`: carries the two automated protocol checks (objective sensitivity in the
   feasible region, and a `GENS=0` row) that run by default on every invocation. Useful as a template
   even though its own direction is scrapped.
 
@@ -128,13 +128,13 @@ the outcome. The toy scale was never the binding problem.
 What it would actually need is a different **source of coverage pressure**, since no complexity prior
 can supply it. Three options, none of them small:
 
-1. A data term that spans the positions, which is what `NVALPOS` did — but then the result is close to
+1. A data term that spans the positions, which is what `NVALPOS` did, but then the result is close to
    tautological ("the search installs a detector per position the objective evaluates") and needs a
    sharper question to be worth reporting.
 2. Quality-diversity (MAP-Elites with position coverage as the behaviour descriptor). This is the
    field's standard answer to "the objective cannot see the property you want" and was never tried.
    A referee asked directly why not, and there is no answer.
-3. Modularly varying goals, after Kashtan & Alon (PNAS 2005) — change the structure of the objective
+3. Modularly varying goals, after Kashtan & Alon (PNAS 2005): change the structure of the objective
    over time rather than adding a term to it.
 
 Before any of that: run `objcheck` on the proposed objective. If it cannot see the outcome, nothing
@@ -272,7 +272,7 @@ cover the input is to grow wide, and one wide unit sets the kernel width for eve
 coverage by *moving* instead of *growing*. That is the neutral-network argument confirmed: being able
 to travel placement at zero energy cost is what makes the compact basin reachable at all.
 
-### PSLIDE sweep -- the spatial neighbourhood prior buys nothing but delay
+### PSLIDE sweep: the spatial neighbourhood prior buys nothing but delay
 
 Rates 0.02 / 0.05 / 0.15 / 0.40, everything else fixed. Arm 0 ignores the rate and came out identical
 in all four runs (0.8932 acc, 0.0936 energy), which checks determinism.
@@ -304,7 +304,7 @@ control can only detect seed and pipeline asymmetry, not drift, since with no mu
 same genome. Putting the rewiring rate in the genome and self-adapting it, the way paper 1's mutation
 rate already is, would remove the rate as a free constant entirely.
 
-### LAMBDA sweep -- the 5-tap floor was the energy weight, not the search
+### LAMBDA sweep: the 5-tap floor was the energy weight, not the search
 
 `LAMBDA` was the last unswept constant. Rates 1 / 2 / 4 / 8 / 16, PSLIDE=0.15, 30 seeds, 150 gens.
 
@@ -329,7 +329,7 @@ growing, function survives only if placement is free.
 
 **Remaining gap:** at LAMBDA=2 coverage is 0.886, not ~1, so the tiling half of the convolution
 criterion is close but not met. Width and sharing are there; a clean tiling is not. Whether the width
-and coverage optima can be met at one LAMBDA, or whether they genuinely trade off, is the next question
+and coverage optima can be met at one LAMBDA, or whether they trade off, is the next question
 and is a two-parameter question (LAMBDA against PSLIDE) rather than another one-dimensional sweep.
 
 **Thread 2 summary.** Rewiring is necessary for compaction and add/remove provably cannot supply it;
@@ -341,8 +341,8 @@ swept: the arm, PSLIDE, LAMBDA, and GENS (the 0-generation control).
 
 The two-level structure is: an inner objective trains the net, an outer fitness scores the topology by
 the quality of that inner learner. The code collapses the whole inner process to one scalar, the
-endpoint at a fixed `TEPOCHS`. Proposal: score the *trajectory* instead -- accuracy at equal iterations,
-or the area under the learning curve -- so that fitness measures learning efficiency rather than a
+endpoint at a fixed `TEPOCHS`. Proposal: score the *trajectory* instead (accuracy at equal iterations,
+or the area under the learning curve), so that fitness measures learning efficiency rather than a
 single endpoint, and keeps a gradient where final accuracy saturates.
 
 `run_net` was extended to evaluate every 5 epochs and return AULC, then compared against final accuracy
@@ -360,7 +360,7 @@ the placement main effect is signal and the residual after removing the task eff
 
 AULC has a smaller placement effect and a larger residual: strictly worse, overall and in the
 compressed regime. `epochs-to-0.85` is worse still and is censored at its maximum for every low-coverage
-placement, since those never reach 0.85 at all -- another thresholded metric that cannot rank the cases
+placement, since those never reach 0.85 at all: another thresholded metric that cannot rank the cases
 that most need ranking.
 
 **A false positive was produced on the way, and it is worth recording.** Conditioning on
@@ -372,7 +372,7 @@ by the comparison, not by the metric. The fixed-placement decomposition is the v
 **Why it failed, and where it would not.** On this probe the inner learner converges well inside its 50
 epochs, so the endpoint is a sufficient statistic for the trajectory and the curve contributes only
 early-training noise. Efficiency fitness cannot beat accuracy once accuracy has converged. The
-condition it needs is an *unconverged* inner learner -- which is exactly what the budget ladder found in
+condition it needs is an *unconverged* inner learner, which is exactly what the budget ladder found in
 `emerge_compose`, where accuracy at depth rose +0.217 with more epochs and data, so the endpoint there
 was reporting optimization progress rather than architecture quality. If this idea is revisited, the
 depth probe is the candidate, not the locality probe.
@@ -386,7 +386,7 @@ If ever built for real: iterations, never wall-clock (wall-clock rewards cheap a
 re-charging the energy term, and makes fitness hardware-dependent), and area under the curve, never
 epochs-to-threshold.
 
-### Data sweep -- the depth ceiling is structural, not budget of any kind
+### Data sweep: the depth ceiling is structural, not budget of any kind
 
 The epoch ladder left one hypothesis standing: D lost accuracy at depth with 4x epochs at fixed data,
 which is overfitting, so the remaining ceiling looked data-limited. Two more levels at fixed
@@ -402,16 +402,16 @@ Data saturates exactly as epochs did. Across the whole ladder the budget now spa
 target is not reached at any budget in any direction.
 
 **This settles it in paper 1's favour.** The composition negative is not an artifact of a small
-training budget, and the reading after level B alone -- that it looked budget-dependent -- was wrong.
+training budget, and the reading after level B alone (that it looked budget-dependent) was wrong.
 The overshoot is budget-converged too: tied sets are {5,6} at s=6 (overshoot +2..+3) and {5} at s=8
 (+1) at every level from B onward, unchanged by F and G. What remains conditional is only the
 *approach* to convergence, not the converged value, so a selected-depth number is safe to report once
 the budget is stated and shown to be past saturation.
 
-### LAMBDA x PSLIDE -- the compact kernel and the full tiling are not simultaneously selectable
+### LAMBDA x PSLIDE: the compact kernel and the full tiling are not simultaneously selectable
 
 The open item from the LAMBDA sweep was whether width -> K and coverage -> 1 can be met at one setting
-or genuinely trade off. 3x3 grid, `rewire-rand`, 30 seeds (run on `emerge_rewire2`):
+or trade off. 3x3 grid, `rewire-rand`, 30 seeds (run on `emerge_rewire2`):
 
     LAMBDA  PSLIDE      max-w          coverage        test acc
          1    0.05   6.33 +- 0.60   0.933 +- 0.022      0.912
@@ -439,12 +439,12 @@ one statement is worth more than either alone.
 `validation/paper2/`, additive; every paper-1 probe is untouched and stays that way while the paper is
 under review.
 
-- **`emerge_rewire2.c`** -- version 2 of the rewire probe. Self-contained, no indirection, reads top to
+- **`emerge_rewire2.c`**: version 2 of the rewire probe. Self-contained, no indirection, reads top to
   bottom through TASK / GENOME / INNER LEARNER / FITNESS / OUTER SEARCH / PROTOCOL. Substantive changes
   over version 1: the inner learner records a learning curve; a **convergence check** runs by default
-  and states whether the endpoint is an honest summary of the learner; and the fitness is one named
+  and states whether the endpoint is a faithful summary of the learner; and the fitness is one named
   function rather than an expression buried mid-probe, which is how a step objective went unexamined.
-- **`common.h`** -- the shared leaves, under one rule: **share what cannot change a number, duplicate
+- **`common.h`**: the shared leaves, under one rule: **share what cannot change a number, duplicate
   what can.** RNG streams, env parsing, protocol reporters. It never calls into a probe and never draws
   a random number itself. Task, genome, mutation, inner learner and fitness are barred from it: a
   shared version of those would hide the thing under test.
@@ -452,31 +452,31 @@ under review.
   same four lines with the directory changed.
 
 **Acceptance test, and it passed:** `emerge_rewire2` reproduces `emerge_rewire.c` and the archived
-per-seed data (commit 70e6ea0) **exactly** -- all 90 RAW rows byte-identical. Any future refactor of
+per-seed data (commit 70e6ea0) **exactly**: all 90 RAW rows byte-identical. Any future refactor of
 `common.h` must rerun it, because a bug there would move every paper-2 probe at once. That is the price
 of not duplicating, and it is only worth paying because the oracle exists.
 
-**Note for the port of `emerge_compose`:** it has no GA and no fitness function -- it enumerates depths
-and applies a selection rule -- so it does not fit the inner-learner-plus-outer-search shape and should
-not be forced into it. Its honest version 2 is inner learner + enumeration + an explicit, selectable
+**Note for the port of `emerge_compose`:** it has no GA and no fitness function (it enumerates depths
+and applies a selection rule), so it does not fit the inner-learner-plus-outer-search shape and should
+not be forced into it. Its faithful version 2 is inner learner + enumeration + an explicit, selectable
 selection rule (target-crossing vs argmax vs tied set), which is a different template.
 
-## Topology crossover: implemented, tested, null -- and the coverage confound found on the way
+## Topology crossover: implemented, tested, null, and the coverage confound found on the way
 
 ### The operators
 
 `emerge_rewire2.c` arms 3-5, all inheriting arm 2's placement mutation so that recombination is the
 ONLY difference from the mutation-only arm:
 
-- **3 xover-canon** -- units sorted by position, then each unit taken from either parent.
-- **4 xover-raw** -- same, WITHOUT the sort.
-- **5 xover-block** -- a contiguous run of whole units copied from the other parent (the structural
+- **3 xover-canon**: units sorted by position, then each unit taken from either parent.
+- **4 xover-raw**: same, WITHOUT the sort.
+- **5 xover-block**: a contiguous run of whole units copied from the other parent (the structural
   clone, closest to the "vegetative reproduction" idea).
 
 Recombination over STRUCTURES, not over a NAS-style encoding string: a genome here is a set of units,
 each a whole little structure, so crossover exchanges units.
 
-The 3-vs-4 pair exists because this genome has permutation symmetry -- any unit may look anywhere, so
+The 3-vs-4 pair exists because this genome has permutation symmetry: any unit may look anywhere, so
 two parents holding the same solution in a different order are different genomes, and recombining by
 index mixes incompatible conventions. That is the classic competing-conventions failure and was the
 live candidate for paper 1's four-operator crossover null. Canonicalising costs nothing; arm 4 omits
@@ -505,7 +505,7 @@ the explanation for the null.
 
 Proposed explanation: POP=24 with ELITE=4 and truncation selection collapses the population, so both
 parents come from four near-identical elites and recombination copies a genome onto itself. `ELITE`
-was a hardcoded, never-swept constant sitting directly upstream of a null -- protocol item 3.
+was a hardcoded, never-swept constant sitting directly upstream of a null: protocol item 3.
 
 Made runtime, swept 4/8/12/18, with population diversity (mean pairwise genome distance) now MEASURED
 rather than inferred:
@@ -517,7 +517,7 @@ rather than inferred:
        18          0.1151     0.8441         0.8400   -0.0041 (t=-0.93)
 
 **Refuted.** Diversity at ELITE=4 is 0.072, not zero: the population had not collapsed. The knob works
-(diversity rises steadily to 0.115). And crossover's edge does not improve with diversity -- it decays
+(diversity rises steadily to 0.115). And crossover's edge does not improve with diversity: it decays
 and turns negative. More raw material, no benefit.
 
 So the crossover null survives both explanations offered for it. On this genome, at this scale,
@@ -526,7 +526,7 @@ recombination adds nothing that mutation plus rewiring does not already provide.
 Incidental: ELITE=4, hardcoded and never swept, is the best value on the objective across the sweep.
 An unswept constant that survives sweeping, for once.
 
-### THE COVERAGE CONFOUND -- applies retroactively to results above
+### THE COVERAGE CONFOUND: applies retroactively to results above
 
 **The seed genome is width 12 at coverage 1.000, the maximum of both.** Every search in this line
 starts at full coverage and moves away from it. Therefore ANY manipulation that slows the search
@@ -539,26 +539,26 @@ is simply worse search wearing a better coverage number.
 
 This is the free-variable failure of protocol item 2 in a new costume, and it applies to the
 LAMBDA x PSLIDE grid recorded above: part of the coverage decline as LAMBDA tightens is the search
-travelling further from the seed, not a genuine trade-off against width. The grid's *conclusion* --
-that the compact kernel and the full tiling are not simultaneously selectable -- survives, because
+travelling further from the seed, not a genuine trade-off against width. The grid's *conclusion*,
+that the compact kernel and the full tiling are not simultaneously selectable, survives, because
 `objcheck` reached it independently and analytically. But the grid's coverage numbers should not be
 quoted as a measured trade-off curve without conditioning on distance-from-seed.
 
 **And it reframes the question.** "Does the tiling emerge?" is not quite the right question for this
 genome. The tiling is present at generation zero; compaction spends it. What should be asked is
-whether anything RETAINS the tiling while the kernel tightens -- a different experiment, and one that
+whether anything RETAINS the tiling while the kernel tightens: a different experiment, and one that
 explains why every knob tried so far trades one against the other.
 
 ## THE HEADLINE: the objective does not have the convolution as its optimum
 
-Everything in thread 2 above -- operators, recombination, seed direction, LAMBDA, PSLIDE, ELITE, epoch
-and data budgets -- was tuned in pursuit of a target the fitness function ranks BELOW what the search
+Everything in thread 2 above (operators, recombination, seed direction, LAMBDA, PSLIDE, ELITE, epoch
+and data budgets) was tuned in pursuit of a target the fitness function ranks BELOW what the search
 already reaches unaided. Score the target by hand and the whole thread collapses into one fact.
 
 ### The measurement
 
-Build the thing the probe claims to hunt -- shared weights, width exactly K=3, windows tiling the
-input -- and score it under the same objective, same tasks, same trainer (new `PROTOCOL target` check
+Build the thing the probe claims to hunt (shared weights, width exactly K=3, windows tiling the
+input) and score it under the same objective, same tasks, same trainer (new `PROTOCOL target` check
 in `emerge_rewire2.c`):
 
     ideal convolution (w=K=3, tiled)   fitness 0.7917
@@ -569,7 +569,7 @@ in `emerge_rewire2.c`):
 The comparison is conservative: the ideal's number is a validation fitness (what selection uses) and
 the evolved genome's accuracy is held out, and it still wins by 0.073 on raw accuracy before energy.
 
-The objective is not blind near the target -- it ranks K above K+1 at every budget tested. It can see
+The objective is not blind near the target: it ranks K above K+1 at every budget tested. It can see
 the neighbourhood. It simply prefers somewhere else, by a lot.
 
 ### It is not an optimization artifact
@@ -583,14 +583,14 @@ net than the evolved mixed-width genomes, so it might merely be undertrained. Te
        200                  0.7736    0.7581             -0.0065
        800                  0.7661    0.7517             -0.0067
 
-It gets WORSE with more training -- overfitting, not undertraining -- and moves away from 0.862 rather
+It gets WORSE with more training (overfitting, not undertraining) and moves away from 0.862 rather
 than toward it. The deficit is preference, not budget.
 
 ### What the search finds instead, and why it wins
 
 Mixed-width units (mean 1.46, max 2.68) all sharing ONE kernel tied by within-window offset, so a
 width-1 unit uses the kernel's first tap, a width-2 unit its first two, and so on. That is a shared
-kernel read at several scales -- a multi-scale filter bank -- and ten identical width-3 windows cannot
+kernel read at several scales (a multi-scale filter bank), and ten identical width-3 windows cannot
 express it. On this task that is worth about 0.07 of accuracy.
 
 Note this holds even though the task is GENERATED by a 3-tap filter slid over all positions. Matching
@@ -598,8 +598,8 @@ the generative form is not the same as maximising this objective on finite data 
 
 ### Why this reframes the whole thread rather than adding to it
 
-By the project's own premise -- pass everything into the function, let search generate the solution,
-treat parameters and methods as implementation -- naming "the convolution" as the target was the
+By the project's own premise (pass everything into the function, let search generate the solution,
+treat parameters and methods as implementation), naming "the convolution" as the target was the
 error, and the search outperforming it is the method working as specified. The interesting content is
 WHAT it found, not that it failed to find what a human named.
 
@@ -627,8 +627,8 @@ Cost of this check: minutes. Cost of not running it: this thread.
 
 ### Boundary worth stating, since "ideally everything is searched" invites crossing it
 
-Machinery can be searched -- PSLIDE, PGROW, PSHARE, the operator choice itself, arguably selection
-pressure -- and paper 1 already shows self-adaptation works here (rate in the genome, log-normal
+Machinery can be searched (PSLIDE, PGROW, PSHARE, the operator choice itself, arguably selection
+pressure), and paper 1 already shows self-adaptation works here (rate in the genome, log-normal
 perturbation at birth, wins consistently). But LAMBDA is a coefficient of the FITNESS FUNCTION, not
 machinery. Put it in the genome and the search drives it to zero, because the cheapest way to score
 well on `acc - lambda*energy` is to stop charging for energy. An objective cannot self-adapt.

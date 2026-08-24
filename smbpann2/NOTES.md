@@ -1,4 +1,4 @@
-# smbpann2 — lab notebook
+# smbpann2: lab notebook
 
 **Paper (working title):** Does the Tiling Emerge? Which Energy Term Selects Which Half of a Convolution
 
@@ -19,14 +19,14 @@ genome, and `emerge_offset.c` says so in its own header:
 
 > "making the genome an offset mask also makes the connectivity translation-invariant by construction"
 
-So the **tiling** — one filter reused across positions — was imposed, not emergent. That is the last
+So the **tiling** (one filter reused across positions) was imposed, not emergent. That is the last
 unfilled cell in paper 1's imposed-versus-emergent map, and it is what this paper attacks.
 
 ## 2. Design
 
 **Genome.** Over `P = N-K+1` candidate window positions:
-- `on[p]` — is there a hidden unit reading the K-window at position p?
-- `g[p]` — which weight group that unit draws its taps from (0..P-1, so every unit *can* be its own)
+- `on[p]`: is there a hidden unit reading the K-window at position p?
+- `g[p]`: which weight group that unit draws its taps from (0..P-1, so every unit *can* be its own)
 
 **Exhaustive seed** = the locally-connected net: every position occupied, every position its own filter.
 Nothing in the genome encodes translation. A convolution is one point in this space among many that
@@ -86,7 +86,7 @@ random (matched budget)   0.53   3.1     0.65  0.721    0.276     0%
 
 **The hand-built convolution scores equiv-err 0.278, worse than evolved `E_param` at 0.237.** That
 should be impossible if the measure is right, and it is not noise. Cause: on a finite **non-circular**
-strip, a convolution is genuinely *not* translation-equivariant. Interior positions are covered by more
+strip, a convolution is *not* translation-equivariant. Interior positions are covered by more
 overlapping windows than edge positions, so detection rate falls off at the boundary. The theorem
 (below) is stated for the cyclic group.
 
@@ -103,11 +103,11 @@ Equivariant CNNs) as predecessor and Bronstein et al., *Geometric Deep Learning*
 
 Why it matters here, and this was the author's move: we cannot tell from a placement diagram whether
 what the search found "is a convolution." The theorem lets us **test the property instead of guessing
-at the wiring** — plant the motif at each position in turn and take the spread of the detection rate.
+at the wiring**: plant the motif at each position in turn and take the spread of the detection rate.
 Zero spread is equivariance. This is architecture-agnostic, so it transfers to any network structure
 tested later.
 
-Two honest caveats for the paper:
+Two caveats for the paper:
 - The theorem covers *linear* maps and *exact* equivariance. This setup has a tanh per unit and a
   learned readout, so the theorem supplies the target point, not a proof that the whole search space
   reduces to it.
@@ -125,7 +125,7 @@ paper 1 as well (see `~/articles/smbpann/revision_notes_gpem.md`).
 Author's proposal, implemented: per-position edits may be unable to build a tiling at all, because the
 intermediate states are not fitter (half a tiling costs energy and buys nothing). Biology does not build
 repeated structure one limb at a time either. So add a rare GLOBAL operator: pick a period T, repeat the
-genome's first T slots across the whole range. **Serial homology** — the mechanism behind a millipede.
+genome's first T slots across the whole range. **Serial homology**: the mechanism behind a millipede.
 It confers periodicity, not a convolution; the search still picks the period and the filter.
 
 Also this run: circular domain (P = N, wrap-around), and energy left as a per-neuron fraction so the
@@ -260,7 +260,7 @@ Requires matplotlib: use `/home/vas/.venv-figs/bin/python` (system python3 has n
 Launched via `~/smbpann/scripts/tile_overnight.sh`, finished 03:34. Four jobs, all `E_param` rows quoted
 (the arm where the operator pays).
 
-### Job 1 — headline at 200 seeds
+### Job 1: headline at 200 seeds
 
 ```
                         cover  groups  reg   test   eq-err  %conv
@@ -276,7 +276,7 @@ random                  0.53   3.9     0.56  0.766  0.296    0%
 secondary claims from the 40-seed run survive: fixed rate beats stagnation (38% vs 22%) while firing
 fewer tilings; the operator only pays under `E_param` (38% vs 8% and 5%).
 
-### Job 4 — the reachability control, and it PASSED
+### Job 4: the reachability control, and it PASSED
 
 At **400 generations**, five times the budget, local mutation still yields **0%** (`E_param` and `both`;
 2% for `E_conn`). The macro arm sits at 40%, essentially unchanged from 38% at 80 generations, so both
@@ -286,7 +286,7 @@ This is the control that matters. The central negative is about **reachability**
 run long enough. Local mutation does not get there with five times the compute. Had it started producing
 convolutions at 400 generations, the headline would have collapsed to a claim about search efficiency.
 
-### Job 2 — rate sweep: a plateau, not a peak
+### Job 2: rate sweep: a plateau, not a peak
 
 ```
 rate   0.01  0.02  0.05  0.10  0.20
@@ -297,7 +297,7 @@ Rises fast to ~40% by 0.05 then flat. **The result is not a tuning artifact**; 0
 edge. Still creeping up at 0.20, so the upper end is untested and the rate at which the operator starts
 destroying population diversity is unknown. Worth one more sweep at 0.3/0.5/0.8.
 
-### Job 3 — N sweep: THE LIMITATION, and it is real
+### Job 3: N sweep: THE LIMITATION, and it is real
 
 ```
 N        8     12     16     20     24
@@ -316,7 +316,7 @@ currently separate "the budget did not scale" from "the mechanism does not scale
 same question in its Sec 2.4 and answered it by growing the budget quadratically in N; the same control
 is owed here and is the single most important missing experiment.
 
-Until that is run, the honest claim is: **demonstrated at N<=16, decaying beyond, cause unresolved.**
+Until that is run, the defensible claim is: **demonstrated at N<=16, decaying beyond, cause unresolved.**
 
 ---
 
@@ -468,7 +468,7 @@ weak penalty: energy barely competes with accuracy, so structure is under-select
 
 ---
 
-## 5g. Run 7 (2026-07-31): max-pooling, and the honest range
+## 5g. Run 7 (2026-07-31): max-pooling, and the defensible range
 
 ### Max-pooling makes the reference a real ceiling
 
@@ -521,7 +521,7 @@ tiling    5%   6%  10%  14%  18%  18%  20%  |   61%
 threshold form. So the gap is structural (constrained vs scalarised optimisation), not a weighting
 that was set too low. That is the evidence the paper needed for the claim.
 
-### The honest headline
+### The defensible headline
 
 The %conv magnitude ranges 8%-61% across pooling rules, objective forms and problem sizes. **The
 control is between 0% and 4% in every single configuration**, and the operator arm is always
@@ -708,7 +708,7 @@ physics turned out not to hold (below).
 
 **(a) No nucleation barrier.** Planted domains of m=1..10, per-site mutation only, prem=0.008:
 drift is `+2.8, +2.3, +1.5, +1.2, +0.4, +0.5, -0.3, -1.1` for m = 1,2,3,4,5,6,8,10. Small domains
-*grow* and large ones *shrink* -- the opposite sign from classical nucleation, so there is no critical
+*grow* and large ones *shrink*: the opposite sign from classical nucleation, so there is no critical
 nucleus. Not barrier-limited.
 
 **(b) No stationary domain size either.** From the drift crossings I fitted
