@@ -26,6 +26,13 @@ C_REPOS = [
     ("curl",     "ext-c/curl",     ["lib"]),
     ("postgres", "ext-c/postgres", ["src/backend"]),
 ]
+RUST_REPOS = [
+    ("ripgrep",  "ext-rust/ripgrep",  ["crates"]),
+    ("tokio",    "ext-rust/tokio",    ["tokio"]),
+    ("serde",    "ext-rust/serde",    ["serde", "serde_derive"]),
+    ("hyper",    "ext-rust/hyper",    ["src"]),
+    ("fd",       "ext-rust/fd",       ["src"]),
+]
 CPP_REPOS = [
     ("leveldb",  "ext-cpp/leveldb",  ["db", "table", "util", "include"]),
     ("rocksdb",  "ext-cpp/rocksdb",  ["db", "table", "util", "include"]),
@@ -37,6 +44,7 @@ CPP_REPOS = [
 
 C_EXT   = (".c", ".h")
 CPP_EXT = (".cc", ".cpp", ".cxx", ".h", ".hpp", ".hh", ".ipp")
+RUST_EXT = (".rs",)
 SKIP    = ("/test", "/tests", "/third_party", "/benchmark", "/example", "/fuzz", "/_deps")
 
 GEN_MARK = re.compile(rb"(DO NOT EDIT|do not edit|[Gg]enerated by|[Aa]utomatically generated|"
@@ -132,6 +140,10 @@ if __name__ == "__main__":
     for name, repo, sd in CPP_REPOS:
         print(f"  measuring {name} ...", file=sys.stderr)
         out["cpp"].append(measure_repo(name, repo, sd, CPP_EXT, feats=True))
+    out["rust"] = []
+    for name, repo, sd in RUST_REPOS:
+        print(f"  measuring {name} ...", file=sys.stderr)
+        out["rust"].append(measure_repo(name, repo, sd, RUST_EXT))
     out["generated_excluded"] = GENERATED
     print(f"  excluded {len(GENERATED)} generated files", file=sys.stderr)
     if "--json" in sys.argv:

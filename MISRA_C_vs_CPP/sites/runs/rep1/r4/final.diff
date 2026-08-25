@@ -1,0 +1,13 @@
+diff --git a/store.c b/store.c
+index d210c43..5aef859 100644
+--- a/store.c
++++ b/store.c
+@@ -21,7 +21,7 @@ static int cmd_add(int argc, char **argv)
+         fprintf(stderr, "add: failed\n");
+         return 1;
+     }
+-    printf("add ok=1 n=%ld\n", n);
++    printf("add ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 

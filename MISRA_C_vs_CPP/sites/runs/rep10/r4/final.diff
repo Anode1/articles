@@ -1,0 +1,94 @@
+diff --git a/store.c b/store.c
+index 601fabe..3f8254f 100644
+--- a/store.c
++++ b/store.c
+@@ -30,7 +30,7 @@ static int cmd_add(int argc, char **argv)
+         fprintf(stderr, "add: failed\n");
+         return 1;
+     }
+-    printf("add ok=1 n=%ld\n", n);
++    printf("add ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -49,7 +49,7 @@ static int cmd_del(int argc, char **argv)
+         fprintf(stderr, "del: failed\n");
+         return 1;
+     }
+-    printf("del ok=1 n=%ld\n", n);
++    printf("del ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -68,7 +68,7 @@ static int cmd_find(int argc, char **argv)
+         fprintf(stderr, "find: failed\n");
+         return 1;
+     }
+-    printf("find ok=1 n=%ld\n", n);
++    printf("find ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -87,7 +87,7 @@ static int cmd_list(int argc, char **argv)
+         fprintf(stderr, "list: failed\n");
+         return 1;
+     }
+-    printf("list ok=1 n=%ld\n", n);
++    printf("list ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -106,7 +106,7 @@ static int cmd_stat(int argc, char **argv)
+         fprintf(stderr, "stat: failed\n");
+         return 1;
+     }
+-    printf("stat ok=1 n=%ld\n", n);
++    printf("stat ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -125,7 +125,7 @@ static int cmd_dump(int argc, char **argv)
+         fprintf(stderr, "dump: failed\n");
+         return 1;
+     }
+-    printf("dump ok=1 n=%ld\n", n);
++    printf("dump ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -144,7 +144,7 @@ static int cmd_keys(int argc, char **argv)
+         fprintf(stderr, "keys: failed\n");
+         return 1;
+     }
+-    printf("keys ok=1 n=%ld\n", n);
++    printf("keys ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -163,7 +163,7 @@ static int cmd_tags(int argc, char **argv)
+         fprintf(stderr, "tags: failed\n");
+         return 1;
+     }
+-    printf("tags ok=1 n=%ld\n", n);
++    printf("tags ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -182,7 +182,7 @@ static int cmd_init(int argc, char **argv)
+         fprintf(stderr, "init: failed\n");
+         return 1;
+     }
+-    printf("init ok=1 n=%ld\n", n);
++    printf("init ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -201,7 +201,7 @@ static int cmd_sync(int argc, char **argv)
+         fprintf(stderr, "sync: failed\n");
+         return 1;
+     }
+-    printf("sync ok=1 n=%ld\n", n);
++    printf("sync ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 

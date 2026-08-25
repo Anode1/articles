@@ -1,0 +1,30 @@
+{
+ "cond": "rep1",
+ "sites": 1,
+ "rep": 3,
+ "model": "claude-sonnet-5",
+ "wall_s": 13.1,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 7,
+ "cost_usd": 0.0819308,
+ "stop": "success",
+ "output_tokens": 734,
+ "context_tokens": 166941,
+ "tool_calls": 6,
+ "tools": {
+  "Bash": 2,
+  "Read": 3,
+  "Edit": 1
+ },
+ "edits": 1,
+ "built": true,
+ "covered": 1,
+ "total_sites": 1,
+ "coverage": 1.0,
+ "complete": true,
+ "per_site": {
+  "add": "ok"
+ },
+ "diff": "diff --git a/store.c b/store.c\nindex d210c43..5aef859 100644\n--- a/store.c\n+++ b/store.c\n@@ -21,7 +21,7 @@ static int cmd_add(int argc, char **argv)\n         fprintf(stderr, \"add: failed\\n\");\n         return 1;\n     }\n-    printf(\"add ok=1 n=%ld\\n\", n);\n+    printf(\"add ok=1 n=%ld arg=%zu\\n\", n, strlen(argv[0]));\n     return 0;\n }\n \n"
+}

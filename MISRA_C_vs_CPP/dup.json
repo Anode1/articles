@@ -1,0 +1,114 @@
+[
+ {
+  "set": "sqlite",
+  "tokens": 872790,
+  "dup_exact": 3.93,
+  "dup_normalised": 13.8,
+  "lang": "C"
+ },
+ {
+  "set": "redis",
+  "tokens": 1074204,
+  "dup_exact": 4.83,
+  "dup_normalised": 25.06,
+  "lang": "C"
+ },
+ {
+  "set": "nginx",
+  "tokens": 1087614,
+  "dup_exact": 21.77,
+  "dup_normalised": 53.06,
+  "lang": "C"
+ },
+ {
+  "set": "curl",
+  "tokens": 724404,
+  "dup_exact": 4.23,
+  "dup_normalised": 21.28,
+  "lang": "C"
+ },
+ {
+  "set": "postgres",
+  "tokens": 3468204,
+  "dup_exact": 7.58,
+  "dup_normalised": 29.99,
+  "lang": "C"
+ },
+ {
+  "set": "leveldb",
+  "tokens": 76526,
+  "dup_exact": 4.5,
+  "dup_normalised": 16.61,
+  "lang": "C++"
+ },
+ {
+  "set": "rocksdb",
+  "tokens": 1048409,
+  "dup_exact": 6.41,
+  "dup_normalised": 21.22,
+  "lang": "C++"
+ },
+ {
+  "set": "protobuf",
+  "tokens": 1341506,
+  "dup_exact": 12.1,
+  "dup_normalised": 41.74,
+  "lang": "C++"
+ },
+ {
+  "set": "fmt",
+  "tokens": 115501,
+  "dup_exact": 2.3,
+  "dup_normalised": 18.43,
+  "lang": "C++"
+ },
+ {
+  "set": "spdlog",
+  "tokens": 164002,
+  "dup_exact": 3.64,
+  "dup_normalised": 22.94,
+  "lang": "C++"
+ },
+ {
+  "set": "json",
+  "tokens": 140181,
+  "dup_exact": 20.88,
+  "dup_normalised": 50.81,
+  "lang": "C++"
+ },
+ {
+  "set": "ripgrep",
+  "tokens": 278789,
+  "dup_exact": 13.95,
+  "dup_normalised": 46.51,
+  "lang": "Rust"
+ },
+ {
+  "set": "tokio",
+  "tokens": 412691,
+  "dup_exact": 21.04,
+  "dup_normalised": 37.9,
+  "lang": "Rust"
+ },
+ {
+  "set": "serde",
+  "tokens": 87124,
+  "dup_exact": 20.4,
+  "dup_normalised": 45.83,
+  "lang": "Rust"
+ },
+ {
+  "set": "hyper",
+  "tokens": 121236,
+  "dup_exact": 12.63,
+  "dup_normalised": 25.52,
+  "lang": "Rust"
+ },
+ {
+  "set": "fd",
+  "tokens": 31100,
+  "dup_exact": 2.48,
+  "dup_normalised": 27.19,
+  "lang": "Rust"
+ }
+]

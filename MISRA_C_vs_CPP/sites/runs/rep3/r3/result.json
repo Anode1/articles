@@ -1,0 +1,32 @@
+{
+ "cond": "rep3",
+ "sites": 3,
+ "rep": 3,
+ "model": "claude-sonnet-5",
+ "wall_s": 18.8,
+ "rc": 0,
+ "stderr": "",
+ "num_turns": 9,
+ "cost_usd": 0.08990000000000001,
+ "stop": "success",
+ "output_tokens": 1062,
+ "context_tokens": 169607,
+ "tool_calls": 8,
+ "tools": {
+  "Bash": 2,
+  "Read": 3,
+  "Edit": 3
+ },
+ "edits": 3,
+ "built": true,
+ "covered": 3,
+ "total_sites": 3,
+ "coverage": 1.0,
+ "complete": true,
+ "per_site": {
+  "add": "ok",
+  "del": "ok",
+  "find": "ok"
+ },
+ "diff": "diff --git a/store.c b/store.c\nindex df6ee09..6414173 100644\n--- a/store.c\n+++ b/store.c\n@@ -23,7 +23,7 @@ static int cmd_add(int argc, char **argv)\n         fprintf(stderr, \"add: failed\\n\");\n         return 1;\n     }\n-    printf(\"add ok=1 n=%ld\\n\", n);\n+    printf(\"add ok=1 n=%ld arg=%zu\\n\", n, strlen(argv[0]));\n     return 0;\n }\n \n@@ -42,7 +42,7 @@ static int cmd_del(int argc, char **argv)\n         fprintf(stderr, \"del: failed\\n\");\n         return 1;\n     }\n-    printf(\"del ok=1 n=%ld\\n\", n);\n+    printf(\"del ok=1 n=%ld arg=%zu\\n\", n, strlen(argv[0]));\n     return 0;\n }\n \n@@ -61,7 +61,7 @@ static int cmd_find(int argc, char **argv)\n         fprintf(stderr, \"find: failed\\n\");\n         return 1;\n     }\n-    printf(\"find ok=1 n=%ld\\n\", n);\n+    printf(\"find ok=1 n=%ld arg=%zu\\n\", n, strlen(argv[0]));\n     return 0;\n }\n \n"
+}

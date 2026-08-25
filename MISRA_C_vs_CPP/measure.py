@@ -253,6 +253,30 @@ def macros(files):
             n += len(re.findall(r"^\s*#\s*define\s+\w+\(", open(f).read(), re.M))
     return n
 
+def compressed(files):
+    """Kolmogorov complexity is uncomputable; compressed size is its standard proxy.
+    Concatenate the set's source in a fixed order and compress. Cross-file redundancy
+    is counted deliberately: boilerplate repeated across files is what a compressor,
+    and an agent that has already read one instance of it, gets nearly free.
+
+    Returns raw, gzip and xz bytes, over the source as written and comment-stripped."""
+    import gzip, lzma
+    raw, stripped = [], []
+    for f in sorted(files):
+        try:
+            src = open(f, encoding="utf-8", errors="replace").read()
+        except Exception:
+            continue
+        raw.append(src)
+        ext = lang_of(f)
+        stripped.append(strip_ada_comments(src) if ext in ("adb", "ads") else strip_c_comments(src))
+    def sizes(parts):
+        b = "\n".join(parts).encode("utf-8")
+        return len(b), len(gzip.compress(b, 9)), len(lzma.compress(b, preset=9))
+    r = sizes(raw); t = sizes(stripped)
+    return {"bytes_raw": r[0], "gz_raw": r[1], "xz_raw": r[2],
+            "bytes_stripped": t[0], "gz_stripped": t[1], "xz_stripped": t[2]}
+
 def git_commit(rel):
     top = os.path.join(HOME, rel.split("/")[0])
     return subprocess.run(["git", "-C", top, "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
@@ -271,6 +295,7 @@ def measure(name, rels, callgraph=False):
          "physical": 0, "lex_tokens": 0, "id_tokens": 0, "distinct_ids": 0, "llm_o200k": 0, "llm_cl100k": 0,
          "llm_o200k_stripped": 0, "nesting": 0, "bytes": 0}
     m.update(cloc(files))
+    m.update(compressed(files))
     ids, funcs, nest = set(), [], 0
     for f in files:
         src = open(f, encoding="utf-8", errors="replace").read()

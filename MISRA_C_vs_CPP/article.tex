@@ -13,8 +13,7 @@
 \setlength{\emergencystretch}{1em}
 
 \title{When Abstraction Becomes Indirection:\\
-\large C against C++ when the maintainer is an agent.\\
-The control arm, the instrument, and the prediction}
+\large What C and C++ cost the agent that maintains them}
 
 \author{Vasili Gavrilov}
 \date{23 August 2026}
@@ -23,15 +22,15 @@ The control arm, the instrument, and the prediction}
 \maketitle
 
 \begin{abstract}
-Abstraction hides detail because a person can hold only so much at once. An agent has no such limit, and pays instead for what it must reconstruct. This paper asks whether the trade still holds when the maintainer is an agent, and reports what can be measured before the treatment arm exists.
+Abstraction hides detail because a person can hold only so much at once. An agent has no such limit, and pays instead for what it must reconstruct. C and C++ share a machine model, so what separates them is that layer alone.
 
-Over public code by other authors: C++ carries 60.9 functions per thousand code lines against C's 28.4, over 430,081 and 1,214,580 lines, and the median C++ function has cyclomatic complexity 1, straight-line code that calls something else. The highest-complexity function in a project is nearly always the code facing a command line, an HTTP request, a wire format, an instruction stream or a file: 20 of the 22 projects here that carry a function above complexity 10, the two exceptions optimised interior kernels. That maximum is a property of a program's boundary, not a verdict on how it was written.
+Over 1.21 million lines of public C and 430 thousand of public C++, C++ carries 60.9 functions per thousand code lines against C's 28.4, and its median function has cyclomatic complexity 1. The extra length of C is redundancy; its indirection count is half.
 
-Over one author's code: explicit procedural C carries 1.3 to 2.7 times the lexical tokens of the same behaviour in his Java; lexical count and tokenizer count agree only at ordinary writing density, so which count a comparison comes with decides which language it calls compact; and a production Java service of 39,621 lines reaches SQL through three artifacts, with no entity, DTO, mapper or framework across 37 tables, which shows the seven-artifact path is not required to deliver that behaviour.
+Source size is four measures that disagree, and compression is the one that survives a change of writing density: for one behaviour by one author, C carries 2.66 times the lexical tokens of the Java and 1.73 times the compressed bytes. Memory separates the same way, C and Rust peaking within 1\% of each other on identical input and Python at 12.7 times.
 
-The agent measurement is a null with a stated cause. In 60 hypothesis-blind runs on maintenance tasks judged by hidden tests, all passed, the source under maintenance was at most 2.7\% of context at the median, and a run cost a 30.9k-token harness constant plus 926 a turn: five languages tied within the spread of three repetitions. Retrieval was one file read, so representation had no opportunity to cost anything. Nothing under 15\% of median context is resolvable at that repetition count.
+A project's highest-complexity function is nearly always the code at its edge, in 24 of the 27 measured here that have one: an input parser in most, its outward twin in the rest. That number describes where a program meets its input, not how it was written.
 
-No C++ and no framework implementation of any behaviour used here exists, so the comparison the paper is built for is absent. What is present is the instrument, at \$0.11 and 29 s a run, the calibration above, and a prediction with its refutations recorded before the code is written.
+An agent ran 60 hypothesis-blind maintenance runs against one program in five languages, judged by hidden tests. All passed, the source under maintenance was at most 2.7\% of context, and a run cost 25,603 tokens a turn, spent re-sending the conversation rather than reading the code. At one-file scale the representation cannot be seen at all.
 \end{abstract}
 
 \section{Question}
@@ -50,6 +49,8 @@ The axis is the fraction of a program's behaviour that is written down in the pr
 
 Ada, Rust, Java and Python are not on this axis. Each changes the runtime, the memory model and the library ecosystem at once, so a ratio against any of them measures a bundle. They are here as controls, calibrating the effect a language change produces when the change is not the layer under study. The rungs that are on the axis have to be written, and Section~\ref{sec:design} specifies them.
 
+The efficiency objection to abstraction is thirty years old and it was answered. In the 1990s the argument against C++ was machine cost: virtual dispatch, allocation, exceptions, code size. Compilers closed most of it and the zero-overhead principle became a design rule rather than a claim. Section~\ref{sec:hold} measures what that is worth now, on the one compiled language here that abstracts heavily: Rust peaks 1\% above C on identical input and finishes in the same time. Where a managed runtime is involved the old objection survives, at 2.6 times for Java and 12.7 for Python, but for compiled abstraction it is spent. It was also never this paper's objection. Machine cost is not what an agent pays.
+
 The answer is not obvious in either direction. Hiding a representation adds a relationship to resolve. Hiding a lifetime removes bookkeeping that would otherwise be carried correctly through every path. RAII and the standard containers are where abstraction plausibly lowers reconstruction cost.
 
 \section{What is withdrawn}
@@ -58,33 +59,33 @@ An earlier draft reported C at 292 physical lines and 1,863 lexical tokens again
 
 \section{Material}
 
-Every repository is public under \url{https://github.com/Anode1}. Table~\ref{tab:repos} lists what was measured and at which commit.
+Every repository is public under \url{https://github.com/Anode1}. Table~\ref{tab:repos} lists what was measured.
 
 \begin{table}[H]
 \centering
 \small
-\begin{tabular}{llll}
+\begin{tabular}{lll}
 \toprule
-Repository & Language & Commit & What it is \\
+Repository & Language & What it is \\
 \midrule
-\texttt{ais} & C & 84e3ad5 & associative index; the five-language bench in \texttt{tests/perf} \\
-\texttt{cjitter} & C & 4aaee2c & four stochastic searches and a uniform control \\
-\texttt{bpnn} & C & 7640917 & backpropagation network and a tabular predictor \\
-\texttt{linearr} & C, Java & 0a79370 & streaming least squares; \texttt{java/} is the fit, line for line \\
-\texttt{iac} & C & 20fb0a3 & inter-agent dispatcher \\
-\texttt{graphcrawl} & C, JS & ef5b405 & depth-bounded graph navigator over a sorted text file \\
-\texttt{mincdp} & C, Java & 1bebbe3 & Chrome DevTools Protocol client, one file per language \\
-\texttt{ljms} & Java & 6677246 & a work queue that is one database table \\
-\texttt{aisgedcom} & Java & ec0cbac & GEDCOM genealogy toolkit, written 2009 and 2011 \\
-\texttt{aisconvert} & Java & d3bc723 & personal genomics toolkit, written 2009 \\
-System A & Java & ef0f7e0d & a commercial web application in production \\
+\texttt{ais} & C & associative index; the five-language bench in \texttt{tests/perf} \\
+\texttt{cjitter} & C & four stochastic searches and a uniform control \\
+\texttt{bpnn} & C & backpropagation network and a tabular predictor \\
+\texttt{linearr} & C, Java & streaming least squares; \texttt{java/} is the fit, line for line \\
+\texttt{iac} & C & inter-agent dispatcher \\
+\texttt{graphcrawl} & C, JS & depth-bounded graph navigator over a sorted text file \\
+\texttt{mincdp} & C, Java & Chrome DevTools Protocol client, one file per language \\
+\texttt{ljms} & Java & a work queue that is one database table \\
+\texttt{aisgedcom} & Java & GEDCOM genealogy toolkit, written 2009 and 2011 \\
+\texttt{aisconvert} & Java & personal genomics toolkit, written 2009 \\
+System A & Java & a commercial web application in production \\
 \bottomrule
 \end{tabular}
-\caption{Repositories measured. The years for \texttt{aisgedcom} and \texttt{aisconvert} are their file headers': both were imported to git in 2015 and no Java file has changed since.}
+\caption{Repositories measured; the commit each was measured at is recorded in \texttt{measurements.json}. The years for \texttt{aisgedcom} and \texttt{aisconvert} are their file headers': both were imported to git in 2015 and no Java file has changed since.}
 \label{tab:repos}
 \end{table}
 
-\subsection{Three equivalent sets, the control arm}
+\subsection{Three sets of equivalent programs}
 
 None varies the abstraction layer on its own; each changes the runtime and the library ecosystem with it. They fix the baseline, the fixtures and the noise floor.
 
@@ -201,39 +202,39 @@ The median claim holds: median function 7 to 15 lines, median CCN 3 to 6, the me
 
 Ports carry the C's shape: \texttt{linearr/java} has its C's maximum function line for line (217 lines, CCN 73 and 74). Java written without a C original does not. \texttt{aisgedcom} and \texttt{aisconvert}, 8,856 code lines and 461 methods from 2009 and 2011, hold the median at 7 and 9 lines and CCN 2 and cut the tail to 32 of 461 methods over CCN 10 (7\%, against 21\% in \texttt{ais}) with maxima of CCN 41 and 44. \texttt{ljms} has nothing above CCN 9.
 
-Table~\ref{tab:max} names the maximum function of every project. In all thirteen it stands at a boundary: a command line, an HTTP request, a WebSocket frame, a file being streamed, a library's exported entry. The one project whose maximum is a leaf, \texttt{mincdp/java} at CCN 6, has no tail to place. Section~\ref{sec:external} tests this outside the author's code, where it holds in nine of eleven.
+Table~\ref{tab:max} names the maximum function of every project. In all thirteen it is an input parser: of a command line, an HTTP request, a WebSocket frame, a file read record by record, a library's arguments. The mechanism differs and the role does not. The one project whose maximum is a leaf, \texttt{mincdp/java} at CCN 6, has no tail to place. Section~\ref{sec:external} tests this outside the author's code, where it holds in thirteen of sixteen.
 
 \begin{table}[H]
 \centering
 \small
 \begin{tabular}{lllrr}
 \toprule
-Project & Highest-complexity function & The boundary it stands at & NLOC & CCN \\
+Project & Highest-complexity function & What it parses & NLOC & CCN \\
 \midrule
 ais/c & \texttt{main} & command line & 601 & 253 \\
-cjitter/c & \texttt{cjitter\_compare\_masked} & the library's exported entry & 99 & 38 \\
+cjitter/c & \texttt{cjitter\_compare\_masked} & its caller's parameters and method mask & 99 & 38 \\
 bpnn/c & \texttt{fit\_stream} & a file streamed record by record & 307 & 141 \\
 linearr/c & \texttt{main} & command line & 144 & 73 \\
 iac & \texttt{main} & command line & 47 & 33 \\
 graphcrawl/c & \texttt{main} & command line & 108 & 40 \\
 mincdp/c & \texttt{cdp\_ws\_read\_msg} & a WebSocket frame & 34 & 25 \\
 \addlinespace
-ljms/src & \texttt{Processor.start} & the queue poll loop & 37 & 9 \\
+ljms/src & \texttt{Processor.start} & rows taken from the queue & 37 & 9 \\
 aisgedcom/src & \texttt{ArgsParser.setArgs} & command line & 120 & 41 \\
 aisconvert/src & \texttt{ArgsParser.setArgs} & command line & 133 & 44 \\
 linearr/java & \texttt{Linearr.main} & command line & 217 & 74 \\
 mincdp/java & \texttt{Demo.isPng} & none: a leaf, and the project has no tail & 8 & 6 \\
 \addlinespace
-private/java & \texttt{doGet} & an HTTP request & 1,249 & 329 \\
+System A & \texttt{doGet} & an HTTP request & 1,249 & 329 \\
 \bottomrule
 \end{tabular}
-\caption{The function of highest cyclomatic complexity in each project, and what it faces. Twelve of the thirteen stand at a boundary; the thirteenth has no function above CCN 10.}
+\caption{The function of highest cyclomatic complexity in each project, and the input it reads. Twelve of the thirteen parse something supplied from outside them; the thirteenth has no function above CCN 10.}
 \label{tab:max}
 \end{table}
 
 Its size varies with how much work it does before delegating. The two toolkits' parser sets properties and returns, the work following a call later from a 57-line \texttt{Main}: CCN 41 and 44. \texttt{ais}'s \texttt{main} parses the options and then runs a second \texttt{switch} of 28 cases executing each command in place: CCN 253. System A's \texttt{doGet} and \texttt{doPost} decode a request and serve it in one method: CCN 329 and 300. Same boundary, same author's habits, a factor of eight. System A is otherwise the author's C profile in another language: median method 12 lines at CCN 4, p90 51 and 14, against \texttt{ais}'s 13, 5, 38 and 14, with 244 of 1,485 methods over CCN 10 (16\% against 21\%).
 
-The median is a property of how the code is written and is the same everywhere here. The maximum is a property of where the boundary is and how much it does. An experiment on ``explicit C'' conditions on both, and the phrase names only the first.
+The median is a property of how the code is written and is the same everywhere here. The maximum is a property of how much the input parser does before it delegates. An experiment on ``explicit C'' conditions on both, and the phrase names only the first.
 
 \section{System A: a case report}
 \label{sec:case}
@@ -273,51 +274,110 @@ The low end of the axis is therefore available in Java at 39,621 production line
 \section{Other people's code}
 \label{sec:external}
 
-The same script, over eleven public projects by other people: five C systems and six C++ libraries, 1.64 million code lines. It tests two of the paper's claims outside the author's hands and fixes the feature rates the C++ conditions of Section~\ref{sec:design} are built at.
+The same script, over sixteen public projects by other people: five C systems, six C++ libraries and five Rust projects, 1.76 million code lines. It tests two of the paper's claims outside the author's hands and fixes the feature rates the C++ conditions of Section~\ref{sec:design} are built at. Rust is included because it compiles to the same machine model as C and abstracts as heavily as C++, which makes it the third point on a line that would otherwise have two.
 
 Each project contributes its main implementation directory. Tests, vendored third-party code, benchmarks, examples and fuzzers are excluded by path, and 130 generated files by name or by a generation marker in their first 4\,kB. That exclusion is not cosmetic: before it, the highest-complexity function in \texttt{postgres} was a Snowball-generated stemmer and the deepest nesting in \texttt{protobuf} was its own compiler's output.
 
 \begin{table}[H]
 \centering
 \small
-\begin{tabular}{llrrrrrrrr}
+\begin{tabular}{lrrrrrrrr}
 \toprule
-Project & Commit & Files & Code & Fns & med & p90 & med & p90 & max \\
-& & & & & \multicolumn{2}{c}{NLOC} & \multicolumn{3}{c}{CCN} \\
+Project & Files & Code & Fns & med & p90 & med & p90 & max \\
+& & & & \multicolumn{2}{c}{NLOC} & \multicolumn{3}{c}{CCN} \\
 \midrule
-sqlite & d6bae5e & 144 & 129,203 & 3,971 & 14 & 53 & 3 & 15 & 1,330 \\
-redis & 6331fbe & 214 & 140,575 & 5,815 & 11 & 43 & 3 & 12 & 326 \\
-nginx & 3f6f782 & 403 & 179,735 & 3,236 & 27 & 91 & 5 & 20 & 190 \\
-curl & c2676bf & 384 & 125,481 & 3,825 & 16 & 60 & 4 & 17 & 90 \\
-postgres & 29636b4 & 848 & 639,586 & 17,664 & 17 & 72 & 3 & 14 & 258 \\
+sqlite & 144 & 129,203 & 3,971 & 14 & 53 & 3 & 15 & 1,330 \\
+redis & 214 & 140,575 & 5,815 & 11 & 43 & 3 & 12 & 326 \\
+nginx & 403 & 179,735 & 3,236 & 27 & 91 & 5 & 20 & 190 \\
+curl & 384 & 125,481 & 3,825 & 16 & 60 & 4 & 17 & 90 \\
+postgres & 848 & 639,586 & 17,664 & 17 & 72 & 3 & 14 & 258 \\
 \addlinespace
-leveldb & 7ee830d & 89 & 11,197 & 857 & 5 & 22 & 1 & 5 & 33 \\
-rocksdb & e6a2ee0 & 559 & 162,453 & 9,516 & 5 & 30 & 1 & 6 & 163 \\
-protobuf & 672eda6 & 561 & 202,746 & 11,913 & 7 & 30 & 1 & 5 & 103 \\
-fmt & e27cc20 & 20 & 13,783 & 1,201 & 4 & 13 & 1 & 4 & 77 \\
-spdlog & f5f173a & 107 & 20,742 & 1,833 & 4 & 13 & 1 & 4 & 77 \\
-json & 734fd30 & 47 & 19,160 & 853 & 5 & 29 & 1 & 10 & 273 \\
+leveldb & 89 & 11,197 & 857 & 5 & 22 & 1 & 5 & 33 \\
+rocksdb & 559 & 162,453 & 9,516 & 5 & 30 & 1 & 6 & 163 \\
+protobuf & 561 & 202,746 & 11,913 & 7 & 30 & 1 & 5 & 103 \\
+fmt & 20 & 13,783 & 1,201 & 4 & 13 & 1 & 4 & 77 \\
+spdlog & 107 & 20,742 & 1,833 & 4 & 13 & 1 & 4 & 77 \\
+json & 47 & 19,160 & 853 & 5 & 29 & 1 & 10 & 273 \\
+\addlinespace
+ripgrep & 141 & 33,992 & 2,183 & 6 & 25 & 1 & 6 & 42 \\
+tokio & 293 & 45,432 & 3,942 & 5 & 18 & 1 & 4 & 25 \\
+serde & 45 & 11,849 & 687 & 7 & 33 & 2 & 8 & 73 \\
+hyper & 61 & 15,643 & 1,034 & 6 & 26 & 1 & 6 & 43 \\
+fd & 22 & 3,891 & 189 & 7 & 32 & 1 & 8 & 37 \\
 \bottomrule
 \end{tabular}
-\caption{Eleven public projects, five in C and six in C++, generated files excluded.}
+\caption{Sixteen public projects, generated files excluded. Commits are in \texttt{external.json}.}
 \label{tab:external}
 \end{table}
 
 \subsection{The indirection is visible before an agent runs}
 
-C++ carries 60.9 functions per thousand code lines against C's 28.4, a factor of 2.1, over 430,081 and 1,214,580 lines respectively. The median C++ function is 4 to 7 lines at cyclomatic complexity 1, against 11 to 27 lines at complexity 3 to 5 in C. Complexity 1 at the median means the median C++ function contains no branch at all: it is straight-line code that calls something else.
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+& Code lines & Fns per KLOC & med NLOC & med CCN & max CCN & xz per KLOC \\
+\midrule
+C & 1,214,580 & 28.4 & 11 to 27 & 3 to 5 & 90 to 1,330 & 4,217 \\
+C++ & 430,081 & 60.9 & 4 to 7 & 1 & 33 to 273 & 4,754 \\
+Rust & 110,807 & 72.5 & 5 to 7 & 1 to 2 & 25 to 73 & 5,126 \\
+\bottomrule
+\end{tabular}
+\caption{The three languages over their public corpora. Medians and maxima are the range across that language's projects.}
+\label{tab:three}
+\end{table}
 
-That is this paper's axis, in released code by other authors, without an agent and without a hypothesis. The path an agent walks is longer because there are twice as many functions per unit of behaviour, and the tokens it reads to reach the point of change are spread over more artifacts. None of it settles the cost, which Section~\ref{sec:design} is for. It establishes that the thing whose cost is in question is real, large and not peculiar to the author.
+C++ carries 60.9 functions per thousand code lines against C's 28.4, and Rust 72.5. The median C++ and Rust function is 4 to 7 lines at cyclomatic complexity 1, against 11 to 27 lines at complexity 3 to 5 in C. Complexity 1 at the median means that function contains no branch at all: it is straight-line code that calls something else. Compressed density runs the same way, 4,217 bytes per thousand lines in C against 4,754 and 5,126.
 
-\subsection{Where the maximum sits, tested outside}
+That is this paper's axis, in released code by other authors, without an agent and without a hypothesis. The path an agent walks is longer because there are two to three times as many functions per unit of behaviour, and the tokens it reads to reach the point of change are spread over more artifacts.
 
-In the author's thirteen projects every maximum above complexity 10 stood at a boundary. Over these eleven that holds nine times: \texttt{sqlite3VdbeExec} is the bytecode interpreter's opcode dispatch, \texttt{rdbLoadObject} decodes a database file format, the nginx request-line parser handles HTTP, \texttt{ExplainNode} walks a plan tree to produce output, \texttt{InterpretArgument} parses a command line, \texttt{parse\_chrono\_format} reads a format string in both \texttt{fmt} and \texttt{spdlog}, a MessagePack reader decodes a wire format, and \texttt{curl\_easy\_strerror} maps internal codes to user-facing strings at the API surface.
+The maxima run the other way, and the reversal is sharp. The worst function in all of \texttt{tokio} is CCN 25, in \texttt{hyper} 43, in \texttt{ripgrep} 42; the worst in \texttt{sqlite} is 1,330 and in \texttt{postgres} 258. Rust carries the most indirection of the three and the least concentration of it. A language buys the absence of a tail with hops, and the two costs fall on different readers: a 601-line function at complexity 253 is what defeats a person, and a chain of seven four-line functions is what a person handles by not looking at it. Which one defeats an agent is the question Section~\ref{sec:design} is for. None of this settles it. It establishes that the thing whose cost is in question is real, large, ordered, and not peculiar to the author.
 
-It fails twice, both the same kind. \texttt{leveldb}'s \texttt{DoCompactionWork} at CCN 33 and \texttt{rocksdb}'s \texttt{crc32c\_3way} at CCN 163 are interior: a compaction driver and a hand-unrolled checksum kernel. Optimised inner loops accumulate branches for reasons unrelated to a program's edges.
+\subsection{Where the maximum sits}
 
-The surviving claim is weaker than the author's own code suggested, and is stated at its measured strength: the highest-complexity function in a project is usually the code facing the outside, and the exceptions here are optimised kernels. Twenty of the twenty-two projects across both corpora that carry a tail at all. Reading that number as a verdict on a language or a style guide remains wrong, which is the use this paper objects to.
+In the author's thirteen projects every maximum above complexity 10 was an input parser. Over these sixteen it holds in thirteen. Nine parse an input: \texttt{sqlite3VdbeExec} interprets a bytecode stream, \texttt{rdbLoadObject} decodes a database file format, the nginx request-line parser handles HTTP, \texttt{InterpretArgument} and \texttt{from\_low\_args} parse command lines, \texttt{parse\_chrono\_format} reads a format string in both \texttt{fmt} and \texttt{spdlog}, a MessagePack reader decodes a wire format, and \texttt{serde}'s \texttt{from\_ast} parses attribute syntax. Four cross the same boundary outward: \texttt{ExplainNode} walks a plan tree to produce text, \texttt{curl\_easy\_strerror} maps internal codes to user-facing strings, \texttt{hyper} encodes headers, and \texttt{tokio}'s worst function is a \texttt{Display} implementation.
 
-\subsection{Feature rates for the C++ conditions}
+It fails three times, all the same kind. \texttt{leveldb}'s \texttt{DoCompactionWork} at CCN 33, \texttt{rocksdb}'s \texttt{crc32c\_3way} at CCN 163 and \texttt{fd}'s \texttt{spawn\_senders} at 37 are interior: a compaction driver, a hand-unrolled checksum kernel, and a thread launcher. Optimised or concurrent interiors accumulate branches for reasons unrelated to a program's edges.
+
+The surviving claim is weaker than the author's own code suggested, and is stated at its measured strength: the highest-complexity function in a project is usually the one that parses its input, and the exceptions here are optimised kernels. Four of them cross it outward rather than inward, which is the same boundary. Twenty-four of the twenty-seven projects across both corpora that carry a tail at all. Reading that number as a verdict on a language or a style guide remains wrong, which is the use this paper objects to.
+
+\subsection{The same question in Java}
+\label{sec:jpa}
+
+System A serves 37 tables through 39 persistence classes and one data carrier, with no ORM. The conventional stack states the same behaviour across an entity, a repository, a service, a controller and a mapper. Thirteen public Java applications that persist through JPA were measured the same way, six of them data-centric systems comparable to System A in shape (\texttt{fineract}, \texttt{BroadleafCommerce}, \texttt{openmrs-core}, \texttt{syncope}, \texttt{shopizer}, \texttt{hawkbit}) and seven platform or sample applications where most of the code is not persistence at all.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+& Entities & Persistence classes & Layer classes & Declared \\
+& & per entity & per entity & artifacts \\
+\midrule
+fineract & 255 & 2.16 & 5.4 & n/a \\
+BroadleafCommerce & 159 & 1.42 & 3.3 & 188 \\
+openmrs-core & 86 & 1.29 & 1.7 & 152 \\
+syncope & 85 & 1.61 & 1.6 & 482 \\
+shopizer & 82 & 2.44 & 4.3 & 73 \\
+hawkbit & 21 & 1.14 & 3.6 & n/a \\
+\midrule
+median of the six & & 1.52 & 3.4 & \\
+\addlinespace
+System A & 37 tables & 1.08 & 1.08 & 8 deployed jars \\
+\bottomrule
+\end{tabular}
+\caption{Public JPA applications against System A. Persistence classes are entity, repository and mapper; layer classes add service and controller. Declared artifacts are distinct Maven \texttt{artifactId}s across the project's POMs.}
+\label{tab:jpa}
+\end{table}
+
+The persistence layer is the part that barely differs: 1.52 classes per entity against 1.08, a factor of 1.4. Whatever the ORM costs, it is not paid in classes at the point where rows become objects. The factor reaches 3.4 only when the service and controller layers are counted, and it reaches nothing like the whole-repository ratios, which range from 10 to 115 files per entity and measure how much of a system is not CRUD rather than what the stack costs.
+
+Where the difference is not marginal is the dependency surface. System A deploys 8 jars totalling 3.3\,MB, of which its own machinery is under 1\,MB, and carries no \texttt{package.json}: its 46,390 lines of front end are plain JavaScript with no framework, no npm and no build step. The comparable systems declare 73 to 482 distinct Maven artifacts, and \texttt{thingsboard} adds 554 npm packages in its lockfile. Each is a version to track, a licence to clear and a vulnerability feed to watch, and none of it appears in a line count.
+
+Two limits. Entity counts come from the \texttt{@Entity} annotation, so a system persisting through MyBatis registers as zero and drops out: \texttt{mall} at 519 files and \texttt{JeecgBoot} at 864, both large production systems, keep hand-written SQL in 76 and 80 \texttt{*Mapper.xml} files and use no ORM. The assumption that the ORM stack is the default does not survive that observation. And thirteen applications chosen by hand from public hosts are not a sample of industry practice; they are what could be found, measured, and re-measured by anyone with the script.
+
+\subsection{Feature rates}
 
 Table~\ref{tab:cppfeat} gives the counts the pairs of Section~\ref{sec:design} are parameterised by, so the C++ side is built at rates that occur rather than rates that favour the hypothesis. Counts are lexical, over comment-stripped source; a semantic count would need each project's build configuration.
 
@@ -347,21 +407,82 @@ The variance is larger than the mean and it is structured. \texttt{fmt} and \tex
 
 The corpus is six libraries and no applications. C++ applications are under-represented on public hosts, and their mix is likely different again; these rates are library and systems C++, not C++ in general.
 
-\section{Agent pilot: the control arm}
+\section{What a representation costs to hold}
+\label{sec:hold}
+
+Three costs are not source length: the information the source actually carries, the memory the program takes to run, and the prose that has to be written and kept true beside it.
+
+\subsection{Compressed size}
+
+Kolmogorov complexity is uncomputable, and compressed size is its standard proxy. Each set's source is concatenated in a fixed order, comment-stripped, and compressed with xz at preset 9. Cross-file redundancy is counted deliberately: boilerplate repeated across files is what a compressor, and a reader who has already seen one instance of it, gets nearly free.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Same behaviour, one author & Lexical & Raw bytes & gzip & xz \\
+\midrule
+bench C / Ada & 0.81 & 0.38 & 0.63 & 0.66 \\
+bench C / Rust & 1.42 & 0.97 & 1.17 & 1.15 \\
+bench C / Java & 1.27 & 0.89 & 1.03 & 1.02 \\
+bench C / Python & 1.74 & 1.30 & 1.51 & 1.43 \\
+mincdp C / Java & 2.66 & 2.04 & 1.81 & 1.73 \\
+linearr C / Java & 2.60 & 2.89 & 2.77 & 2.65 \\
+\bottomrule
+\end{tabular}
+\caption{Ratios of C to the other language on the same behaviour, by four measures. Comment-stripped source throughout.}
+\label{tab:comp}
+\end{table}
+
+The four measures disagree, and the disagreement has a direction. Compression removes most of the C's excess where the behaviour is genuinely matched: on the bench the C/Java ratio falls from 1.27 lexical to 1.02 compressed, and on \texttt{mincdp} from 2.66 to 1.73. It removes none of \texttt{linearr}'s, because that C carries a scoring mode the Java lacks, which is why its ratio was already an upper bound. What compression takes away is repetition, and repetition is most of what explicit style adds.
+
+Across the public corpora, where behaviour cannot be matched, the comparison is per line: C++ carries 4,754 compressed bytes per thousand code lines against C's 4,217. A C++ line holds 13\% more information than a C line, which is the same fact seen from the other side.
+
+\subsection{Memory}
+
+The five equivalent programs were run on identical input and their peak resident set recorded. Two points bracket it: the runtime's floor, on a 400 and 350 element pair, and a data-dominated run on two lists of 2,000,000 ids, 17 MB each.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{Floor (750 ids)} & \multicolumn{2}{c}{2,000,000 ids each} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Language & Peak RSS & $\times$ C & Peak RSS & $\times$ C \\
+\midrule
+C & 1.7 MB & 1.0 & 49.4 MB & 1.0 \\
+Rust & 2.2 MB & 1.3 & 49.8 MB & 1.01 \\
+Ada & 5.0 MB & 3.0 & 69.0 MB & 1.4 \\
+Java & 46.4 MB & 27.9 & 128.5 MB & 2.6 \\
+Python & 10.0 MB & 6.0 & 624.9 MB & 12.7 \\
+\bottomrule
+\end{tabular}
+\caption{Peak resident memory on the intersection, same input, same machine. Wall time at the large input: C and Rust 0.16 s, Ada 0.23, Java 0.27, Python 4.44.}
+\label{tab:mem}
+\end{table}
+
+Rust costs 1\% more than C at the large input and 0.16 s against 0.16 s, which is what a zero-cost abstraction means when it is measured rather than asserted. The runtime floor is the number that matters where the unit of deployment is a process: 46.4 MB against 1.7 MB is the same program.
+
+\subsection{Comments}
+
+If abstraction is a compression of the source, it is a lossy one: what runs cannot be recovered from the compressed form alone, and the missing part is supplied by an interface, a construction site, a convention, or a comment. Comments are the only one of those that nothing checks, and the only one that can silently stop being true.
+
+For one behaviour by one author the prediction holds. The more abstract side of each pair carries more comment per line of code: 8.9 against 0.0 on the bench, 23.8 against 15.3 on \texttt{mincdp}, 41.6 against 26.0 on \texttt{linearr}, comment lines per hundred code lines. Over the author's whole corpus it is 41.8 for the Java against 25.0 for the C.
+
+Across projects by different authors the relation reverses: 38.2 for the five public C projects against 22.9 for the six C++. That comparison holds neither behaviour nor author fixed, and the within-language spread swamps the between-language difference, from 4.4 in \texttt{nginx} to 50.6 in \texttt{postgres}. Comment density is a property of a project's convention before it is a property of its language.
+
+What a line count cannot see is whether a comment is needed. An API description and an explanation of what a template instantiation resolves to are both comment lines. Separating them is a reading task, not a counting one, and it is not attempted here.
+
+\section{Running an agent on the code}
 \label{sec:pilot}
 
 \subsection{Protocol}
 
 The five bench implementations are the five conditions. Each run copies one into a fresh directory holding only the source file, a neutral \texttt{README.md} with build and run commands, \texttt{check.sh} (builds and runs both operations on the visible fixtures), and \texttt{fixtures/} (a 24-line store and two posting lists of nine and seven elements). The directory is a fresh git repository; trace, diff and verdict are written outside it.
 
-Four tasks, one text each, identical for every language, naming behaviour and output but never a file, a function or a language feature:
-
-\begin{description}[nosep]
-\item[T1] add a \texttt{diff} operation: ids in the first list absent from the second, one forward pass, no set or map, rows beginning \texttt{diff} with \texttt{only=<count>};
-\item[T2] make the scan case-insensitive for ASCII letters, every other byte exact, each line counted at most once;
-\item[T3] the intersection reports a wrong count (4 is correct for the fixtures); find and fix it. The defect is one substitution per language: the merge advances the wrong side when heads differ, yielding 0;
-\item[T4] after the intersection's rows, print \texttt{first} and \texttt{last} for the common ids, or \texttt{none} for both.
-\end{description}
+Four tasks, one text each, identical for every language, naming behaviour and output but never a file, a function or a language feature: add a set-difference operation over the two lists; make the scan case-insensitive for ASCII letters; find and fix an injected defect in the intersection, one substitution per language that makes the merge advance the wrong side; and print the first and last common id after the intersection's rows. The texts are in \texttt{pilot/tasks.py}.
 
 Each task ends: keep everything else unchanged, verify with \texttt{check.sh}, do not ask questions.
 
@@ -373,44 +494,8 @@ Per run, from the stream-json trace: context tokens (the sum over API calls of i
 
 \subsection{Results}
 
-All 60 runs passed the hidden tests, and every run stopped of its own accord: no turn or budget cap was reached. Table~\ref{tab:cells} gives each cell, Table~\ref{tab:langs} each language over the four tasks.
+All 60 runs passed the hidden tests, and every run stopped of its own accord: no turn or budget cap was reached. Table~\ref{tab:langs} gives each language over the four tasks; the per-cell figures are in \texttt{pilot/runs}.
 
-\begin{table}[H]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{llrrrrrrr}
-\toprule
-Task & Lang. & Pass & Context med. & Context range & Output median & Turns & Tool calls & Wall s \\
-\midrule
-T1 add diff & C & 3/3 & 204,558 & 203,656--204,778 & 3,049 & 10 & 9 & 31 \\
- & Ada & 3/3 & 249,748 & 246,739--324,890 & 3,413 & 12 & 11 & 36 \\
- & Rust & 3/3 & 274,313 & 274,294--308,837 & 2,727 & 10 & 9 & 32 \\
- & Java & 3/3 & 206,650 & 204,276--311,586 & 3,310 & 11 & 10 & 34 \\
- & Python & 3/3 & 236,730 & 200,866--240,527 & 2,812 & 9 & 8 & 30 \\
-\addlinespace
-T2 case-insens.\ scan & C & 3/3 & 200,517 & 200,092--233,574 & 1,937 & 8 & 7 & 24 \\
- & Ada & 3/3 & 207,292 & 205,749--207,582 & 2,793 & 8 & 7 & 31 \\
- & Rust & 3/3 & 200,856 & 200,449--235,943 & 2,155 & 8 & 7 & 27 \\
- & Java & 3/3 & 199,965 & 199,910--201,120 & 1,804 & 8 & 7 & 27 \\
- & Python & 3/3 & 240,090 & 203,900--240,415 & 4,027 & 9 & 8 & 47 \\
-\addlinespace
-T3 repair merge & C & 3/3 & 165,743 & 164,868--165,790 & 1,874 & 9 & 8 & 23 \\
- & Ada & 3/3 & 202,332 & 167,680--202,440 & 1,017 & 6 & 5 & 17 \\
- & Rust & 3/3 & 164,745 & 164,491--197,106 & 1,021 & 7 & 6 & 18 \\
- & Java & 3/3 & 198,952 & 198,075--201,535 & 1,321 & 7 & 6 & 23 \\
- & Python & 3/3 & 196,857 & 163,456--229,857 & 1,266 & 7 & 6 & 22 \\
-\addlinespace
-T4 first/last id & C & 3/3 & 201,478 & 200,580--235,736 & 2,263 & 8 & 7 & 30 \\
- & Ada & 3/3 & 282,105 & 245,366--283,467 & 3,156 & 10 & 9 & 35 \\
- & Rust & 3/3 & 200,245 & 199,778--200,338 & 1,973 & 8 & 7 & 26 \\
- & Java & 3/3 & 200,068 & 199,967--200,331 & 1,880 & 8 & 7 & 26 \\
- & Python & 3/3 & 231,944 & 163,394--233,382 & 1,665 & 8 & 7 & 26 \\
-\bottomrule
-\end{tabular}
-\caption{Each cell of the pilot: three runs. Context is the cumulative prompt over the run's API calls; turns, tool calls and wall time are medians.}
-\label{tab:cells}
-\end{table}
 
 \begin{table}[H]
 \centering
@@ -432,13 +517,13 @@ Python & 12/12 & 230,900 & 2,476 & 8 & 8 & 30 & 1.39 \\
 
 Per run the median context was 202,386 tokens (163,394 to 324,890), median output 2,078 (912 to 4,854), 6 to 12 turns, 5 to 11 tool calls. Every run read the source file first; the median run read three files (source, \texttt{README.md}, \texttt{check.sh}), ran the shell two to four times and made one or two edits. In every T1 run the agent also updated \texttt{README.md} and \texttt{check.sh}. The 60 runs cost \$6.85 and 29 minutes: \$0.11 and 29 s a run.
 
-Where the context goes: the first API call of every run shows the model 30,920 to 30,969 tokens (default system prompt, tool schemas, task), and each later call adds a median 926. The source file at o200k is 478 to 1,373 tokens; shown on every call it is at most 2.7\% of a run's context at the median (Ada 4.5\%, Python 1.6\%). Context per run is turns times a harness constant, to within a few percent.
+Where the context goes: the first API call of every run shows the model 30,920 to 30,969 tokens (default system prompt, tool schemas, task), and each later call adds a median 926. The source file at o200k is 478 to 1,373 tokens; shown on every call it is at most 2.7\% of a run's context at the median (Ada 4.5\%, Python 1.6\%). Context is dominated by re-sending the accumulated conversation on every call: the median run pays 25,603 tokens a turn, with a two-fold spread across runs (17,221 to 34,287). It tracks turns only loosely. Regressed on turn count over the 60 runs, turns explain 27\% of the variance, and a quadratic term adds three points more; six, seven and eight turn runs all land near 200k, and above eight the median rises about 20k a turn. What the regression does establish is where the money goes. The unit of cost is an exchange carrying the whole conversation so far, not a file: a task needing three more turns late in a session pays three times a context of 200k, while reading twice as much source costs a few thousand once.
 
 Between languages: C, Rust and Java share a median of 200k to 201k; Ada 226k and Python 231k, 13 to 15\% more. Within a cell, three repetitions spread by a median 34,652 tokens and up to 107,310, so the between-language differences are of that order. The rank changes with the task: C is cheapest on T1, second on T2 and T3, third on T4; Rust is cheapest on T3 and costliest on T1. Ada costs the most output (2,929 median against 1,887 to 2,476), which is verbosity on the writing side, its reading side being 4.5\% of context. Python's T2 is the costliest T2 (240k context, 4,027 output, 47 s): its scan has two paths and both had to change.
 
 \subsection{What the pilot does and does not show}
 
-With retrieval at its floor and tasks this small, representation does not show in the cost. The agent read the file once at 1 to 4\% of its context and spent the rest on the harness constant times its turns. The five are separated only by turns taken and tokens written, and at three repetitions that separation sits inside the run-to-run spread. This is the null the design allows for, at the one scale where it was always likeliest.
+With retrieval at its floor and tasks this small, representation does not show in the cost. The agent read the file once at 1 to 4\% of its context and spent the rest re-sending the conversation, once per exchange. The five are separated only by turns taken and tokens written, and at three repetitions that separation sits inside the run-to-run spread. This is the null the design allows for, at the one scale where it was always likeliest.
 
 Each repository is one file, so retrieval is one \texttt{Read}: the pilot measures reconstruction and modification with retrieval held at its floor, the condition the design calls ``highly relevant context given''. Three repetitions bound the spread; they do not support a test between languages. One model was run. The bench is 25 to 133 lines, and nothing here scales.
 
@@ -465,41 +550,29 @@ Each repository is one file, so retrieval is one \texttt{Read}: the pilot measur
 \section{The experiment this motivates}
 \label{sec:design}
 
-The pilot fixes the harness. What follows varies what it held fixed, in two stages: a cheap one isolating the cost of a single indirection, and a larger one asking whether retrieval erases it.
+Section~\ref{sec:external} compares C and C++ as other people write them, which holds neither behaviour nor author fixed. What follows holds both.
 
-\textbf{Stage one, one pair per feature.} Porting \texttt{ais} to C++ would give one number with every feature confounded in it, so the unit of analysis is the indirection. Six pairs, each a small C program and the same behaviour in C++ using one construct, the sixth at a realistic mixture: direct call against virtual override, \texttt{void *} or duplication against template, named function against overloaded operator, explicit initialise and free against constructor and destructor, struct embedding against inheritance, and all together. Each pair passes one hidden suite, so equivalence is checked and not asserted.
+Porting \texttt{ais} to C++ would give one number with every feature confounded in it, so the unit of analysis is the indirection. Six pairs, each a small C program and the same behaviour in C++ using one construct, the sixth at a realistic mixture: direct call against virtual override, \texttt{void *} or duplication against template, named function against overloaded operator, explicit initialise and free against constructor and destructor, struct embedding against inheritance, and all together. Each pair passes one hidden suite, so equivalence is checked and not asserted. Rates come from Table~\ref{tab:cppfeat}, the mixed pair built at systems rather than header-only-library rates, so the C++ side is not a straw man and the choice is reported.
 
-The pilot found cost to be a harness constant times turns with the source under 3\% of context, so a large C++ file shows nothing a small one does not. What must be long is the resolution path, not the file: the construction site in one file, the override in another, the instantiation in a header. Seven artifacts can be seven short files, and the effect is predicted in turns.
+The pilot found cost to be a harness constant times turns with the source under 3\% of context, so a large C++ file shows nothing a small one does not. What must be long is the resolution path: the construction site in one file, the override in another, the instantiation in a header. Seven artifacts can be seven short files, and the effect is predicted in turns. Four tasks per pair, at least two requiring a change whose effect is not visible at the site of the change. Six pairs at two conditions, four tasks and five repetitions is 240 runs, about \$26 and under two hours at four in parallel. The code lives with this paper beside \texttt{pilot/}, with its own build, kept out of \texttt{ais}.
 
-Rates come from Table~\ref{tab:cppfeat}, the mixed pair built at systems rather than header-only-library rates, so the C++ side is not a straw man and the choice is reported. Four tasks per pair, behaviour-specified with hidden tests, at least two requiring a change whose effect is not visible at the site of the change; a local task will show nothing, for the reason the pilot measured. The code lives with this paper beside \texttt{pilot/}, self-contained with its own build, kept out of \texttt{ais} so that nothing written for measurement enters that repository's build or dependency surface. Six pairs at two conditions, four tasks and five repetitions is 240 runs, about \$26 and under two hours at four in parallel.
+What the runs yield is a cost per unresolved edge, which with the function density of Section~\ref{sec:external} gives the cost of a codebase at a given size and density: a model with measured parameters, not a measurement of a port nobody wrote.
 
-What the runs yield is a cost per unresolved edge. Combined with the function density and feature rates of Section~\ref{sec:external}, that gives the cost of a codebase at a given size and density: a model with measured parameters and a stated assumption about how they combine, not a measurement of a port nobody wrote.
+Two conditions follow it. A repository where retrieval is not one \texttt{Read} (the full \texttt{ais/c}, 10,597 code lines) crossed with ordinary tools against associative retrieval, which separates the two costs: if better retrieval closes the gap, the cost was retrieval. And a framework rung, one endpoint of the System A kind built three ways and judged at the HTTP boundary, since a framework hides control flow that is not in the repository in any form and so cannot be retrieved from it at all.
 
-\textbf{Stage two, scale, retrieval and a framework.} Stage one holds retrieval at its floor, which is what makes it cheap and what limits it. Stage two uses a repository where retrieval is not one \texttt{Read} (the full \texttt{ais/c}, 10,597 code lines) crossed with two retrieval conditions, ordinary tools and associative retrieval through \texttt{ais} itself. If better retrieval closes the gap between representations, the cost was retrieval; if both get cheaper and the gap stays, representation costs reconstruction on its own. At least 20 tasks, generated by rule before any run: local, cross-module and debugging, each behaviour-specified with hidden tests.
+Outcomes are the three the pilot already records, per task type rather than pooled: tokens read and written, wall seconds, and turns to a passing hidden test with failures reported rather than filtered. Runtime cost is not among them, for the reason Section~\ref{sec:hold} gives. Mixed-effects regression on log context with task and model as random effects; five repetitions, since three resolved nothing below 15\%.
 
-The framework rung belongs here as its own condition: one behaviour built on a framework that supplies part of it, against the same behaviour built without one. A language abstraction hides code that is still in the repository; a framework hides control flow that is not in the repository at all, since an annotation, a naming convention or a container decides what runs and the agent can read it nowhere in the tree. One endpoint of the System A kind is enough: about 200 lines of behaviour, built three ways, judged at the HTTP boundary.
+$H_0$: after task, model, size and retrieval, representation has no effect. $H_1$: reconstruction cost, measured on the semantic graph, predicts agent cost beyond token count. $H_2$: some abstractions raise it and some lower it, RAII and the standard containers being the candidates for lowering and framework control flow for raising it most.
 
-\textbf{Common to both.} Every condition implements one specification, so the source-token difference between conditions is the syntactic overhead, measured and not estimated, recorded on both sides: tokens read to reach the point of change, tokens written to make it. Ceremony costing a person one habitual gesture is paid by an agent at full price in both directions, and a representation can be compact to read and expensive to edit.
+\subsection{Prediction, recorded first}
 
-Three outcomes, all already recorded by the pilot harness. \emph{Tokens}: context to a hidden-test pass, read and written separately. \emph{Time}: wall seconds to a passing run. \emph{Debugging}: turns and tool calls to the pass, failed attempts, and regressions in behaviour the task did not name. Failures are reported and never dropped, so success probability is an outcome and not a filter.
-
-Runtime performance is not an outcome. Between C and C++ it is within noise, which is what makes the pair a clean instrument: the abstraction is free at run time, so anything it costs is paid elsewhere. Between a bare stack and a framework stack the difference is real and large and has been measured by others on identical hardware against a fixed specification; this paper cites that work rather than reproducing it.
-
-Repetitions of one task are not independent. Mixed-effects regression on log context with task and model as random effects, effect sizes and intervals, per-task distributions printed. The pilot resolved nothing below 15\% of median context at three repetitions, so the design carries five and each condition reports which effect sizes it could not have seen.
-
-$H_0$: after task, model, size and retrieval, representation has no effect. $H_1$: reconstruction cost, measured on the semantic graph (relationships traversed, plausible targets, dispersion across files), predicts agent cost beyond token count. $H_2$: some abstractions raise it and some lower it; RAII and standard containers are the candidates for lowering, and framework control flow for raising it most, being the one form of hiding that puts the answer outside the repository.
-
-\subsection{Prediction, recorded before the rungs exist}
-
-No C++ implementation of any of these behaviours existed on 24 August 2026, when this was written. The direction is recorded now so it cannot be fitted to the numbers later, with the results that would refute it.
-
-The prediction concerns tokens, wall time and the turns a change takes to get right. The mechanism is not token count. Reading more source costs an agent roughly linearly and cheaply: the file under maintenance was at most 2.7\% of context at the median, so doubling its length adds about 2.5\% to a run. Resolving a relationship costs a search over the targets a call site could reach, and its failure mode is not slowness but an edit that compiles, passes the build and is wrong. Explicitness is predicted to pay where the second cost applies and to be nearly free where only the first does.
+No pair above existed on 24 August 2026, when this was written. The direction is recorded now so it cannot be fitted to the numbers later, with the results that would refute it.
 
 \begin{enumerate}[nosep]
-\item \textbf{Local tasks}, the behaviour to change visible at the site of the change: no advantage to the explicit rungs, and a possible advantage to the abstract ones, since RAII removes a lifetime obligation the C rungs carry on every path out of a function. Predicted loser: explicit C.
+\item \textbf{Local tasks}, the behaviour to change visible at the site of the change: no advantage to the explicit rungs, and a possible advantage to the abstract ones, since RAII removes a lifetime obligation the C carries on every path out of a function. Predicted loser: explicit C.
 \item \textbf{Cross-module and debugging tasks}, where the answer depends on a relationship not visible at the site of the change: the explicit rungs cost less context and fail less often, the gap growing with plausible targets per call site rather than with source size.
-\item \textbf{The mix}: an effect smaller than either, in whichever direction the task proportions decide. The primary analysis is per task type; an aggregate alone would hide both.
-\item \textbf{The framework condition} costs the most of any rung on cross-module tasks, because the control flow deciding the answer is not in the repository in any form.
+\item \textbf{The mix}: an effect smaller than either, in whichever direction the task proportions decide.
+\item \textbf{The framework condition} costs the most of any rung on cross-module tasks.
 \end{enumerate}
 
 Table~\ref{tab:paths} gives the path an agent must walk to establish what one call does, for one behaviour: fetch a record and return it.
@@ -522,11 +595,9 @@ Java, framework & controller, service, repository interface, its generated imple
 \label{tab:paths}
 \end{table}
 
-The second column is what people argue about, and layered designs are defended on it fairly. The third has no answer for an agent, being behaviour that cannot be read at any price: a template instantiation, an implicit destructor, a generated repository implementation, a transaction boundary that exists only as an annotation. It is zero at both short paths and non-zero at both long ones, in two languages that share nothing else. The prediction is that agent cost tracks the third column rather than the second, and that the two pairs move together.
+The second column is what people argue about, and layered designs are defended on it fairly. The third has no answer for an agent, being behaviour that cannot be read at any price: a template instantiation, an implicit destructor, a generated repository implementation, a transaction boundary that exists only as an annotation. It is zero at both short paths and non-zero at both long ones, in two languages that share nothing else. The prediction is that agent cost tracks the third column rather than the second.
 
-Three results refute the prediction as stated. The explicit rungs costing more context, or failing more often, on cross-module or debugging tasks. The gap between rungs closing when retrieval improves, which would mean the cost was retrieval and representation only a proxy for it. Tokens written on the explicit rungs rising with the repetition explicitness requires, by enough to cancel the reading advantage, which would make the answer a property of the task mix rather than of the representation.
-
-An effect below 15\% of median context is not resolvable at three repetitions: Ada and Python sat 13 to 15\% above the other three and that difference was inside one cell's spread. The experiment needs enough repetitions to resolve less than that, or it will report a null it cannot distinguish from this one.
+Three results refute it. The explicit rungs costing more context, or failing more often, on cross-module or debugging tasks. The gap closing when retrieval improves, which would mean the cost was retrieval and representation only its proxy. Or tokens written on the explicit rungs rising with the repetition explicitness requires, by enough to cancel the reading advantage, which would make the answer a property of the task mix. An effect below 15\% of median context is not resolvable at three repetitions, so a null from too few will not be distinguishable from the pilot's.
 
 \section{Reproducibility}
 
@@ -536,11 +607,9 @@ Toolchain: gcc 13.3.0, GNAT 13.3.0, rustc 1.75.0, OpenJDK 21.0.11, CPython 3.12.
 
 \section{What is open}
 
-The measurement this paper is built for is absent: no C++ and no framework implementation of any behaviour here exists. Stage one of Section~\ref{sec:design} is 240 runs, about \$26 and two hours, and it is what turns the prediction into a result.
+C, C++ and Rust are compared here as other people write them, over 1.76 million lines. What that cannot do is hold behaviour fixed: no two of those projects do the same job, so the ratios are per line rather than per unit of work. The pairs of Section~\ref{sec:design} close that gap for 240 runs and about \$26, and Section~\ref{sec:design} records the predicted direction and the three results that would refute it beforehand.
 
-Two things this paper establishes do not depend on that. The indirection whose cost is in question is real and large in released code by other authors: 60.9 functions per thousand lines against 28.4, at a median complexity of 1. And the long path is not required to deliver the behaviour, which one production system of 39,621 lines and 37 tables shows by existing.
-
-One thing it establishes is negative and holds regardless: at one-file scale a coding agent's cost is a harness constant times its turns, the representation under 3\% of what it reads, so a one-file language comparison cannot answer this question at all.
+What holds without them: the indirection whose cost is in question is real, large and ordered in released code, 28.4 functions per thousand lines in C against 60.9 in C++ and 72.5 in Rust, the last two at a median complexity of 1, and the maxima running the opposite way, from 1,330 in C down to 73 in Rust. Explicit style buys its extra length with redundancy, which compression removes and an abstraction's indirection does not. The long path is not required to deliver production behaviour, which one system of 39,621 lines and 37 tables shows by existing. And at one-file scale a coding agent's cost is a harness constant times its turns, with the representation under 3\% of what it reads, so a one-file language comparison cannot answer this question at all.
 
 \begin{thebibliography}{99}
 

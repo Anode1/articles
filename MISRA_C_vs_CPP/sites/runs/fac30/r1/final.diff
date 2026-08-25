@@ -1,0 +1,13 @@
+diff --git a/store.c b/store.c
+index 1b505d1..669d427 100644
+--- a/store.c
++++ b/store.c
+@@ -50,7 +50,7 @@ static int run_one(const char *name, long (*op)(const char *), int argc, char **
+         fprintf(stderr, "%s: failed\n", name);
+         return 1;
+     }
+-    printf("%s ok=1 n=%ld\n", name, n);
++    printf("%s ok=1 n=%ld arg=%zu\n", name, n, strlen(argv[0]));
+     return 0;
+ }
+ 

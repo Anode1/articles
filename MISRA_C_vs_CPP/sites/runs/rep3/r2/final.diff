@@ -1,0 +1,31 @@
+diff --git a/store.c b/store.c
+index df6ee09..6414173 100644
+--- a/store.c
++++ b/store.c
+@@ -23,7 +23,7 @@ static int cmd_add(int argc, char **argv)
+         fprintf(stderr, "add: failed\n");
+         return 1;
+     }
+-    printf("add ok=1 n=%ld\n", n);
++    printf("add ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -42,7 +42,7 @@ static int cmd_del(int argc, char **argv)
+         fprintf(stderr, "del: failed\n");
+         return 1;
+     }
+-    printf("del ok=1 n=%ld\n", n);
++    printf("del ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
+@@ -61,7 +61,7 @@ static int cmd_find(int argc, char **argv)
+         fprintf(stderr, "find: failed\n");
+         return 1;
+     }
+-    printf("find ok=1 n=%ld\n", n);
++    printf("find ok=1 n=%ld arg=%zu\n", n, strlen(argv[0]));
+     return 0;
+ }
+ 
