@@ -12,6 +12,9 @@ benchmark's own release (Zenodo 10.5281/zenodo.10561215).
   (dimension, budget) over the 296 non-baseline implementations.
 - `effect_top_budget.tsv`: median over pairs of the error ratio implementation over
   uniform control at the top budget, descriptive.
+- `robustness.txt`: the post-review annexes (2.5% rule, the 282 family, cluster-level,
+  per-function, AOCC, Wilcoxon, effect facts, baseline win ranges), the output of
+  `example/metaphors/robustness.py`.
 
 Everything regenerates from the Zenodo release and the cjitter repository alone: the
 pipeline is `example/metaphors/README.md` there, and the uniform control is

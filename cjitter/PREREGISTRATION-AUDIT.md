@@ -128,3 +128,19 @@ digit on every confirmatory number.
   some incompleteness is a release artifact. Coverage is reported per cell.
 - fx semantics (best-so-far error at budget, lower better) are taken from the release's
   processing scripts; one cell is re-derived from Raw.zip as a check before the run.
+
+## Addendum, 2026-08-25, after independent review
+
+Four independent referees (review/audit/) reviewed the confirmatory draft. Analysis
+changes made in response, all additive and all disclosed as post-hoc:
+
+1. The two-directional rule: 5% per direction holds each directional family at 5% and
+   the pair at no worse than 10%. The 2.5%-per-direction tables are computed and
+   reported beside the primary; 27 of 7,104 verdicts differ.
+2. Robustness annexes added, none pre-registered: cluster-level sign test on
+   per-(function, instance) medians; the same audit on the release's per-run AOCC;
+   paired Wilcoxon; the 282-implementation family named by the release's own
+   aggregate; per-function verdict counts. All in example/metaphors/robustness.py.
+3. Corrections of prose against the shipped tables (trend shape, baseline win-rate
+   range, effect-size tail, the audited paper's own fixed-budget section and counts).
+   No pre-registered estimand, rule, or table changed.
