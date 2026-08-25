@@ -12,7 +12,7 @@
 \usetikzlibrary{arrows.meta}
 \usepackage[hidelinks]{hyperref}
 
-\title{\textbf{What Do People Optimize in Graph Layout?}}
+\title{\textbf{What Do People Optimize in Diagram Layout?}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
 table's script: \url{https://github.com/Anode1/cjitter}, directory
 \texttt{example/diagrams}.}}
@@ -29,15 +29,20 @@ criterion at a time on 853 hand-drawn diagrams of 15 to 40 boxes (WikiPathways, 
 each box 2\% of the drawing width in sixteen directions and ask whether any move lowers the
 criterion, \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs as controls.
 Overlap holds every box at zero, by hand and in every tool that removes it. Uniform edge
-length and stress hold no hand-placed box in any corpus, and not for want of anything to
-gain: every diagram has improving moves, the best of them worth 1.2\% of the length term
-and 0.6\% of stress. \texttt{neato}'s stress layouts are held at 1.00 under the same test,
+length and stress hold almost no hand-placed box, 0.3 to 1.1\% per corpus and a median
+diagram of 0.00, and not for want of anything to gain: every diagram has improving moves,
+the best of them worth 1.2\% of the length term and 0.6\% of stress. \texttt{neato}'s stress layouts are held at 1.00 under the same test,
 so it has power; a weight of 0.001 on either term drops
 the held fraction below 0.015. The criterion that holds a hand layout and that the energy
-omits is alignment into rows and columns: 0.52, 0.21 and 0.87 of boxes, against 0.06 for
-\texttt{neato}, 1.00 for \texttt{dot}, and 0.07 for a layout snapped to the same grid with
-no author. A hand layout is a layered layout with partial
-alignment. Coordinates and judgement disagree: judges have been found to track stress, and
+omits is alignment into rows and columns: 0.52 and 0.21 of boxes on the two biological
+corpora and 0.87 over the full BPMN population, against 0.06 for \texttt{neato}, 1.00 for
+\texttt{dot}, and 0.07 both for a layout snapped to the same grid with no author and for
+a uniform random layout of the same graphs. Whether the person's hand or the editor's
+alignment guide supplies those rows, the coordinates cannot say, and for fitting an
+energy it does not matter: the term is held and absent either way. A hand layout is a
+layered layout with partial alignment. The pattern is not the diagrams': 136 drawings of
+abstract graphs from HOLA's formative study hold alignment at 0.50 and the distance terms
+at 0.00. Coordinates and judgement disagree: judges have been found to track stress, and
 the coordinates people draw are held by no distance term we tested.
 \end{abstract}
 
@@ -54,8 +59,11 @@ examples varies, and the difference matters here. Learning from preferences or s
 well under the learned energy. Inverse optimisation, which fits an objective to solutions
 taken as optimal \cite{ahuja01, keshavarz11, chan19}, needs the stronger property: that the
 coordinates themselves sit at a minimum. The stronger property has never been tested
-against human coordinates, and it is the one that separates an energy describing where a
-person put a box from an energy describing how they ranked the result. Where it fails, the
+against human coordinates, no published layout method yet commits to it, and 4{,}890
+hand-made drawings were just collected into one corpus \cite{gdcoll25}, so the first
+coordinate fit is one download away. It is the property that separates an energy
+describing where a person put a box from an energy describing how they ranked the
+result. Where it fails, the
 fitted weights are the criteria's mutual trade-offs rather than the person's, and the term
 the person did optimise stays unlearned because it was never offered.
 
@@ -86,7 +94,8 @@ the findings are these.
 \item Overlap holds every box of the median hand diagram at value zero in every corpus, as
   it does in every tool that removes overlaps; the term is nonzero in 4 to 8\% of hand
   diagrams. People satisfy it exactly.
-\item Length and stress hold no hand-placed box anywhere, 0.00 in all three corpora, while
+\item Length and stress hold a hand-placed box almost nowhere, median diagram 0.00 in all
+  three corpora and 25 to 78 boxes of roughly 7{,}000 each, while
   \texttt{neato}'s stress layouts are held at 1.00. No reweighting repairs it: a weight of
   0.001 on either term drops the held fraction of the sum below 0.015.
 \item Alignment into rows and columns holds 0.52, 0.21 and 0.87 against \texttt{neato}'s
@@ -105,8 +114,9 @@ The rest of the paper is the foundation behind the test (Section~\ref{sec:founda
 the instrument (Section~\ref{sec:instrument}), the corpora, the method, the measurements,
 the alternatives not yet excluded (Section~\ref{sec:alternatives}), and what is already
 known (Section~\ref{sec:related}). A tool builder reading only this far has the changes:
-take the weight off edge length, add alignment, and print the fraction of boxes the energy
-holds when started from a layout a person accepted.
+add alignment to the energy and print the fraction of boxes it holds when started from a
+layout a person accepted; edge length keeps its weight, for the reason the conclusion
+gives.
 
 \section{Foundations}\label{sec:foundations}
 
@@ -241,11 +251,15 @@ BPMN models submitted twice. The 41 to 100 node band was not run.
 How the coordinates were made matters for the alignment criterion. Of the raw coordinates,
 17\% are integers in WikiPathways, 67\% in Reactome and 63\% in BPMN (44\% multiples of
 five); the fraction of boxes sharing an exact $x$ with another box is 0.37, 0.06 and 0.42,
-an exact $y$ 0.29, 0.12 and 0.76, and either 0.49, 0.19 and 0.88, which is the figure the
-alignment row of Section~\ref{sec:results} should be read against. In WikiPathways exact alignment is twice as common as
-integer coordinates, so it is the person's act and not a rounding grid's; BPMN authors work
-on a grid inside lanes, which is where the $y$ figure of 0.76 comes from; Reactome's
-curation tool rounds and its authors align little.
+an exact $y$ 0.29, 0.12 and 0.76, and either 0.54, 0.17 and 0.88, which is the figure the
+alignment row of Section~\ref{sec:results} should be read against. In WikiPathways exact
+alignment is twice as common as integer coordinates, so it is not a rounding grid's act;
+whether it is the person's hand or the editor's snap-to-object guide, which PathVisio
+draws on every drag, the coordinates cannot say. BPMN authors work on a grid inside
+lanes, which is where the $y$ figure of 0.76 comes from, and their editors guide every
+drag toward the neighbours; Reactome's curation tool rounds and its authors align little.
+The hold orders exactly as the editors' affordances do, which
+Section~\ref{sec:alternatives} takes up.
 
 \section{The method}\label{sec:method}
 
@@ -289,7 +303,7 @@ source box, the interior waypoints, the attachment point on the target box; wher
 stores nothing it is the chord between the centres. Crossings, orthogonality and node--edge
 separation are evaluated on the route; length and stress on the centres. When a node moves
 its attachment points move with it and the waypoints stay. The attachment point matters:
-of the 2{,}688 BPMN routes that carry an interior waypoint, 0.27 are axis-aligned at every
+of the 2{,}584 BPMN routes that carry an interior waypoint, 0.27 are axis-aligned at every
 segment when the route is closed at the box centres and 0.88 when it is closed at the
 stored attachments. What each format stores, as a fraction of the edges in the band:
 
@@ -440,7 +454,8 @@ BPMN & C$+$O & 1.00 [1.00, 1.00] & 0.41 & 1.00 & 1.00 & 1.00 \\
 at value zero; so it does in every tool layout that removes overlaps, and \texttt{neato}
 without removal is the only layout it does not hold, so crossings and overlap together
 separate a hand layout from that configuration and from nothing else. Length and stress hold
-no hand-placed box, and \texttt{neato}'s stress layouts are held under stress at 1.00, so
+almost no hand-placed box, 0.3 to 1.1 per cent per corpus, and \texttt{neato}'s stress
+layouts are held under stress at 1.00, so
 the zero is the layout's and not the test's; \texttt{dot}, which is layered and prices no
 distance, scores 0.00 on both as the hand layouts do. At the hand layout the three base terms
 share the energy as length 0.99, crossings 0.01, overlap 0.00, and $C+O+L$ inherits the
@@ -485,7 +500,11 @@ overlap-reducing one, so ``crossings hold every box'' is a statement about the r
 the corpus's near-trees, not about the author. The five below are live everywhere, and
 there the $0.00$ of length and stress is a real reading: every diagram has improving moves,
 the mean best one worth 1.2 to 1.3 per cent of the length term and 0.5 to 0.7 per cent of
-stress, and none of them was taken.
+stress, and none of them was taken. One such move is below perception, so at any
+perceptual $\epsilon$ the layouts are $\epsilon$-stationary under the distance terms; the
+failure is cumulative, not local, since from the same starts the capped climber removes
+0.28 to 0.31 of $C{+}O{+}L$. What a coordinate fit needs is exact stationarity, and the
+layouts sit a quarter of the energy from it.
 
 The BPMN figure is the one number in the paper that the corpus's selection moves. The 300
 models are the first by id of the 6{,}723 in the band, and on all 6{,}723 the alignment hold
@@ -594,7 +613,9 @@ most 0.02 everywhere but C$+$O$+$F (0.05, 0.07 and 0.13), the flow term's platea
 Section~\ref{sec:foundations} says it must be: on the two biological corpora it puts all
 weight on overlap (residual per node 0.0001 and 0.0000; held-out $q$ 0.987 [0.982, 0.993]
 and 0.994 [0.990, 0.998]), on BPMN all weight on crossings (0.0009; 0.992 [0.979, 0.998]),
-and the same answer comes back whether it is offered three terms or all eight. Confined to
+offered all eight terms on BPMN it spreads weight over six, flow 0.32, stress 0.25,
+orthogonality 0.22, with a held-out $q$ of 0.801 swinging from 0.50 to 1.00 across
+splits: many weightings reach a high $q$ and none is identified. Confined to
 length and stress it puts everything on stress and holds 0.003 to 0.011 of nodes: no
 distance-only weighting holds a hand layout. Confined to the four terms no layout satisfies
 exactly (orthogonality, alignment, node--edge, flow) it splits weight between flow and
@@ -678,6 +699,49 @@ orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
 
 \input{figures/sweep}
 
+\paragraph{The fourth corpus, restored.} The pre-registration named HOLA's formative
+drawings \cite{hola16} and the previous draft dropped them without a word. Restored: 136
+drawings, 17 participants each laying out the same 8 abstract graphs, scraped from the
+study's published SVGs (\texttt{data/hola.txt}, provenance beside it), chord edges,
+below this paper's 15-box band and free of every diagram notation. The pattern holds:
+overlap and crossings 1.00, length and stress 0.00, alignment 0.50, between Reactome's
+0.21 and BPMN's 0.91. Node--edge holds 1.00, so H4 fails here too. These are drawings
+from a study tool rather than a diagram editor, which bears on the guide question of
+Section~\ref{sec:alternatives}, though whether that tool drew alignment aids is not
+recorded in the corpus.
+
+\paragraph{Null layouts.} Review asked for the chance line under every term, not only
+alignment. Uniform random layouts of the same graphs, chord geometry, one draw per
+diagram, seeds from the diagram ids: alignment 0.06 to 0.07 against hand 0.52, 0.21 and
+0.91; node--edge 0.11 to 0.12 against 0.76 to 0.87; flow 0.26 to 0.41 against 0.59 to
+0.85; orthogonality 0.00 against 0.05 to 0.40. Length and stress hold 0.00 in the random
+layouts too: no layout of any provenance is stationary under a distance term at this
+radius except a tool's converged output, so the distance result separates optimizers from
+everyone, not humans from tools. Crossings and overlap hold 0.58 to 0.67 of random boxes,
+the flat base rate the active column already prices. Under a jitter of one grid cell the
+alignment hold keeps 0.76, 0.44 and 0.19 of its three corpora while orthogonality falls
+from 0.40 to 0.18 and 0.16 to 0.06: orthogonality, not alignment, is the tie artifact.
+Axis-only moves, which preserve every perpendicular alignment tie, still improve length
+and stress on the median diagram of every corpus ($q$ 0.00, means 0.005 to 0.016), and a
+weight of 0.001 on length collapses the held fraction of $C{+}O{+}A_1$ from 0.89, 0.51
+and 0.22 to 0.13, 0.11 and 0.07: the distance terms are unpriced even inside the
+alignment-preserving move set, and no small weight on them survives beside alignment. The
+generator and every number: \texttt{results/nulls.py}.
+
+\paragraph{The pre-registration's scorecard.} H1, crossings and overlap hold the hand
+layout above 0.9 and above \texttt{neato}: holds, 1.00 against 0.41 to 0.76. H2, length
+alone holds under 0.2 and below \texttt{neato}: holds, 0.00 against 0.24 to 0.42. H3, no
+positive length weight repairs $C{+}O{+}L$: holds, fitted weight 0.000 everywhere and $q$
+0.008 at any weight past 0.001. H4, alignment holds more boxes than orthogonality or
+node--edge in every corpus: \textbf{refuted}. Node--edge holds 0.88, 1.00 and 1.00 of
+hand-placed boxes against alignment's 0.52, 0.21 and 0.91. Node--edge is priced in the
+standard energy and alignment is not, so the omitted-term conclusion stands, but the
+registered ranking was wrong and the recorded prediction with it. H5, exploratory, stress
+holds the hand layout less than \texttt{neato}'s: holds, 0.00 against 1.00. The registered
+fourth corpus, HOLA's formative drawings, was dropped undeclared from the previous draft;
+it is restored above. Registered and still not run: the deduplication pass, the 41--100
+band, the caps in pitch units.
+
 \section{What else could produce this}\label{sec:alternatives}
 
 \begin{enumerate}
@@ -695,7 +759,23 @@ orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
   bounding box and no author: it holds 0.065, 0.075 and 0.067. Displacing the hand layouts
   past $d/2$ takes them to that same level (0.097, 0.095 and 0.200 at a half-width of 15,
   0.065, 0.061 and 0.062 at 120). The grid is available to the random layout and does not
-  produce the effect.
+  produce the effect. Two additions after review: a random layout snapped to the
+  plausible working pitch of five units holds 0.076, the same 0.07 as at pitch one, so
+  the null is not flattered by the finest pitch; and the jittered hand layouts begin
+  falling well below $d/2$ (0.59 on BPMN at a half-width of 5), so the corner argument
+  bounds only the declared half-pitch test, and the caption of Figure~\ref{fig:sweep}
+  now says so.
+\item \textbf{The editor snapped to the neighbours}, so alignment is the guide's. Not
+  separable on these corpora, and conceded. A grid control cannot see snap-to-object
+  guides, which PathVisio and the BPMN editors draw on every drag and Reactome's curation
+  tool does not, and the alignment hold orders exactly as those affordances do: 0.87 to
+  0.91 where guides meet every drag, 0.52 where they are offered, 0.21 where they are
+  absent. For fitting an energy the attribution changes nothing, the coordinates hold a
+  term the energy lacks either way; for the word ``optimize'' it does, and the claim here
+  is about the layouts, not the muscle. Separating them needs a guide-free editor or an
+  interaction log, and these corpora carry neither. The nearest evidence is the restored
+  HOLA corpus: drawings from a study tool, not a commercial editor, hold alignment at
+  0.50, so the phenomenon does not need Signavio to appear.
 \end{enumerate}
 
 The rest, each with the test that excluded it and the numbers it turned on:
@@ -836,13 +916,19 @@ deterministic from their seed on every platform. Every table is from the battery
 \texttt{results/tests.sh}, \texttt{results/lanes.py} and \texttt{results/sparsity.py};
 \texttt{results/manifest.txt} records the platform, the tool versions (gcc 13.3.0,
 Graphviz 2.43.0, elkjs 0.12.0, HiGHS via scipy 1.18.1), the seeds and the SHA-256 of the
-three raw archives and of the eighteen corpus files as measured.
+three raw archives and of the eighteen corpus files as measured. The population number
+of Section~\ref{sec:results} reads the tracked
+\texttt{data/bpmn\_population\_a1.csv}, 6{,}723 rows regenerated from the archive by the
+commands in its header, so the abstract's 0.87 rebuilds from a clone. The BPMN archive is
+distributed for academic use; the repository carries only derived coordinates and ids,
+never model content, and the two biological corpora are CC-licensed exports.
 
 \section{Conclusion}
 
 Coordinates a person accepted are not minima of the energy in use, and the way they fail
 is specific: exact under overlap, nowhere near under uniform edge length or stress, and held
-instead by an alignment into rows and columns that no standard energy prices. On every
+instead by an alignment into rows and columns that, HOLA's gridiness step aside
+\cite{hola16}, no standard energy prices. On every
 criterion measured, a hand layout reads as a layered layout with partial alignment and
 partial flow.
 
@@ -933,7 +1019,7 @@ the energy holds when started from a layout a person accepted.
  Gradient Descent, (GD)$^2$. \emph{Graph Drawing (GD 2020)}, LNCS, 3--17, 2020.
 \bibitem{kamada89} T.~Kamada, T.~Kawai. An Algorithm for Drawing General Undirected Graphs.
  \emph{Information Processing Letters} 31:7--15, 1989.
-\bibitem{gansner05} E.~R. Gansner, Y.~Koren, Y.~North. Graph Drawing by Stress
+\bibitem{gansner05} E.~R. Gansner, Y.~Koren, S.~C. North. Graph Drawing by Stress
  Majorization. \emph{Graph Drawing (GD 2004)}, LNCS, 239--250, 2005.
 \bibitem{fabregat18} A.~Fabregat et al. Reactome Diagram Viewer: Data Structures and
  Strategies to Boost Performance. \emph{Bioinformatics} 34(7):1208--1214, 2018.
@@ -947,8 +1033,6 @@ the energy holds when started from a layout a person accepted.
  Workshops (ICPM 2022)}, LNBIP, 453--465, 2023.
 \bibitem{bohler16} A.~Bohler et al. Reactome from a WikiPathways Perspective. \emph{PLOS
  Computational Biology} 12(5):e1004941, 2016.
-\bibitem{bpfnn97} V.~Gavrilov. Backpropagation Feed-Forward Neural Networks. Seminar
- thesis, Open University of Israel, 1997; revised 2026, doi:10.5281/zenodo.20450525.
 \end{thebibliography}
 
 \end{document}

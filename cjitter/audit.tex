@@ -181,6 +181,15 @@ the worst sits at $3.8 \times 10^3$ times the control's error in 2D. Clearing th
 floor by an order of magnitude is the common case, and no verdict column shows that,
 which is why the ratios ship beside the verdicts.
 
+\paragraph{What a practitioner takes.} The verdict files, not the headline, are the
+usable product. 102 of the 296 implementations are shown better than uniform sampling
+in every one of the 24 (dimension, budget) cells, 169 are never shown worse in any,
+and the robust list ships beside the tables. The libraries differ: at the top budget
+EvoloPy's implementations are shown better in 93 per cent of their dimension cells and
+shown worse in 4, mealpy in 76 and 19, NiaPy in 69 and 24, Opytimizer in 67 and 28.
+Picking from the robust list costs nothing and avoids every worse-than-random row in
+this audit; it is the floor applied, not a ranking.
+
 \paragraph{Checks.} The audit's own controls behaved: differential evolution, the two
 modular CMA variants, L-SHADE and BIPOP are shown better in every dimension at the top budget, with win
 rates from 963 to 1200 of 1200 against their random search and from 983 to 1200

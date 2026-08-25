@@ -50,3 +50,12 @@ G. effect sizes at the top budget, uniform: per-implementation median error rati
 H. the five outcome-neutral baselines, win rates at the top budget:
   vs their RandomSearch: wins 963 to 1200 of 1200
   vs uniform: wins 983 to 1200 of 1200
+
+I. the robust set (needs verdicts_uniform.tsv beside the data):
+  shown better in all 24 cells: 102 of 296; never shown worse anywhere: 169
+
+J. per-library at the top budget (4 dimension cells per implementation):
+  EVOLOPY     better 52/56 (93%)  not-shown 2  worse 2 (4%)
+  NIAPY       better 147/212 (69%)  not-shown 14  worse 51 (24%)
+  OPYTIMIZER  better 221/328 (67%)  not-shown 14  worse 93 (28%)
+  mealpy      better 449/588 (76%)  not-shown 29  worse 110 (19%)

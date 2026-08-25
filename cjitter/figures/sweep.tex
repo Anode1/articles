@@ -22,11 +22,10 @@
 \node[anchor=west,font=\scriptsize,gray!55!black] at (axis cs:14.5,0.47) {$d/2$};
 \end{axis}
 \end{tikzpicture}
-\caption{What the half-grid jitter test can and cannot see. $T_A$ has its corner at
-agreement, so a box offset by $\epsilon$ is released only when a move of radius $d$ lowers
-the term, and moving $d$ toward the agreement lands at $d-\epsilon$: below $\epsilon=d/2$
-nothing changes. Half the detected pitch is 0.5 units, at the left edge, which is why the
-declared test leaves every corpus where it found it. Past $d/2$ the hold falls to the
-grid-snapped level of 0.06 to 0.08.}
+\caption{What the jitter sweep sees. The declared half-pitch test sits at the left
+edge, 0.5 units, where nothing has changed. The corner of $T_A$ protects a single
+displaced box below $\epsilon = d/2$, but every box is displaced, relative offsets reach
+$2\epsilon$, and the hold falls well before $d/2$: BPMN 0.89 to 0.59 by a half-width of
+5. By $d/2$ every corpus is at the grid-snapped level of 0.06 to 0.08.}
 \label{fig:sweep}
 \end{figure}
