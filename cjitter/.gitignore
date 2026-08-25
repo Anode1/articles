@@ -9,3 +9,7 @@ withdrawn/data/c
 withdrawn/data/example/
 withdrawn/data/sweep_bin*
 withdrawn/data/stat*
+metaphors/
+*.aux
+*.log
+*.out
