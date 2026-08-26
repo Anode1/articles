@@ -26,8 +26,7 @@ Not deposited, and each says on its own first page or in its README what state i
 
 | directory | what it is |
 | --- | --- |
-| [`cjitter`](cjitter/README.md) | Two drafts, both negative. What Do People Optimize in Diagram Layout?, and The Test the Metaphor Benchmark Never Ran |
-| [`erd`](erd/README.md) | Placing a migration's tables into a diagram somebody already arranged. The engineering paper for `cjitter/example/erd` |
+| [`cjitter`](cjitter/README.md) | Three papers on the cjitter library. What Do People Optimize in Diagram Layout?, The Test the Metaphor Benchmark Never Ran, and `erd/`, Placing a Migration's Tables into a Diagram Somebody Already Arranged |
 | [`bpnn`](bpnn/README.md) | What a Benchmark Can Resolve: training noise as a ceiling on architecture comparison. Unpublished and unsubmitted |
 | [`energy`](energy/README.md) | A Substack piece on pricing grid power for data centres, with its charts and the script that draws them |
 

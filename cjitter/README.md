@@ -1,7 +1,7 @@
-# What a search shows, and what a benchmark never asked
+# Three papers on one library
 
-**Two drafts, both negative results, both read from the same library:
-[cjitter](https://github.com/Anode1/cjitter). Neither is deposited.**
+**All three read [cjitter](https://github.com/Anode1/cjitter), and none is deposited. Two
+are negative results; `erd/` is the engineering paper.**
 
 `stationary.tex`, *What Do People Optimize in Diagram Layout?*, 19 pages. Fitting a layout
 energy to human drawings by inverse optimisation assumes the drawings sit at a minimum of
@@ -23,10 +23,21 @@ one in three in 2D, are not shown better than uniform random sampling at equal c
 to 79 of those are shown strictly worse. Measurements are in `example/metaphors`, run
 against the benchmark's own release, Zenodo 10.5281/zenodo.10561215.
 
+[`erd/`](erd/README.md), *Placing a Migration's Tables into a Diagram Somebody Already
+Arranged*, 5 pages. A quality metric that cannot tell a person's careful work from a random
+draw is not measuring the drawing. Straight-line stress is such a metric for
+entity-relationship diagrams, and it is what every library offering frozen placement
+optimises: on a real 44-table diagram it scores the maintainer's own arrangement at 218,207
+and uniform random placement at 219,319, within one per cent. Score the orthogonal connector
+the diagram actually draws and the two separate by a factor of two, 157,552 against 80,606.
+The benchmark is sixteen consecutive migrations of one production schema over seven months.
+Freezing a subset is not new and the paper claims none of it; the edge model is. Measurements
+are in `example/erd`.
+
 | file | what it is |
 | --- | --- |
 | PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, governs `stationary.tex` |
 | PREREGISTRATION-AUDIT.md | signed before the audit's confirmatory numbers were computed |
 | audit-data/ | the audit's verdict tables, summaries and robust set |
-| figures/ | the TikZ figures both papers include |
+| figures/ | the TikZ figures `stationary.tex` and `audit.tex` include; `erd/` has its own |
 | review/ | the referee panels, by paper |
