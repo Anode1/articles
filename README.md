@@ -26,9 +26,13 @@ Directories without a DOI:
 - [`energy`](energy/) is a Substack piece with its charts and the script that draws them.
 - [`bpnn`](bpnn/) holds `resolution.tex`, a draft on what a neural architecture benchmark can and
   cannot resolve. It is unpublished and unsubmitted; read it as a draft.
-- [`cjitter`](cjitter/) holds `stationary.tex`, What Do People Optimize in Graph Layout?, a draft
-  whose measurements live in the [cjitter](https://github.com/Anode1/cjitter) repository under
-  `example/diagrams`; `withdrawn/` is the pre-registration it replaced.
+- [`cjitter`](cjitter/) holds two drafts whose measurements live in the
+  [cjitter](https://github.com/Anode1/cjitter) repository. `stationary.tex`, What Do People
+  Optimize in Diagram Layout?, reads the tables under `example/diagrams`. `audit.tex`, The
+  Test the Metaphor Benchmark Never Ran, runs `example/metaphors` against the GECCO 2024
+  benchmark's own release ([10.5281/zenodo.10561215](https://doi.org/10.5281/zenodo.10561215));
+  `PREREGISTRATION-AUDIT.md` was signed before its confirmatory numbers were computed.
+  `review/` holds the referee panels, `withdrawn/` the two papers this line replaced.
 
 ## smbpann2: a retired line of work
 
