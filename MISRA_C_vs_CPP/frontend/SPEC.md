@@ -1,6 +1,6 @@
 # The behavior both sides implement
 
-One screen, modelled on the shape kul uses for every list page: fetch rows,
+One screen, modelled on the shape System A uses for every list page: fetch rows,
 render a table, filter it, select rows, act on one.
 
 1. On load, GET `items.json` and render every row.

@@ -448,11 +448,13 @@ shape System~A uses on every list page: fetch rows, filter, sort,
 select, delete, with rendering by a map over the rows joined into
 \texttt{innerHTML} and one delegated listener, the idiom of System~A's
 own 62,536 lines of JS (387 \texttt{innerHTML} assignments, 118
-\texttt{closest()} delegations). Built as behavior-matched twins with
-identical rendered DOM, the plain page is 1,092 tokens and the React~19
+\texttt{closest()} delegations). Built as behavior-matched twins, equal on the graded projection of
+the rendered DOM (count, selection, rows, carets, empty state), the
+plain page is 1,092 tokens and the React~19
 page is 1,145 in four components, 1,108 in one file: writing concedes
 nothing to JSX in this idiom. Behind the React page sit 282,717 tokens
-over 29 modules of the runtime's own source at the pinned version (the
+over 29 modules of the runtime's own source, counted on tag v19.1.0
+while the runs installed 19.2.8 (the
 hooks store, the work loop, reconciliation and key identity, the commit
 path, prop application, the delegated synthetic event system, the
 scheduler), 2.3 times the Spring closure; the whole runtime is 641,367.
@@ -461,7 +463,8 @@ current RealWorld React implementation (React 19.2, May 2026) closes
 over 28 repository files, 16,237 tokens, by mechanical import trace,
 and ten of the modules it imports exist in no repository at all: its
 API client and schemas are generated at build time from a 1,025-line
-OpenAPI specification, category 3 in a new form.
+OpenAPI specification, category 3 in a new form. The trace is
+\texttt{frontend/trace\_subject.py}.
 
 \section{What an agent pays: two bounded experiments}
 \label{sec:bounded}
@@ -782,8 +785,10 @@ raw runs are in \texttt{endpoint/} beside this paper.
 \subsection{The web pair, run}
 \label{sec:web}
 
-The third pair ran twice, with predictions recorded in the
-pre-registration before the twins existed. First the twins of
+The third pair ran twice. The predictions were written into the
+pre-registration before the twins, the same day; both entered the
+repository in one commit, so that ordering is the author's record,
+not git's. First the twins of
 Section~\ref{sec:closures}: four maintenance tasks mirroring the
 endpoint four, five repetitions, 40 runs, graded by hidden scenarios
 driving headless Chrome and comparing the rendered DOM to a reference
@@ -849,27 +854,29 @@ against both pinned versions (18.3.1 and 19.2.8) plus the plain
 control, 30 runs. A default for a missing field is silently ignored on
 19 when written as \texttt{defaultProps}; a ref passed as a plain prop
 is silently stripped on 18. Neither trap fired: 30 of 30 passed, zero
-version-wrong choices. The mechanism is not version awareness, since
-the agent read \texttt{package.json} in none of the ten
-version-critical runs; its habitual idioms are the version-portable
-ones. Every default-value run on every side wrote the inline default
+version-wrong choices. The mechanism is mostly not version awareness: two of the ten
+version-critical runs opened \texttt{package.json}, both on the 18
+side, and wrote the same idiom the other eight chose unchecked; the
+habitual idioms are the version-portable ones. Every default-value run on every side wrote the inline default
 and \texttt{defaultProps} never appeared; the focus runs wrote
 \texttt{forwardRef}, valid on both versions, 7 of 10 times, and the
-19-only idiom appeared only on the side where it works, 3 of 5, which
-at $n = 5$ may be chance. What survived is the cost of the
-boundary, and it is paid in every currency: focusing a child
+other three passed the ref through an ordinary prop of their own
+naming, portable anywhere; the reserved-\texttt{ref} form that only
+19 accepts appeared in none. What survived is the cost of the boundary: focusing a child
 component's input from the parent cost 12.0 and 13.0 mean turns
 against the plain page's uniform 6.0, 32 and 36 seconds against 18,
 323 and 353 thousand cumulative context tokens against 181, and
-\$0.14 a run against \$0.09, every run passing. The version check
-itself, about one turn's worth, no run ever paid: correctness came
-from habit, not verification, and nothing in the workflow forces the
-turn a model with less portable habits would need. The web pair
+\$0.14 a run against \$0.09, every run passing. The version check,
+about one turn's worth, eight of the ten runs never paid, and the two
+that paid it changed nothing: correctness came from habit, and nothing
+in the workflow forces the check a model with less portable habits
+would need. The web pair
 replicates the pairs result, not the endpoint result: the framework's
 conventions did not bite where Spring's binding did, and what the agent
 pays for is the walk across the boundary. The twins, the grader, the
-equivalence probe and the raw runs are in \texttt{frontend/} beside
-this paper.
+equivalence probe and the subject trace are in \texttt{frontend/}
+beside this paper; the run records are available from the author on
+request.
 
 \section{Related measurements}
 
@@ -968,7 +975,9 @@ author-written and small, the real subject bounds only the closure, and
 the stale-recall condition tested two version boundaries at five
 repetitions per cell, so its zero is a bound, not a law; the DOM
 projection the web grader compares is a choice, and a different
-projection could grade differently. One model ran, on one date;
+projection could grade differently; and no plain cell with the same
+indirection, the input extracted into its own module, was run, so the
+boundary's price is measured against the unfactored plain page only. One model ran, on one date;
 agent cost is a property of the model and the representation together,
 and the web result says the sharpest version of that: the version traps
 missed because this model's habits are version-portable, and another
@@ -1022,7 +1031,7 @@ paper (\texttt{measure.py}, \texttt{dup.py}, \texttt{external.py},
 \texttt{jpa.py}, \texttt{pilot/}, \texttt{sites/}), each recording its
 commits and raw runs; the endpoint runs (claude-sonnet-5, 2026-08-25)
 and both stacks' sources are \texttt{endpoint/}; the web pair
-(claude-sonnet-5, 2026-08-27; React 19.2.8 and 18.3.1 via vite, chrome
+(claude-sonnet-5, 2026-08-26; React 19.2.8 and 18.3.1 via vite, chrome
 headless grading; closure counted on the react source tag v19.1.0 and
 on yurisldk/realworld-react-fsd at 969709a) is \texttt{frontend/}; the blind second rater's derivation is
 \texttt{second\_rater.txt}; the Maven-artifact counts are from the projects' POMs

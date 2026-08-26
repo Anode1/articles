@@ -155,10 +155,14 @@ endpoint experiment. One model unless the second condition runs. The DOM
 projection used for equivalence is a choice, and a different projection could
 change a pass into a failure.
 
-## Executed, 2026-08-27
+## Executed, 2026-08-26
 
-A and B ran as designed; C2 ran with two version boundaries; C1 is still
-open. Predictions scored against what landed:
+B ran as designed and C2 ran with two version boundaries. A ran with
+author-written twins plus a one-sided real-subject bound instead of the
+three-sided third-party design, and Angular was not measured; C1 and the
+second-model condition are still open. The predictions below were written
+before the twins, the same day, and entered the repository in one commit
+with them, so the ordering is the author's record, not git's. Scored:
 
 1. Failed, and in our favour: React category 1 is not smaller, it is 1.05
    times plain (1,092 against 1,145 tokens; 1.01 in the single-file
@@ -173,13 +177,13 @@ open. Predictions scored against what landed:
    40 of 40 and then 30 of 30 in C2.
 5. Not yet measured (C1 open).
 6. Failed: 30 C2 runs across React 18.3.1 and 19.2.8, zero version-wrong
-   choices. The agent never read package.json in any of the ten
-   version-critical runs; it did not need version awareness, because its
-   habitual idioms are the version-portable ones: every default-value run
-   on every side wrote the inline default, never defaultProps, and the
-   focus runs wrote forwardRef 7 of 10 times, valid on both versions.
-   ref-as-prop appeared only on the side where it works, 3 of 5, which at
-   n = 5 may be chance.
+   choices. Two of the ten version-critical runs opened package.json, both
+   on the 18 side, and wrote the same idiom the other eight chose
+   unchecked; the habitual idioms are the version-portable ones. Every
+   default-value run wrote the inline default, never defaultProps; the
+   focus runs wrote forwardRef 7 of 10 times or passed the ref through an
+   ordinary prop of their own naming (3 of 10); the reserved 19-only ref
+   form never appeared.
 
 What survived everywhere is the turn cost of indirection: threading a ref
 across the component boundary cost 12.0 and 13.0 mean turns against
