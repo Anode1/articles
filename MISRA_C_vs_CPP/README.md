@@ -17,6 +17,18 @@ more turns, and a control pair shows the largest cost is one-class-per-file
 scatter (+3.5 turns over eight files, +0.5 in one file), not the dispatch.
 Correctness never separated: 278 of 280 runs passed identical hidden tests.
 
+Why, in short. Objects are for people: a class is a bundle sized to a
+human working set, an interface is a promise a human can hold whole, and
+an agent reads in neither unit. Structs are enough for the data and
+functions over them are enough for the algorithm, the way ciphers and
+codecs are written in every codebase. The frameworks and the layers were
+the correct engineering for human working memory; the reader changed. So
+the measure counts what the new reader must hold: the deciding text of
+one path, and where that text lives, in your repository, in framework
+jars, or in no file at all. The implicit context differs the same way:
+K&R is 272 pages, Stroustrup is 1,368, and a framework's documentation
+has no fixed size, it moves with the version.
+
 What is here:
 
 | File | What it is |
