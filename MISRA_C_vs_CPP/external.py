@@ -45,7 +45,8 @@ CPP_REPOS = [
 C_EXT   = (".c", ".h")
 CPP_EXT = (".cc", ".cpp", ".cxx", ".h", ".hpp", ".hh", ".ipp")
 RUST_EXT = (".rs",)
-SKIP    = ("/test", "/tests", "/third_party", "/benchmark", "/example", "/fuzz", "/_deps")
+SKIP    = ("/test", "/tests", "/third_party", "/benchmark", "/example", "/fuzz", "/_deps",
+           "/bundled")   # vendored trees (spdlog ships a copy of fmt)
 
 GEN_MARK = re.compile(rb"(DO NOT EDIT|do not edit|[Gg]enerated by|[Aa]utomatically generated|"
                       rb"machine-generated|@generated|This file was generated|GENERATED FILE)")
