@@ -856,10 +856,15 @@ ones. Every default-value run on every side wrote the inline default
 and \texttt{defaultProps} never appeared; the focus runs wrote
 \texttt{forwardRef}, valid on both versions, 7 of 10 times, and the
 19-only idiom appeared only on the side where it works, 3 of 5, which
-at $n = 5$ may be chance. What survived is the turn cost of the
-boundary: focusing a child component's input from the parent cost 12.0
-and 13.0 mean turns against the plain page's uniform 6.0, twice the
-turns for identical behavior, every run passing. The web pair
+at $n = 5$ may be chance. What survived is the cost of the
+boundary, and it is paid in every currency: focusing a child
+component's input from the parent cost 12.0 and 13.0 mean turns
+against the plain page's uniform 6.0, 32 and 36 seconds against 18,
+323 and 353 thousand cumulative context tokens against 181, and
+\$0.14 a run against \$0.09, every run passing. The version check
+itself, about one turn's worth, no run ever paid: correctness came
+from habit, not verification, and nothing in the workflow forces the
+turn a model with less portable habits would need. The web pair
 replicates the pairs result, not the endpoint result: the framework's
 conventions did not bite where Spring's binding did, and what the agent
 pays for is the walk across the boundary. The twins, the grader, the
