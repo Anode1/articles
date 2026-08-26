@@ -22,34 +22,32 @@
 {\large Vasili Gavrilov\par}
 \end{center}
 \vspace{10pt}
-{\small\noindent\textbf{\textit{Abstract}---}We examine whether programs written with AI coding agents still need the
-framework layers, language abstractions and syntactic sugar invented
-for human coders. An agent must read all that decides what code
-will do before changing it safely. We measure that reading as
+{\small\noindent\textbf{\textit{Abstract}---}We examine whether programs written with AI coding agents still need
+the framework layers, language abstractions and syntactic sugar
+invented for human coders. An agent must read all that decides what
+code will do before changing it safely. We measure that reading as
 tokens-to-trace: for one entry point, the token count of the smallest
 set of source regions that determines its behavior, each region
 classified by residence: project, library source, or only the
-version's documentation. We measured one path per stack: idiomatic C++ (taskwarrior) needs 2.8 times the plain C path's
-text counted the same way (257 against 90 thousand), a gap that is mostly
-feature scope: matched for behavior in seven small pairs, the idiom
-costs about 15\% more text, spread over eight files against C's
-one; Spring Boot~4 needs at least 51 to
-124 thousand tokens of framework text outside the project where plain
-Java with JDBC needs none (8.2 against 7.6 thousand inside it), and
-part of the framework's behavior is in no repository; the same screen
-costs the same to write in plain JS and React (1,092 against 1,145
-tokens) with 283 thousand of runtime behind React. In 280 paired runs
-the layered side cost more turns in all seven pairs, about 20\%, and a
-control pair shows the cost is file scatter, not dispatch. One endpoint on both Java
-stacks, 40 graded runs: the framework side cost 1.25 turns more per
-run ($p=0.02$), both wrong answers from a naming convention no source
-file states; on the web pair all 70 runs passed and a component
-boundary doubled the turns. The implicit context is not counted: for C the K\&R book, 272 pages;
-for C++ the Stroustrup, 1,368; for a framework, versioned documentation
-with no fixed size. One line of style bias in the prompt gives an agent
-the whole searchable truth of a path for a few thousand tokens,
-where the layered styles fill its context or need text no repository
-supplies.\par}
+version's documentation. One path per stack, three pairs. Plain C
+against idiomatic C++, whole files: 90 against 257 thousand tokens,
+and matched for identical behavior the idiom costs only 15\% more
+text, so the gap is scope and scatter, not syntax. Plain Java with
+JDBC against Spring: 7.6 thousand, all in the project, against 8.2
+thousand plus 51 to 124 thousand inside the framework jars, with part
+of the behavior in no file at all. Vanilla JS against React: the same
+1.1 thousand to write on both sides, and nothing against 283 thousand
+of runtime behind the screen. Then 390 graded agent runs on the same
+pairs. C against C++: the layered side cost about 20\% more turns,
+and a control pair shows the cost is file scatter, not dispatch. The
+Java endpoint: 1.25 turns more per run on Spring, and its only wrong
+answers, both from a naming convention no source file states. The web
+screen: everything passed, and a change crossing a component boundary
+took twice the turns. The implicit context is not counted: K\&R is
+272 pages, the Stroustrup 1,368, a framework's documentation has no
+fixed size. One line of style bias in the prompt gives an agent the
+whole searchable truth of a path for a few thousand tokens, where the
+layered styles fill its context or need text no repository supplies.\par}
 \vspace{22pt}
 }]
 
