@@ -30,9 +30,11 @@ Directories without a DOI:
   [cjitter](https://github.com/Anode1/cjitter) repository. `stationary.tex`, What Do People
   Optimize in Diagram Layout?, reads the tables under `example/diagrams`. `audit.tex`, The
   Test the Metaphor Benchmark Never Ran, runs `example/metaphors` against the GECCO 2024
-  benchmark's own release ([10.5281/zenodo.10561215](https://doi.org/10.5281/zenodo.10561215));
-  `PREREGISTRATION-AUDIT.md` was signed before its confirmatory numbers were computed.
-  `review/` holds the referee panels, `withdrawn/` the two papers this line replaced.
+  benchmark's own release
+  ([10.5281/zenodo.10561215](https://doi.org/10.5281/zenodo.10561215)). Each paper's
+  pre-registration was signed before its confirmatory numbers were computed,
+  `PREREGISTRATION-STATIONARITY.md` and `PREREGISTRATION-AUDIT.md`; `review/` holds the
+  referee panels.
 
 ## smbpann2: a retired line of work
 
