@@ -1,0 +1,6 @@
+runs/
+__pycache__/
+h2.jar
+spring/build/
+spring/.gradle/
+*.class

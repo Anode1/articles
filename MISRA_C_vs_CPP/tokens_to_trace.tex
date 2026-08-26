@@ -24,24 +24,23 @@ for human coders. An agent must read everything that decides what code
 will do before changing it safely. We measure that reading as
 tokens-to-trace: for one entry point, the token count of the smallest
 set of source regions that determines its behavior, each region
-classified by whether its text lives in the project, in library source,
-or only in the version's documentation. Prior work counts the tokens agents
-spend; ours counts the deciding text, and where it lives, before any
-run.
-We measured one list path in four real systems, and the ratios are the
-result: idiomatic C++ (taskwarrior) needs 2.8 times the plain C path's
+classified by where its text lives: project, library source, or only the version's documentation. Prior work counts the tokens agents
+spend; ours counts the deciding text, and where it lives.
+We measured one list path in four real systems: idiomatic C++ (taskwarrior) needs 2.8 times the plain C path's
 text counted the same way (257 against 90 thousand tokens), a gap that is mostly
 feature scope: matched for behavior in seven small pairs, the idiom
 costs about 15\% more text, spread over up to eight files against C's
 one; Spring Boot~4 needs at least 51 to
 124 thousand tokens of framework text outside the project where plain
 Java with JDBC needs none (8.2 against 7.6 thousand inside it), and
-part of the framework's behavior is in no repository. In 280 paired agent
-runs the layered side cost more mean turns in all seven pairs, about
-20\% on average, all but two runs passing their hidden tests; only the
-three largest costs stand above noise, and a control pair shows the
-cost is the file scatter, not the dispatch. One cost we did not measure, the implicit context a reader must bring: for C it is the K\&R book, 272 pages; for C++ the Stroustrup,
-1,368; for a framework, versioned documentation with no fixed size. We conclude that one line of style bias in the prompt gives an agent
+part of the framework's behavior is in no repository. In 280 paired runs
+the layered side cost more mean turns in all seven pairs, about
+20\% on average, and a control pair shows the cost is the file
+scatter, not the dispatch. One endpoint built on both Java
+stacks, 40 graded runs: the framework side cost 1.25 turns more per
+run ($p=0.02$), and both wrong answers were from a naming convention
+no source file states. One cost we did not measure, the implicit context a reader must bring: for C the K\&R book, 272 pages; for C++ the Stroustrup,
+1,368; for a framework, versioned documentation with no fixed size. One line of style bias in the prompt gives an agent
 the whole searchable truth of a path for a few thousand tokens,
 where the layered styles fill its context or require text no repository
 supplies.
@@ -646,11 +645,100 @@ style accretes at system size, not the constructs.
 Of the recorded predictions, only the cost direction held: the prediction said C++ would be cheaper on
 local tasks, and it was not; the predicted failures never came. A caution on scale: every run sat far below the context window,
 and an agent retrieves slices rather than loading closures, so what a
-large closure costs is untested here. The two experiments that would
-test it are cross-module tasks on taskwarrior itself against its plain
-twin, and one endpoint of the System~A kind built three ways, judged at
-the HTTP boundary, with the criterion recorded: the hypothesis fails if
-the framework tasks do not cost more than the plain ones.
+large closure costs is untested here. The volume experiment that would
+test it, cross-module tasks on taskwarrior itself against its plain
+twin, remains open.
+
+\subsection{The endpoint, two stacks}
+\label{sec:endpoint}
+
+The second named experiment ran: one endpoint of the System~A kind, an
+item list and an item create behind bearer-token authentication over a
+local SQL store, built twice with the same routes, schema, seed rows and
+observable behavior. The plain side is one file, JDK
+\texttt{HttpServer} and JDBC, 108 lines. The framework side is the
+stack of Section~2 (Spring Boot~3.3 with Spring Data JPA; the closure
+there was measured on Boot~4), seven
+classes in the current idiom (a \texttt{OncePerRequestFilter} for the
+token, a repository interface with derived queries, a
+\texttt{@RestController}). Equivalence at the HTTP boundary, status,
+parsed body and the pinned header, was verified over eight probe cases
+of the contract before any run (\texttt{equiv.py}); outside the
+contract the sides diverge, a POST body missing a field getting 400
+from plain's visible validation and 500 from Spring's database
+constraint, a case no task touches. Four maintenance tasks,
+the same text on both sides: add a field to the response, add a
+combinable query-string filter, change the authentication failure
+contract, and find an injected prefix-match defect. Five repetitions,
+40 runs, one model (claude-sonnet-5, headless), grading by hidden HTTP
+checks against a live server the agent never saw. The criterion was
+recorded before the build: the hypothesis fails if the framework tasks
+do not cost more than the plain ones.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Task & plain turns & Spring turns & $\Delta$ & pass \\
+\midrule
+add a response field & 6.6 & 8.4 & $+1.8$ & 5/5 \quad 5/5 \\
+add a filter & 11.0 & 12.0 & $+1.0$ & 5/5 \quad 3/5 \\
+change the 401 contract & 6.0 & 4.2 & $-1.8$ & 5/5 \quad 5/5 \\
+find the injected defect & 5.0 & 9.0 & $+4.0$ & 5/5 \quad 5/5 \\
+\bottomrule
+\end{tabular}
+\caption{Mean turns per task, five repetitions each. Pass columns:
+plain then Spring.}
+\label{tab:endpoint}
+\end{table}
+
+The framework side cost 1.25 turns more per run on average (7.15
+against 8.40) and 5.3 seconds more wall time. With task as the designed
+blocking factor, a permutation test shuffling sides within each task
+puts both above noise ($p = 0.023$ turns, $p = 0.022$ wall, one-sided,
+100{,}000 resamples; turns is the primary metric and the two are
+correlated, so no multiplicity correction is applied); the pooled
+rank-sum test, which ignores the
+blocking, does not resolve ($p = 0.13$), and a signed-rank on four
+task means is below resolution at $n = 4$. Cumulative context ran
+21 thousand tokens higher on the framework side and does not resolve
+either ($p = 0.13$).
+
+Correctness separates the sides in kind rather than in count: 18 of 20
+against 20 of 20 is below statistical resolution, and the finding is
+the mechanism. Both Spring failures are the same miss
+on the filter task: the agent added \texttt{@RequestParam(required =
+false) Integer minLen} and correct JPQL behind it, but Spring binds a
+query parameter by the Java parameter name (this build, like every
+Boot build, compiles with \texttt{-parameters}; without that flag the
+same code fails loudly at the request instead), the URL says
+\texttt{min\_len}, so the
+parameter stayed null and the endpoint returned the unfiltered list
+with status 200. The three passing repetitions wrote
+\texttt{@RequestParam(name = "min\_len")} explicitly. Nothing in the
+compiler, the runtime or the response flagged the two that did not:
+the deciding rule is the category-3 binding convention of Section~1,
+and this is what its failure looks like, silent wrong rows. The plain
+side parses its query string in visible code, so the same mistake had
+no place to hide, five of five.
+
+The direction is not uniform and the exception is instructive: on the
+401-contract task Spring was cheaper (4.2 against 6.0 turns), because
+the framework's filter puts the whole authentication contract in one
+small class while the plain side's is inline in a longer file. Where
+the framework genuinely localizes a change, it wins the turn count;
+where the behavior crosses its conventions, it loses turns (the defect
+hunt, $+4.0$) or correctness (the filter task). The recorded criterion
+is met, three tasks of four and the means with it, but met with that
+asymmetry on record. Two scope cautions: both projects are small, so
+the 51 to 124 thousand tokens of category-2 text from Section~2 never
+had to be read, and Spring is in every training corpus, so these runs
+price recalling the framework's conventions, not reading them; the
+wall gap also folds in the slower build the framework brings
+(Gradle against \texttt{javac}) and the harness ran three runs in
+parallel, which adds contention to wall time on both sides. The build
+scripts, tasks, grader, equivalence probes and
+raw runs are in \texttt{endpoint/} beside this paper.
 
 \section{Related measurements}
 
@@ -742,8 +830,9 @@ passed everything, so they bound mechanisms and cannot separate
 representations. In the pairs the C++ file count changes together with
 the construct, one class per file being the registry idiom, so the top
 of Table~\ref{tab:pairs} prices construct and layout together. Spring
-and the RealWorld application are in every training corpus, which will
-confound the planned endpoint experiment. One model ran, on one date;
+and its idiom are in every training corpus, so the endpoint runs price
+recalling the framework's conventions rather than reading them, and
+recall is where its two failures happened. One model ran, on one date;
 agent cost is a property of the model and the representation together.
 
 \section{Conclusion and recommendation}
@@ -758,10 +847,14 @@ behavior, the C++ sides carry only 1.17 times the C sides' text; below
 the window a construct of indirection kept in one or two files costs the
 agent under two turns, differences under a turn sit inside run-to-run
 noise, almost nothing breaks, and the one large cost,
-measured and controlled, is the file scatter the idiom brings. What a closure that outgrows the window costs is still open, and its scope is
+measured and controlled, is the file scatter the idiom brings. On the
+Java stacks the endpoint runs gave the framework side 1.25 turns more
+per run and the only wrong answers of the set, both from a binding
+convention no source file states; the one task its filter class localizes it
+won, and the asymmetry is in Section~\ref{sec:endpoint}. What a closure that outgrows the window costs is still open, and its scope is
 stated: an agent retrieves slices rather than loading wholes,
 so the question at scale is the working set after retrieval and the text
-no retrieval reaches, and the two experiments that decide it are named
+no retrieval reaches, and the volume experiment that decides it is named
 above.
 
 The recommendation, scoped to read cost and to teams working with agents:
@@ -785,7 +878,8 @@ tiktoken; manifests with per-row lines, characters, and tokens are
 pilot and site-coverage numbers come from the scripts and JSON beside this
 paper (\texttt{measure.py}, \texttt{dup.py}, \texttt{external.py},
 \texttt{jpa.py}, \texttt{pilot/}, \texttt{sites/}), each recording its
-commits and raw runs; the blind second rater's derivation is
+commits and raw runs; the endpoint runs (claude-sonnet-5, 2026-08-25)
+and both stacks' sources are \texttt{endpoint/}; the blind second rater's derivation is
 \texttt{second\_rater.txt}; the Maven-artifact counts are from the projects' POMs
 and not yet scripted. Region boundaries are function, block, or
 DDL-statement granularity; whole files where stated.
