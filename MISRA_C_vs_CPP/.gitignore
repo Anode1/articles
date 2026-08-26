@@ -3,3 +3,5 @@ venv/
 *.aux
 *.log
 *.out
+*.json
+second_rater.txt
