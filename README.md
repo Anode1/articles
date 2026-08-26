@@ -12,6 +12,7 @@ resolves to the latest version.
 | [`intelligence_compressors`](intelligence_compressors/) | Intelligence Is the Discovery of Compressors | [10.5281/zenodo.20440110](https://doi.org/10.5281/zenodo.20440110) |
 | [`ConditionalProbability`](ConditionalProbability/) | Conditional Probability in Diagnostic Testing: An Isomorphism Between Tree Diagrams, Bayes' Theorem, Contingency Tables and ARR/RRR | [10.5281/zenodo.20449608](https://doi.org/10.5281/zenodo.20449608) |
 | [`BPFNN_Coursework`](BPFNN_Coursework/) | Backpropagation Feed-Forward Neural Networks (1997 undergraduate thesis, revised) | [10.5281/zenodo.20450525](https://doi.org/10.5281/zenodo.20450525) |
+| | The math in the thesis is implemented in [`bpnn`](https://github.com/Anode1/bpnn) (2001-...) | |
 | [`ControlModel`](ControlModel/) | Artifact Promotion as a Control Model for Stable Cloud Deployment, and its implementation case study | [10.5281/zenodo.20451078](https://doi.org/10.5281/zenodo.20451078), [10.5281/zenodo.20528904](https://doi.org/10.5281/zenodo.20528904) |
 | [`atree`](atree/) | The Atree Format: A Scalable Binary-Path Notation for Ancestral Genealogies | [10.5281/zenodo.20587715](https://doi.org/10.5281/zenodo.20587715) |
 | [`innovation_compression`](innovation_compression/) | Chaos Makes Many, Compression Keeps Few: Where Innovation Comes From | [10.5281/zenodo.20603482](https://doi.org/10.5281/zenodo.20603482) |
