@@ -7,7 +7,7 @@
 \usepackage{array}
 \setlength{\emergencystretch}{1em}
 
-\title{When Abstraction Becomes Indirection:\\Tokens-to-trace, measured on four stacks}
+\title{When Abstraction Becomes Indirection:\\Tokens-to-trace, measured on six stacks}
 \author{Vasili Gavrilov}
 \date{August 2026}
 
@@ -17,36 +17,38 @@
 \begin{center}
 {\Huge\bfseries When Abstraction Becomes Indirection\par}
 \vspace{6pt}
-{\LARGE Tokens-to-trace, measured on four stacks\par}
+{\LARGE Tokens-to-trace, measured on six stacks\par}
 \vspace{12pt}
 {\large Vasili Gavrilov\par}
 \end{center}
 \vspace{10pt}
 {\small\noindent\textbf{\textit{Abstract}---}We examine whether programs written with AI coding agents still need the
 framework layers, language abstractions and syntactic sugar invented
-for human coders. An agent must read everything that decides what code
+for human coders. An agent must read all that decides what code
 will do before changing it safely. We measure that reading as
 tokens-to-trace: for one entry point, the token count of the smallest
 set of source regions that determines its behavior, each region
-classified by where its text lives: project, library source, or only the version's documentation. Prior work counts the tokens agents
-spend; ours counts the deciding text, and where it lives.
-We measured one list path in four real systems: idiomatic C++ (taskwarrior) needs 2.8 times the plain C path's
-text counted the same way (257 against 90 thousand tokens), a gap that is mostly
+classified by residence: project, library source, or only the
+version's documentation. We measured one path per stack: idiomatic C++ (taskwarrior) needs 2.8 times the plain C path's
+text counted the same way (257 against 90 thousand), a gap that is mostly
 feature scope: matched for behavior in seven small pairs, the idiom
-costs about 15\% more text, spread over up to eight files against C's
+costs about 15\% more text, spread over eight files against C's
 one; Spring Boot~4 needs at least 51 to
 124 thousand tokens of framework text outside the project where plain
 Java with JDBC needs none (8.2 against 7.6 thousand inside it), and
-part of the framework's behavior is in no repository. In 280 paired runs
-the layered side cost more mean turns in all seven pairs, about
-20\% on average, and a control pair shows the cost is the file
-scatter, not the dispatch. One endpoint built on both Java
+part of the framework's behavior is in no repository; the same screen
+costs the same to write in plain JS and React (1,092 against 1,145
+tokens) with 283 thousand of runtime behind React. In 280 paired runs
+the layered side cost more turns in all seven pairs, about 20\%, and a
+control pair shows the cost is file scatter, not dispatch. One endpoint on both Java
 stacks, 40 graded runs: the framework side cost 1.25 turns more per
-run ($p=0.02$), and both wrong answers were from a naming convention
-no source file states. One cost we did not measure, the implicit context a reader must bring: for C the K\&R book, 272 pages; for C++ the Stroustrup,
-1,368; for a framework, versioned documentation with no fixed size. One line of style bias in the prompt gives an agent
+run ($p=0.02$), both wrong answers from a naming convention no source
+file states; on the web pair all 70 runs passed and a component
+boundary doubled the turns. The implicit context is not counted: for C the K\&R book, 272 pages;
+for C++ the Stroustrup, 1,368; for a framework, versioned documentation
+with no fixed size. One line of style bias in the prompt gives an agent
 the whole searchable truth of a path for a few thousand tokens,
-where the layered styles fill its context or require text no repository
+where the layered styles fill its context or need text no repository
 supplies.\par}
 \vspace{22pt}
 }]
@@ -357,6 +359,8 @@ taskwarrior, whole-file$^{*}$ & idiomatic C++ & 256{,}664 & 0 & 0 \\
 System~A & plain Java+JDBC & 7{,}566 & 0 & 0 \\
 Monocypher AEAD (third party) & plain C & 7{,}560 & 0 & 0 \\
 Spring endpoint & framework Java & 8{,}175 & 123{,}794$^{\dagger}$ & $>$0$^{\S}$ \\
+items screen twin & plain JS & 1{,}092 & 0 & 0 \\
+items screen twin & React 19 & 1{,}145 & 282{,}717 & $>$0 \\
 \bottomrule
 \end{tabular}
 \caption{Tokens-to-trace by residence, one read path per system, o200k.
@@ -435,6 +439,29 @@ row's volume (a 1M-token window holds 257k beside the work). That makes the
 framework claim the stronger of the two, and the C++ claim a matter of
 volume and of counting granularity. The paper's own taxonomy separates them, and the hypothesis in
 the abstract rests on the framework row.
+
+\textbf{The web pair, plain JS and React.} The same rule extends to the
+browser: the engine (parse, layout, paint) is floor for the reason MySQL
+is, and React is counted for the reason Hibernate is, it varies by
+version and the application configures it. The subject screen is the
+shape System~A uses on every list page: fetch rows, filter, sort,
+select, delete, with rendering by a map over the rows joined into
+\texttt{innerHTML} and one delegated listener, the idiom of System~A's
+own 62,536 lines of JS (387 \texttt{innerHTML} assignments, 118
+\texttt{closest()} delegations). Built as behavior-matched twins with
+identical rendered DOM, the plain page is 1,092 tokens and the React~19
+page is 1,145 in four components, 1,108 in one file: writing concedes
+nothing to JSX in this idiom. Behind the React page sit 282,717 tokens
+over 29 modules of the runtime's own source at the pinned version (the
+hooks store, the work loop, reconciliation and key identity, the commit
+path, prop application, the delegated synthetic event system, the
+scheduler), 2.3 times the Spring closure; the whole runtime is 641,367.
+A real third-party subject bounds the twin: the profile screen of a
+current RealWorld React implementation (React 19.2, May 2026) closes
+over 28 repository files, 16,237 tokens, by mechanical import trace,
+and ten of the modules it imports exist in no repository at all: its
+API client and schemas are generated at build time from a 1,025-line
+OpenAPI specification, category 3 in a new form.
 
 \section{What an agent pays: two bounded experiments}
 \label{sec:bounded}
@@ -752,6 +779,93 @@ parallel, which adds contention to wall time on both sides. The build
 scripts, tasks, grader, equivalence probes and
 raw runs are in \texttt{endpoint/} beside this paper.
 
+\subsection{The web pair, run}
+\label{sec:web}
+
+The third pair ran twice, with predictions recorded in the
+pre-registration before the twins existed. First the twins of
+Section~\ref{sec:closures}: four maintenance tasks mirroring the
+endpoint four, five repetitions, 40 runs, graded by hidden scenarios
+driving headless Chrome and comparing the rendered DOM to a reference
+model. All 40 passed on both sides. Turns did not separate, 6.95
+against 6.85 ($p = 0.91$, task-stratified, two-sided), and React won
+one task outright, adding a field to the row, 5.6 against 7.6 turns,
+the component boundary putting that change in one small file. Both
+halves were predicted: the pre-registration says the turn metric may
+come out flat or reversed and the framework wins at least one task. Its
+failure-mode prediction did not land: there was nothing to separate,
+where the same-scale Spring endpoint produced two silent wrong answers.
+
+\begin{figure}[!t]
+\footnotesize
+\begin{verbatim}
+plain JS             React
+1.1k, all in page    1.1k + 283k runtime
+
+event listener       {synthetic event}
+  |                    |
+handler              {priority lane}
+  |                    |
+filter + sort        state setter
+  |                    |
+template string      {hook state store}
+  |                    |
+innerHTML write      component function
+  |                    |
+browser paints       filter + sort
+                       |
+                     {reconciler diff}
+                       |
+                     {key identity}
+                       |
+                     {commit phase}
+                       |
+                     {prop application}
+                       |
+                     browser paints
+
+  |   a step to a name at the call site,
+      resolvable by one search
+ {}  a step resolvable only in the
+     framework's source or conventions
+\end{verbatim}
+\caption{The third pair, the same interaction on the web: a keystroke in
+the filter until the browser paints the rows. The browser engine (parse,
+layout, paint) is floor on both sides by the rule that makes MySQL floor
+in the Java pair. Every plain step is in the page's own 1,092 tokens; the
+braced steps resolve in the 282,717 tokens of the runtime's source
+(react, react-dom, the reconciler, the scheduler, at the measured
+version), or, for the delegated event's target and the controlled
+input's value tracking, in version convention. The two sides' own code
+is the same size (1,092 against 1,145 tokens, matched behavior,
+identical rendered DOM); the difference is the machinery behind the
+braces.}
+\label{fig:webpaths}
+\end{figure}
+
+The second execution aimed at the version conventions directly: two
+tasks whose correct idiom changed between React 18 and 19, each run
+against both pinned versions (18.3.1 and 19.2.8) plus the plain
+control, 30 runs. A default for a missing field is silently ignored on
+19 when written as \texttt{defaultProps}; a ref passed as a plain prop
+is silently stripped on 18. Neither trap fired: 30 of 30 passed, zero
+version-wrong choices. The mechanism is not version awareness, since
+the agent read \texttt{package.json} in none of the ten
+version-critical runs; its habitual idioms are the version-portable
+ones. Every default-value run on every side wrote the inline default
+and \texttt{defaultProps} never appeared; the focus runs wrote
+\texttt{forwardRef}, valid on both versions, 7 of 10 times, and the
+19-only idiom appeared only on the side where it works, 3 of 5, which
+at $n = 5$ may be chance. What survived is the turn cost of the
+boundary: focusing a child component's input from the parent cost 12.0
+and 13.0 mean turns against the plain page's uniform 6.0, twice the
+turns for identical behavior, every run passing. The web pair
+replicates the pairs result, not the endpoint result: the framework's
+conventions did not bite where Spring's binding did, and what the agent
+pays for is the walk across the boundary. The twins, the grader, the
+equivalence probe and the raw runs are in \texttt{frontend/} beside
+this paper.
+
 \section{Related measurements}
 
 The nearest prior work measures token consumption during runs. A study of
@@ -844,8 +958,16 @@ the construct, one class per file being the registry idiom, so the top
 of Table~\ref{tab:pairs} prices construct and layout together. Spring
 and its idiom are in every training corpus, so the endpoint runs price
 recalling the framework's conventions rather than reading them, and
-recall is where its two failures happened. One model ran, on one date;
-agent cost is a property of the model and the representation together.
+recall is where its two failures happened. The web twins are
+author-written and small, the real subject bounds only the closure, and
+the stale-recall condition tested two version boundaries at five
+repetitions per cell, so its zero is a bound, not a law; the DOM
+projection the web grader compares is a choice, and a different
+projection could grade differently. One model ran, on one date;
+agent cost is a property of the model and the representation together,
+and the web result says the sharpest version of that: the version traps
+missed because this model's habits are version-portable, and another
+model's habits need not be.
 
 \section{Conclusion and recommendation}
 
@@ -863,7 +985,10 @@ measured and controlled, is the file scatter the idiom brings. On the
 Java stacks the endpoint runs gave the framework side 1.25 turns more
 per run and the only wrong answers of the set, both from a binding
 convention no source file states; the one task its filter class localizes it
-won, and the asymmetry is in Section~\ref{sec:endpoint}. What a closure that outgrows the window costs is still open, and its scope is
+won, and the asymmetry is in Section~\ref{sec:endpoint}. On the web
+pair nothing broke and nothing separated but the boundary, twice the
+turns to cross a component (Section~\ref{sec:web}), so the third pair
+joins the pairs result, not the endpoint one. What a closure that outgrows the window costs is still open, and its scope is
 stated: an agent retrieves slices rather than loading wholes,
 so the question at scale is the working set after retrieval and the text
 no retrieval reaches, and the volume experiment that decides it is named
@@ -891,7 +1016,10 @@ pilot and site-coverage numbers come from the scripts and JSON beside this
 paper (\texttt{measure.py}, \texttt{dup.py}, \texttt{external.py},
 \texttt{jpa.py}, \texttt{pilot/}, \texttt{sites/}), each recording its
 commits and raw runs; the endpoint runs (claude-sonnet-5, 2026-08-25)
-and both stacks' sources are \texttt{endpoint/}; the blind second rater's derivation is
+and both stacks' sources are \texttt{endpoint/}; the web pair
+(claude-sonnet-5, 2026-08-27; React 19.2.8 and 18.3.1 via vite, chrome
+headless grading; closure counted on the react source tag v19.1.0 and
+on yurisldk/realworld-react-fsd at 969709a) is \texttt{frontend/}; the blind second rater's derivation is
 \texttt{second\_rater.txt}; the Maven-artifact counts are from the projects' POMs
 and not yet scripted. Region boundaries are function, block, or
 DDL-statement granularity; whole files where stated.
