@@ -12,6 +12,6 @@ spacing. Every quantitative claim in it is an artifact.
 converts into architecture quality only if the selection signal is refreshed, was falsified
 three separate ways on the afternoon it was written.
 
-Kept rather than deleted because the failures are the record. `RETIRED.md` says what is void
-and what survived; `PROTOCOL.md` lists the checks that would have caught both on day one.
+`RETIRED.md` says what is void and what survived, and why the directory was kept.
+`PROTOCOL.md` lists the checks that would have caught both on day one.
 The measurement work continued in [bpnn](https://github.com/Anode1/bpnn).

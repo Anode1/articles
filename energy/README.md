@@ -10,7 +10,7 @@ double the price. Ontario passed a law letting a minister decide, and has not wr
 rules. When a monopoly has more buyers than supply it either names a price or picks winners,
 and all four picked winners.
 
-A Substack piece, not a paper. No DOI, not deposited.
+A Substack piece. No DOI, not deposited.
 
 `simple.txt` states the argument at four lengths, shortest first, for whichever fits the
 room. `make_charts.py` draws the four figures. Each figure carries its source inside the
