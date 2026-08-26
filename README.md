@@ -36,16 +36,6 @@ Directories without a DOI:
   `PREREGISTRATION-STATIONARITY.md` and `PREREGISTRATION-AUDIT.md`; `review/` holds the
   referee panels.
 
-## smbpann2: a retired line of work
-
-[`smbpann2`](smbpann2/) is the follow-up to the emergence paper, and it is kept because it failed
-in a way worth reading. `tiling.tex` is **retracted** and says so on its own first page: its energy
-term was exactly indifferent to the property it was supposed to select, so a fully occupied genome
-satisfied the convolution test for free and every operator that added units looked like a
-discovery. `estimator.tex` is retired, its central mechanism falsified three ways on the afternoon
-it was written. Neither should be cited or extended. `RETIRED.md` explains what is void and what
-survived, and `PROTOCOL.md` lists the checks that would have caught both on day one.
-
 ## Related work by others
 
 [`related`](related/) holds papers by other authors that bear on the work here, redistributed
