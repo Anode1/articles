@@ -22,32 +22,33 @@
 {\large Vasili Gavrilov\par}
 \end{center}
 \vspace{10pt}
-{\small\noindent\textbf{\textit{Abstract}---}We examine whether programs written with AI coding agents still need
-the framework layers, language abstractions and syntactic sugar
-invented for human coders. An agent must read all that decides what
-code will do before changing it safely. We measure that reading as
-tokens-to-trace: for one entry point, the token count of the smallest
-set of source regions that determines its behavior, each region
-classified by residence: project, library source, or only the
+{\small\noindent\textbf{\textit{Abstract}---}Programs are full of layers made for human readers: frameworks, class
+hierarchies, syntactic sugar. We ask whether code written with AI
+agents still needs them. Before an agent can change code safely it
+must read everything that decides what the code does. We count that
+reading as tokens-to-trace: for one entry point, the tokens of the
+smallest set of source pieces that decide its behavior, and where
+each piece lives: in the project, in library source, or only in the
 version's documentation. One path per stack, three pairs. Plain C
 against idiomatic C++, whole files: 90 against 257 thousand tokens,
-and matched for identical behavior the idiom costs only 15\% more
-text, so the gap is scope and scatter, not syntax. Plain Java with
-JDBC against Spring: 7.6 thousand, all in the project, against 8.2
-thousand plus 51 to 124 thousand inside the framework jars, with part
-of the behavior in no file at all. Vanilla JS against React: the same
-1.1 thousand to write on both sides, plus 283 thousand of framework
-context outside the project for React. Then 390 agent runs on the same
-pairs. C against C++: the layered side cost about 20\% more turns,
-and a control pair shows the cost is file scatter, not dispatch. The
-Java endpoint: 1.25 turns more per run on Spring, and its only wrong
-answers, both from a naming convention no source file states. The web
-screen: a change crossing a component boundary cost React 100\% more
-turns than vanilla JS. The implicit context is not counted: K\&R is
-272 pages, the Stroustrup 1,368, a framework's documentation has no
-fixed size. One line of style bias in the prompt gives an agent the
-whole searchable truth of a path for a few thousand tokens, where the
-layered styles fill its context or need text no repository supplies.\par}
+and held to the same behavior the C++ text is only 15\% bigger, so
+the gap is scope and file scatter, not syntax. Plain Java with JDBC
+against Spring: 7.6 thousand, all in the project, against 8.2
+thousand in the project plus 51 to 124 thousand inside the framework
+jars, and part of what Spring does is written in no file at all.
+Vanilla JS against React: the same 1.1 thousand to write, plus 283
+thousand of React's own machinery outside the project. Then 390
+agent runs on the same pairs. C against C++: the C++ side cost about
+20\% more turns, and a control pair shows the agent pays for the
+walk across files, not for the dispatch. Java: Spring cost 1.25
+turns more per run, and its only wrong answers came from a naming
+rule no source file states. The web: a change that crosses a
+component boundary cost React 100\% more turns than vanilla. What a
+reader must know first is also not equal: K\&R is 272 pages, the
+Stroustrup 1,368, and a framework's documentation has no fixed size.
+One line in the prompt, ``plain C'' or ``plain Java with JDBC'',
+gives the agent the whole truth of a path for a few thousand tokens;
+the layered styles fill its memory or need text no repository holds.\par}
 \vspace{22pt}
 }]
 
