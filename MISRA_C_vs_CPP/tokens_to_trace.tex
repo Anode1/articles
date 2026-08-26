@@ -785,21 +785,14 @@ raw runs are in \texttt{endpoint/} beside this paper.
 \subsection{The web pair, run}
 \label{sec:web}
 
-The third pair ran twice. The predictions were written into the
-pre-registration before the twins, the same day; both entered the
-repository in one commit, so that ordering is the author's record,
-not git's. First the twins of
-Section~\ref{sec:closures}: four maintenance tasks mirroring the
-endpoint four, five repetitions, 40 runs, graded by hidden scenarios
-driving headless Chrome and comparing the rendered DOM to a reference
-model. All 40 passed on both sides. Turns did not separate, 6.95
-against 6.85 ($p = 0.91$, task-stratified, two-sided), and React won
-one task outright, adding a field to the row, 5.6 against 7.6 turns,
-the component boundary putting that change in one small file. Both
-halves were predicted: the pre-registration says the turn metric may
-come out flat or reversed and the framework wins at least one task. Its
-failure-mode prediction did not land: there was nothing to separate,
-where the same-scale Spring endpoint produced two silent wrong answers.
+The third pair ran twice; the predictions were written before the
+twins, the same day, and entered the repository with them. First the
+twins: four maintenance tasks mirroring the endpoint four, five
+repetitions, 40 runs, graded by hidden scenarios reading the rendered
+DOM in headless Chrome. All 40 passed. Turns did not separate, 6.95
+against 6.85 ($p = 0.91$), and React won the add-a-field task, 5.6
+against 7.6 turns: the component boundary puts that change in one
+small file.
 
 \begin{figure}[!t]
 \footnotesize
@@ -848,35 +841,22 @@ braces.}
 \label{fig:webpaths}
 \end{figure}
 
-The second execution aimed at the version conventions directly: two
-tasks whose correct idiom changed between React 18 and 19, each run
-against both pinned versions (18.3.1 and 19.2.8) plus the plain
-control, 30 runs. A default for a missing field is silently ignored on
-19 when written as \texttt{defaultProps}; a ref passed as a plain prop
-is silently stripped on 18. Neither trap fired: 30 of 30 passed, zero
-version-wrong choices. The mechanism is mostly not version awareness: two of the ten
-version-critical runs opened \texttt{package.json}, both on the 18
-side, and wrote the same idiom the other eight chose unchecked; the
-habitual idioms are the version-portable ones. Every default-value run on every side wrote the inline default
-and \texttt{defaultProps} never appeared; the focus runs wrote
-\texttt{forwardRef}, valid on both versions, 7 of 10 times, and the
-other three passed the ref through an ordinary prop of their own
-naming, portable anywhere; the reserved-\texttt{ref} form that only
-19 accepts appeared in none. What survived is the cost of the boundary: focusing a child
-component's input from the parent cost 12.0 and 13.0 mean turns
-against the plain page's uniform 6.0, 32 and 36 seconds against 18,
-323 and 353 thousand cumulative context tokens against 181, and
-\$0.14 a run against \$0.09, every run passing. The version check,
-about one turn's worth, eight of the ten runs never paid, and the two
-that paid it changed nothing: correctness came from habit, and nothing
-in the workflow forces the check a model with less portable habits
-would need. The web pair
-replicates the pairs result, not the endpoint result: the framework's
-conventions did not bite where Spring's binding did, and what the agent
-pays for is the walk across the boundary. The twins, the grader, the
-equivalence probe and the subject trace are in \texttt{frontend/}
-beside this paper; the run records are available from the author on
-request.
+Then the version conventions directly: two tasks whose correct idiom
+changed between React 18 and 19 (\texttt{defaultProps} is silently
+ignored on 19; a ref passed as a plain prop is silently stripped on
+18), each against both pinned versions (18.3.1, 19.2.8) plus the plain
+control, 30 runs. All passed, zero version-wrong choices: the model's
+habitual idioms are the version-portable ones, the inline default and
+\texttt{forwardRef}, and only two of the ten version-critical runs
+looked at \texttt{package.json}. What separated is the boundary:
+focusing a child component's input from the parent cost 12 and 13 mean
+turns against plain's uniform 6, 32 and 36 seconds against 18, 323 and
+353 thousand cumulative context tokens against 181, and \$0.14 a run
+against \$0.09, every run passing. The web pair repeats the pairs
+result, not the endpoint one: nothing broke, and the agent pays for
+the walk across the boundary. The twins, the grader, the equivalence
+probe and the subject trace are in \texttt{frontend/}; the run
+records are available from the author on request.
 
 \section{Related measurements}
 
