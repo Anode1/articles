@@ -1,6 +1,4 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage{times}
+\documentclass[journal]{IEEEtran}
 \usepackage[hidelinks]{hyperref}
 \usepackage{booktabs}
 \usepackage{enumitem}
@@ -9,16 +7,22 @@
 \usepackage{array}
 \setlength{\emergencystretch}{1em}
 
-\title{When Abstraction Becomes Indirection:\\
-\large Tokens-to-trace, measured on four stacks}
+\title{When Abstraction Becomes Indirection:\\Tokens-to-trace, measured on four stacks}
 \author{Vasili Gavrilov}
 \date{August 2026}
 
 \begin{document}
-\maketitle
 
-\begin{abstract}
-We examine whether programs written with AI coding agents still need the
+\twocolumn[{%
+\begin{center}
+{\Huge\bfseries When Abstraction Becomes Indirection\par}
+\vspace{6pt}
+{\LARGE Tokens-to-trace, measured on four stacks\par}
+\vspace{12pt}
+{\large Vasili Gavrilov\par}
+\end{center}
+\vspace{10pt}
+{\small\noindent\textbf{\textit{Abstract}---}We examine whether programs written with AI coding agents still need the
 framework layers, language abstractions and syntactic sugar invented
 for human coders. An agent must read everything that decides what code
 will do before changing it safely. We measure that reading as
@@ -43,10 +47,15 @@ no source file states. One cost we did not measure, the implicit context a reade
 1,368; for a framework, versioned documentation with no fixed size. One line of style bias in the prompt gives an agent
 the whole searchable truth of a path for a few thousand tokens,
 where the layered styles fill its context or require text no repository
-supplies.
-\end{abstract}
+supplies.\par}
+\vspace{22pt}
+}]
+
+
+
 
 \section{The question and the measure}
+\label{sec:measure}
 
 A class hides a representation and an interface hides an implementation.
 A framework hides something larger: control flow. Each is a remedy for a limit of human working
@@ -93,6 +102,7 @@ systems compare by number, and a disagreement is about a manifest row, not
 about an interpretation.
 
 \section{Four closures}
+\label{sec:closures}
 
 One read path per system, each doing the same kind of work so the numbers
 compare: an authenticated or filtered list over a local store, returning
@@ -170,7 +180,7 @@ regions costs roughly 100k, still one window, and every callee on the path
 is named literally at its call site, so each hop is findable by one search.
 Categories 2 and 3 measure zero at the stated floor.
 
-\begin{figure}[H]
+\begin{figure*}[!t]
 \footnotesize
 \textbf{Side note: the same parser, written plain.} The filter machinery on
 the measured path is a small language: \texttt{Lexer}, \texttt{Variant}
@@ -209,9 +219,9 @@ it,
 and the pairs of Table~\ref{tab:pairs} already price the constructs it
 removes. It is shown because the claim ``the plain form exists and is
 small'' is otherwise abstract.
-\end{figure}
+\end{figure*}
 
-\textbf{Spring Boot 4.1.0, framework Java.} \texttt{raeperd/realworld-springboot-java}
+\textbf{Spring Boot 4.1.0, framework Java.} \texttt{raeperd/}\allowbreak\texttt{realworld-}\allowbreak\texttt{springboot-java}
 v2.1.1 \cite{realworld}, an implementation of RealWorld, the community
 specification of one Medium-style blogging application that many stacks
 implement identically so the implementations can be compared; this one is
@@ -226,7 +236,7 @@ exact versions:
 
 \begin{table}[H]
 \centering
-\small
+\footnotesize\setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
 Module & Classes & Lines & o200k \\
@@ -280,7 +290,7 @@ defaults; serialization defaults; H2's PostgreSQL emulation. The Jackson~3
 package rename (\texttt{tools.jackson}) and the Boot~4 module split are the
 version-incoherence instances observed during measurement.
 
-\begin{figure}[H]
+\begin{figure*}[!t]
 \footnotesize
 \begin{verbatim}
 plain C              idiomatic C++        plain Java           framework Java
@@ -332,11 +342,11 @@ pairs experiment prices them (Table~\ref{tab:pairs}), and its control
 shows the one-class-per-file layout, not the dispatch construct, carries
 most of the largest cost.}
 \label{fig:paths}
-\end{figure}
+\end{figure*}
 
 \begin{table}[H]
 \centering
-\small
+\footnotesize\setlength{\tabcolsep}{1.3pt}
 \begin{tabular}{@{}llrrr@{}}
 \toprule
 System & Style & Cat.~1 & Cat.~2 & Cat.~3 \\
@@ -344,7 +354,7 @@ System & Style & Cat.~1 & Cat.~2 & Cat.~3 \\
 ais, engine as floor & plain C & 5{,}750 & 0 & 0 \\
 ais, engine included & plain C & 14{,}444 & 0 & 0 \\
 taskwarrior, whole-file$^{*}$ & idiomatic C++ & 256{,}664 & 0 & 0 \\
-System~A & plain Java + JDBC & 7{,}566 & 0 & 0 \\
+System~A & plain Java+JDBC & 7{,}566 & 0 & 0 \\
 Monocypher AEAD (third party) & plain C & 7{,}560 & 0 & 0 \\
 Spring endpoint & framework Java & 8{,}175 & 123{,}794$^{\dagger}$ & $>$0$^{\S}$ \\
 \bottomrule
@@ -427,6 +437,7 @@ volume and of counting granularity. The paper's own taxonomy separates them, and
 the abstract rests on the framework row.
 
 \section{What an agent pays: two bounded experiments}
+\label{sec:bounded}
 
 \textbf{Mechanism.} Sixty maintenance runs, in which the agent was told
 nothing of the study (Claude Code headless, \texttt{claude-sonnet-5}, four
@@ -498,7 +509,7 @@ Two guards against over-reading the C rows. Size: the same behavior in this
 author's C costs up to 2.7 times his Java in lexical tokens, and the agent
 pays that price in full (mincdp: 6,932 o200k against 2,615); compression
 shows the excess is mostly repetition (the xz ratio falls to 1.73); and the sites records
-(Section 3) show why exact repetition is safe: one replace-all pass
+(Section~\ref{sec:bounded}) show why exact repetition is safe: one replace-all pass
 erases identical copies, and the untested hazard is the near-miss form
 no single pass ends. The C advantage claimed here is closure locality, never
 size. Runtime: nothing here rests on machine cost.
@@ -597,12 +608,12 @@ the construct unit.
 
 \begin{table}[H]
 \centering
-\small
+\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
-Construct & C++ files & C turns & C++ turns & C++ $-$ C \\
+Construct & files & C & C++ & $\Delta$ \\
 \midrule
-virtual registry, one class per file & 8 & 7.85 & 11.35 & $+$3.50 \\
+virtual registry, class per file & 8 & 7.85 & 11.35 & $+$3.50 \\
 mixed constructs & 4 & 7.85 & 10.65 & $+$2.80 \\
 template in a header & 2 & 6.90 & 8.60 & $+$1.70 \\
 RAII & 2 & 8.15 & 9.20 & $+$1.05 \\
@@ -657,7 +668,7 @@ item list and an item create behind bearer-token authentication over a
 local SQL store, built twice with the same routes, schema, seed rows and
 observable behavior. The plain side is one file, JDK
 \texttt{HttpServer} and JDBC, 108 lines. The framework side is the
-stack of Section~2 (Spring Boot~3.3 with Spring Data JPA; the closure
+stack of Section~\ref{sec:closures} (Spring Boot~3.3 with Spring Data JPA; the closure
 there was measured on Boot~4), seven
 classes in the current idiom (a \texttt{OncePerRequestFilter} for the
 token, a repository interface with derived queries, a
@@ -677,14 +688,15 @@ do not cost more than the plain ones.
 
 \begin{table}[H]
 \centering
+\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{tabular}{lcccc}
 \toprule
-Task & plain turns & Spring turns & $\Delta$ & pass \\
+Task & plain & Spring & $\Delta$ & pass \\
 \midrule
-add a response field & 6.6 & 8.4 & $+1.8$ & 5/5 \quad 5/5 \\
-add a filter & 11.0 & 12.0 & $+1.0$ & 5/5 \quad 3/5 \\
-change the 401 contract & 6.0 & 4.2 & $-1.8$ & 5/5 \quad 5/5 \\
-find the injected defect & 5.0 & 9.0 & $+4.0$ & 5/5 \quad 5/5 \\
+add a response field & 6.6 & 8.4 & $+1.8$ & 5/5\;5/5 \\
+add a filter & 11.0 & 12.0 & $+1.0$ & 5/5\;3/5 \\
+change the 401 contract & 6.0 & 4.2 & $-1.8$ & 5/5\;5/5 \\
+find the injected defect & 5.0 & 9.0 & $+4.0$ & 5/5\;5/5 \\
 \bottomrule
 \end{tabular}
 \caption{Mean turns per task, five repetitions each. Pass columns:
@@ -717,7 +729,7 @@ parameter stayed null and the endpoint returned the unfiltered list
 with status 200. The three passing repetitions wrote
 \texttt{@RequestParam(name = "min\_len")} explicitly. Nothing in the
 compiler, the runtime or the response flagged the two that did not:
-the deciding rule is the category-3 binding convention of Section~1,
+the deciding rule is the category-3 binding convention of Section~\ref{sec:measure},
 and this is what its failure looks like, silent wrong rows. The plain
 side parses its query string in visible code, so the same mistake had
 no place to hide, five of five.
@@ -731,7 +743,7 @@ where the behavior crosses its conventions, it loses turns (the defect
 hunt, $+4.0$) or correctness (the filter task). The recorded criterion
 is met, three tasks of four and the means with it, but met with that
 asymmetry on record. Two scope cautions: both projects are small, so
-the 51 to 124 thousand tokens of category-2 text from Section~2 never
+the 51 to 124 thousand tokens of category-2 text from Section~\ref{sec:closures} never
 had to be read, and Spring is in every training corpus, so these runs
 price recalling the framework's conventions, not reading them; the
 wall gap also folds in the slower build the framework brings
@@ -825,7 +837,7 @@ bookkeeping in the ais engine is undercounted. And in certification work
 under DO-178C or ISO~26262, every duplicated site still has to be
 verified separately, whatever the agent's edit coverage.
 
-Both agent experiments of Section 3 sat far below the context window and
+Both agent experiments of Section~\ref{sec:bounded} sat far below the context window and
 passed everything, so they bound mechanisms and cannot separate
 representations. In the pairs the C++ file count changes together with
 the construct, one class per file being the registry idiom, so the top
@@ -899,17 +911,6 @@ Language Specification}, 2nd ed. Addison-Wesley, 2000.
 Microsystems, 1999.
 \bibitem{date} H.~F.~Korth, A.~Silberschatz. \emph{Database System
 Concepts}. McGraw-Hill, 1986.
-\bibitem{aisstyle} \emph{AIS: Coding Style and Ideology}. In \cite{ais},
-\texttt{doc/dev/STYLE.md}.
-\bibitem{ais} \texttt{ais}, an associative index in C99.
-\url{https://github.com/Anode1/ais}. The five-language bench and its
-\texttt{LANG\_COMPARISON} note are under \texttt{tests/perf}.
-\bibitem{mincdp} \texttt{mincdp}, a Chrome DevTools Protocol client, one
-file per language. \url{https://github.com/Anode1/mincdp}.
-\bibitem{aisgedcom} \texttt{aisgedcom}, a GEDCOM genealogy toolkit in Java,
-2009--2011. \url{https://github.com/Anode1/aisgedcom}.
-\bibitem{aisconvert} \texttt{aisconvert}, a personal genomics toolkit in
-Java, 2009. \url{https://github.com/Anode1/aisconvert}.
 \bibitem{monocypher} L.~Vaillant. \emph{Monocypher} 4.0.3, a
 cryptographic library in C99. \url{https://monocypher.org}.
 \bibitem{taskwarrior} \texttt{taskwarrior}, an open-source command-line
@@ -920,14 +921,6 @@ Boot implementation of the RealWorld specification (one Medium-style
 application, implemented identically across many stacks).
 \url{https://github.com/raeperd/realworld-springboot-java}; the
 specification: \url{https://github.com/gothinkster/realworld}.
-\bibitem{recipes} \texttt{agent-recipes}: working practices for coding
-with AI agents, generalized from the systems measured here.
-\url{https://github.com/Anode1/agent-recipes}.
-\bibitem{compressors} V.~Gavrilov. \emph{Intelligence Is the Discovery of
-Compressors}. Zenodo, 2026. \url{https://doi.org/10.5281/zenodo.20440110}.
-\bibitem{promote} V.~Gavrilov. \emph{The Artifact Promotion Control Model:
-An Implementation Case Study}. Zenodo, 2026.
-\url{https://doi.org/10.5281/zenodo.20528903}.
 \bibitem{tokenmax} \emph{The Best Programming Language for Tokenmaxxing:
 An Investigation of Coding Agent Behavior Across Programming Languages}.
 arXiv:2607.22807, 2026.
@@ -943,5 +936,24 @@ Introduce Unfairness Between Languages}. NeurIPS, 2023.
 \bibitem{tiktoken} tiktoken, OpenAI's open-source tokenizer library;
 \texttt{o200k\_base} is the encoding of OpenAI's current models.
 \url{https://github.com/openai/tiktoken}.
+\bibitem{aisstyle} \emph{AIS: Coding Style and Ideology}. In \cite{ais},
+\texttt{doc/dev/STYLE.md}.
+\bibitem{ais} \texttt{ais}, an associative index in C99.
+\url{https://github.com/Anode1/ais}. The five-language bench and its
+\texttt{LANG\_COMPARISON} note are under \texttt{tests/perf}.
+\bibitem{mincdp} \texttt{mincdp}, a Chrome DevTools Protocol client, one
+file per language. \url{https://github.com/Anode1/mincdp}.
+\bibitem{aisgedcom} \texttt{aisgedcom}, a GEDCOM genealogy toolkit in Java,
+2009--2011. \url{https://github.com/Anode1/aisgedcom}.
+\bibitem{aisconvert} \texttt{aisconvert}, a personal genomics toolkit in
+Java, 2009. \url{https://github.com/Anode1/aisconvert}.
+\bibitem{recipes} \texttt{agent-recipes}: working practices for coding
+with AI agents, generalized from the systems measured here.
+\url{https://github.com/Anode1/agent-recipes}.
+\bibitem{compressors} V.~Gavrilov. \emph{Intelligence Is the Discovery of
+Compressors}. Zenodo, 2026. \url{https://doi.org/10.5281/zenodo.20440110}.
+\bibitem{promote} V.~Gavrilov. \emph{The Artifact Promotion Control Model:
+An Implementation Case Study}. Zenodo, 2026.
+\url{https://doi.org/10.5281/zenodo.20528903}.
 \end{thebibliography}
 \end{document}
