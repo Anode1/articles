@@ -29,7 +29,6 @@ Not deposited, and each says on its own first page or in its README what state i
 | [`cjitter`](cjitter/README.md) | Two drafts, both negative. What Do People Optimize in Diagram Layout?, and The Test the Metaphor Benchmark Never Ran |
 | [`erd`](erd/README.md) | Placing a migration's tables into a diagram somebody already arranged. The engineering paper for `cjitter/example/erd` |
 | [`bpnn`](bpnn/README.md) | What a Benchmark Can Resolve: training noise as a ceiling on architecture comparison. Unpublished and unsubmitted |
-| [`sixty`](sixty/README.md) | The rule of 59, tested. Parked: the pre-registration is unsigned and nothing confirmatory has run |
 | [`energy`](energy/README.md) | A Substack piece on pricing grid power for data centres, with its charts and the script that draws them |
 
 ## Related work by others
