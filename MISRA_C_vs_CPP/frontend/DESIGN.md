@@ -155,6 +155,39 @@ endpoint experiment. One model unless the second condition runs. The DOM
 projection used for equivalence is a choice, and a different projection could
 change a pass into a failure.
 
+## Executed, 2026-08-27
+
+A and B ran as designed; C2 ran with two version boundaries; C1 is still
+open. Predictions scored against what landed:
+
+1. Failed, and in our favour: React category 1 is not smaller, it is 1.05
+   times plain (1,092 against 1,145 tokens; 1.01 in the single-file
+   control). Written in the map-and-innerHTML idiom System A uses, plain
+   JS concedes nothing to JSX.
+2. Held: category 2 is 282,717 tokens over 29 modules of the React 19.1
+   runtime against zero for plain, 2.3 times the Spring closure. Angular
+   was not measured.
+3. Held exactly: 40 runs, turns flat (6.95 against 6.85, p = 0.91), React
+   won one task outright (add a field, 5.6 against 7.6).
+4. Failed: no silent-wrong separation, because nothing failed at all,
+   40 of 40 and then 30 of 30 in C2.
+5. Not yet measured (C1 open).
+6. Failed: 30 C2 runs across React 18.3.1 and 19.2.8, zero version-wrong
+   choices. The agent never read package.json in any of the ten
+   version-critical runs; it did not need version awareness, because its
+   habitual idioms are the version-portable ones: every default-value run
+   on every side wrote the inline default, never defaultProps, and the
+   focus runs wrote forwardRef 7 of 10 times, valid on both versions.
+   ref-as-prop appeared only on the side where it works, 3 of 5, which at
+   n = 5 may be chance.
+
+What survived everywhere is the turn cost of indirection: threading a ref
+across the component boundary cost 12.0 and 13.0 mean turns against
+plain's uniform 6.0, twice the turns for identical behavior, with every
+run passing. The frontend replicates the pairs result, not the endpoint
+result: the framework's conventions did not bite where Spring's binding
+did, and what the agent pays for is the walk across the boundary.
+
 ## Build order
 
 1. Subjects checked out, closure manifests written, A measured.

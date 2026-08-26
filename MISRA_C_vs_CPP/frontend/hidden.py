@@ -17,6 +17,10 @@ from tasks import DEFECTS, SCENARIOS, TASKS, model
 
 NODE_BIN = os.path.expanduser("~/.local/bin")
 
+# Which template's node_modules a side borrows (versions differ by design).
+NM = {"react": "react", "react19f": "react",
+      "react18": "react18", "react18f": "react18"}
+
 HELPER = r"""
 window.__h = {
   set(sel, v) {
@@ -36,6 +40,7 @@ window.__h = {
     return {
       count: t("#count"), selected: t("#selected"),
       empty: t("#rows .empty"),
+      focused: document.activeElement ? document.activeElement.id : "",
       count_empty_class:
         !!document.querySelector("#count")?.classList.contains("is-empty"),
       caret_id: t('[data-sort="id"]'), caret_name: t('[data-sort="name"]'),
@@ -76,7 +81,7 @@ def build(workdir, side):
     for d in ("src", "public"):
         if os.path.isdir(os.path.join(workdir, d)):
             shutil.copytree(os.path.join(workdir, d), os.path.join(tmp, d))
-    os.symlink(os.path.join(here, "react", "node_modules"),
+    os.symlink(os.path.join(here, NM[side], "node_modules"),
                os.path.join(tmp, "node_modules"))
     p = subprocess.run([os.path.join(NODE_BIN, "npx"), "vite", "build"],
                        cwd=tmp, capture_output=True, text=True, timeout=180,
@@ -165,16 +170,26 @@ def make_workdir(side, task, d):
     src = os.path.join(here, side)
     ignore = shutil.ignore_patterns("node_modules", "dist", "runs")
     shutil.copytree(src, d, ignore=ignore)
-    if side == "react":
-        os.symlink(os.path.join(here, "react", "node_modules"),
+    if side != "plain":
+        os.symlink(os.path.join(here, NM[side], "node_modules"),
                    os.path.join(d, "node_modules"))
+    if task == "tdef":
+        import json
+        from tasks import items_def
+        data = os.path.join(d, "items.json" if side == "plain"
+                            else "public/items.json")
+        json.dump(items_def(), open(data, "w"), indent=1)
     apply_defects(d, side, task)
 
 
 def selfcheck():
     bad = 0
-    for side in ("plain", "react"):
-        for task in ("t1", "t2", "t3", "t4"):
+    cells = ([(s, t) for s in ("plain", "react") for t in
+              ("t1", "t2", "t3", "t4")]
+             + [("plain", "tdef"), ("react", "tdef"), ("react18", "tdef"),
+                ("plain", "tfoc"), ("react19f", "tfoc"), ("react18f", "tfoc")])
+    for side, task in cells:
+        if True:
             d = tempfile.mkdtemp(prefix="self-")
             shutil.rmtree(d)
             make_workdir(side, task, d)

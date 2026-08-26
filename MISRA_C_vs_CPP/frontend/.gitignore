@@ -3,3 +3,10 @@ node_modules/
 dist/
 __pycache__/
 package-lock.json
+runs2/
+react18/node_modules/
+react18/dist/
+react19f/node_modules/
+react19f/dist/
+react18f/node_modules/
+react18f/dist/

@@ -26,6 +26,12 @@ TASKS = {
     "t4": "The text filter must match anywhere inside the name or the "
           "author, case-insensitive, but it currently matches only from the "
           "beginning of them. Make it match anywhere again.",
+    "tdef": "Some items in the data have no state field. They must render "
+            "exactly like items whose state is draft: the same badge, the "
+            "same text. Items that do have a state keep their own.",
+    "tfoc": "After a row is deleted with its Delete button, keyboard focus "
+            "must land on the text filter input, so the user can refine the "
+            "list right away. Focus must not move on any other action.",
 }
 
 DEFECTS = {
@@ -64,6 +70,8 @@ SCENARIOS = {
     ],
     "t3": BASE + [[("text", "zzz"), ("text", "")]],
     "t4": BASE,
+    "tdef": BASE,
+    "tfoc": BASE + [[("delete", "5")], [("text", "cup"), ("delete", "3")]],
 }
 
 
@@ -71,9 +79,16 @@ def load_items():
     return json.load(open(os.path.join(here, "plain", "items.json")))
 
 
+def items_def():
+    """The tdef variant: two items with no state field at all."""
+    return load_items() + [{"id": 25, "author": "dave", "name": "beaker"},
+                           {"id": 26, "author": "alice", "name": "flask"}]
+
+
 def model(ops, task):
     """Apply ops per the spec; return the projection the DOM must show."""
-    items = [dict(it) for it in load_items()]
+    items = [dict(it) for it in (items_def() if task == "tdef"
+                                 else load_items())]
     selected, sort = set(), {"key": "id", "dir": 1}
     text, minlen, state = "", 0, ""
     for kind, arg in ops:
@@ -94,6 +109,9 @@ def model(ops, task):
             items = [it for it in items if str(it["id"]) != arg]
             selected.discard(arg)
     q = text.lower()
+    for it in items:
+        if task == "tdef":
+            it["state"] = it.get("state", "draft")
     rows = [it for it in items
             if (not q or q in it["name"].lower() or q in it["author"].lower())
             and len(it["name"]) >= minlen
@@ -119,4 +137,6 @@ def model(ops, task):
             r["len"] = str(len(r["name"]))
     if task == "t3":
         exp["count_empty_class"] = n == 0
+    if task == "tfoc" and any(k == "delete" for k, _ in ops):
+        exp["focused"] = "filter"
     return exp

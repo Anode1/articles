@@ -1,0 +1,49 @@
+% The web pair's lineage figure, same conventions as fig:paths: role names
+% not project names, {braces} = a step the reader cannot follow by the name
+% at the call site. Drop into the v3 frontend section.
+\begin{figure}[H]
+\footnotesize
+\begin{verbatim}
+plain JS             React
+1.1k, all in page    1.1k + 283k runtime
+
+event listener       {synthetic event}
+  |                    |
+handler              {priority lane}
+  |                    |
+filter + sort        state setter
+  |                    |
+template string      {hook state store}
+  |                    |
+innerHTML write      component function
+  |                    |
+browser paints       filter + sort
+                       |
+                     {reconciler diff}
+                       |
+                     {key identity}
+                       |
+                     {commit phase}
+                       |
+                     {prop application}
+                       |
+                     browser paints
+
+  |   a step to a name at the call site,
+      resolvable by one search
+ {}  a step resolvable only in the
+     framework's source or conventions
+\end{verbatim}
+\caption{The third pair, the same interaction on the web: a keystroke in
+the filter until the browser paints the rows. The browser engine (parse,
+layout, paint) is floor on both sides by the rule that makes MySQL floor
+in the Java pair. Every plain step is in the page's own 1,092 tokens; the
+braced steps resolve in the 282,717 tokens of the runtime's source
+(react, react-dom, the reconciler, the scheduler, at the measured
+version), or, for the delegated event's target and the controlled
+input's value tracking, in version convention. The two sides' own code
+is the same size (1,092 against 1,145 tokens, matched behavior,
+identical rendered DOM); the difference is the machinery behind the
+braces.}
+\label{fig:webpaths}
+\end{figure}

@@ -44,7 +44,8 @@ def project(side):
 
 
 if __name__ == "__main__":
-    a, b = project("plain"), project("react")
+    sides = sys.argv[1:] or ["plain", "react"]
+    a, b = project(sides[0]), project(sides[1])
     bad = 0
     for i, (x, y) in enumerate(zip(a, b)):
         if x != y:
