@@ -18,6 +18,7 @@ resolves to the latest version.
 | [`ais`](ais/) | Compress the Access, Not the Store, and the AIS priority and provenance record | [10.5281/zenodo.20764255](https://doi.org/10.5281/zenodo.20764255), [10.5281/zenodo.20647048](https://doi.org/10.5281/zenodo.20647048) |
 | [`iac`](iac/) | A Wakeup, Not a Broker: The Minimal Transport for Coordinating Stateless LLM Agents | [10.5281/zenodo.21206970](https://doi.org/10.5281/zenodo.21206970) |
 | [`smbpann`](smbpann/) | The Imposed and Emergent Pieces of Convolution Under an Energy Budget | [10.5281/zenodo.21423177](https://doi.org/10.5281/zenodo.21423177) |
+| [`MISRA_C_vs_CPP`](MISRA_C_vs_CPP/) | When Abstraction Becomes Indirection: Tokens-to-trace, measured on four stacks | [10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993) |
 
 Directories without a DOI:
 
@@ -27,14 +28,6 @@ Directories without a DOI:
 - [`cjitter`](cjitter/) holds `stationary.tex`, What Do People Optimize in Graph Layout?, a draft
   whose measurements live in the [cjitter](https://github.com/Anode1/cjitter) repository under
   `example/diagrams`; `withdrawn/` is the pre-registration it replaced.
-- [`MISRA_C_vs_CPP`](MISRA_C_vs_CPP/) holds `article.tex`, When Abstraction Becomes Indirection, on
-  whether the layers built for human working memory still pay when the maintainer is an agent. Source
-  measurements over the author's C, Ada, Rust, Java and Python; eleven public C and C++ projects, where
-  C++ carries 60.9 functions per thousand lines against C's 28.4; an anonymised production Java case
-  serving 37 tables through three artifacts with no ORM; and a 60-run agent maintenance pilot, with the
-  scripts and every run's trace. The C++ arm does not exist yet, so the paper records the predicted
-  direction and the three results that would refute it before writing any of it. Its earlier 26% C++
-  figure is withdrawn on its own second page. Unsubmitted; read it as a draft.
 
 ## smbpann2: a retired line of work
 
