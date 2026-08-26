@@ -31,3 +31,6 @@ __pycache__/
 
 # Python venvs for the measurement scripts. Recreate with the pinned versions in each paper.
 venv/
+
+# Private: how Vasili writes. Kept on disk, never published.
+STYLE.md
