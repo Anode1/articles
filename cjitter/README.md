@@ -1,7 +1,7 @@
-# Two papers on one library
+# One paper on one library
 
-**Both read [cjitter](https://github.com/Anode1/cjitter), both are negative results, and
-neither is deposited.**
+**It reads [cjitter](https://github.com/Anode1/cjitter), it is a negative result, and it
+is not deposited.**
 
 `stationary.tex`, *What Do People Optimize in Diagram Layout?*, 19 pages. Fitting a layout
 energy to human drawings by inverse optimisation assumes the drawings sit at a minimum of
@@ -14,19 +14,12 @@ two biological corpora and 0.87 over the full BPMN population, against 0.06 for 
 hand layout is a layered layout with partial alignment. Measurements are in
 `example/diagrams`.
 
-`audit.tex`, *The Test the Metaphor Benchmark Never Ran*, 5 pages. The largest benchmark of
-metaphor-based optimization heuristics ran 294 implementations for 1,411,200 runs on the 24
-BBOB functions and contains no statistical test: the word does not occur in it, and none of
-the 21 papers citing it adds one. Its raw data is public, so the missing test is computable
-from it. At the top budget of 10^4 d evaluations, 66 to 98 implementations per dimension,
-one in three in 2D, are not shown better than uniform random sampling at equal cost, and 53
-to 79 of those are shown strictly worse. Measurements are in `example/metaphors`, run
-against the benchmark's own release, Zenodo 10.5281/zenodo.10561215.
+The metaphor-benchmark audit that stood beside it is withdrawn: a correction inherits the
+audience of what it corrects. Its verdict tables remain in the library's
+`example/metaphors`.
 
 | file | what it is |
 | --- | --- |
 | PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, governs `stationary.tex` |
-| PREREGISTRATION-AUDIT.md | signed before the audit's confirmatory numbers were computed |
-| audit-data/ | the audit's verdict tables, summaries and robust set |
-| figures/ | the TikZ figures both papers include |
-| review/ | the referee panels, by paper |
+| figures/ | the TikZ figures the paper includes |
+| review/ | the two referee panels |
