@@ -1,9 +1,9 @@
-# Source: LiveJournal (English) — "Compact text format for genealogies storing and exchange"
+# Source: LiveJournal (English), "Compact text format for genealogies storing and exchange"
 
 - URL: https://siberean.livejournal.com/14874.html
 - Author: Vasili Gavrilov (LJ `siberean`)
 - Tags: atree, genealogy, modified-ahnentafel
-- Approx date: ~2011–2012 (post id 14874 precedes the conditional-probability post 16220) — [TODO: confirm exact date from the post timestamp]
+- Approx date: ~2011-2012 (post id 14874 precedes the conditional-probability post 16220). [TODO: confirm exact date from the post timestamp]
 - Russian discussion: http://forum.molgen.org/index.php/topic,3066.0.html and .../topic,3065.0.html
 - Tool: `aisgedcom` (GEDCOM 5.5 → atree), https://sourceforge.net/projects/aisgedcom/
 
@@ -13,7 +13,7 @@ in the article (Appendix A).
 
 ---
 
-## BNF grammar (as published — contains known minor errors)
+## BNF grammar (as published: contains known minor errors)
 
 ```
 ============================
@@ -40,7 +40,7 @@ atree format grammar
 
 - Each line is one person; the first field is the **id = path of ancestral sexes** (M = father, F = mother) from the subject.
 - First character encodes the **subject's own sex** (M if male, F if female).
-- Lines are **self-sufficient** — no external context; a single line or subset can be sent to a relative.
+- Lines are **self-sufficient**: no external context; a single line or subset can be sent to a relative.
 - Surname delimited by `/.../` (GEDCOM-style); maiden surname in parentheses inside; `//` or `?` mark unknowns.
 - Dates: `ABT`/`BEF`/`AFT` + 4-digit year; ranges `start-end`; `?` for unknown endpoints.
 - Optional leading `[haplogroup]` (ties to molecular genealogy); trailing `, location`.
@@ -120,5 +120,5 @@ echo $decimal
 
 ## Stated limitations
 
-- Ascending (ancestor) tree only — "not supposed to work for more general graphs for descending genealogies."
+- Ascending (ancestor) tree only: "not supposed to work for more general graphs for descending genealogies."
 - The tree always shows one level of unknown terminal nodes (`?`) for not-yet-researched parents.
