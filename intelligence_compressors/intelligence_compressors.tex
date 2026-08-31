@@ -29,7 +29,7 @@ Intelligence is the discovery of compressors whose inductive bias matches the st
 
 \section{Introduction}
 % PURPOSE: State the thesis (intelligence = discovery of compressors); preview
-% the structure; scope the contribution honestly as synthesis rather than
+% the structure; scope the contribution as synthesis rather than
 % original formal result.
 
 Different research traditions in artificial intelligence, machine learning, statistical physics, and theoretical neuroscience have, often in isolation, arrived at structurally similar claims about what intelligence is and where it comes from. Information theory \citep{shannon1948} says intelligence is compression: a system that predicts well has, of necessity, found regularities in its inputs and represented them compactly. Algorithmic information theory says the same in stricter language: the shortest program generating the data is the data's intrinsic structure, and any system that discovers it has discovered the data's content \citep{solomonoff1964, kolmogorov1965}. Statistical physics says it in the language of renormalization: useful descriptions arise by integrating out detail that does not matter at the scale of interest. Theoretical neuroscience, via the Free Energy Principle and predictive processing, says that organisms maintain themselves by becoming compressors of their environments. Modern deep learning has demonstrated that weight regularization corresponds to a complexity prior \citep{hinton_vancamp_1993}, and the architectural inductive biases of convolutional \citep{lecun1989} and transformer networks are themselves compressed encodings of the structural assumptions a useful learner needs.
