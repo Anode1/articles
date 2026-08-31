@@ -34,7 +34,8 @@ move improves is held. The distance terms hold almost no hand-placed box yet hol
 \texttt{neato}'s layouts fully, so the test can see a minimum. Overlap is satisfied
 exactly. The one criterion the costs omit, alignment into rows and columns, holds a
 fifth to most of the median hand diagram and almost none of any optimised, random or
-grid-snapped layout: a hand layout is a layered layout with partial alignment. A cost
+grid-snapped layout: a hand layout is a layered layout with partial alignment. The
+4{,}890-drawing corpus shows the same profile under the terms its format allows. A cost
 fitted to hand coordinates therefore learns the terms' mutual trade-offs, not the
 drawer's. Whether the alignment is the hand's or the editor guide's the coordinates
 cannot say, and for fitting it does not matter: the term is held and absent either way.
@@ -111,6 +112,8 @@ the findings are these.
 \item Crossings and node--edge separation hold every box because they are flat at this
   radius, not because they are met. Only 3 to 30\% of diagrams offer any improving move.
 \item Orthogonality is partly held: 0.19, 0.17 and 0.73 by hand.
+\item The corpus of the standing proposal behaves the same: on its 1{,}072 drawings in
+  the band, length and stress hold 0.00 and alignment 0.87.
 \end{enumerate}
 
 The rest of the paper is the foundation behind the test (Section~\ref{sec:foundations}),
@@ -256,8 +259,12 @@ nodes; the climber pilot used 10 to 400. The registered deduplication pass
 drawing stored under two ids; by the structural key ($n$, $m$, degree sequence, box
 sizes), one further Reactome pair and one WikiPathways pair; the 300 BPMN models collide
 under neither key, so the feared resubmission duplicates are absent from this sample.
-Removing every extra member moves no headline median. The 41 to 100 node band was not
-run.
+Removing every extra member moves no headline median. Clustering by drawer: the 305
+WikiPathways pathways carry 153 first authors, the most prolific 9\% of the corpus; the
+A1 median's interval clustered by first author is [0.48, 0.55] against [0.48, 0.54] over
+diagrams, and the twenty drawers of three or more pathways hold medians 0.19 to 0.85
+(\texttt{results/drawers.py}). Reactome curators and BPMN authors are not recorded in
+the archives as parsed. The 41 to 100 node band was not run.
 
 How the coordinates were made matters for the alignment criterion. Of the raw coordinates,
 17\% are integers in WikiPathways, 67\% in Reactome and 63\% in BPMN (44\% multiples of
@@ -745,6 +752,17 @@ from a study tool rather than a diagram editor, which bears on the guide questio
 Section~\ref{sec:alternatives}; the corpus does not record whether that tool drew
 alignment aids.
 
+\paragraph{The motivating corpus.} The GD Collection itself \cite{gdcoll25} runs through
+the same test on the terms that need neither box extent nor edge direction: 1{,}072 of
+its 4{,}890 drawings have a largest component in the 15 to 40 band
+(\texttt{results/gdcoll.py}; chord edges, zero box sizes, and the collection's caveats
+stand: provenance is not per drawing, and in its authors' own audit 69\% of extracted
+figures reproduce their source exactly). The profile is the paper's: length and stress
+hold 0.00, at exactly zero in 82 and 84\% of drawings; crossings 1.00; orthogonality
+0.06; alignment A1 holds 0.87 of the median drawing, with 0.43 of drawings at exactly
+1.00 and 0.06 at zero. The corpus the standing proposal would fit first is held by the
+term the standard cost omits, at BPMN's level.
+
 \paragraph{Null layouts.} Review asked for the chance line under every term, not only
 alignment. Uniform random layouts of the same graphs, chord geometry, one draw per
 diagram, seeds from the diagram ids: alignment 0.06 to 0.07 against hand 0.52, 0.21 and
@@ -897,8 +915,9 @@ Mooney et al.\ \cite{mooney25}
    and removes none \\[2pt]
 Mooney et al.\ \cite{gdcoll25}
  & 4{,}890 drawings harvested automatically from 27 editions of these proceedings
- & the nearest corpus, not used here: its authors judge it mostly hand-drawn, but
-   provenance is not per drawing and edge directions are dropped \\[4pt]
+ & measured in Section~\ref{sec:results}: length and stress 0.00, alignment 0.87.
+   Provenance is not per drawing and edge directions are dropped, so flow and the box
+   terms are not run \\[4pt]
 \multicolumn{3}{@{}l}{\emph{By showing people drawings}}\\[2pt]
 Purchase et al.\ \cite{purchase20}
  & a Turing test on hand and algorithmic drawings
