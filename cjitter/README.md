@@ -22,3 +22,4 @@ audience of what it corrects. Its verdict tables remain in the library's
 | --- | --- |
 | PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, governs `stationary.tex` |
 | figures/ | the TikZ figures the paper includes |
+| verified.bib | every citation checked: DOI resolved, PDF read |
