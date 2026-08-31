@@ -16,9 +16,7 @@
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
 table's script: \url{https://github.com/Anode1/cjitter}, directory
 \texttt{example/diagrams}.}}
-\date{Draft, August 2026. Measurements are from the battery of 2026-08-23 on commit
-\texttt{1987633} and the control runs of 2026-08-24 and 25 committed beside it
-(\texttt{results/manifest.txt} in the repository).}
+\date{Draft, August 2026.}
 
 \begin{document}
 \maketitle
@@ -365,11 +363,11 @@ reweighting repairs it'') are read off the sweep, never off a failure to reject.
 
 \input{figures/tools}
 
-The tables in this section are from one battery on the corpora of
-Section~\ref{sec:corpora}, run 2026-08-23 on commit \texttt{1987633}
-(\texttt{example/diagrams/results/run\_all.sh}; versions, seeds and corpus hashes in
-\texttt{results/manifest.txt}); the population, null and HOLA numbers are from the
-control runs of 2026-08-24 and 25, each committed with its script. The directional test is one deterministic pass over the
+The tables in this section are from one deterministic battery on the corpora of
+Section~\ref{sec:corpora} (\texttt{example/diagrams/results/run\_all.sh}; commit,
+versions, seeds and corpus hashes in \texttt{results/manifest.txt}); the population,
+null and HOLA numbers ship with their scripts beside their committed outputs. The
+directional test is one deterministic pass over the
 whole band on the stored routes with the fitted $L$.
 
 \paragraph{Each criterion alone.} $q_{0.02}$ on the hand layout, with its 95\% bootstrap
@@ -919,12 +917,12 @@ to 2026 work.
 Parsers, the energy (one function per term), the directional test, the descent, the fitting
 scripts, the parsed corpora and every table's script are in the repository under
 \texttt{example/diagrams}. The directional test is deterministic; the descents are
-deterministic from their seed on every platform. The main tables are from the battery of
-2026-08-23 on commit \texttt{1987633}, run by \texttt{results/run\_all.sh} followed by
+deterministic from their seed on every platform. The main tables rebuild by
+\texttt{results/run\_all.sh} followed by
 \texttt{results/tests.sh}, \texttt{results/lanes.py} and \texttt{results/sparsity.py};
-the alignment controls, the nulls and the HOLA corpus are the runs of 2026-08-24 and 25,
-each script committed with its output;
-\texttt{results/manifest.txt} records the platform, the tool versions (gcc 13.3.0,
+the alignment controls, the nulls and the HOLA corpus each ship the script beside its
+committed output;
+\texttt{results/manifest.txt} records the commit, the platform, the tool versions (gcc 13.3.0,
 Graphviz 2.43.0, elkjs 0.12.0, HiGHS via scipy 1.18.1), the seeds and the SHA-256 of the
 three raw archives and of the eighteen corpus files as measured. The population number
 of Section~\ref{sec:results} reads the tracked
