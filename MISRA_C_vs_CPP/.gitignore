@@ -5,3 +5,4 @@ venv/
 *.out
 *.json
 second_rater.txt
+run_records.zip

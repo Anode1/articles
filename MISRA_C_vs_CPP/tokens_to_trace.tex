@@ -37,13 +37,16 @@ against Spring: 7.6 thousand, all in the project, against 8.2
 thousand in the project plus 51 to 124 thousand inside the framework
 jars, and part of what Spring does is written in no file at all.
 Vanilla JS against React: the same 1.1 thousand to write, plus 283
-thousand of React's own machinery outside the project. Then 390
+thousand of React's own machinery outside the project. Then 430
 agent runs on the same pairs. C against C++: the C++ side cost about
 20\% more turns, and a control pair shows the agent pays for the
-walk across files, not for the dispatch. Java: Spring cost 1.25
-turns more per run, and its only wrong answers came from a naming
-rule no source file states. The web: a change that crosses a
-component boundary cost React 100\% more turns than vanilla. What a
+walk across files, not for the dispatch. Java: one endpoint built on
+both stacks and run in two batches of 40; the turn cost reversed its
+sign between the batches, and what replicated is the failure: five
+silent wrong answers, all Spring's, each a wire name derived from a
+Java identifier by a convention no source file states. The web: a
+change that crosses a component boundary cost React 100\% more turns
+than vanilla. What a
 reader must know first is also not equal: K\&R is 272 pages, the
 Stroustrup 1,368, and a framework's documentation is versioned:
 what it says and how much of it there is depend on the version.
@@ -374,8 +377,9 @@ the framework row's deciding text sits partly in the Spring jars and
 partly in version convention.
 $^{*}$Upper bound; measured the same way, whole files, the C figure is 90k, factor 2.8.
 $^{\dagger}$51k under the highest defensible floor (Table~\ref{tab:cat2}).
-$^{\S}$Present and enumerated in the text; not counted, since its residence
-is documentation and runtime observation, not source.}
+$^{\S}$Enumerated in the text; for the two-stack endpoint of
+Section~\ref{sec:endpoint} the category is counted, 31,535 tokens of
+documentation at the exact versions.}
 \label{tab:quad}
 \end{table}
 
@@ -713,67 +717,93 @@ the same text on both sides: add a field to the response, add a
 combinable query-string filter, change the authentication failure
 contract, and find an injected prefix-match defect. Five repetitions,
 40 runs, one model (claude-sonnet-5, headless), grading by hidden HTTP
-checks against a live server the agent never saw. The criterion was
-recorded before the build: the hypothesis fails if the framework tasks
-do not cost more than the plain ones.
+checks against a live server the agent never saw; the whole experiment
+then ran a second time under the same harness five days later, another
+40 runs. The criterion was recorded before the build: the hypothesis
+fails if the framework tasks do not cost more than the plain ones.
 
 \begin{table}[H]
 \centering
-\footnotesize\setlength{\tabcolsep}{3pt}
-\begin{tabular}{lcccc}
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lccccc}
 \toprule
-Task & plain & Spring & $\Delta$ & pass \\
+ & \multicolumn{2}{c}{batch 1} & \multicolumn{2}{c}{batch 2} & \\
+Task & plain & Spring & plain & Spring & pass \\
 \midrule
-add a response field & 6.6 & 8.4 & $+1.8$ & 5/5\;5/5 \\
-add a filter & 11.0 & 12.0 & $+1.0$ & 5/5\;3/5 \\
-change the 401 contract & 6.0 & 4.2 & $-1.8$ & 5/5\;5/5 \\
-find the injected defect & 5.0 & 9.0 & $+4.0$ & 5/5\;5/5 \\
+add a response field & 6.6 & 8.4 & 10.0 & 7.4 & 10/10\;9/10 \\
+add a filter & 11.0 & 12.0 & 9.6 & 15.2 & 10/10\;6/10 \\
+change the 401 contract & 6.0 & 4.2 & 9.2 & 4.2 & 10/10\;10/10 \\
+find the injected defect & 5.0 & 9.0 & 7.6 & 7.8 & 10/10\;10/10 \\
 \bottomrule
 \end{tabular}
-\caption{Mean turns per task, five repetitions each. Pass columns:
-plain then Spring.}
+\caption{Mean turns per task, five repetitions per batch. Pass columns:
+plain then Spring, both batches pooled.}
 \label{tab:endpoint}
 \end{table}
 
-The framework side cost 1.25 turns more per run on average (7.15
-against 8.40) and 5.3 seconds more wall time. With task as the designed
-blocking factor, a permutation test shuffling sides within each task
-puts both above noise ($p = 0.023$ turns, $p = 0.022$ wall, one-sided,
-100{,}000 resamples; turns is the primary metric and the two are
-correlated, so no multiplicity correction is applied); the pooled
-rank-sum test, which ignores the
-blocking, does not resolve ($p = 0.13$), and a signed-rank on four
-task means is below resolution at $n = 4$. Cumulative context ran
-21 thousand tokens higher on the framework side and does not resolve
-either ($p = 0.13$).
+The turn count did not survive the second batch. In the first the
+framework side cost 1.25 turns more per run (7.15 against 8.40) and
+5.3 seconds more wall time, both above the within-batch noise with
+task as the designed blocking factor ($p = 0.023$ turns, $p = 0.022$
+wall, one-sided permutation, 100{,}000 resamples). The second batch
+reversed the sign, $-0.45$ turns ($p = 0.62$), and the 80 runs
+combined give $+0.40$ ($p = 0.31$). The reversal is what the pairs
+experiment's own calibration predicts: its control twin, the same C
+program in two cells of 20, differs from itself by 1.05 turns, and the
+same machinery declares that null difference significant, so a
+within-batch $p$ measures exchangeability inside one batch, not
+stability across batches. The recorded criterion is met in the first
+batch and not in the second: the cost claim is void. Cumulative
+context ran 21 thousand tokens higher on the framework side in the
+first batch and does not resolve ($p = 0.13$).
 
-Correctness separates the sides in kind rather than in count: 18 of 20
-against 20 of 20 is below statistical resolution, and the finding is
-the mechanism. Both Spring failures are the same miss
-on the filter task: the agent added \texttt{@RequestParam(required =
+Correctness separates the sides in count as well as in kind: 35 of 40
+against 40 of 40, all five failures on one side (one-sided
+hypergeometric $p = 0.027$), every one silent, every one a wire name
+derived from a Java identifier by a convention no application file
+states. Four are the same miss on the filter task, two per batch: the
+agent added \texttt{@RequestParam(required =
 false) Integer minLen} and correct JPQL behind it, but Spring binds a
 query parameter by the Java parameter name (this build, like every
 Boot build, compiles with \texttt{-parameters}; without that flag the
 same code fails loudly at the request instead), the URL says
 \texttt{min\_len}, so the
 parameter stayed null and the endpoint returned the unfiltered list
-with status 200. The three passing repetitions wrote
-\texttt{@RequestParam(name = "min\_len")} explicitly. Nothing in the
-compiler, the runtime or the response flagged the two that did not:
-the deciding rule is the category-3 binding convention of Section~\ref{sec:measure},
-and this is what its failure looks like, silent wrong rows. The plain
-side parses its query string in visible code, so the same mistake had
-no place to hide, five of five.
+with status 200. The passing repetitions wrote the wire name
+explicitly (\texttt{name =} or \texttt{value = "min\_len"}). The fifth
+is the same convention on the response side: asked for a
+\texttt{name\_length} field, the agent added
+\texttt{getNameLength()} and Jackson's bean naming emitted
+\texttt{nameLength}, field present, name wrong, status 200, while its
+four passing siblings wrote \texttt{@JsonProperty("name\_length")}
+explicitly. Nothing in the
+compiler, the runtime or the response flagged the five that did not:
+the deciding rules are category-3 conventions of Section~\ref{sec:measure},
+and this is what their failure looks like, silent wrong rows. The plain
+side parses its query string and writes its JSON keys in visible code,
+so the same mistakes had no place to hide, ten of ten.
+
+The convention residence is itself counted for this stack: the fifteen
+conventions on the endpoint's path, both naming rules among them, are
+stated in \textbf{31,535 o200k tokens} of documentation, measured from
+the documentation sources at the exact BOM-resolved tags (Framework
+6.1.13, Data JPA and Commons 3.3.4, Boot 3.3.4, Hibernate 6.5.2,
+Jackson 2.17.2; whole pages, or the section stating the rule, so a
+lower bound; H2 is floor as MySQL is elsewhere; \texttt{cat3.py} /
+\texttt{cat3.json} beside this paper). That is four times the plain
+side's whole deciding text, and the page stating the
+\texttt{-parameters} rule is among the counted rows.
 
 The direction is not uniform and the exception is instructive: on the
-401-contract task Spring was cheaper (4.2 against 6.0 turns), because
+401-contract task Spring was cheaper in both batches (4.2 against 6.0
+turns, then 4.2 against 9.2), because
 the framework's filter puts the whole authentication contract in one
-small class while the plain side's is inline in a longer file. Where
-the framework genuinely localizes a change, it wins the turn count;
-where the behavior crosses its conventions, it loses turns (the defect
-hunt, $+4.0$) or correctness (the filter task). The recorded criterion
-is met, three tasks of four and the means with it, but met with that
-asymmetry on record. Two scope cautions: both projects are small, so
+small class while the plain side's is inline in a longer file. That
+localization win is the only per-task turn effect that repeated; the
+defect hunt's $+4.0$ of the first batch fell to $+0.2$ in the second.
+Where the framework localizes a change it can win the turn count;
+where the behavior crosses its naming conventions it fails silently.
+Two scope cautions: both projects are small, so
 the 51 to 124 thousand tokens of category-2 text from Section~\ref{sec:closures} never
 had to be read, and Spring is in every training corpus, so these runs
 price recalling the framework's conventions, not reading them; the
@@ -857,7 +887,8 @@ against \$0.09, every run passing. The web pair repeats the pairs
 result, not the endpoint one: nothing broke, and the agent pays for
 the walk across the boundary. The twins, the grader, the equivalence
 probe and the subject trace are in \texttt{frontend/}; the run
-records are available from the author on request.
+records of all experiments ship with this paper's Zenodo deposit
+(\texttt{run\_records.zip}).
 
 \section{Related measurements}
 
@@ -951,7 +982,7 @@ the construct, one class per file being the registry idiom, so the top
 of Table~\ref{tab:pairs} prices construct and layout together. Spring
 and its idiom are in every training corpus, so the endpoint runs price
 recalling the framework's conventions rather than reading them, and
-recall is where its two failures happened. The web twins are
+recall is where its five failures happened. The web twins are
 author-written and small, the real subject bounds only the closure, and
 the stale-recall condition tested two version boundaries at five
 repetitions per cell, so its zero is a bound, not a law; the DOM
@@ -977,10 +1008,13 @@ the window a construct of indirection kept in one or two files costs the
 agent under two turns, differences under a turn sit inside run-to-run
 noise, almost nothing breaks, and the one large cost,
 measured and controlled, is the file scatter the idiom brings. On the
-Java stacks the endpoint runs gave the framework side 1.25 turns more
-per run and the only wrong answers of the set, both from a binding
-convention no source file states; the one task its filter class localizes it
-won, and the asymmetry is in Section~\ref{sec:endpoint}. On the web
+Java stacks the endpoint ran in two batches of 40; the turn cost
+reversed its sign between them and is not a finding, while the
+failures replicated: five silent wrong answers over 80 runs, all the
+framework side's, each a wire name derived from a Java identifier by a
+convention no source file states, against zero on the plain side
+($p = 0.027$); the one task its filter class localizes it won in both
+batches, and the asymmetry is in Section~\ref{sec:endpoint}. On the web
 pair nothing broke and nothing separated but the boundary, twice the
 turns to cross a component (Section~\ref{sec:web}), so the third pair
 joins the pairs result, not the endpoint one. What a closure that outgrows the window costs is still open, and its scope is
@@ -1010,8 +1044,11 @@ tiktoken; manifests with per-row lines, characters, and tokens are
 pilot and site-coverage numbers come from the scripts and JSON beside this
 paper (\texttt{measure.py}, \texttt{dup.py}, \texttt{external.py},
 \texttt{jpa.py}, \texttt{pilot/}, \texttt{sites/}), each recording its
-commits and raw runs; the endpoint runs (claude-sonnet-5, 2026-08-25)
-and both stacks' sources are \texttt{endpoint/}; the web pair
+commits and raw runs; the endpoint runs (claude-sonnet-5, two batches
+of 40: 2026-08-25 and 2026-08-30) and both stacks' sources are
+\texttt{endpoint/}; the category-3 documentation count is
+\texttt{cat3.py} / \texttt{cat3.json}, fetching the documentation
+sources at the BOM-resolved tags; the web pair
 (claude-sonnet-5, 2026-08-26; React 19.2.8 and 18.3.1 via vite, chrome
 headless grading; closure counted on the react source tag v19.1.0 and
 on yurisldk/realworld-react-fsd at 969709a) is \texttt{frontend/}; the blind second rater's derivation is

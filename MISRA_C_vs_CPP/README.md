@@ -60,5 +60,5 @@ cited in the paper; one subject is private and its rows ship redacted, so
 the public systems reproduce without it). `python3 pairs/hidden.py
 selfcheck` verifies the experiment harness; `python3 pairs/run.py` reruns
 the experiment against a local `claude` CLI. The measured JSON outputs and
-raw run records are not in this repository; they are available from the
-author on request.
+raw run records are not in this repository; they ship as
+`run_records.zip` with the paper's Zenodo deposit.
