@@ -18,16 +18,16 @@
 Before an AI coding agent can change code safely it must read everything
 that decides what the code does. We count that reading as
 tokens-to-trace: for one entry point, the tokens of the smallest set of
-source regions that determine its behavior, classified by where each
-region lives: in the project, in library source outside it, or in no
-file at all, only in the conventions of the version in use. Measured on
+source regions that determine its behavior, classified by residence:
+in the project, in library source outside it, or in no file at all,
+only in the version's conventions. Measured on
 three language pairs, the plain member of each pair keeps a whole path
-in a few thousand tokens inside the project; the layered member spends
-124 to 283 thousand tokens outside it, or keeps part of the deciding
-text where no repository holds it. In 390 controlled agent runs the
-layered side cost more turns wherever a task crossed files or
-conventions, and its only wrong answers came from a convention no
-source file states.
+in 1 to 14 thousand tokens inside the project; the layered member
+spends 124 to 283 thousand tokens outside it, or keeps part of the
+deciding text where no repository holds it. In 390 controlled agent
+runs the layered side cost more turns wherever a task crossed files or
+conventions, and the only silent failures, wrong rows under status 200,
+came from a convention no source file states.
 \end{abstract}
 
 \section*{The reader changed}
@@ -72,13 +72,21 @@ from any source file.
 \end{enumerate}
 
 Tokens are o200k, counted with tiktoken \cite{tiktoken}: a public,
-model-neutral count near what a commercial agent is billed. The measure
-is a count: anyone can recompute it from the region manifests published
-with the full study \cite{full}, so two systems compare by number, and a
-disagreement is about a manifest row, not an interpretation. Where the
-floor sits is a declared judgment, and moving it moves the numbers by a
-stated factor: 2.5 for the C system below, 2.4 for the framework's
-category 2. In the agent's own terms the closure is the needed context:
+model-neutral count near what a commercial agent is billed (the
+vendor's own tokenizer differs, so the window fractions below are
+approximate). The token count of a region set is exact: anyone can
+recompute it from the manifests published with the full study
+\cite{full}, and a disagreement is about a manifest row. The set itself
+is a backward slice in Weiser's sense \cite{weiser}, derived by hand,
+and a slice is a judgment: a blind second rater agreed on 97 of 103
+files of the C++ closure and traced three times the printed Spring
+category 2, deeper into framework source, so the framework numbers
+below are conservative lower bounds. Where the floor sits is a declared
+judgment too, and moving it moves the numbers by a stated factor: 2.5
+for the C system below, 2.4 for the framework's category 2; a stricter
+floor turns the plain sides' zeros into small numbers as well, largest
+for C. Categories 1 and 2 are counts; category 3 is a classification,
+its documentation size unmeasured. In the agent's own terms the closure is the needed context:
 what must be in front of it before it can decide that a change is safe.
 
 \section*{Six closures, three pairs}
@@ -104,11 +112,10 @@ all-C++ release of its line \cite{taskwarrior}; its \texttt{task list}
 closes in 99 files. Whole files on both sides: 90,151 tokens against
 256,664, a factor of 2.8 in tokens and 6 in files. At region
 granularity the C path is 14,444 tokens: 7\% of one 200k context
-window. To bound how much of that is the author rather than the style,
-the same rule applied to a library nobody here wrote, Monocypher's AEAD
-encrypt path \cite{monocypher}, closes at 7,560 tokens: at the
-algorithmic extreme the plain style's closure is the same few thousand
-tokens whoever writes it.
+window. To bound the author against the style, Monocypher's AEAD
+encrypt path \cite{monocypher}, a library nobody here wrote, closes at
+7,560 tokens: at the algorithmic extreme the plain closure is the same
+size whoever writes it.
 
 \textbf{Plain Java against Spring.} System~A is a commercial web
 application in production, 39,677 code lines, plain Java with JDBC,
@@ -137,20 +144,26 @@ concedes nothing to JSX. Behind the React page sit 282,717 tokens of
 the runtime's own source over 29 modules (the whole runtime is
 641,367), 2.3 times the Spring closure.
 
-The implicit context differs the same way. K\&R is 272 pages and
-Stroustrup is 1,368 \cite{knr,stroustrup}, and a framework's reference
-has no fixed size at all: what it says and how much of it there is
-depend on the version, and the training corpus superposes the versions.
+The implicit context differs the same way: K\&R is 272 pages,
+Stroustrup 1,368 \cite{knr,stroustrup}, and a framework's reference
+moves with the version, so the training corpus superposes versions.
 Window growth absorbs the C++ row's volume; it does not remove a
-coherence problem.
+coherence problem, and long contexts degrade before they fill
+\cite{lostmiddle}.
 
 \section*{390 runs: what the agent actually pays}
 
 A count of text is not yet a cost. Four experiments put agents on the
 measured pairs: 390 runs total, one model (claude-sonnet-5, headless),
 tasks that name behavior and never a file or a function, graded by
-hidden tests the agent never saw. Table~\ref{tab:stats} is the summary;
-the raw run records ship with the study \cite{full}.
+hidden tests the agent never saw. A turn is one model request; in every
+recorded run it equals tool calls plus one, so the metric counts
+actions and tracks money loosely ($r = 0.70$ with dollars across the
+280 pairs runs; cached prefixes make the per-run difference cents). The
+runs price two of the measure's three residences, file scatter and
+convention; no task here forced reading the category-2 volume, so the
+biggest bars of Figure~\ref{fig:closures} stay unpriced by any run. Table~\ref{tab:stats} is the summary; the raw run records ship
+with the study \cite{full}.
 
 \begin{table}[!t]
 \centering
@@ -167,30 +180,44 @@ Web version traps & 30 & 30/30 & \multicolumn{2}{c}{0 wrong choices} & \\
 \;\;its boundary task, turns & 15 & 15/15 & 6.0 & 12--13 & $^{c}$ \\
 \bottomrule
 \end{tabular}
-\caption{The run experiments. $^{a}$C++ dearer in six of six independent
-constructs, sign test. $^{b}$Permutation within task, one-sided,
-100{,}000 resamples. $^{c}$Five runs per cell; cumulative context 323
-and 353 thousand tokens against plain's 181, \$0.14 a run against
-\$0.09. Both failures in the set are the Spring side's silent binding
-miss.}
+\caption{The run experiments. Turns is the pre-declared primary metric;
+p-values are unadjusted; dollar cost and cumulative context do not
+resolve at this $n$ except where footnoted. $^{a}$Sign test over the
+six constructs, two-sided; 0.031 is the smallest value six pairs can
+give. $^{b}$Permutation within task, one-sided, 100{,}000 resamples;
+wall time largely re-measures turns. Both endpoint failures are the
+Spring side's silent binding miss; the two C/C++ failures are one C++
+cell missing the same empty-store edge twice, loudly. $^{c}$Five runs
+per cell; cumulative context 323 and 353 thousand tokens against
+plain's 181, \$0.14 a run against \$0.09.}
 \label{tab:stats}
 \end{table}
 
 \textbf{The constructs, priced one at a time.} Six C/C++ pairs isolate
 one construct each (a virtual registry, a template, operator overloads,
 RAII, inheritance, a mix), same behavior, same tasks, hidden tests, 40
-runs per pair. Correctness does not separate: 278 of 280 passed. Turns
-do (Figure~\ref{fig:pairs}): the C++ side cost more in all seven pairs,
+runs per pair. Correctness sits at ceiling: 278 of 280 passed, and 2
+of 20 against 0 of 20 resolves nothing (Fisher $p = 0.24$). Turns do
+(Figure~\ref{fig:pairs}): the C++ side cost more in all seven pairs,
 with three effects above the measured rerun noise: the registry spread
 over eight files ($+3.50$ turns, $p = 0.003$), the mix ($+2.80$,
 $p < 0.001$), the template ($+1.70$, $p = 0.004$). The control pair is
 the point: the same registry classes in a single file cost $+0.50$,
-indistinguishable from zero, so the agent pays for the walk across
-files, not for the virtual dispatch. And held to identical behavior the
-C++ text is only 1.17 times the C: the 2.8 between the whole tools is
-scope and file scatter, not syntax. The experiment ran twice; on
-unchanged pairs the small deltas moved (RAII $+0.50$ then $+1.05$), so
-we trust the sign, the three large effects, and nothing finer.
+indistinguishable from zero, so in these pairs the walk across files
+carries the measurable cost, and any price of the dispatch itself sits
+below the noise floor. The mechanism fits what an agent does: a callee
+named at the call site is one search; a registry adds a search before
+the first can land, finding the registration site; a convention
+terminates no search at all. And held to identical behavior the C++
+text is only 1.17 times the C: the 2.8 between the whole tools is scope
+and file scatter, not syntax. The experiment ran twice; three C++ sides
+were repaired between executions, the printed numbers are the second,
+and the archived first execution shows the same six positive signs. On
+unchanged pairs the small deltas moved (RAII $+0.50$ then $+1.05$), and
+the noise band of Figure~\ref{fig:pairs} doubles as an A/A calibration:
+applied to that null pair, the study's own tests declare significance,
+so we trust the sign, the three large effects, and nothing of a turn or
+less.
 
 \begin{figure}[!t]
 \centering
@@ -199,7 +226,8 @@ we trust the sign, the three large effects, and nothing finer.
 mean and bootstrap 95\% CI (20{,}000 resamples). The square is the
 control: the eight-file registry's classes moved into one file. Effect
 sizes (Cliff's $\delta$) run 0.23 to 0.80, largest for the mix and the
-scattered registry.}
+scattered registry. Intervals reflect run-to-run variation only;
+effects inside the gray band are not claims.}
 \label{fig:pairs}
 \end{figure}
 
@@ -208,23 +236,31 @@ create behind bearer-token authentication over SQL, built twice with
 the same routes, schema, and observable behavior, equivalence verified
 at the HTTP boundary before any run. The plain side is one file, JDK
 \texttt{HttpServer} and JDBC, 108 lines; the framework side is seven
-classes of current Spring idiom. Four maintenance tasks, five
-repetitions each (Figure~\ref{fig:runs}). The framework side cost 1.25
-turns and 5.3 seconds more per run, and gave the only wrong answers of
-all 390: twice, on the filter task, the agent wrote
-\texttt{@RequestParam(required = false) Integer minLen} with correct
-JPQL behind it. Spring binds a query parameter by the Java parameter
-name; the URL says \texttt{min\_len}; the parameter stayed null and the
-endpoint returned the unfiltered list with status 200. Nothing in the
-compiler, the runtime or the response flagged it. The deciding rule is
-a category-3 convention, and this is what its failure looks like:
-silent wrong rows. The plain side parses its query string in visible
-code, so the same mistake had no place to hide, five of five. The
-direction is not uniform, and the exception is instructive: on the
-401-contract task Spring was cheaper, 4.2 turns against 6.0, because
-its filter puts the whole authentication contract in one small class.
-Where the framework localizes a change it wins the turn count; where
-the behavior crosses its conventions it loses turns or correctness.
+classes of current Spring idiom (Boot 3.3; the closure above is
+measured on Boot 4). Four maintenance tasks, five repetitions each
+(Figure~\ref{fig:runs}). The framework side cost 1.25 turns and 5.3
+seconds more per run, an estimate the A/A calibration holds to
+suggestive, and gave the only silent failures of all 390: twice, on
+the filter task, the agent wrote \texttt{@RequestParam(required =
+false) Integer minLen} with correct JPQL behind it. Spring derives the
+wire name from the compiled Java parameter name (every Boot build
+compiles with \texttt{-parameters}; without that flag the same code
+fails loudly at the request); the URL says \texttt{min\_len}; the
+parameter stayed null and the endpoint returned the unfiltered list
+with status 200. Nothing in the compiler, the runtime or the response
+flagged it. The deciding rule is a category-3 convention, and this is
+what its failure looks like: silent wrong rows. The plain side carries
+the wire name as a literal string in visible parsing code, so the miss
+has no silent form there, five of five; 2 of 5 against 0 of 5 resolves
+nothing by count, and the mechanism is the finding. Spring also
+saturates every training corpus, so these runs price recalling its
+conventions, not reading its 124k: the density favors the framework
+side, and the failure is one model's recall on one date. The direction
+is not uniform, and the exception is instructive: on the 401-contract
+task Spring was cheaper, 4.2 turns against 6.0, because its filter
+puts the whole authentication contract in one small class. Where the
+framework localizes a change it wins the turn count; where the
+behavior crosses its conventions it loses turns or correctness.
 
 \begin{figure}[!t]
 \centering
@@ -236,16 +272,18 @@ component's input from the parent, against React 19 and React 18.}
 \end{figure}
 
 \textbf{The web pair.} On four local maintenance tasks the twins did
-not separate, and React won the add-a-field task, 5.6 turns against
-7.6: the component boundary puts that change in one small file. Two
-tasks whose correct idiom changed between React 18 and 19 produced
-zero version-wrong choices in 30 runs: this model's habitual idioms
-are the version-portable ones, and another model's habits need not be.
+not separate, and React was cheaper on the add-a-field task, 5.6 turns
+against 7.6 (five runs a side, not resolving): the component boundary
+puts that change in one small file. Two tasks whose correct idiom
+changed between React 18 and 19 produced zero version-wrong choices in
+the 20 runs on version-pinned sides: this model's habitual idioms are
+the version-portable ones, and another model's habits need not be.
 What separated is the boundary: focusing a child component's input
 from the parent cost twice the turns of the unfactored plain page,
-every run passing. The web pair repeats the C/C++ result, not the Java
-one: nothing broke, and the agent pays for the walk across the
-boundary.
+every run passing; no factored plain cell ran, so the price belongs to
+the boundary, not to React specifically. The web pair repeats the
+C/C++ result, not the Java one: nothing broke, and the agent pays for
+the walk across the boundary.
 
 \section*{The subjects are demonstrations, not samples}
 
@@ -262,14 +300,16 @@ RealWorld, a more scattered C++ than taskwarrior, and equally a C
 codebase whose closure measures like taskwarrior's, since nginx-style
 ops-struct vtables would resolve no more cheaply than a registry. The
 style is not the language; the closure is the property, and the
-language only sets how hard the low closure is to reach.
+language only sets how hard the low closure is to reach. The framework
+bars do travel: categories 2 and 3 are properties of the jars and the
+version, carried by every application on them.
 
 That inversion is the recommendation. Do not argue about taste: measure
-the closure of one representative path in the stack you are choosing,
-at a declared floor, and compare numbers. The measure costs an
-afternoon with a tokenizer, and it settles which side of
-Figure~\ref{fig:closures} your candidate is on before a line of the
-system exists.
+the closure of one representative path in a reference implementation of
+each candidate stack, at a declared floor, and compare numbers. A plain
+trace costs an afternoon with a tokenizer; a framework trace costs a
+day and is rater-sensitive; either settles where the deciding text of
+your candidate lives before the system exists.
 
 The low closure is also reachable on demand. An agent's default is its
 training-set average, the industry idiom; one line in the prompt,
@@ -309,23 +349,23 @@ though the near-miss cross-file form remains untested \cite{full}.
 
 \section*{Limits}
 
-The numbers bound mechanisms, not laws. One rater derived the closures;
-a blind second rater re-deriving two of them agreed on 97 of 103 C++
-files but found 373k tokens of Spring category 2 where the printed
-trace counts 124k, so the framework number is confirmed as an
-undercount, and its printed form is the conservative trace. One model
-ran, on one date; agent cost is a property of the model and the
-representation together. The cells are five runs; every run sat far
-below the context window, so what a closure that outgrows the window
-costs is untested, and the volume experiment that decides it,
+The numbers bound mechanisms, not laws. One model ran, on one harness
+version, on one date; agent cost is a property of the model and the
+representation together. The cells are five runs, the tasks are fixed
+by design, so every claim is about these tasks on this model; every run
+sat far below the context window, so what a closure that outgrows the
+window costs is untested, and the volume experiment that decides it,
 cross-module tasks on taskwarrior against a plain twin, is named in the
-study as open. The measure prices reading and nothing else: not
-security, not what a type system removes, not the certification regime
-that verifies every duplicated site separately. Prior cross-language
-work compares pass rates or run-time spend \cite{multiple,swebench};
-tokens-to-trace is the pre-run complement, and both counts are needed,
-because an agent answering from its weights makes missing context look
-free.
+study as open. The measure prices reading and nothing else. It does not
+price security: framework defaults are amortized defenses (header
+parsing, encoding, injection), and the plain stack buys that coverage
+back with tests and review, a cost no closure counts. It does not price
+what a type system removes, the certification regime that verifies
+every duplicated site separately, or the onboarding of the humans who
+share a house style. Prior cross-language work compares pass rates or
+run-time spend \cite{multiple,swebench}; tokens-to-trace is the pre-run
+complement, and both counts are needed, because an agent answering from
+its weights makes missing context look free.
 
 \section*{What to do Monday}
 
@@ -333,7 +373,9 @@ free.
 \item Before choosing a stack, measure tokens-to-trace of one
 representative path in each candidate, at a declared floor, and ask
 where the deciding text lives. A path whose behavior rests on
-convention will fail the way the filter task failed: silently.
+convention can fail the way the filter task failed, and when it fails,
+nothing in the toolchain flags it; whether it fails is a property of
+the model's habits, as the React traps show.
 \item When writing with an agent, state the bias in the prompt: the
 plain subset of your stack, named in one line. The agent's default is
 the industry average; the low closure is one sentence away.
@@ -359,6 +401,10 @@ Language}, 4th ed. Addison-Wesley, 2013.
 guide under \texttt{doc/dev}. \url{https://github.com/Anode1/ais}.
 \bibitem{tiktoken} tiktoken, OpenAI's tokenizer library;
 \texttt{o200k\_base}. \url{https://github.com/openai/tiktoken}.
+\bibitem{weiser} M.~Weiser. \emph{Program Slicing}. IEEE Trans.
+Software Eng., 1984.
+\bibitem{lostmiddle} N.~F.~Liu et al. \emph{Lost in the Middle: How
+Language Models Use Long Contexts}. TACL, 2024.
 \bibitem{tokenmax} \emph{The Best Programming Language for
 Tokenmaxxing: An Investigation of Coding Agent Behavior Across
 Programming Languages}. arXiv:2607.22807, 2026.
