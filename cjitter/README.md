@@ -3,7 +3,7 @@
 **It reads [cjitter](https://github.com/Anode1/cjitter), it is a negative result, and it
 is not deposited.**
 
-`stationary.tex`, *What Do People Optimize in Diagram Layout?*, 19 pages. Fitting a layout
+`stationary.tex`, *What Holds a Hand-Drawn Diagram?*, 19 pages. Fitting a layout
 energy to human drawings by inverse optimisation assumes the drawings sit at a minimum of
 some weighted sum of the standard criteria. Tested one criterion at a time on 853 hand-drawn
 diagrams of 15 to 40 boxes, that assumption fails. Overlap holds every box at zero. Uniform

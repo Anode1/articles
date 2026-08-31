@@ -12,12 +12,13 @@
 \usetikzlibrary{arrows.meta}
 \usepackage[hidelinks]{hyperref}
 
-\title{\textbf{What Do People Optimize in Diagram Layout?}}
+\title{\textbf{What Holds a Hand-Drawn Diagram?}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
 table's script: \url{https://github.com/Anode1/cjitter}, directory
 \texttt{example/diagrams}.}}
-\date{Draft, August 2026. Every measurement is from the battery of 2026-08-23 on commit
-\texttt{1987633} (\texttt{results/manifest.txt} in the repository).}
+\date{Draft, August 2026. Measurements are from the battery of 2026-08-23 on commit
+\texttt{1987633} and the control runs of 2026-08-24 and 25 committed beside it
+(\texttt{results/manifest.txt} in the repository).}
 
 \begin{document}
 \maketitle
@@ -31,11 +32,11 @@ criterion, \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs as co
 Overlap holds every box at zero, by hand and in every tool that removes it. Uniform edge
 length and stress hold almost no hand-placed box, 0.3 to 1.1\% per corpus and a median
 diagram of 0.00, and not for want of anything to gain: every diagram has improving moves,
-the best of them worth 1.2\% of the length term and 0.6\% of stress. \texttt{neato}'s stress layouts are held at 1.00 under the same test,
+the median diagram's mean best worth 1.2\% of the length term and 0.6\% of stress. \texttt{neato}'s stress layouts are held at 1.00 under the same test,
 so it has power; a weight of 0.001 on either term drops
 the held fraction below 0.015. The criterion that holds a hand layout and that the energy
-omits is alignment into rows and columns: 0.52 and 0.21 of boxes on the two biological
-corpora and 0.87 over the full BPMN population, against 0.06 for \texttt{neato}, 1.00 for
+omits is alignment into rows and columns: the median diagram at 0.52 and 0.21 on the two
+biological corpora and 0.87 over the full BPMN population (mean 0.81), against 0.06 for \texttt{neato}, 1.00 for
 \texttt{dot}, and 0.07 both for a layout snapped to the same grid with no author and for
 a uniform random layout of the same graphs. Whether the person's hand or the editor's
 alignment guide supplies those rows, the coordinates cannot say, and for fitting an
@@ -79,7 +80,11 @@ traded away.
 What the test finds puts coordinates and judgement on opposite sides. Mooney et al.\
 \cite{mooney25} report that people prefer low-stress drawings and locate shortest paths
 better as stress falls, on graphs to 50 nodes; Dwyer et al.\ \cite{dwyer09} had seen the
-preference half earlier, over twelve layouts and without a test. The coordinates people
+preference half earlier, over twelve layouts and without a test. The production half is
+also on record at value level: the user layouts of \cite{dwyer09} carry 3 to 9 times the
+force-directed stress in that paper's own Table 2, and 71 of 73 hand layouts in
+\cite{vanham08} hold more edge-length variance than the stress minimum half of them
+started from. What neither ran is a test at the coordinates. The coordinates people
 drew here are held by no distance term at all, stress included, in any of three corpora,
 while \texttt{neato}'s stress layouts are held at 1.00 under the same test. People prefer
 what they do not draw, and a criterion can be wanted in the result without being visible in
@@ -100,7 +105,8 @@ the findings are these.
   0.001 on either term drops the held fraction of the sum below 0.015.
 \item Alignment into rows and columns holds 0.52, 0.21 and 0.87 against \texttt{neato}'s
   0.06 and 0.07 for a grid-snapped random layout. It is the criterion the base energy omits
-  and the person supplies, and BPMN's lanes cannot impose it.
+  and the hand layouts carry, by the person's hand or the editor's guide
+  (Section~\ref{sec:alternatives}), and BPMN's lanes cannot impose it.
 \item Reading direction does not close the gap. Flow holds 0.59 to 0.85 by hand where
   \texttt{dot} and ELK hold 1.00: the person tolerates a backward edge the layered tools
   remove.
@@ -359,10 +365,11 @@ reweighting repairs it'') are read off the sweep, never off a failure to reject.
 
 \input{figures/tools}
 
-Every number in this section is from one battery on the corpora of
+The tables in this section are from one battery on the corpora of
 Section~\ref{sec:corpora}, run 2026-08-23 on commit \texttt{1987633}
 (\texttt{example/diagrams/results/run\_all.sh}; versions, seeds and corpus hashes in
-\texttt{results/manifest.txt}). The directional test is one deterministic pass over the
+\texttt{results/manifest.txt}); the population, null and HOLA numbers are from the
+control runs of 2026-08-24 and 25, each committed with its script. The directional test is one deterministic pass over the
 whole band on the stored routes with the fitted $L$.
 
 \paragraph{Each criterion alone.} $q_{0.02}$ on the hand layout, with its 95\% bootstrap
@@ -468,8 +475,8 @@ Section~\ref{sec:corpora} to within a few points.
 
 \paragraph{What $q$ counts, term by term.} A held fraction is not commensurable across
 terms of different shape, and reading down a column compares three different things. Beside
-each $q$ the table gives \emph{dec}, the mean over boxes of the best decrease a single move
-finds as a fraction of the term's value, and \emph{active}, the share of diagrams in which
+each $q$ the table gives \emph{dec}, the median over diagrams of the per-diagram mean best
+decrease a single move finds as a fraction of the term's value, and \emph{active}, the share of diagrams in which
 any box has an improving move at all. Where \emph{active} is small the term is flat at this
 radius: it holds every box without being satisfied by any of them, and its 1.00 carries no
 information about the person.
@@ -593,7 +600,7 @@ Reactome & C$+$O$+$L & 1.00 & 0.76 & 0.31 & 0.16 & 0.93 & 1.00 \\
  & C$+$O$+$F & 0.36 & 0.75 & 0.32 & 0.22 & 0.71 & 1.00 \\
 \midrule
 BPMN & C$+$O$+$L & 1.00 & 0.77 & 0.26 & 0.12 & 0.99 & 1.00 \\
- & C$+$O$+$A1 & 0.11 & 0.73 & 0.24 & 0.00 & 0.95 & 1.00 \\
+ & C$+$O$+$A1 & 0.11 & 0.73 & 0.24 & $-$0.01 & 0.95 & 1.00 \\
  & stress & 1.00 & 0.77 & 0.14 & 0.07 & 1.00 & 1.00 \\
  & C$+$O$+$F & 0.16 & 0.74 & 0.09 & 0.04 & 0.66 & 1.00 \\
 \bottomrule
@@ -834,27 +841,28 @@ work & what it did & what it gives, and what it leaves \\
 \midrule
 \multicolumn{3}{@{}l}{\emph{By having people draw}}\\[2pt]
 van Ham, Rogowitz \cite{vanham08}
- & hand layouts against a force-directed algorithm
- & hand layouts carry fewer crossings \\[2pt]
+ & 73 hand layouts against a force-directed algorithm, half started from its optimum
+ & 71 of 73 raise edge-length variance above the optimum; 60\% fewer crossings \\[2pt]
 Dwyer et al.\ \cite{dwyer09}
  & 32 participants laid out one graph; 194 judges ranked the results against three
    automatic layouts
- & judges' choices track stress, over twelve layouts and without a test \\[2pt]
+ & judges' choices track stress, without a test; its Table 2 has user layouts at 3 to 9
+   times the force-directed stress \\[2pt]
 Purchase, Pilcher, Plimmer \cite{purchase12}
  & participants drew from adjacency lists
  & crossing removal the strongest aesthetic, alignment to a grid important \\[2pt]
 Kieffer et al.\ \cite{hola16}
- & 17 designers' layouts of 8 small graphs, ranked by 66 judges
+ & 17 participants' layouts of 8 small graphs, ranked by 66 judges
  & gridiness correlates with rank on all 8, which is where HOLA's alignment step comes
-   from \\[2pt]
+   from; rank tracks stress on 4 of 8 \\[2pt]
 Mooney et al.\ \cite{mooney25}
  & preference and shortest-path performance against stress, graphs to 50 nodes
  & people prefer low stress and perform better as it falls; why the conclusion adds a term
    and removes none \\[2pt]
 Mooney et al.\ \cite{gdcoll25}
  & 4{,}890 drawings harvested automatically from 27 editions of these proceedings
- & the nearest corpus, not used here: a figure in a graph-drawing paper is as likely an
-   algorithm's output, provenance is not per drawing, and edge directions are dropped \\[4pt]
+ & the nearest corpus, not used here: its authors judge it mostly hand-drawn, but
+   provenance is not per drawing and edge directions are dropped \\[4pt]
 \multicolumn{3}{@{}l}{\emph{By showing people drawings}}\\[2pt]
 Purchase et al.\ \cite{purchase20}
  & a Turing test on hand and algorithmic drawings
@@ -911,9 +919,11 @@ to 2026 work.
 Parsers, the energy (one function per term), the directional test, the descent, the fitting
 scripts, the parsed corpora and every table's script are in the repository under
 \texttt{example/diagrams}. The directional test is deterministic; the descents are
-deterministic from their seed on every platform. Every table is from the battery of
+deterministic from their seed on every platform. The main tables are from the battery of
 2026-08-23 on commit \texttt{1987633}, run by \texttt{results/run\_all.sh} followed by
 \texttt{results/tests.sh}, \texttt{results/lanes.py} and \texttt{results/sparsity.py};
+the alignment controls, the nulls and the HOLA corpus are the runs of 2026-08-24 and 25,
+each script committed with its output;
 \texttt{results/manifest.txt} records the platform, the tool versions (gcc 13.3.0,
 Graphviz 2.43.0, elkjs 0.12.0, HiGHS via scipy 1.18.1), the seeds and the SHA-256 of the
 three raw archives and of the eighteen corpus files as measured. The population number
