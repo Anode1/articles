@@ -89,12 +89,12 @@ PATHS = [
 
 def fig_paths():
     n = max(len(steps) for _, steps in PATHS)
-    fig, ax = plt.subplots(figsize=(7.3, 3.1))
+    fig, ax = plt.subplots(figsize=(7.6, 3.1))
     ax.set_axis_off()
-    ax.set_xlim(0, 6)
+    ax.set_xlim(0, 6.7)
     ax.set_ylim(-0.6, n + 1.6)
-    for col, (head, steps) in enumerate(PATHS):
-        x = col + 0.5
+    xs = [0.5, 1.5, 2.85, 3.85, 5.2, 6.2]  # a 0.35 gap between pairs
+    for (head, steps), x in zip(PATHS, xs):
         ax.text(x, n + 0.7, head, ha="center", va="bottom", fontsize=7,
                 fontweight="bold")
         for i, (label, ind) in enumerate(steps):
@@ -113,9 +113,9 @@ def fig_paths():
                                facecolor="#e8eef5", edgecolor=PLAIN, lw=0.7))
     ax.text(0.32, -0.29, "a name at the call site: one search",
             va="center", fontsize=6.5)
-    ax.add_patch(plt.Rectangle((2.54, -0.5), 0.22, 0.42,
+    ax.add_patch(plt.Rectangle((2.85, -0.5), 0.22, 0.42,
                                facecolor="#f5dedd", edgecolor=LAYER, lw=1.1))
-    ax.text(2.82, -0.29, "resolves only in a registry, an interpreter, "
+    ax.text(3.13, -0.29, "resolves only in a registry, an interpreter, "
             "an overload set, or a version convention", va="center",
             fontsize=6.5)
     fig.tight_layout()
