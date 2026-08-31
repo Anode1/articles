@@ -42,7 +42,7 @@ agent runs on the same pairs. C against C++: the C++ side cost about
 20\% more turns, and a control pair shows the agent pays for the
 walk across files, not for the dispatch. Java: one endpoint built on
 both stacks and run in two batches of 40; the turn cost reversed its
-sign between the batches, and what replicated is the failure: five
+sign between the batches, and the failure replicated: five
 silent wrong answers, all Spring's, each a wire name derived from a
 Java identifier by a convention no source file states. The web: a
 change that crosses a component boundary cost React 100\% more turns
@@ -747,8 +747,8 @@ framework side cost 1.25 turns more per run (7.15 against 8.40) and
 task as the designed blocking factor ($p = 0.023$ turns, $p = 0.022$
 wall, one-sided permutation, 100{,}000 resamples). The second batch
 reversed the sign, $-0.45$ turns ($p = 0.62$), and the 80 runs
-combined give $+0.40$ ($p = 0.31$). The reversal is what the pairs
-experiment's own calibration predicts: its control twin, the same C
+combined give $+0.40$ ($p = 0.31$). The pairs experiment's own
+calibration predicts the reversal: its control twin, the same C
 program in two cells of 20, differs from itself by 1.05 turns, and the
 same machinery declares that null difference significant, so a
 within-batch $p$ measures exchangeability inside one batch, not
@@ -879,7 +879,7 @@ ignored on 19; a ref passed as a plain prop is silently stripped on
 control, 30 runs. All passed, zero version-wrong choices: the model's
 habitual idioms are the version-portable ones, the inline default and
 \texttt{forwardRef}, and only two of the ten version-critical runs
-looked at \texttt{package.json}. What separated is the boundary:
+looked at \texttt{package.json}. The boundary separated them:
 focusing a child component's input from the parent cost 12 and 13 mean
 turns against plain's uniform 6, 32 and 36 seconds against 18, 323 and
 353 thousand cumulative context tokens against 181, and \$0.14 a run

@@ -19,7 +19,7 @@ Correctness never separated: 278 of 280 runs passed identical hidden tests.
 Then one endpoint built on both Java stacks, run twice: 80 runs graded by
 hidden HTTP checks. The turn cost did not survive its replication (batch
 one +1.25 turns, p=0.02; batch two -0.45, p=0.62; combined +0.40, p=0.31),
-and what replicated is the failure: five Spring runs of 40 returned silent
+and the failure replicated: five Spring runs of 40 returned silent
 wrong answers against zero of 40 plain (one-sided hypergeometric p=0.027),
 every one a wire name derived from a Java identifier by a convention no
 application file states: @RequestParam bound minLen while the URL said
