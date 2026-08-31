@@ -85,7 +85,8 @@ force-directed stress in that paper's own Table 2, and 71 of 73 hand layouts in
 started from. Neither ran a test at the coordinates. The coordinates people
 drew here are held by no distance term at all, stress included, in any of three corpora,
 while \texttt{neato}'s stress layouts are held at 1.00 under the same test. People prefer
-what they do not draw.
+what they do not draw, with the caveat that the preference and the production are
+measured on different graphs and tasks; no study yet takes both from one corpus.
 
 We ran the test on 853 diagrams of 15 to 40 boxes from three unrelated communities
 (Section~\ref{sec:corpora}), and on layouts of the same graphs by four tools.
@@ -626,20 +627,24 @@ stress. The converged reference's median $q$ is 1.00 for every energy and corpus
 test's power on the sums; the fraction of diagrams whose reference stops below 0.9 is at
 most 0.02 everywhere but C$+$O$+$F (0.05, 0.07 and 0.13), the flow term's plateaus.
 
-\paragraph{Reweighting.} The linear program is degenerate as
-Section~\ref{sec:foundations} says it must be: on the two biological corpora it puts all
-weight on overlap (residual per node 0.0001 and 0.0000; held-out $q$ 0.987 [0.982, 0.993]
-and 0.994 [0.990, 0.998]), on BPMN all weight on crossings (0.0009; 0.992 [0.979, 0.998]),
-offered all eight terms on BPMN it spreads weight over six, flow 0.32, stress 0.25,
-orthogonality 0.22, with a held-out $q$ of 0.801 swinging from 0.50 to 1.00 across
-splits: many weightings reach a high $q$ and none is identified. Confined to
-length and stress it puts everything on stress and holds 0.003 to 0.011 of nodes: no
-distance-only weighting holds a hand layout. Confined to the four terms no layout satisfies
-exactly (orthogonality, alignment, node--edge, flow) it splits weight between flow and
-orthogonality and holds 0.22 to 0.55, except Reactome, where it rides the node--edge term
-and its held-out $q$ swings from 0.10 to 0.90 across splits. The sweep: the fraction of
-the corpus's nodes held as a weight $w$ on one term joins crossings
-and overlap at equal weight:
+\paragraph{Reweighting.} The bracket beside each held-out $q$ here is the range of the
+ten $5{\times}2$ values, a spread over correlated splits, not a confidence interval. The
+linear program is degenerate as Section~\ref{sec:foundations} says it must be: on the two
+biological corpora it puts all weight on overlap (residual per node 0.0001 and 0.0000;
+held-out $q$ 0.987 [0.982, 0.993] and 0.994 [0.990, 0.998]), on BPMN all weight on
+crossings (0.0009; 0.992 [0.979, 0.998]). Confined to length and stress it puts
+everything on stress and holds 0.003 to 0.011 of nodes: no distance-only weighting holds
+a hand layout. Confined to the four terms no layout satisfies exactly (orthogonality,
+alignment, node--edge, flow) it is identified, and what it identifies is the person's
+term: alignment carries 0.95, 0.92 and 0.89 of the weight with the held-out $q$ stable at
+0.248 [0.236, 0.260], 0.149 [0.142, 0.157] and 0.660 [0.647, 0.674]. Offered all eight
+terms it returns to the degenerate vertex where one is open, WikiPathways' held-out $q$
+swinging [0.235, 0.991] across splits, while on BPMN, where no term is exact, it places
+0.86 on alignment and holds a stable 0.514 [0.503, 0.525]. An earlier draft ran this fit
+with the smooth A3 kernel in the alignment column and concluded that nothing is
+identified; under the corner form that conclusion was the kernel's, not the data's. The
+sweep: the fraction of the corpus's nodes held as a weight $w$ on one term joins
+crossings and overlap at equal weight:
 
 \begin{center}\small
 \begin{tabular}{lrrrrrr}
@@ -650,7 +655,7 @@ term added to C$+$O & $w{=}0.001$ & $w{=}1$ & $w{=}0.001$ & $w{=}1$ & $w{=}0.001
 none ($w = 0$) & \multicolumn{2}{c}{0.94} & \multicolumn{2}{c}{0.97} & \multicolumn{2}{c}{0.98} \\
 length & 0.008 & 0.004 & 0.010 & 0.007 & 0.012 & 0.009 \\
 stress & 0.005 & 0.003 & 0.008 & 0.006 & 0.014 & 0.011 \\
-alignment A1 & 0.286 & 0.229 & 0.129 & 0.114 & 0.382 & 0.334 \\
+alignment A1 & 0.506 & 0.516 & 0.243 & 0.238 & 0.811 & 0.821 \\
 flow & 0.576 & 0.606 & 0.613 & 0.625 & 0.797 & 0.810 \\
 \bottomrule
 \end{tabular}
@@ -659,7 +664,13 @@ flow & 0.576 & 0.606 & 0.613 & 0.625 & 0.797 & 0.810 \\
 The fall is a step, not a slope: whatever weight length or stress carries, 0.001 or 1, the
 sum holds under 0.015 of the nodes, because at almost every node some direction lowers the
 distance term and nothing else moves. Alignment and flow can carry weight: the criteria
-people partly satisfy survive in the sum at the fraction they are satisfied.
+people partly satisfy survive in the sum at the fraction they are satisfied. Per diagram
+the same rows carry intervals: at $w = 0.001$ the median held fraction is 0.00 [0.00,
+0.00] under either distance term and 0.52 [0.47, 0.54], 0.21 [0.19, 0.25] and 0.89 [0.86,
+0.95] under A1 (\texttt{results/constrained.py}). Under the smooth A3 kernel the
+alignment row reads 0.29, 0.13 and 0.38 at $w = 0.001$: a differentiable proxy carries a
+third to half of what the corner carries, the number a gradient-trained consumer of this
+recommendation should expect.
 
 \paragraph{Routes.} The tables above are on the stored routes; the chords are the
 sensitivity, \texttt{chords.md} beside the tables in the repository. Closing every edge at the box centres moves no
@@ -746,6 +757,11 @@ and stress on the median diagram of every corpus ($q$ 0.00, means 0.005 to 0.016
 weight of 0.001 on length collapses the held fraction of $C{+}O{+}A_1$ from 0.89, 0.51
 and 0.22 to 0.13, 0.11 and 0.07: the distance terms are unpriced even inside the
 alignment-preserving move set, and no small weight on them survives beside alignment. The
+constrained model of the layout literature, stress minimised subject to alignment
+constraints \cite{ipsepcola06, dunnart08, setcola18}, fails under its own move set:
+restricted to the directions that do not raise A1, 0.87 to 0.90 of the median diagram's
+boxes still have a stress-lowering move, and the boxes alignment pins entirely, no
+direction admissible, are 0.02 to 0.05 (\texttt{results/constrained.py}). The
 generator and every number: \texttt{results/nulls.py}.
 
 \paragraph{The pre-registration's scorecard.} H1, crossings and overlap hold the hand
@@ -903,6 +919,10 @@ Flud \cite{flud22}
 Zhang et al.\ \cite{zhang26}
  & 64{,}222 pairwise preference labels
  & the nearest recent work; it learns from preferences, not coordinates \\[2pt]
+Wang et al.\ \cite{deepgd21}
+ & a graph network drawing arbitrary graphs under a weighted sum of aesthetics
+ & the weights are asserted or tuned, not learned from people; no human coordinates
+   enter it \\[2pt]
 O'Donovan, Agarwala, Hertzmann \cite{odonovan14}
  & a 122-parameter energy over single-page graphic designs fitted to a handful of human
    examples by nonlinear inverse optimisation
@@ -912,7 +932,11 @@ O'Donovan, Agarwala, Hertzmann \cite{odonovan14}
 \end{tabular}
 \end{center}
 
-Alignment as a human criterion is therefore known since 2012. The new part is the count
+Alignment as a human criterion is therefore known since 2012 in graph drawing, and since
+1985 in drawing editors: Pavlidis and Van Wyk's beautifier inferred alignment constraints
+from the near-alignments of a rough drawing \cite{pvw85}, Igarashi et al.\ made the
+inference interactive \cite{igarashi97}, and the guides of
+Section~\ref{sec:alternatives} are their descendants. The new part is the count
 of how many hand-placed boxes it holds, on diagrams of 15 to 40 boxes, beside the counts for
 the criteria tools weight. Two results bound what such a count can mean: van Wageningen,
 Mchedlidze and Telea \cite{wageningen25} show drawings with identical metric values that
@@ -961,7 +985,14 @@ fits nothing the person did. For a tool builder that is one addition and one num
 subtraction: edge length and stress keep their weight, since a term inert at human
 coordinates is not thereby unwanted and the preference evidence runs the other way
 \cite{mooney25, dwyer09}. The number to report is the fraction of boxes
-the energy holds when started from a layout a person accepted.
+the energy holds when started from a layout a person accepted: $q_{0.02}$ as
+Section~\ref{sec:method} fixes it, sixteen directions, fitted $L$, alignment A1, on
+layouts held out from any fit, with the decrease and active columns beside it, since the
+degenerate fit of Section~\ref{sec:results} reaches 0.99 by weighting a term everyone
+satisfies and a bare held fraction can always be bought that way. The charge is also
+bounded: \texttt{dot} and ELK hold alignment at 0.42 to 1.00 without pricing it, layering
+aligns as a side effect, so the missing term convicts the force-directed and
+multicriteria energies, not the layered engines.
 
 \begin{thebibliography}{99}
 \bibitem{gj83} M.~R. Garey, D.~S. Johnson. Crossing Number is NP-Complete. \emph{SIAM
@@ -1056,6 +1087,20 @@ the energy holds when started from a layout a person accepted.
  Workshops (ICPM 2022)}, LNBIP, 453--465, 2023.
 \bibitem{bohler16} A.~Bohler et al. Reactome from a WikiPathways Perspective. \emph{PLOS
  Computational Biology} 12(5):e1004941, 2016.
+\bibitem{pvw85} T.~Pavlidis, C.~J. Van Wyk. An Automatic Beautifier for Drawings and
+ Illustrations. \emph{SIGGRAPH '85}, 225--234, 1985.
+\bibitem{igarashi97} T.~Igarashi, S.~Matsuoka, S.~Kawachiya, H.~Tanaka. Interactive
+ Beautification: A Technique for Rapid Geometric Design. \emph{UIST '97}, 105--114, 1997.
+\bibitem{ipsepcola06} T.~Dwyer, Y.~Koren, K.~Marriott. IPSep-CoLa: An Incremental
+ Procedure for Separation Constraint Layout of Graphs. \emph{IEEE Transactions on
+ Visualization and Computer Graphics} 12(5):821--828, 2006.
+\bibitem{dunnart08} T.~Dwyer, K.~Marriott, M.~Wybrow. Dunnart: A Constraint-Based Network
+ Diagram Authoring Tool. \emph{Graph Drawing (GD 2008)}, LNCS 5417, 420--431, 2009.
+\bibitem{setcola18} J.~Hoffswell, A.~Borning, J.~Heer. SetCoLa: High-Level Constraints
+ for Graph Layout. \emph{Computer Graphics Forum} 37(3):537--548, 2018.
+\bibitem{deepgd21} X.~Wang, K.~Yen, Y.~Hu, H.-W. Shen. DeepGD: A Deep Learning Framework
+ for Graph Drawing Using GNN. \emph{IEEE Computer Graphics and Applications}
+ 41(5):32--44, 2021.
 \end{thebibliography}
 
 \end{document}
