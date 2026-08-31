@@ -1,0 +1,12 @@
+haiku|*|1788215601|20
+[haiku] FRAG: wakeup
+opus|*|1788215602|16
+[opus] FRAG: not
+sonnet|*|1788215603|21
+[sonnet] FRAG: broker
+haiku|operator|1788215606|33
+[haiku] ANSWER: wakeup-not-broker
+opus|operator|1788215607|32
+[opus] ANSWER: wakeup-not-broker
+sonnet|operator|1788215927|34
+[sonnet] ANSWER: wakeup-not-broker
