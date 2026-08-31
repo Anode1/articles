@@ -19,15 +19,16 @@ Before an AI coding agent can change code safely it must read everything
 that decides what the code does. We count that reading as
 tokens-to-trace: for one entry point, the tokens of the smallest set of
 source regions that determine its behavior, classified by residence:
-in the project, in library source outside it, or in no file at all,
-only in the version's conventions. Measured on
+in the project, in library source outside it, or in no file at all, in
+the version's conventions. Measured on
 three language pairs, the plain member of each pair keeps a whole path
 in 1 to 14 thousand tokens inside the project; the layered member
 spends 124 to 283 thousand tokens outside it, or keeps part of the
-deciding text where no repository holds it. In 390 controlled agent
-runs the layered side cost more turns wherever a task crossed files or
-conventions, and the only silent failures, wrong rows under status 200,
-came from a convention no source file states.
+deciding text where no repository holds it. In 430 controlled agent
+runs the extra turns tracked file scatter and boundary crossings, not
+the constructs, and all five wrong answers were the
+framework side's: each silent, each a wire name derived by a convention
+no source file states.
 \end{abstract}
 
 \section*{The reader changed}
@@ -42,14 +43,13 @@ resolve, which abstraction adds rather than removes.
 The machine cost of abstraction was priced decades ago by compiler work
 and the zero-overhead principle, and nothing here rests on it. The
 reader's cost was never priced, and the reader has changed. Studies of
-agent trajectories already show where the money goes: agents spend most
-of their tokens reading, and the language with the longest programs is
-not the one that costs the most \cite{tokenmax,spend}. Those are counts
-of consumption, properties of a model, a harness and a date. This
-article contributes the static count: a property of the code alone,
-computable before anything is built or any agent runs. The measure is
-the contribution; the systems measured below are demonstrations of how
-to apply it, and the verdicts are theirs, not the measure's.
+agent trajectories measure consumption: agents spend most of their
+tokens reading, and the language with the longest programs is not the
+dearest \cite{tokenmax,spend}; those counts are properties of a model,
+a harness and a date. This article contributes the static count: a
+property of the code alone, computable before anything is built or any
+agent runs. The measure is the contribution; the systems below are
+demonstrations, and the verdicts are theirs, not the measure's.
 
 \section*{The measure}
 
@@ -73,21 +73,19 @@ from any source file.
 
 Tokens are o200k, counted with tiktoken \cite{tiktoken}: a public,
 model-neutral count near what a commercial agent is billed (the
-vendor's own tokenizer differs, so the window fractions below are
-approximate). The token count of a region set is exact: anyone can
+vendor's tokenizer differs; window fractions are approximate). The token count of a region set is exact: anyone can
 recompute it from the manifests published with the full study
 \cite{full}, and a disagreement is about a manifest row. The set itself
 is a backward slice in Weiser's sense \cite{weiser}, derived by hand,
 and a slice is a judgment: a blind second rater agreed on 97 of 103
 files of the C++ closure and traced three times the printed Spring
 category 2, deeper into framework source, so the framework numbers
-below are conservative lower bounds. Where the floor sits is a declared
-judgment too, and moving it moves the numbers by a stated factor: 2.5
-for the C system below, 2.4 for the framework's category 2; a stricter
-floor turns the plain sides' zeros into small numbers as well, largest
-for C. Categories 1 and 2 are counts; category 3 is a classification,
-its documentation size unmeasured. In the agent's own terms the closure is the needed context:
-what must be in front of it before it can decide that a change is safe.
+below are conservative lower bounds. The floor is a declared judgment
+too: moving it changes the C system below by 2.5 times and the
+framework's category 2 by 2.4, and a stricter floor turns the plain
+zeros into small numbers, largest for C. Category 3 counts too, in the
+version-pinned documentation that states each convention; it is
+measured for the endpoint stack below.
 
 \section*{Six closures, three pairs}
 
@@ -133,8 +131,8 @@ uncounted, hibernate-core alone is 6.7M tokens of source. And part of
 what Spring does is written in no file at all: the derived-query
 grammar that turns \texttt{findAllByAuthorProfileUserName} into a join
 tree, parameter binding, filter-chain order, fetch and flush defaults.
-That is category 3, and no counting granularity reaches it: a
-convention that is in no repository cannot be read at any granularity.
+That is category 3: a convention in no repository cannot be read at any
+granularity.
 
 \textbf{Plain JS against React.} Behavior-matched twins of the list
 screen every application has (fetch, filter, sort, select, delete),
@@ -151,18 +149,18 @@ Window growth absorbs the C++ row's volume; it does not remove a
 coherence problem, and long contexts degrade before they fill
 \cite{lostmiddle}.
 
-\section*{390 runs: what the agent actually pays}
+\section*{430 runs: what the agent actually pays}
 
 A count of text is not yet a cost. Four experiments put agents on the
-measured pairs: 390 runs total, one model (claude-sonnet-5, headless),
+measured pairs: 430 runs total, one model (claude-sonnet-5, headless),
 tasks that name behavior and never a file or a function, graded by
 hidden tests the agent never saw. A turn is one model request; in every
 recorded run it equals tool calls plus one, so the metric counts
-actions and tracks money loosely ($r = 0.70$ with dollars across the
-280 pairs runs; cached prefixes make the per-run difference cents). The
+actions and tracks money loosely ($r = 0.70$ with dollars in the pairs
+runs; cached prefixes make the per-run difference cents). The
 runs price two of the measure's three residences, file scatter and
 convention; no task here forced reading the category-2 volume, so the
-biggest bars of Figure~\ref{fig:closures} stay unpriced by any run. Table~\ref{tab:stats} is the summary; the raw run records ship
+biggest bars of Figure~\ref{fig:closures} stay unpriced by any run. Table~\ref{tab:stats} summarizes; the raw run records ship
 with the study \cite{full}.
 
 \begin{table}[!t]
@@ -173,23 +171,25 @@ with the study \cite{full}.
 Experiment & Runs & Pass & Plain & Layered & $p$ \\
 \midrule
 C/C++ constructs, turns & 280 & 278/280 & 7.87 & 9.41 & 0.031$^{a}$ \\
-Java endpoint, turns & 40 & 38/40 & 7.15 & 8.40 & 0.023$^{b}$ \\
-Java endpoint, wall s & & & 24.9 & 30.2 & 0.022$^{b}$ \\
+Java endpoint, turns, batch 1 & 40 & 38/40 & 7.15 & 8.40 & 0.023$^{b}$ \\
+Java endpoint, turns, batch 2 & 40 & 37/40 & 9.10 & 8.65 & 0.62$^{b}$ \\
+\;\;silent failures, both & 80 & & 0 & 5 & 0.027$^{c}$ \\
 Web twins, turns & 40 & 40/40 & 6.95 & 6.85 & 0.91 \\
 Web version traps & 30 & 30/30 & \multicolumn{2}{c}{0 wrong choices} & \\
-\;\;its boundary task, turns & 15 & 15/15 & 6.0 & 12--13 & $^{c}$ \\
+\;\;its boundary task, turns & 15 & 15/15 & 6.0 & 12--13 & $^{d}$ \\
 \bottomrule
 \end{tabular}
 \caption{The run experiments. Turns is the pre-declared primary metric;
 p-values are unadjusted; dollar cost and cumulative context do not
-resolve at this $n$ except where footnoted. $^{a}$Sign test over the
+resolve at this $n$. $^{a}$Sign test over the
 six constructs, two-sided; 0.031 is the smallest value six pairs can
-give. $^{b}$Permutation within task, one-sided, 100{,}000 resamples;
-wall time largely re-measures turns. Both endpoint failures are the
-Spring side's silent binding miss; the two C/C++ failures are one C++
-cell missing the same empty-store edge twice, loudly. $^{c}$Five runs
-per cell; cumulative context 323 and 353 thousand tokens against
-plain's 181, \$0.14 a run against \$0.09.}
+give. The two C/C++ failures are one C++ cell missing the same
+empty-store edge twice, loudly. $^{b}$Permutation within task,
+one-sided, 100{,}000 resamples; the sign reverses between batches.
+$^{c}$One-sided hypergeometric; every failure is the Spring side's,
+silent, a wire-name convention. $^{d}$Five runs per cell; cumulative
+context 323 and 353 thousand tokens against plain's 181, \$0.14 a run
+against \$0.09.}
 \label{tab:stats}
 \end{table}
 
@@ -207,8 +207,7 @@ indistinguishable from zero, so in these pairs the walk across files
 carries the measurable cost, and any price of the dispatch itself sits
 below the noise floor. The mechanism fits what an agent does: a callee
 named at the call site is one search; a registry adds a search before
-the first can land, finding the registration site; a convention
-terminates no search at all. And held to identical behavior the C++
+the first can land; a convention terminates no search at all. And held to identical behavior the C++
 text is only 1.17 times the C: the 2.8 between the whole tools is scope
 and file scatter, not syntax. The experiment ran twice; three C++ sides
 were repaired between executions, the printed numbers are the second,
@@ -234,40 +233,53 @@ effects inside the gray band are not claims.}
 \textbf{The endpoint, two stacks.} One endpoint, an item list and item
 create behind bearer-token authentication over SQL, built twice with
 the same routes, schema, and observable behavior, equivalence verified
-at the HTTP boundary before any run. The plain side is one file, JDK
+at the HTTP boundary. The plain side is one file, JDK
 \texttt{HttpServer} and JDBC, 108 lines; the framework side is seven
 classes of current Spring idiom (Boot 3.3; the closure above is
-measured on Boot 4). Four maintenance tasks, five repetitions each
-(Figure~\ref{fig:runs}). The framework side cost 1.25 turns and 5.3
-seconds more per run, an estimate the A/A calibration holds to
-suggestive, and gave the only silent failures of all 390: twice, on
-the filter task, the agent wrote \texttt{@RequestParam(required =
-false) Integer minLen} with correct JPQL behind it. Spring derives the
-wire name from the compiled Java parameter name (every Boot build
-compiles with \texttt{-parameters}; without that flag the same code
-fails loudly at the request); the URL says \texttt{min\_len}; the
-parameter stayed null and the endpoint returned the unfiltered list
-with status 200. Nothing in the compiler, the runtime or the response
-flagged it. The deciding rule is a category-3 convention, and this is
-what its failure looks like: silent wrong rows. The plain side carries
-the wire name as a literal string in visible parsing code, so the miss
-has no silent form there, five of five; 2 of 5 against 0 of 5 resolves
-nothing by count, and the mechanism is the finding. Spring also
-saturates every training corpus, so these runs price recalling its
-conventions, not reading its 124k: the density favors the framework
-side, and the failure is one model's recall on one date. The direction
-is not uniform, and the exception is instructive: on the 401-contract
-task Spring was cheaper, 4.2 turns against 6.0, because its filter
-puts the whole authentication contract in one small class. Where the
-framework localizes a change it wins the turn count; where the
-behavior crosses its conventions it loses turns or correctness.
+measured on Boot 4). Four maintenance tasks, five repetitions each,
+run twice: 80 runs (Figure~\ref{fig:runs}). The turn count did not
+survive its replication. Batch one gave the framework side $+1.25$
+turns per run ($p = 0.023$); batch two reversed the sign ($-0.45$,
+$p = 0.62$); combined, $+0.40$ at $p = 0.31$, as the A/A calibration
+prices effects of this size. The recorded criterion, that framework
+tasks cost more, is met in batch one and not in batch two. The cost
+claim is void; what replicated is the failure. Five Spring runs of 40 returned wrong answers against
+zero of 40 plain, every one silent, every one the same shape: a wire
+name derived from a Java identifier by a convention no application
+file states. Four are the filter task: the agent wrote
+\texttt{@RequestParam(required = false) Integer minLen} with correct
+JPQL behind it; Spring derives the wire name from the compiled
+parameter name (Boot builds compile with \texttt{-parameters}; without
+the flag the same code fails loudly); the URL
+says \texttt{min\_len}; the parameter stayed null and the endpoint
+returned the unfiltered list with status 200. The fifth is the same
+convention on the response side: asked for a \texttt{name\_length}
+field, the agent added \texttt{getNameLength()} and Jackson's bean
+naming emitted \texttt{nameLength}: field present, name wrong, status
+200. Nothing in the compiler, the runtime or the response flagged
+them. The category is countable: the fifteen conventions on this
+endpoint's path, both naming rules among them, are stated in 31,535
+tokens of documentation, counted from the documentation sources at the
+exact BOM tags (\texttt{cat3.py}), four times the plain side's whole
+deciding text. The plain side carries every
+wire name as a literal string in visible code, so the miss has no
+silent form there. Spring also saturates every training corpus, so
+these runs price recalling its conventions, not reading its 124k, and
+the misses are one model's recall on one date. Not everything in the
+turn count is noise: on the 401-contract task Spring
+was cheaper in both batches (4.2 turns against 6.0 and 9.2): its
+filter puts the whole authentication contract in one small class.
+Where the framework localizes a change it can win the turn count;
+where behavior crosses its naming conventions it fails silently.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{fig_runs.pdf}
-\caption{Left: the Java endpoint, mean turns per task, dots are
-individual runs. Right: the web pair's boundary task, focusing a child
-component's input from the parent, against React 19 and React 18.}
+\caption{Left: the Java endpoint over both batches, mean turns per
+task, dots are individual runs; the annotation marks the filter task's
+four silent binding misses; the fifth is the add-a-field naming. Right: the web pair's boundary task, focusing a
+child component's input from the parent, against React 19 and React
+18.}
 \label{fig:runs}
 \end{figure}
 
@@ -289,12 +301,11 @@ the walk across the boundary.
 
 One rater derived the closures, he is the author of the plain systems,
 and he chose the endpoints and where the floors sit. In a sampling
-study that is a flaw. This is not a sampling study, and the choices are
-the method: each plain subject demonstrates how cheap a path becomes
+study that is a flaw; here the choices are the method: each plain
+subject demonstrates how cheap a path becomes
 when it is built for the new reader, the way a proof of existence picks
-its witness. The demonstration is open in both directions. Write your
-path plainer than these and the point strengthens; nobody claims these
-witnesses are minimal. And you can always find less efficient
+its witness. Write your path plainer than these and the point
+strengthens; nobody claims these witnesses are minimal. And you can always find less efficient
 implementations of either style: a heavier Spring than the measured
 RealWorld, a more scattered C++ than taskwarrior, and equally a C
 codebase whose closure measures like taskwarrior's, since nginx-style
@@ -334,29 +345,26 @@ that compiles as C. Take the subtraction to its end, a language whose
 semantics have not moved in forty years, so that everything ever
 written about it describes the same language and the training corpus is
 one coherent body, and the language you are holding is, by coincidence,
-C. The old languages were
-expensive for unaided humans, and the expense was exactly the
-bookkeeping agents now do.
+C.
 
 What of abstraction's other jobs? Reuse of hard, stable code survives
 fully: that is the platform floor, and the measured plain systems keep
 it (the database, the cipher, the browser engine). Contracts between
 teams partially survive as module seams. Compression for small working
 memory loses its purpose where the whole deciding text fits beside the
-work, and reliable mechanical edits, the reason for DRY, showed no
-failure in a dedicated 25-run experiment at up to 30 exact-copy sites,
-though the near-miss cross-file form remains untested \cite{full}.
+work; DRY's mechanical edits showed no failure at 30 exact-copy sites
+in a dedicated 25-run experiment, the near-miss cross-file form
+untested \cite{full}.
 
 \section*{Limits}
 
 The numbers bound mechanisms, not laws. One model ran, on one harness
-version, on one date; agent cost is a property of the model and the
-representation together. The cells are five runs, the tasks are fixed
-by design, so every claim is about these tasks on this model; every run
+version, on one date, and the tasks are fixed by design: every claim is
+about these tasks on this model, and cost is a property of model and
+representation together. The cells are five runs; every run
 sat far below the context window, so what a closure that outgrows the
-window costs is untested, and the volume experiment that decides it,
-cross-module tasks on taskwarrior against a plain twin, is named in the
-study as open. The measure prices reading and nothing else. It does not
+window costs is untested, and the volume experiment that decides it is named
+in the study as open. The measure prices reading and nothing else. It does not
 price security: framework defaults are amortized defenses (header
 parsing, encoding, injection), and the plain stack buys that coverage
 back with tests and review, a cost no closure counts. It does not price
@@ -382,8 +390,7 @@ the industry average; the low closure is one sentence away.
 \item Keep abstraction where a platform floor earns it, and spend the
 human effort on the requirements and the tests.
 \item If your path measures cheaper than the witnesses here, publish
-the number. The measure is recomputable, and the comparison is the
-point.
+the number; the comparison is the point.
 \end{itemize}
 
 \begin{thebibliography}{9}

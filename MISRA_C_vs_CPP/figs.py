@@ -104,13 +104,15 @@ def fig_pairs():
 
 
 def _dots(ax, x, vals, color):
+    step = min(0.055, 0.42 / max(len(vals), 1))
     for i, v in enumerate(vals):
-        ax.plot(x + (i - len(vals) / 2 + 0.5) * 0.055, v, "o",
+        ax.plot(x + (i - len(vals) / 2 + 0.5) * step, v, "o",
                 color=color, ms=2.6, alpha=0.75, mew=0)
 
 
 def fig_runs():
-    E = json.load(open("endpoint/runs/results.json"))
+    E = (json.load(open("endpoint/runs/results.json"))
+         + json.load(open("endpoint/runs2/results.json")))
     F2 = json.load(open("frontend/runs2/results.json"))
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(4.9, 2.3),
                                  gridspec_kw={"width_ratios": [4, 2.1]})
@@ -123,13 +125,13 @@ def fig_runs():
         a1.bar(i + 0.19, st.mean(s), 0.34, color=LAYER)
         _dots(a1, i - 0.19, p, "#26496b")
         _dots(a1, i + 0.19, s, "#7a2f2c")
-    a1.annotate("3/5 pass: silent\nbinding miss twice", xy=(1.19, 12.6), xytext=(1.85, 15.0),
-                fontsize=7, ha="left",
+    a1.annotate("6/10 pass: the silent\nbinding miss, four times", xy=(1.19, 13.9),
+                xytext=(1.85, 19.5), fontsize=7, ha="left",
                 arrowprops=dict(arrowstyle="-", lw=0.7, color="#555555"))
     a1.set_xticks(range(4))
     a1.set_xticklabels([t[1] for t in tasks], fontsize=7.5)
-    a1.set_ylim(0, 18.5)
-    a1.set_ylabel("mean turns, 5 runs per bar")
+    a1.set_ylim(0, 24)
+    a1.set_ylabel("mean turns, 10 runs per bar")
     a1.set_title("one endpoint, two Java stacks", fontsize=8.5, pad=2)
     a1.legend(["plain JDK + JDBC", "Spring Boot"], fontsize=7, frameon=False,
               loc="upper left", handlelength=1.2)

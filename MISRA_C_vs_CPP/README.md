@@ -2,7 +2,7 @@
 
 **A measure of what an AI coding agent must read before it can change one
 endpoint safely, applied to plain C, idiomatic C++, plain Java with JDBC,
-and Spring Boot 4, with 320 controlled agent runs behind it.**
+and Spring Boot 4, with 430 controlled agent runs behind it.**
 
 The paper: [tokens_to_trace.pdf](tokens_to_trace.pdf), published as
 [doi:10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993).
@@ -16,12 +16,17 @@ behavior in no file at all. In 280 paired agent runs every construct cost
 more turns, and a control pair shows the largest cost is one-class-per-file
 scatter (+3.5 turns over eight files, +0.5 in one file), not the dispatch.
 Correctness never separated: 278 of 280 runs passed identical hidden tests.
-Then one endpoint built on both Java stacks, 40 runs graded by hidden HTTP
-checks: the Spring side cost 1.25 turns more per run (p=0.02) and gave the
-only wrong answers, both because @RequestParam binds by the Java parameter
-name while the URL said min_len, so the filter silently never applied.
-Plain passed 20 of 20; it parses its query string in visible code, so the
-same mistake had no place to hide.
+Then one endpoint built on both Java stacks, run twice: 80 runs graded by
+hidden HTTP checks. The turn cost did not survive its replication (batch
+one +1.25 turns, p=0.02; batch two -0.45, p=0.62; combined +0.40, p=0.31),
+and what replicated is the failure: five Spring runs of 40 returned silent
+wrong answers against zero of 40 plain (one-sided hypergeometric p=0.027),
+every one a wire name derived from a Java identifier by a convention no
+application file states: @RequestParam bound minLen while the URL said
+min_len, and Jackson emitted nameLength where the task said name_length.
+The fifteen conventions on that path are stated in 31,535 tokens of
+version-pinned documentation sources (cat3.py), four times the plain
+side's whole deciding text.
 
 Why, in short. Objects are for people: a class is a bundle sized to a
 human working set, an interface is a promise a human can hold whole, and
@@ -43,7 +48,9 @@ What is here:
 | closures.py | the closure manifests; emits closures.json with per-region lines, chars, o200k tokens |
 | pairs/ | the 280-run experiment: gen.py (all pair programs), tasks.py, hidden.py (grader with selfcheck), run.py |
 | pairs/gen-v1-as-run.py, NOTE-v1.md | the first execution's generator, archived as run |
-| endpoint/ | the two-stack endpoint experiment: both service builds (plain/, spring/), tasks.py, hidden.py (HTTP grader with selfcheck), run.py |
+| endpoint/ | the two-stack endpoint experiment: both service builds (plain/, spring/), tasks.py, hidden.py (HTTP grader with selfcheck), run.py; run twice (runs/, runs2/) |
+| cat3.py | category-3 token count for the endpoint stack: the documentation sources stating each convention, fetched at the exact BOM tags; emits cat3.json |
+| ieee_software.tex, .pdf, figs.py | the IEEE Software version and its charts, drawn from the raw run records |
 | measure.py, external.py, jpa.py, dup.py | corpus measurements the paper cites |
 | ROADMAP.md | what is done and what the next experiments are |
 
