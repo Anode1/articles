@@ -24,28 +24,25 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \begin{abstract}
 A layout program places the boxes of a diagram by minimising a cost: overlaps out,
 connected boxes near, edge lengths even. 4{,}890 hand drawings were just pooled into a
-corpus, and the standing proposal is to learn the cost's weights from them. That fit
-rests on a property nobody has tested at the coordinates: that a person's drawing sits at
-a minimum of some such cost. We test it directly, one criterion at a time, on 853 working
-diagrams of 15 to 40 boxes from three communities (biological pathways, business
-processes) and on 136 lab drawings of abstract graphs: move each box 2\% of the drawing
-width in sixteen directions and ask whether any move lowers the criterion; a box is held
-when none does. The distance criteria that dominate every published cost hold 0.3 to
-1.1\% of hand-placed boxes, median diagram 0.00, with improvements on offer in every
-diagram, while the same test holds \texttt{neato}'s optimised layouts at 1.00; no
-down-weighting repairs it. A hand drawing satisfies no-overlap exactly, and its boxes are
-held by a criterion the standard costs omit: alignment into rows and columns,
-median diagram 0.52 and 0.21 on the biological corpora and 0.87 over all 6{,}723
-business-process models (mean 0.81), where optimised, uniform random and grid-snapped
-layouts of the same graphs sit at 0.06 to 0.08, and the abstract-graph drawings sit at
-0.50 with distance still at 0.00. A hand layout is a layered layout with partial
-alignment. The contribution is the test, the first at the coordinates rather than at
-preferences or values, and its verdict: a cost fitted to hand-drawn coordinates learns
-the criteria's mutual trade-offs, not the drawer's, and the one term the drawing supplies
-is not among the terms on offer. The judgement studies are untouched: judges have been
-found to track stress; the coordinates people draw are held by no distance term we
-tested. The coordinates cannot say whether the hand or the editor's alignment guide
-supplies the rows, and for fitting a cost it does not matter: the term is held and
+corpus. The standing proposal is to learn the cost's weights from them. That assumes a
+drawing sits at a minimum of the cost. Nobody has tested this at the coordinates. We
+took 853 working diagrams of 15 to 40 boxes: biological pathways and business
+processes. We added 136 lab drawings of abstract graphs. We moved every box by 2\% of
+the drawing width in sixteen directions. If no move lowers a criterion, the box is held
+under it. \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs were the
+controls. Edge length and stress hold 0.3 to 1.1\% of hand-placed boxes. The median
+diagram holds none, and every diagram has improving moves. No down-weighting repairs
+it. \texttt{neato}'s own layouts are held at 1.00, so the test can see a minimum.
+Overlap is satisfied exactly. One criterion the costs omit does hold the drawings:
+alignment into rows and columns. The median diagram holds 0.52 and 0.21 in the
+biological corpora and 0.87 across all 6{,}723 business-process models (mean 0.81).
+Optimised, random and grid-snapped layouts hold 0.06 to 0.08. The lab drawings hold
+0.50, and their distance terms 0.00. A hand layout is a layered layout with partial
+alignment. The test is new: it reads coordinates, not preferences or values. A cost
+fitted to hand coordinates learns the terms' trade-offs, not the drawer's, because the
+one term the drawer supplies is missing from the cost. Judges have been found to track
+stress, and that evidence stands. The coordinates cannot tell the hand from the
+editor's alignment guide. For fitting a cost it does not matter: the term is held and
 absent either way.
 \end{abstract}
 
