@@ -89,7 +89,7 @@ PATHS = [
 
 def fig_paths():
     n = max(len(steps) for _, steps in PATHS)
-    fig, ax = plt.subplots(figsize=(7.0, 3.1))
+    fig, ax = plt.subplots(figsize=(7.3, 3.1))
     ax.set_axis_off()
     ax.set_xlim(0, 6)
     ax.set_ylim(-0.6, n + 1.6)
@@ -101,7 +101,7 @@ def fig_paths():
             y = n - i
             fc = "#f5dedd" if ind else "#e8eef5"
             ec = LAYER if ind else PLAIN
-            ax.add_patch(plt.Rectangle((x - 0.46, y - 0.32), 0.92, 0.64,
+            ax.add_patch(plt.Rectangle((x - 0.49, y - 0.32), 0.98, 0.64,
                                        facecolor=fc, edgecolor=ec,
                                        lw=1.1 if ind else 0.7))
             ax.text(x, y, label, ha="center", va="center", fontsize=6.2)
