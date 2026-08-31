@@ -34,10 +34,9 @@ controls. Edge length and stress hold 0.3 to 1.1\% of hand-placed boxes. The med
 diagram holds none, and every diagram has improving moves. No down-weighting repairs
 it. \texttt{neato}'s own layouts are held at 1.00, so the test can see a minimum.
 Overlap is satisfied exactly. One criterion the costs omit does hold the drawings:
-alignment into rows and columns. The median diagram holds 0.52 and 0.21 in the
-biological corpora and 0.87 across all 6{,}723 business-process models (mean 0.81).
-Optimised, random and grid-snapped layouts hold 0.06 to 0.08. The lab drawings hold
-0.50, and their distance terms 0.00. A hand layout is a layered layout with partial
+alignment into rows and columns. It holds a fifth to most of the median hand diagram,
+corpus by corpus, and almost none of any optimised, random or grid-snapped layout; the
+lab drawings repeat the pattern. A hand layout is a layered layout with partial
 alignment. The test is new: it reads coordinates, not preferences or values. A cost
 fitted to hand coordinates learns the terms' trade-offs, not the drawer's, because the
 one term the drawer supplies is missing from the cost. Judges have been found to track
@@ -503,12 +502,12 @@ the mean best one worth 1.2 to 1.3 per cent of the length term and 0.5 to 0.7 pe
 stress, and none of them was taken. One such move is below perception, so at any
 perceptual $\epsilon$ the layouts are $\epsilon$-stationary under the distance terms; the
 failure is cumulative, not local, since from the same starts the capped climber removes
-0.28 to 0.31 of $C{+}O{+}L$. A coordinate fit needs exact stationarity, and the
+0.26 to 0.31 of $C{+}O{+}L$. A coordinate fit needs exact stationarity, and the
 layouts sit a quarter of the energy from it.
 
 The BPMN figure is the one number in the paper that the corpus's selection moves. The 300
 models are the first by id of the 6{,}723 in the band, and on all 6{,}723 the alignment hold
-is 0.87 rather than 0.91; resampling 300 of them 2{,}000 times puts the committed corpus at
+is 0.87 rather than 0.91, the mean 0.81; resampling 300 of them 2{,}000 times puts the committed corpus at
 the 99th percentile, outside the interval [0.83, 0.90] that a random 300 gives. Every other
 term is where it was: crossings, overlap, node--edge and $C{+}O$ at 1.00, length, stress and
 $C{+}O{+}L$ at 0.00, orthogonality 0.733 against 0.726, A3 0.312 against 0.310 and flow
@@ -716,7 +715,7 @@ diagram, seeds from the diagram ids: alignment 0.06 to 0.07 against hand 0.52, 0
 layouts too: no layout of any provenance is stationary under a distance term at this
 radius except a tool's converged output, so the distance result separates optimisers from
 everyone, not humans from tools. Crossings and overlap hold 0.58 to 0.67 of random boxes,
-the flat base rate the active column already prices. Under a jitter of one grid cell the
+the flat base rate the active column already prices. Under a jitter of half a grid cell either way the
 alignment hold keeps 0.76, 0.44 and 0.19 of its three corpora while orthogonality falls
 from 0.40 to 0.18 and 0.16 to 0.06: orthogonality, not alignment, is the tie artefact.
 Axis-only moves, which preserve every perpendicular alignment tie, still improve length
