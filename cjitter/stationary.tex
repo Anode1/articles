@@ -251,9 +251,13 @@ WikiPathways pathway in the band is); container glyphs (SBGN compartments, BPMN 
 lanes) are not nodes; SBGN process glyphs are nodes, so the Reactome graphs are bipartite
 and their $m/n$ is the process graph's; each layout is rescaled so that its bounding box
 fits the unit square, box sizes scaled with it. The directional test runs on 15 to 40
-nodes; the climber pilot used 10 to 400. Diagrams are not deduplicated: the WikiPathways
-set is \emph{Homo sapiens} only, so it holds no ortholog copies, and no check was made for
-BPMN models submitted twice. The 41 to 100 node band was not run.
+nodes; the climber pilot used 10 to 400. The registered deduplication pass
+(\texttt{results/dedup.py}): by exact coordinate multiset, one Reactome pair is a single
+drawing stored under two ids; by the structural key ($n$, $m$, degree sequence, box
+sizes), one further Reactome pair and one WikiPathways pair; the 300 BPMN models collide
+under neither key, so the feared resubmission duplicates are absent from this sample.
+Removing every extra member moves no headline median. The 41 to 100 node band was not
+run.
 
 How the coordinates were made matters for the alignment criterion. Of the raw coordinates,
 17\% are integers in WikiPathways, 67\% in Reactome and 63\% in BPMN (44\% multiples of
@@ -775,8 +779,8 @@ standard energy and alignment is not, so the omitted-term conclusion stands, but
 registered ranking was wrong and the recorded prediction with it. H5, exploratory, stress
 holds the hand layout less than \texttt{neato}'s: holds, 0.00 against 1.00. The registered
 fourth corpus, HOLA's formative drawings, was dropped undeclared from the previous draft;
-it is restored above. Registered and still not run: the deduplication pass, the 41--100
-band, the caps in pitch units.
+it is restored above. The deduplication pass is run in Section~\ref{sec:corpora}.
+Registered and still not run: the 41--100 band, the caps in pitch units.
 
 \section{What else could produce this}\label{sec:alternatives}
 
