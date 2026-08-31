@@ -1,7 +1,7 @@
 # Articles
 
 Papers by Vasili Gavrilov (ORCID [0009-0007-9371-5994](https://orcid.org/0009-0007-9371-5994)),
-with their sources, figures, data and working notes. Each directory holds the LaTeX source, the
+with their sources, figures and data. Each directory holds the LaTeX source, the
 built PDF, the figures, whatever was needed to produce the numbers, and a README saying in short
 what the work is and what it shows.
 

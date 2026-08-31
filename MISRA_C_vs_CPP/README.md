@@ -52,7 +52,6 @@ What is here:
 | cat3.py | category-3 token count for the endpoint stack: the documentation sources stating each convention, fetched at the exact BOM tags; emits cat3.json |
 | ieee_software.tex, .pdf, figs.py | the IEEE Software version and its charts, drawn from the raw run records |
 | measure.py, external.py, jpa.py, dup.py | corpus measurements the paper cites |
-| ROADMAP.md | what is done and what the next experiments are |
 
 Reproduce: `python3 closures.py` re-derives every closure (roots are
 overridable env vars; the public subjects re-fetch from the repositories
