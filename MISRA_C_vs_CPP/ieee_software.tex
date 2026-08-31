@@ -15,20 +15,20 @@
 \maketitle
 
 \begin{abstract}
-Before an AI coding agent can change code safely it must read everything
-that decides what the code does. We count that reading as
-tokens-to-trace: for one entry point, the tokens of the smallest set of
-source regions that determine its behavior, classified by residence:
-in the project, in library source outside it, or in no file at all, in
-the version's conventions. Measured on
-three language pairs, the plain member of each pair keeps a whole path
-in 1 to 14 thousand tokens inside the project; the layered member
-spends 124 to 283 thousand tokens outside it, or keeps part of the
-deciding text where no repository holds it. In 430 controlled agent
-runs the extra turns tracked file scatter and boundary crossings, not
-the constructs, and all five wrong answers were the
-framework side's: each silent, each a wire name derived by a convention
-no source file states.
+Abstraction layers were built to fit programs into human working
+memory. AI coding agents read differently, and
+before an agent can change code safely it must read everything that
+decides what the code does. This article contributes a way to price
+that reading before any agent runs: tokens-to-trace, the size of the
+smallest set of source regions that determines one entry point's
+behavior, classified by where each region lives: in the project, in
+library source outside it, or in no file at all, in the version's
+conventions. We apply the measure to plain and layered stacks
+in C, Java, and JavaScript doing the same work, and test it with 430
+controlled agent runs. The plain styles keep a path's whole deciding
+text small and inside the project; the layered styles keep most of it
+outside, and the part that lives in no file produced every silent
+failure of the runs.
 \end{abstract}
 
 \section*{The reader changed}
