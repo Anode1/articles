@@ -253,7 +253,8 @@ A diagram enters as its largest connected component (194 of the 248 Reactome gra
 WikiPathways pathway in the band is); container glyphs (SBGN compartments, BPMN pools and
 lanes) are not nodes; SBGN process glyphs are nodes, so the Reactome graphs are bipartite
 and their $m/n$ is the process graph's; each layout is rescaled so that its bounding box
-fits the unit square, box sizes scaled with it. The directional test runs on 15 to 40
+fits the unit square, uniformly by the larger extent, so aspect is preserved, box sizes
+scaled with it. The directional test runs on 15 to 40
 nodes; the climber pilot used 10 to 400. The registered deduplication pass
 (\texttt{results/dedup.py}): by exact coordinate multiset, one Reactome pair is a single
 drawing stored under two ids; by the structural key ($n$, $m$, degree sequence, box
@@ -598,6 +599,15 @@ layouts 0.00; under length the hand layouts score 0.03, 0.04 and 0.05 and \textt
 0.26, 0.41 and 0.45. Under $L = 1/\sqrt{N}$ no box of any layout is held under either term,
 the scale being wrong for every layout. The hand verdicts do not depend on the choice; the
 control's does, so the fit is primary (Section~\ref{sec:foundations}).
+
+\paragraph{Box extent.} Centre distances on box diagrams could be the objection: with
+large, uneven boxes a person could sit at a minimum of a border-to-border distance term
+while failing the centre one. Measured border to border, each box's offset to its border
+along the joining direction subtracted and $L$ refitted on those distances, the hand
+verdicts do not move: length and stress hold 0.00 in every corpus, 0.86 to 0.92 of
+diagrams at exactly zero (\texttt{results/border.py}). \texttt{neato}, which minimised
+the centre form, is not held under the border form (0.00 to 0.09), as a layout optimising
+one criterion and tested on another should not be.
 
 \paragraph{Descent and chance.} The secondary estimand, per corpus and energy: the median
 fraction of the cap the capped climber uses and of the energy it removes, the same for
