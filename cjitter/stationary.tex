@@ -995,8 +995,10 @@ scripts, the parsed corpora and every table's script are in the repository under
 deterministic from their seed on every platform. The main tables rebuild by
 \texttt{results/run\_all.sh} followed by
 \texttt{results/tests.sh}, \texttt{results/lanes.py} and \texttt{results/sparsity.py};
-the alignment controls, the nulls and the HOLA corpus each ship the script beside its
-committed output;
+the alignment controls, the nulls, the HOLA corpus, and the panel additions of this
+draft (\texttt{robustness.py}, \texttt{constrained.py}, \texttt{dedup.py},
+\texttt{drawers.py}, \texttt{border.py}, \texttt{gdcoll.py}, the last against the GD
+Collection at commit \texttt{d113537}) each ship the script beside its committed output;
 \texttt{results/manifest.txt} records the commit, the platform, the tool versions (gcc 13.3.0,
 Graphviz 2.43.0, elkjs 0.12.0, HiGHS via scipy 1.18.1), the seeds and the SHA-256 of the
 three raw archives and of the eighteen corpus files as measured. The population number
