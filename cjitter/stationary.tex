@@ -22,27 +22,32 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \maketitle
 
 \begin{abstract}
-Fitting a layout energy to human drawings by inverse optimisation assumes the drawings
-sit at a minimum of some weighted sum of the standard criteria. We test that assumption one
-criterion at a time on 853 hand-drawn diagrams of 15 to 40 boxes (WikiPathways, Reactome, BPMN): move
-each box 2\% of the drawing width in sixteen directions and ask whether any move lowers the
-criterion, \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs as controls.
-Overlap holds every box at zero, by hand and in every tool that removes it. Uniform edge
-length and stress hold almost no hand-placed box, 0.3 to 1.1\% per corpus and a median
-diagram of 0.00, and not for want of anything to gain: every diagram has improving moves,
-the median diagram's mean best worth 1.2\% of the length term and 0.6\% of stress. \texttt{neato}'s stress layouts are held at 1.00 under the same test,
-so it has power; a weight of 0.001 on either term drops
-the held fraction below 0.015. The criterion that holds a hand layout and that the energy
-omits is alignment into rows and columns: the median diagram at 0.52 and 0.21 on the two
-biological corpora and 0.87 over the full BPMN population (mean 0.81), against 0.06 for \texttt{neato}, 1.00 for
-\texttt{dot}, and 0.07 both for a layout snapped to the same grid with no author and for
-a uniform random layout of the same graphs. Whether the person's hand or the editor's
-alignment guide supplies those rows, the coordinates cannot say, and for fitting an
-energy it does not matter: the term is held and absent either way. A hand layout is a
-layered layout with partial alignment. The pattern is not the diagrams': 136 drawings of
-abstract graphs from HOLA's formative study hold alignment at 0.50 and the distance terms
-at 0.00. Coordinates and judgement disagree: judges have been found to track stress, and
-the coordinates people draw are held by no distance term we tested.
+A layout program places the boxes of a diagram by minimising a cost: overlaps out,
+connected boxes near, edge lengths even. People prefer its output in every judgement
+study, and the standing proposal, one download away since 4{,}890 hand drawings were
+pooled into a corpus, is to learn the cost's weights from drawings people made. That fit
+rests on a property nobody has tested at the coordinates: that a person's drawing sits at
+a minimum of some such cost. We test it directly, one criterion at a time, on 853 working
+diagrams of 15 to 40 boxes from three communities (biological pathways, business
+processes) and on 136 lab drawings of abstract graphs: move each box 2\% of the drawing
+width in sixteen directions and ask whether any move lowers the criterion; a box no move
+improves is held. The distance criteria that dominate every published cost hold 0.3 to
+1.1\% of hand-placed boxes, median diagram 0.00, with improvements on offer in every
+diagram, while the same test holds \texttt{neato}'s optimised layouts at 1.00; no
+down-weighting repairs it. What a hand drawing satisfies exactly is no-overlap, and what
+holds its boxes is a criterion the standard costs omit: alignment into rows and columns,
+median diagram 0.52 and 0.21 on the biological corpora and 0.87 over all 6{,}723
+business-process models (mean 0.81), where optimised, uniform random and grid-snapped
+layouts of the same graphs sit at 0.06 to 0.08, and the abstract-graph drawings sit at
+0.50 with distance still at 0.00. A hand layout is a layered layout with partial
+alignment. The contribution is the test, the first at the coordinates rather than at
+preferences or values, and its verdict: a cost fitted to hand-drawn coordinates learns
+the criteria's mutual trade-offs, not the drawer's, and the one term the drawing supplies
+is not among the terms on offer. The judgement studies stand: people prefer low stress
+and read better under it; the coordinates they draw are held by no distance term we
+tested. Whether the hand or the editor's alignment guide supplies the rows, the
+coordinates cannot say, and for fitting a cost it does not matter: the term is held and
+absent either way.
 \end{abstract}
 
 \section{Introduction}
