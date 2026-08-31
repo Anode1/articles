@@ -56,6 +56,72 @@ def fig_closures():
     fig.savefig("fig_closures.pdf")
 
 
+PATHS = [
+    ("plain C\n90k", [
+        ("main", 0), ("arg parse + dispatch", 0), ("query", 0),
+        ("store read", 0), ("print records", 0)]),
+    ("idiomatic C++\n257k", [
+        ("main", 0), ("app object run", 0), ("command registry", 1),
+        ("command object", 0), ("query", 0), ("operator overloads", 1),
+        ("store read", 0), ("formatter factory", 1), ("print records", 0)]),
+    ("plain Java\n7.6k in repo", [
+        ("dispatcher servlet", 0), ("route + auth", 0),
+        ("endpoint branch", 0), ("DAO query", 0), ("SQL read", 0),
+        ("rows to JSON", 0)]),
+    ("Spring\n8.2k +124k +conv.", [
+        ("filter chain auth", 1), ("framework dispatcher", 0),
+        ("route mapping", 1), ("argument binding", 1),
+        ("controller + service", 0), ("tx proxy", 1),
+        ("repository iface", 0), ("query derivation", 1),
+        ("dynamic SQL read", 1), ("serializer to JSON", 1)]),
+    ("plain JS\n1.1k in page", [
+        ("event listener", 0), ("handler", 0), ("filter + sort", 0),
+        ("template string", 0), ("innerHTML write", 0),
+        ("browser paints", 0)]),
+    ("React 19\n1.1k +283k +conv.", [
+        ("synthetic event", 1), ("priority lane", 1), ("state setter", 0),
+        ("hook state store", 1), ("component function", 0),
+        ("filter + sort", 0), ("reconciler diff", 1), ("key identity", 1),
+        ("commit phase", 1), ("prop application", 1),
+        ("browser paints", 0)]),
+]
+
+
+def fig_paths():
+    n = max(len(steps) for _, steps in PATHS)
+    fig, ax = plt.subplots(figsize=(7.0, 3.1))
+    ax.set_axis_off()
+    ax.set_xlim(0, 6)
+    ax.set_ylim(-0.6, n + 1.6)
+    for col, (head, steps) in enumerate(PATHS):
+        x = col + 0.5
+        ax.text(x, n + 0.7, head, ha="center", va="bottom", fontsize=7,
+                fontweight="bold")
+        for i, (label, ind) in enumerate(steps):
+            y = n - i
+            fc = "#f5dedd" if ind else "#e8eef5"
+            ec = LAYER if ind else PLAIN
+            ax.add_patch(plt.Rectangle((x - 0.46, y - 0.32), 0.92, 0.64,
+                                       facecolor=fc, edgecolor=ec,
+                                       lw=1.1 if ind else 0.7))
+            ax.text(x, y, label, ha="center", va="center", fontsize=6.2)
+            if i < len(steps) - 1:
+                ax.annotate("", xy=(x, y - 0.68), xytext=(x, y - 0.34),
+                            arrowprops=dict(arrowstyle="->", lw=0.6,
+                                            color="#666666"))
+    ax.add_patch(plt.Rectangle((0.04, -0.5), 0.22, 0.42,
+                               facecolor="#e8eef5", edgecolor=PLAIN, lw=0.7))
+    ax.text(0.32, -0.29, "a name at the call site: one search",
+            va="center", fontsize=6.5)
+    ax.add_patch(plt.Rectangle((2.54, -0.5), 0.22, 0.42,
+                               facecolor="#f5dedd", edgecolor=LAYER, lw=1.1))
+    ax.text(2.82, -0.29, "resolves only in a registry, an interpreter, "
+            "an overload set, or a version convention", va="center",
+            fontsize=6.5)
+    fig.tight_layout()
+    fig.savefig("fig_paths.pdf")
+
+
 def boot_ci(a, b, n=20000):
     out = []
     for _ in range(n):
@@ -151,6 +217,7 @@ def fig_runs():
 
 if __name__ == "__main__":
     fig_closures()
+    fig_paths()
     fig_pairs()
     fig_runs()
-    print("wrote fig_closures.pdf fig_pairs.pdf fig_runs.pdf")
+    print("wrote fig_closures.pdf fig_paths.pdf fig_pairs.pdf fig_runs.pdf")

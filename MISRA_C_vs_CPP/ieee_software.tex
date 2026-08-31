@@ -92,15 +92,16 @@ measured for the endpoint stack below.
 One read path per system, each doing the same kind of work: an
 authenticated or filtered list over a local store (Figure~\ref{fig:closures}).
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=\columnwidth]{fig_closures.pdf}
-\caption{Tokens-to-trace of one read path per system, each pair at the
-same counting granularity. Dark bars are text in the project's own
-repository; light bars are framework source outside it; ``conv.'' marks
-behavior fixed by version convention, in no file at all.}
+\includegraphics[width=0.92\textwidth]{fig_paths.pdf}
+\caption{The path a reading agent resolves through one endpoint of each
+pair, plain beside layered, with its tokens-to-trace in the header
+(each pair at one counting granularity). Every red step is an
+indirection: the name at the call site does not reach the deciding
+code.}
 \label{fig:closures}
-\end{figure}
+\end{figure*}
 
 \textbf{C against C++.} The plain C system is ais, an associative index
 of 10,597 code lines written to an explicit style guide \cite{ais}; its
@@ -160,7 +161,9 @@ actions and tracks money loosely ($r = 0.70$ with dollars in the pairs
 runs; cached prefixes make the per-run difference cents). The
 runs price two of the measure's three residences, file scatter and
 convention; no task here forced reading the category-2 volume, so the
-biggest bars of Figure~\ref{fig:closures} stay unpriced by any run. Table~\ref{tab:stats} summarizes; the raw run records ship
+largest counts of Figure~\ref{fig:closures}, the text outside the
+project, stay unpriced by any run. Table~\ref{tab:stats} summarizes;
+the raw run records ship
 with the study \cite{full}.
 
 \begin{table}[!t]
