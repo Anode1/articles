@@ -22,27 +22,25 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \maketitle
 
 \begin{abstract}
-A layout program places the boxes of a diagram by minimising a cost: overlaps out,
-connected boxes near, edge lengths even. 4{,}890 hand drawings were just pooled into a
-corpus. The standing proposal is to learn the cost's weights from them. That assumes a
-drawing sits at a minimum of the cost. Nobody has tested this at the coordinates. We
-took 853 working diagrams of 15 to 40 boxes: biological pathways and business
-processes. We added 136 lab drawings of abstract graphs. We moved every box by 2\% of
-the drawing width in sixteen directions. If no move lowers a criterion, the box is held
-under it. \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs were the
-controls. Edge length and stress hold 0.3 to 1.1\% of hand-placed boxes. The median
-diagram holds none, and every diagram has improving moves. No down-weighting repairs
-it. \texttt{neato}'s own layouts are held at 1.00, so the test can see a minimum.
-Overlap is satisfied exactly. One criterion the costs omit does hold the drawings:
-alignment into rows and columns. It holds a fifth to most of the median hand diagram,
-corpus by corpus, and almost none of any optimised, random or grid-snapped layout; the
-lab drawings repeat the pattern. A hand layout is a layered layout with partial
-alignment. The test is new: it reads coordinates, not preferences or values. A cost
-fitted to hand coordinates learns the terms' trade-offs, not the drawer's, because the
-one term the drawer supplies is missing from the cost. Judges have been found to track
-stress, and that evidence stands. The coordinates cannot tell the hand from the
-editor's alignment guide. For fitting a cost it does not matter: the term is held and
-absent either way.
+Diagram editors ship an automatic layout, MySQL Workbench's \texttt{Arrange > Autolayout}
+among them, and it places the boxes by minimising a cost: overlaps out, connected boxes
+near, edge lengths even. 4{,}890 hand drawings were just pooled into a corpus, and the
+standing proposal is to learn the cost's weights from them. That assumes a drawing a
+person accepted sits at a minimum of the cost; nobody had tested it at the coordinates.
+We moved every box of 853 working diagrams, biological pathways and business processes,
+and of 136 lab drawings, by 2\% of the drawing width in sixteen directions, with
+\texttt{neato}, \texttt{dot} and ELK layouts of the same graphs as controls. A box no
+move improves is held. The distance terms hold almost no hand-placed box yet hold
+\texttt{neato}'s layouts fully, so the test can see a minimum. Overlap is satisfied
+exactly. The one criterion the costs omit, alignment into rows and columns, holds a
+fifth to most of the median hand diagram and almost none of any optimised, random or
+grid-snapped layout: a hand layout is a layered layout with partial alignment. A cost
+fitted to hand coordinates therefore learns the terms' mutual trade-offs, not the
+drawer's. Whether the alignment is the hand's or the editor guide's the coordinates
+cannot say, and for fitting it does not matter: the term is held and absent either way.
+The fix is one addition, not a subtraction: offer alignment among the terms, keep
+length and stress, whose preference evidence stands, and report the fraction of boxes
+the fitted cost holds at layouts people accepted.
 \end{abstract}
 
 \section{Introduction}
@@ -50,8 +48,11 @@ absent either way.
 A layout program places the boxes of a diagram by minimising an \emph{energy}, a weighted
 sum of quantities the field has agreed are bad: edges that cross, boxes that overlap, edges
 of very unequal length, boxes that sit on edges they do not belong to \cite{tdb88, dh96,
-purchase02, kobourov}. The weights are asserted by the tool's author, and since 1994 the
-proposal has been to learn them instead, from layouts people made or preferred
+purchase02, kobourov}. The weights are asserted by the tool's author and reach the user
+as one unparameterised command: MySQL Workbench documents \texttt{Arrange > Autolayout}
+in full as ``Automatically arranges objects on the canvas'', and Oracle SQL Developer
+Data Modeler's documented remedy for a bad result is Undo. Since 1994 the
+proposal has been to learn the weights instead, from layouts people made or preferred
 \cite{masui94, spoenemann14, klammler19, flud22, zhang26}. Such methods differ in what
 they need of their examples. Learning from preferences or selections
 \cite{masui94, spoenemann14, klammler19, zhang26} needs only that an accepted layout rank
@@ -205,6 +206,13 @@ summed energy fell, is the operator of a label placer the author deployed in 200
 directional test of equation~\eqref{eq:held} is that proposal made exhaustive, every
 direction tried, none accepted, the answer read off.
 
+The library was written for a diagram task. MySQL Workbench's reverse-engineering
+rebuilds a schema diagram auto-placed after every database change, and restoring a
+44-table diagram by hand cost the author about an hour each time, so \texttt{cjitter}
+places a migration's new tables onto the frozen rest. Pinning the rest is justified only
+if the person's positions carry something worth keeping; what they carry, at the
+coordinates, is this paper's question.
+
 \section{The corpora}\label{sec:corpora}
 
 Three collections of diagrams whose node coordinates a person chose, from three communities
@@ -327,7 +335,7 @@ The chords are the sensitivity.
 \paragraph{Reading direction.} $T_F$ needs a direction $u$. It is one of the four axis directions, the one under which $T_F$ is least for the layout as loaded, fixed before any move, the same rule as for $L$. Undirected edge kinds (GPML graphical lines, BPMN undirected associations) do not enter it.
 
 \paragraph{Directional test.} Radius $d \in \{0.005, 0.01, 0.02, 0.05\}$ of the drawing
-width, sixteen directions, every node, each term alone and the sums of the tables. Primary cell $d = 0.02$. The directions are exact to double precision (a series evaluated in the first quadrant and rotated), and a move that lowers the energy by less than $10^{-12}$ of its value is a tie; an earlier build with directions off by up to $4 \times 10^{-6}$ counted the shift that error made as an improvement and read alignment lower by up to 0.04. Deterministic: no seed, no budget. Every median carries a 95\% bootstrap interval over diagrams (1000 resamples).
+width, sixteen directions, every node, each term alone and the sums of the tables. Primary cell $d = 0.02$. The directions are exact to double precision (a series evaluated in the first quadrant and rotated), and a move that lowers the energy by less than $10^{-12}$ of its value is a tie; an earlier build with directions off by up to $4 \times 10^{-6}$ counted the shift that error made as an improvement and read alignment lower by up to 0.04. Deterministic: no seed, no budget. Every median carries a 95\% bootstrap interval over diagrams (1000 resamples). An interval of [0.00, 0.00] or [1.00, 1.00] is a pileup at the boundary, not precision: 87 to 92\% of hand diagrams sit at exactly 0.00 under length and stress, and 62 to 85\% of \texttt{neato}'s at exactly 1.00 under stress (\texttt{results/robustness.md}).
 
 \paragraph{Tool controls.} The same graphs with the same box sizes and edge directions laid out by \texttt{neato} (\texttt{-Gstart=1}, so the file reproduces), by \texttt{neato} with \texttt{-Goverlap=false} (prism), by \texttt{dot}, and by ELK layered 0.12.0 (\texttt{elkjs}, direction RIGHT, every other option at its default), the engine the BPMN and KIELER editors run; a check in the binary confirms each control is the same graphs.
 
@@ -562,6 +570,16 @@ reaches an alignment from further away; flow, a projection, does not move with $
 ELK's block (\texttt{results/sweep.md}) reads as \texttt{dot}'s: length and stress 0.00 at
 every radius, flow 1.00 at every radius.
 
+\paragraph{Directions.} Each doubling of $V$ contains the previous set, so $q$ can only
+fall as directions are added and the primary sixteen-direction figures are upper bounds on
+the continuum value (\texttt{results/robustness.md}). At 8, 16, 32 and 64 directions the
+verdicts stand: hand length and stress 0.00 in every corpus at every count,
+\texttt{neato}'s stress 1.00 at every count. The alignment level is what moves: A1 by hand
+reads 0.58, 0.52, 0.47, 0.39 on WikiPathways, 0.31, 0.21, 0.14, 0.07 on Reactome and 0.92,
+0.91, 0.90, 0.86 on BPMN across the four counts, while \texttt{neato}'s 0.06 falls to
+0.00. The hand-to-control gap survives at 64; the levels are comparable only at one count
+and are stated at sixteen.
+
 \paragraph{Reference length.} Under the median edge length instead of the fitted $L$,
 \texttt{neato}'s stress layouts score 0.07, 0.08 and 0.12 under stress and the hand
 layouts 0.00; under length the hand layouts score 0.03, 0.04 and 0.05 and \texttt{neato}'s
@@ -690,7 +708,8 @@ flow & $-0.40$ [$-0.42$, $-0.38$] & $<$1e-4 & $-0.33$ [$-0.35$, $-0.31$] & $<$1e
 The shifts under crossings, overlap, length and stress are distinguishable but confined to
 the minority of diagrams where the pair differs at all. The large shifts are the profile's
 gaps: the hand layout sits below \texttt{dot} on alignment in the biological corpora
-($-0.46$ and $-0.70$) and level with it on BPMN ($p = 0.14$), below it on flow everywhere
+($-0.46$ and $-0.70$) and within $[-0.01, +0.09]$ of it on BPMN, a bound read off the
+interval, not an equivalence read off the $p$ of 0.14; below it on flow everywhere
 ($-0.17$ to $-0.40$), and above it on node--edge separation and, in BPMN, on
 orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
 
@@ -702,7 +721,11 @@ drawings, 17 participants each laying out the same 8 abstract graphs, scraped fr
 study's published SVGs (\texttt{data/hola.txt}, provenance beside it), chord edges,
 below this paper's 15-box band and free of every diagram notation. The pattern holds:
 overlap and crossings 1.00, length and stress 0.00, alignment 0.50, between Reactome's
-0.21 and BPMN's 0.91. Node--edge holds 1.00, so H4 fails here too. These are drawings
+0.21 and BPMN's 0.91. Node--edge holds 1.00, so H4 fails here too. The 136 drawings are
+17 participants crossed with 8 graphs, so the interval is clustered: resampling
+participants (2000 draws) puts the alignment median at [0.31, 0.57], and the
+per-participant medians run 0.14 to 0.96. Across the four corpora the seven terms every
+corpus measures rank in the same order, Kendall's $W = 0.99$. These are drawings
 from a study tool rather than a diagram editor, which bears on the guide question of
 Section~\ref{sec:alternatives}; the corpus does not record whether that tool drew
 alignment aids.
