@@ -1,6 +1,6 @@
 # Pre-registration: phase 1, board versus every solo model, one lab
 
-    status      DRAFT, unsigned. No arm runs before the owner signs.
+    status      SIGNED by the owner, 2026-09-01. Frozen.
     population  the 18 instances in runs/screen.tsv marked "unresolved"
     frozen      population, budgets, criterion; fixed at signing
 
@@ -62,4 +62,4 @@ django-11141 stays in the population; its arms rerun under this protocol.
 
 ## Signature
 
-Signed: ____________  date: ____________
+Signed: __vasili_________  date: _____sep 1 2025_______
