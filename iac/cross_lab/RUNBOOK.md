@@ -12,8 +12,14 @@ Design: [README.md](README.md). Population: [harvest/](harvest/README.md).
   per-seat dollar metering from `claude -p --output-format json`, $0.42 total.
 - Residual set harvested and frozen: 37 instances of SWE-bench Verified that
   the best Claude-, GPT- and Gemini-based submissions all fail.
-- SOLO pilot on mwaskom__seaborn-3187 (sonnet): 21 turns, $0.36, 106 s, a
-  34-line patch archived unscored in `runs/solo/`.
+- SOLO pilot on mwaskom__seaborn-3187 (sonnet): 21 turns, $0.36, 106 s, and
+  the official harness scores it RESOLVED, so the 2025 leaderboard record
+  overstates hardness for current models. The population must be screened:
+  every instance a current solo seat resolves leaves the experiment; the
+  survivors are the real residual. `run/screen.sh` does the whole pass
+  (generate with `run_solo.sh`, evaluate in one harness call, verdicts to
+  `runs/screen.tsv`); it skips instances that already have an attempt, so it
+  resumes cheaply after any interruption.
 
 ## Conventions
 
@@ -53,10 +59,22 @@ conditions to judge (a seat burned 5 idle minutes on an interpreted
 condition). Runner script not yet written; model it on `run/run_solo.sh` plus
 `shakedown/BRIEF.md`.
 
+## Evaluation
+
+Docker is installed, data-root on the kuldata disk, and the dataset name that
+works with swebench 5.0.2 is `SWE-bench/SWE-bench_Verified` (prebuilt
+per-instance images; the old `princeton-nlp/` name lacks the `image` field
+and fails). One patch, from the venv at `/media/vas/kuldata/iac/venv`:
+
+    sg docker -c "$VENV/bin/python -m swebench.harness.run_evaluation \
+      --dataset_name SWE-bench/SWE-bench_Verified \
+      --predictions_path preds.jsonl --run_id <id> --max_workers 2"
+
+`preds.jsonl` rows: `{"instance_id", "model_name_or_path", "model_patch"}`.
+Verdicts (`report.json`) are copied beside the run in `runs/solo/`.
+
 ## Blocked, and on what
 
-- Patch evaluation: needs docker (sudo install, Vas) or an sb-cli token.
-  The official harness runs each instance's held-out tests in a container.
 - HETERO: metered OpenAI and xAI API keys (not subscriptions; dollar-matched
   arms need metered billing).
 - Owner decisions still open: spend cap, repeat count.
