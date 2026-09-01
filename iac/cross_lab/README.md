@@ -81,5 +81,7 @@ is already published (AgentRoom: two Haikus beat one Sonnet).
 
 ## Open
 
-Second and third vendor and their metered API keys, benchmark and residual-set
-rule, spend cap, repeat count. Recorded here when set.
+Metered OpenAI and xAI API keys, spend cap, repeat count, and the evaluation
+path (docker or sb-cli). The benchmark and residual rule are set: SWE-bench
+Verified, 37 instances, [harvest/](harvest/README.md). Working state and
+continuation instructions: [RUNBOOK.md](RUNBOOK.md).
