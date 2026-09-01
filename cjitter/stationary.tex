@@ -22,26 +22,33 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \maketitle
 
 \begin{abstract}
-Diagram editors ship an automatic layout, MySQL Workbench's \texttt{Arrange > Autolayout}
-among them, and it places the boxes by minimising a cost: overlaps out, connected boxes
-near, edge lengths even. 4{,}890 hand drawings were just pooled into a corpus, and the
-standing proposal is to learn the cost's weights from them. That assumes a drawing a
-person accepted sits at a minimum of the cost; nobody had tested it at the coordinates.
-We moved every box of 853 working diagrams, biological pathways and business processes,
-and of 136 lab drawings, by 2\% of the drawing width in sixteen directions, with
-\texttt{neato}, \texttt{dot} and ELK layouts of the same graphs as controls. A box no
-move improves is held. The distance terms hold almost no hand-placed box yet hold
-\texttt{neato}'s layouts fully, so the test can see a minimum. Overlap is satisfied
-exactly. The one criterion the costs omit, alignment into rows and columns, holds a
-fifth to most of the median hand diagram and almost none of any optimised, random or
-grid-snapped layout: a hand layout is a layered layout with partial alignment. The
-4{,}890-drawing corpus shows the same profile under the terms its format allows. A cost
-fitted to hand coordinates therefore learns the terms' mutual trade-offs, not the
-drawer's. Whether the alignment is the hand's or the editor guide's the coordinates
-cannot say, and for fitting it does not matter: the term is held and absent either way.
-The fix is one addition, not a subtraction: offer alignment among the terms, keep
-length and stress, whose preference evidence stands, and report the fraction of boxes
-the fitted cost holds at layouts people accepted.
+Diagram editors ship an automatic layout; MySQL Workbench calls it \texttt{Arrange >
+Autolayout}. Underneath is a cost, a weighted sum of complaints: boxes overlap,
+connected boxes sit far apart, edge lengths vary. The program moves boxes until the sum
+stops falling. 4{,}890 hand drawings were just pooled into a corpus, and the standing
+proposal is to learn the cost's weights from drawings like these. That only works if a
+finished drawing sits at a minimum of the cost. Nobody had checked at the coordinates.
+
+The check is simple. Take a diagram a person drew and accepted. Move each box by two
+per cent of the drawing width, in sixteen directions, and ask whether any move lowers a
+criterion; a box no move improves is held. We ran this on 853 working diagrams,
+biological pathways and business processes, on 136 lab drawings, and, as controls, on
+\texttt{neato}, \texttt{dot} and ELK layouts of the same graphs.
+
+The answer is one-sided. Edge length and stress hold almost no box a person placed,
+while the same test holds \texttt{neato}'s own layouts fully, so it does see a minimum
+where one exists. Overlap is satisfied exactly. What does hold the drawings is a
+criterion the costs do not carry: alignment into rows and columns. It holds a fifth to
+most of the median hand diagram and almost nothing in any optimised, random or
+grid-snapped layout. A hand layout is a layered layout with partial alignment, and the
+4{,}890-drawing corpus shows the same profile.
+
+A cost fitted to hand coordinates therefore learns the trade-offs between its own
+terms, not the drawer's. Whether the person aligned the boxes or the editor's guide did,
+the coordinates cannot tell; for fitting it makes no difference, the term is held and
+missing either way. The fix is an addition: offer alignment among the terms, keep
+length and stress, whose preference evidence stands, and report how many boxes the
+fitted cost holds at layouts people accepted.
 \end{abstract}
 
 \section{Introduction}
