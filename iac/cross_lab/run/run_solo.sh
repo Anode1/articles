@@ -33,10 +33,25 @@ git -C "$WORK" remote add origin "https://github.com/$REPO.git"
 git -C "$WORK" fetch -q --depth 1 origin "$COMMIT"
 git -C "$WORK" checkout -q FETCH_HEAD
 
+STREAMS=/media/vas/kuldata/iac/streams/solo-$ID-$STAMP
+mkdir -p "$STREAMS"
 claude -p "You are fixing one issue in the repository at $WORK (checked out at the relevant commit). The issue is in $WORK/PROBLEM.md. Read it, locate the fault, and fix it by editing the repository. Do not create new test files; do not commit. When the fix is in place, stop." \
   --model "$MODEL" --max-turns "$TURNS" \
   --allowedTools "Read" "Glob" "Grep" "Edit" "Write" "Bash" \
-  --output-format json > "$OUT/seat.json" 2> "$OUT/seat.stderr" || true
+  --verbose --output-format stream-json > "$STREAMS/seat.stream.jsonl" 2> "$OUT/seat.stderr" || true
+python3 - "$STREAMS/seat.stream.jsonl" > "$OUT/seat.json" <<'EOF' || true
+import json, sys
+res = {}
+for line in open(sys.argv[1]):
+    try:
+        d = json.loads(line)
+    except Exception:
+        continue
+    if d.get("type") == "result":
+        res = d
+print(json.dumps(res))
+EOF
+echo "$STREAMS" > "$OUT/streams.path"
 
 git -C "$WORK" diff > "$OUT/patch.diff"
 python3 - "$OUT/seat.json" <<'EOF' > "$OUT/meta.json"

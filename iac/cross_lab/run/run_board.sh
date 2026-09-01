@@ -70,14 +70,31 @@ PIDS=""
 for SEAT in $SEATS; do
     i=$((i+1))
     MODEL=$(echo "$MODELS" | cut -d, -f$i)
+    STREAMS=/media/vas/kuldata/iac/streams/board-$ID-$STAMP
+    mkdir -p "$STREAMS"
     IAC_FROM=$SEAT claude -p "You are $SEAT (model $MODEL), one of three seats fixing one issue together over an iac message board. Read $ROOM/BRIEF.md and follow it exactly. Your name: $SEAT" \
       --model "$MODEL" --max-turns "$TURNS" \
       --allowedTools "Read" "Glob" "Grep" "Edit" "Write" "Bash" \
-      --output-format json > "$OUT/$SEAT.json" 2> "$OUT/$SEAT.stderr" &
+      --verbose --output-format stream-json > "$STREAMS/$SEAT.stream.jsonl" 2> "$OUT/$SEAT.stderr" &
     PIDS="$PIDS $!"
 done
 wait $PIDS || true
 
+for SEAT in $SEATS; do
+    python3 - "/media/vas/kuldata/iac/streams/board-$ID-$STAMP/$SEAT.stream.jsonl" > "$OUT/$SEAT.json" <<'EOF' || true
+import json, sys
+res = {}
+for line in open(sys.argv[1]):
+    try:
+        d = json.loads(line)
+    except Exception:
+        continue
+    if d.get("type") == "result":
+        res = d
+print(json.dumps(res))
+EOF
+done
+echo "/media/vas/kuldata/iac/streams/board-$ID-$STAMP" > "$OUT/streams.path"
 git -C "$WORK/repo" diff > "$OUT/patch.diff"
 cp "$ROOM/BRIEF.md" "$OUT/BRIEF.md"
 $IAC log "$ROOM" > "$OUT/room-log.txt" 2>/dev/null || true
