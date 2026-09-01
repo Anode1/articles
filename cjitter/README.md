@@ -3,7 +3,9 @@
 **It reads [cjitter](https://github.com/Anode1/cjitter), it is a negative result, and it
 is not deposited.**
 
-`stationary.tex`, *What Holds a Hand-Drawn Diagram?*, 19 pages. Fitting a layout
+`stationary.tex`, *What Holds a Hand-Drawn Diagram?*, the full version, every
+sensitivity inline; `stationary_gd.tex` is the same paper in GD's `gd-lipics` class,
+500 lines of main matter and the sensitivities in an appendix, for GD 2027, Track 2. Fitting a layout
 energy to human drawings by inverse optimisation assumes the drawings sit at a minimum of
 some weighted sum of the standard criteria. Tested one criterion at a time on 853 hand-drawn
 diagrams of 15 to 40 boxes, that assumption fails. Overlap holds every box at zero. Uniform
@@ -23,3 +25,4 @@ audience of what it corrects. Its verdict tables remain in the library's
 | PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, governs `stationary.tex` |
 | figures/ | the TikZ figures the paper includes |
 | verified.bib | every citation checked: DOI resolved, PDF read |
+| gd-lipics-v3.cls, lipics-v2021.cls | the GD submission class and the LIPIcs class it wraps |

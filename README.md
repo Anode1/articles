@@ -26,7 +26,7 @@ Not deposited, and each says on its own first page or in its README what state i
 
 | directory | what it is |
 | --- | --- |
-| [`cjitter`](cjitter/README.md) | Two papers, both negative. What Do People Optimize in Diagram Layout?, and The Test the Metaphor Benchmark Never Ran |
+| [`cjitter`](cjitter/README.md) | What Holds a Hand-Drawn Diagram? Negative; targeting GD 2027. The metaphor-benchmark audit is withdrawn; its tables live in the library |
 | [`bpnn`](bpnn/README.md) | What a Benchmark Can Resolve: training noise as a ceiling on architecture comparison. Unpublished and unsubmitted |
 | [`energy`](energy/README.md) | A Substack piece on pricing grid power for data centres, with its charts and the script that draws them |
 
