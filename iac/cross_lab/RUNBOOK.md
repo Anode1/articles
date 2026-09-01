@@ -58,6 +58,16 @@ conditions to judge (a seat burned 5 idle minutes on an interpreted
 condition). Runner script not yet written; model it on `run/run_solo.sh` plus
 `shakedown/BRIEF.md`.
 
+- Board pilot (`run/run_board.sh`, three sonnet seats, django__django-11141,
+  $2.11): protocol held end to end: independent diagnoses posted before
+  reading, a claim conflict negotiated, work split fix/tests/docs, and the
+  collective patch scores RESOLVED on an instance the solo screen failed.
+  Not a comparison: budgets were unmatched and pilots are excluded by design.
+  Lessons: board seats need max-turns well above 40 (recv polling eats
+  turns), and seats sometimes recall the upstream fix from training data;
+  the contamination is symmetric across arms but must be stated as a
+  limitation of any absolute claim.
+
 ## Evaluation
 
 Docker is installed, data-root on the kuldata disk, and the dataset name that
