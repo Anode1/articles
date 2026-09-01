@@ -608,7 +608,10 @@ reads 0.58, 0.52, 0.47, 0.39 on WikiPathways, 0.31, 0.21, 0.14, 0.07 on Reactome
 0.00. The hand-to-control gap survives at 64; the levels are comparable only at one count
 and are stated at sixteen. The full grid of radius, direction count, reference-length
 rule and route treatment, 1{,}008 cells, flips no verdict: under the fitted $L$ the hand
-distance terms read exactly 0.00 in every cell (\texttt{results/specgrid.md}).
+distance terms read exactly 0.00 in every cell (\texttt{results/specgrid.md}). The tie
+tolerance, the last instrument constant, moves nothing at all: the A1 medians are
+identical at 0.001 through 0.01 (\texttt{results/tolsweep.md}), so the alignments the
+test counts are exact ties, not tolerance-window artefacts.
 
 \paragraph{Reference length.} Under the median edge length instead of the fitted $L$,
 \texttt{neato}'s stress layouts score 0.07, 0.08 and 0.12 under stress and the hand
@@ -873,7 +876,13 @@ the 41--100 band above. Registered and still not run: the caps in pitch units.
   is about the layouts, not the muscle. Separating them needs a guide-free editor or an
   interaction log, and these corpora carry neither. The nearest evidence is the restored
   HOLA corpus: drawings from a study tool, not a commercial editor, hold alignment at
-  0.50, so the phenomenon does not need Signavio to appear.
+  0.50, so the phenomenon does not need Signavio to appear. The eras say the same
+  (\texttt{results/era.md}): the GD Collection holds A1 at 0.81 in 1998 to 2005, when
+  its figures came from xfig, Ipe and hand-coded PostScript with no shared guide, 0.60
+  in 2006 to 2014 and 0.95 in the TikZ years, where a typed coordinate is alignment
+  chosen by hand; and WikiPathways is flat at 0.47 to 0.53 across four generations of
+  WP numbers, so no gradient follows PathVisio's releases. No single editor's aid
+  produces the hold; what stays open is only whether some aid does in each era.
 \end{enumerate}
 
 The rest, each with the test that excluded it and the numbers it turned on:
