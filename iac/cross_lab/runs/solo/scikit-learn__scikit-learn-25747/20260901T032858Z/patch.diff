@@ -1,0 +1,17 @@
+diff --git a/sklearn/utils/_set_output.py b/sklearn/utils/_set_output.py
+index 335773c..b084567 100644
+--- a/sklearn/utils/_set_output.py
++++ b/sklearn/utils/_set_output.py
+@@ -55,7 +55,11 @@ def _wrap_in_pandas_container(
+     if isinstance(data_to_wrap, pd.DataFrame):
+         if columns is not None:
+             data_to_wrap.columns = columns
+-        if index is not None:
++        # Only set the index if the data_to_wrap has the same number of
++        # samples as the index. This is needed because some transformers
++        # aggregate the data, e.g. a `groupby` operation, which results in
++        # a different number of samples than the original data.
++        if index is not None and len(index) == data_to_wrap.shape[0]:
+             data_to_wrap.index = index
+         return data_to_wrap
+ 

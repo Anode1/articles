@@ -1,0 +1,24 @@
+diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
+index e0c7d56..7969664 100644
+--- a/sphinx/writers/latex.py
++++ b/sphinx/writers/latex.py
+@@ -1709,12 +1709,16 @@ class LaTeXTranslator(SphinxTranslator):
+             node.astext(), lang, opts=opts, location=node)
+         # TODO: Use nowrap option once LaTeX formatter supports it
+         # https://github.com/pygments/pygments/pull/1343
+-        hlcode = hlcode.replace(r'\begin{Verbatim}[commandchars=\\\{\}]',
+-                                r'\sphinxcode{\sphinxupquote{')
++        hlcode = hlcode.replace(r'\begin{Verbatim}[commandchars=\\\{\}]' + CR,
++                                r'\sphinxcode{\sphinxupquote{%' + CR)
+         # get consistent trailer
+         hlcode = hlcode.rstrip()[:-14]  # strip \end{Verbatim}
++        # the Verbatim environment ends its last line with a newline
++        # that would otherwise render as a stray space in the inline
++        # (non-verbatim) \sphinxupquote group
++        hlcode = hlcode.rstrip(CR) + '%'
+         self.body.append(hlcode)
+-        self.body.append('}}')
++        self.body.append(CR + '}}')
+         raise nodes.SkipNode
+ 
+     def depart_literal(self, node: Element) -> None:
