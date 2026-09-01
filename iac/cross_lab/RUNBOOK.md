@@ -23,6 +23,18 @@ Design: [README.md](README.md). Population: [harvest/](harvest/README.md).
   this tree); push only when Vas says.
 - Prose follows `~/articles/STYLE.md`; match `cjitter/README.md`.
 
+## Storage
+
+- `~/articles/iac/cross_lab` (NVMe, git): everything reproduction of the
+  article needs: harvest, briefs, patches, run metadata, room logs.
+- `/media/vas/kuldata/iac` (USB3, ~700G), symlinked as
+  `~/articles/iac/external_data`: bulk that must survive but not travel in
+  git, chiefly evaluation logs under `evals/`. Docker's data-root is
+  `/media/vas/kuldata/docker`. The three kul directories beside it
+  (`data`, `data2`, `staging`) belong to another project: never touch.
+- `/tmp` scratch: seat workdirs (`CROSS_LAB_WORK` in `run/run_solo.sh`),
+  disposable.
+
 ## Running a SOLO attempt
 
     run/run_solo.sh <instance_id> <model> [max_turns]
