@@ -12,6 +12,8 @@ Design: [README.md](README.md). Population: [harvest/](harvest/README.md).
   per-seat dollar metering from `claude -p --output-format json`, $0.42 total.
 - Residual set harvested and frozen: 37 instances of SWE-bench Verified that
   the best Claude-, GPT- and Gemini-based submissions all fail.
+- SOLO pilot on mwaskom__seaborn-3187 (sonnet): 21 turns, $0.36, 106 s, a
+  34-line patch archived unscored in `runs/solo/`.
 
 ## Conventions
 
