@@ -12,14 +12,13 @@ Design: [README.md](README.md). Population: [harvest/](harvest/README.md).
   per-seat dollar metering from `claude -p --output-format json`, $0.42 total.
 - Residual set harvested and frozen: 37 instances of SWE-bench Verified that
   the best Claude-, GPT- and Gemini-based submissions all fail.
-- SOLO pilot on mwaskom__seaborn-3187 (sonnet): 21 turns, $0.36, 106 s, and
-  the official harness scores it RESOLVED, so the 2025 leaderboard record
-  overstates hardness for current models. The population must be screened:
-  every instance a current solo seat resolves leaves the experiment; the
-  survivors are the real residual. `run/screen.sh` does the whole pass
-  (generate with `run_solo.sh`, evaluate in one harness call, verdicts to
-  `runs/screen.tsv`); it skips instances that already have an attempt, so it
-  resumes cheaply after any interruption.
+- The screen is done. One sonnet attempt per instance ($18.60 total,
+  `run/screen.sh` to generate, `run/eval_batched.sh` to score on a
+  space-limited disk) resolved 19 of the 37 instances the 2025 leaderboard's
+  best all failed. `runs/screen.tsv` holds the verdicts; the 18 unresolved
+  instances are the experiment's population. A survivor of one attempt may
+  still fall to repeats or a stronger model; the SOLO arm exists to settle
+  that at matched dollars.
 
 ## Conventions
 
