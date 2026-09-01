@@ -524,7 +524,14 @@ stress, and none of them was taken. One such move is below perception, so at any
 perceptual $\epsilon$ the layouts are $\epsilon$-stationary under the distance terms; the
 failure is cumulative, not local, since from the same starts the capped climber removes
 0.26 to 0.31 of $C{+}O{+}L$. A coordinate fit needs exact stationarity, and the
-layouts sit a quarter of the energy from it.
+layouts sit a quarter of the energy from it. On a displacement scale
+(\texttt{results/calib.py}): perturb \texttt{neato}'s converged stress layouts, every
+box moved a known fraction of the width in a seeded direction, and run the same capped
+climber. Unperturbed it removes 0.001 of the stress energy; at a displacement of 0.005,
+0.007 to 0.024; at 0.02, 0.09 to 0.26; at 0.05, 0.24 to 0.43; at 0.10 less again, the
+cap seeing a shrinking share of a growing energy. The hand layouts' 0.12 to 0.14 under
+stress sits at a displacement of 0.014 to 0.025: a hand layout is as far from a stress
+minimum as a converged layout whose every box was moved by about the test radius.
 
 The BPMN figure is the one number in the paper that the corpus's selection moves. The 300
 models are the first by id of the 6{,}723 in the band, and on all 6{,}723 the alignment hold
@@ -532,8 +539,16 @@ is 0.87 rather than 0.91, the mean 0.81; resampling 300 of them 2{,}000 times pu
 the 99th percentile, outside the interval [0.83, 0.90] that a random 300 gives. Every other
 term is where it was: crossings, overlap, node--edge and $C{+}O$ at 1.00, length, stress and
 $C{+}O{+}L$ at 0.00, orthogonality 0.733 against 0.726, A3 0.312 against 0.310 and flow
-0.842 against 0.854. The tables here stay on the 300 because that is the corpus the tool
-controls were generated for; the alignment claim is stated at 0.87, the population value.
+0.842 against 0.854 (\texttt{results/bpmn\_population.md}). The tables here stay on the
+committed 300; a seeded random 300 with all four tool controls regenerated
+(\texttt{data/bpmnr.txt}, \texttt{results/bpmn\_random300.md}) reruns the battery and
+confirms the confinement: A1 0.846, around the population 0.872, every other energy
+within 0.017, the R,A,N,F fit still 0.88 on alignment, the lanes split 28/14/58 against
+30/13/57. One pair changes verdict: hand against \texttt{dot} on A1 reads $-0.05$
+[$-0.10$, $-0.00$], Holm $p$ = 0.042, on the random 300, so the committed sample's
+apparent parity with \texttt{dot} was the selection's and the hand layout sits below
+\texttt{dot} on alignment in BPMN as in the biological corpora. The alignment claim is
+stated at 0.87, the population value.
 The gridiness value puts 58\%, 36\% and 82\% of hand-placed
 boxes in an alignment of three or more, none of \texttt{neato}'s, 88\%, 82\% and 78\% of
 \texttt{dot}'s and 80\%, 69\% and 75\% of ELK's. The gridiness $q$ of 0.77 to 0.78 on \texttt{neato}'s layouts, at value
@@ -591,7 +606,9 @@ verdicts stand: hand length and stress 0.00 in every corpus at every count,
 reads 0.58, 0.52, 0.47, 0.39 on WikiPathways, 0.31, 0.21, 0.14, 0.07 on Reactome and 0.92,
 0.91, 0.90, 0.86 on BPMN across the four counts, while \texttt{neato}'s 0.06 falls to
 0.00. The hand-to-control gap survives at 64; the levels are comparable only at one count
-and are stated at sixteen.
+and are stated at sixteen. The full grid of radius, direction count, reference-length
+rule and route treatment, 1{,}008 cells, flips no verdict: under the fitted $L$ the hand
+distance terms read exactly 0.00 in every cell (\texttt{results/specgrid.md}).
 
 \paragraph{Reference length.} Under the median edge length instead of the fitted $L$,
 \texttt{neato}'s stress layouts score 0.07, 0.08 and 0.12 under stress and the hand
@@ -741,7 +758,8 @@ The shifts under crossings, overlap, length and stress are distinguishable but c
 the minority of diagrams where the pair differs at all. The large shifts are the profile's
 gaps: the hand layout sits below \texttt{dot} on alignment in the biological corpora
 ($-0.46$ and $-0.70$) and within $[-0.01, +0.09]$ of it on BPMN, a bound read off the
-interval, not an equivalence read off the $p$ of 0.14; below it on flow everywhere
+interval, not an equivalence read off the $p$ of 0.14 (the random 300 below reads
+$-0.05$); below it on flow everywhere
 ($-0.17$ to $-0.40$), and above it on node--edge separation and, in BPMN, on
 orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
 
