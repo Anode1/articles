@@ -22,30 +22,35 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \maketitle
 
 \begin{abstract}
-Diagram editors ship an automatic layout; in MySQL Workbench it is one button,
-Autolayout. Behind the button is a cost: boxes must not overlap, connected boxes should
-sit close, edge lengths should come out even. A corpus of several thousand hand-made
-drawings was published last year, and the standing plan is to tune the cost's weights
-on drawings like these. The plan rests on an assumption: a drawing a person kept is
-already a minimum of the cost. Nobody had checked.
+Diagram editors ship an automatic layout; in MySQL Workbench it is one menu command,
+Autolayout. Behind such commands is a cost, a weighted sum of complaints: boxes
+overlap, connected boxes sit far apart, edge lengths vary. A corpus of several thousand
+hand-made drawings was published last year, and one standing proposal is to tune the
+cost's weights on drawings like these, treating each drawing a person kept as a minimum
+of the cost. Nobody had checked whether it is one.
 
-The check is simple. Take a drawing. Nudge every box a little, in every direction, and
-ask whether any nudge makes the cost better. If none does, the box is where the cost
-wants it. We ran this on 989 real diagrams, pathways, business processes and lab
-drawings, and on machine layouts of the same graphs for comparison.
+The check is simple, one criterion at a time. Take a drawing. Nudge every box a little,
+in sixteen directions, and ask whether any nudge lowers the criterion; a box no nudge
+improves is held. We ran this on 853 working diagrams, biological pathways and business
+processes, on 136 lab drawings, and, for comparison, on tool-made and random layouts of
+the same graphs.
 
-The result is lopsided. Under the distance terms almost every hand-placed box has a
-better spot nearby; the same test finds nothing to improve in the machine's own
-layouts, so it does see a minimum where one exists. What people do satisfy is a rule
-the costs do not contain: boxes lined up in rows and columns. Hand drawings are
-aligned, and machine and random layouts are not, in every corpus we touched, the new
-one included.
+The result is lopsided between the criteria. Under uniform edge length and stress, the
+two terms that price distances, the median hand drawing has no held box at all, while
+the stress minimiser's own layouts are held in full, so the test does see a minimum
+where one exists. What holds the hand drawings instead is a criterion the tuned costs
+do not contain: alignment into rows and columns. It holds a fifth to most of the median
+hand drawing against almost none of a force-directed or random layout; the layered
+tools align too, but by construction, without a term for it. The new corpus shows the
+same hand profile. People are known to prefer low-stress drawings; at the coordinates
+they do not produce them.
 
-So a cost tuned on human drawings learns nothing about the human: the one habit the
-drawings carry is not on offer. Whether the person aligned the boxes or the editor's
-guide did, the coordinates cannot say, and for tuning it does not matter. The fix is
-one addition. Offer alignment among the terms, keep the rest, and report how much of a
-human drawing any tuned cost holds still.
+So a cost tuned on hand coordinates learns the trade-offs among its own terms, not the
+drawer's. Whether the person aligned the boxes or the editor's snap guide did, the
+coordinates cannot say, and for tuning it does not matter: the term is held and missing
+either way. The fix is an addition and a report. Offer alignment among the terms, keep
+the rest, and judge any tuned cost by the fraction of a person's boxes it would leave
+in place.
 \end{abstract}
 
 \section{Introduction}
