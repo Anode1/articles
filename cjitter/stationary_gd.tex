@@ -1,6 +1,7 @@
 \documentclass[a4paper,UKenglish]{gd-lipics-v3}
 % for submission: \documentclass[a4paper,UKenglish,anonymous]{gd-lipics-v3}
 \usepackage{booktabs}
+\usepackage{xurl}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -13,15 +14,20 @@
 \ccsdesc[500]{Human-centered computing~Graph drawings}
 \keywords{graph drawing, layout aesthetics, inverse optimisation, alignment, empirical study}
 \category{Track 2, Long Paper}
+\GAIDecl{Generative AI (Anthropic's Claude) was used throughout, under the author's
+direction and review: in the analysis scripts, the measurements they produced, and the
+drafting of the text.}
 \relatedversion{A full version with every sensitivity inline is maintained beside this one.}
-\supplement{Code, parsed corpora and every table's script:
-\url{https://github.com/Anode1/cjitter}, directory \texttt{example/diagrams}.}
+\supplement{\url{https://github.com/Anode1/cjitter}, directory
+\texttt{example/diagrams}: code, parsed corpora, and every table's script.}
+
+\setcounter{secnumdepth}{3}
 
 \begin{document}
 \maketitle
 \begin{abstract}
-Diagram editors ship an automatic layout; MySQL Workbench calls it \texttt{Arrange >
-Autolayout}. Underneath is a cost, a weighted sum of complaints: boxes overlap,
+Diagram editors ship an automatic layout; MySQL Workbench calls it
+\mbox{\texttt{Arrange >}} \mbox{\texttt{Autolayout}}. Underneath is a cost, a weighted sum of complaints: boxes overlap,
 connected boxes sit far apart, edge lengths vary. The program moves boxes until the sum
 stops falling. 4{,}890 hand drawings were just pooled into a corpus, and the standing
 proposal is to learn the cost's weights from drawings like these. That only works if a
@@ -212,13 +218,13 @@ Three collections of diagrams whose node coordinates a person chose, from three 
 with different authoring tools, all redistributable.
 
 \begin{center}\footnotesize
-\begin{tabular}{llrrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-corpus & licence & files & parsed & 15--40 nodes & used & median $m/n$ \\
+corpus & files & parsed & 15--40 nodes & used & median $m/n$ \\
 \midrule
-WikiPathways GPML, \emph{Homo sapiens} & CC0 & 1{,}016 & 571 & 305 & 305 & 1.06 \\
-Reactome SBGN-ML & CC0 & 1{,}382 & 710 & 248 & 248 & 1.04 \\
-BPMN Academic Initiative & academic & 29{,}810 & 21{,}784 & 6{,}723 & 300 & 1.11 \\
+WikiPathways GPML, \emph{Homo sapiens} & 1{,}016 & 571 & 305 & 305 & 1.06 \\
+Reactome SBGN-ML & 1{,}382 & 710 & 248 & 248 & 1.04 \\
+BPMN Academic Initiative & 29{,}810 & 21{,}784 & 6{,}723 & 300 & 1.11 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -325,43 +331,43 @@ whole band on the stored routes with the fitted $L$.
 interval over diagrams, and on the three tool layouts of the same graphs; in parentheses
 the median value of the term at the layout, 0 when satisfied.
 
-\begin{center}\scriptsize\setlength{\tabcolsep}{3.5pt}
+\begin{center}\fontsize{5.6}{6.8}\selectfont\setlength{\tabcolsep}{1.2pt}
 \begin{tabular}{llrrrrr}
 \toprule
 corpus & energy & hand & \texttt{neato} & \texttt{prism} & \texttt{dot} & \texttt{elk} \\
 \midrule
-WikiPathways & crossings alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.029) & 1.00 (0.036) \\
-& overlap alone & 1.00 [1.00, 1.00] (0.000) & 0.60 (0.030) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) \\
-& length alone & 0.00 [0.00, 0.00] (0.219) & 0.24 (0.011) & 0.19 (0.014) & 0.00 (0.241) & 0.00 (0.127) \\
-& stress alone & 0.00 [0.00, 0.00] (0.217) & 1.00 (0.042) & 0.94 (0.044) & 0.00 (0.201) & 0.00 (0.241) \\
-& orthogonality alone & 0.19 [0.18, 0.21] (0.157) & 0.00 (0.280) & 0.00 (0.281) & 0.19 (0.244) & 0.19 (0.158) \\
-& alignment A1 alone & 0.52 [0.48, 0.54] (0.003) & 0.06 (0.011) & 0.07 (0.010) & 1.00 (0.000) & 0.57 (0.001) \\
-& alignment A3 alone & 0.20 [0.18, 0.23] (0.284) & 0.03 (0.446) & 0.03 (0.451) & 0.45 (0.204) & 0.35 (0.176) \\
-& gridiness alone & 0.87 [0.84, 0.89] (0.424) & 0.78 (1.000) & 0.79 (1.000) & 1.00 (0.125) & 0.76 (0.200) \\
-& node-edge alone & 0.88 [0.86, 0.90] (0.004) & 0.89 (0.000) & 1.00 (0.000) & 0.78 (0.011) & 0.74 (0.016) \\
-& flow alone & 0.59 [0.56, 0.62] (0.131) & 0.50 (0.211) & 0.50 (0.211) & 1.00 (0.000) & 1.00 (0.000) \\
+WikiPathways & crossings & 1.00 [1.00,1.00](0.000) & 1.00(0.000) & 1.00(0.000) & 1.00(0.029) & 1.00(0.036) \\
+& overlap & 1.00 [1.00,1.00](0.000) & 0.60(0.030) & 1.00(0.000) & 1.00(0.000) & 1.00(0.000) \\
+& length & 0.00 [0.00,0.00](0.219) & 0.24(0.011) & 0.19(0.014) & 0.00(0.241) & 0.00(0.127) \\
+& stress & 0.00 [0.00,0.00](0.217) & 1.00(0.042) & 0.94(0.044) & 0.00(0.201) & 0.00(0.241) \\
+& orthogonality & 0.19 [0.18,0.21](0.157) & 0.00(0.280) & 0.00(0.281) & 0.19(0.244) & 0.19(0.158) \\
+& alignment A1 & 0.52 [0.48,0.54](0.003) & 0.06(0.011) & 0.07(0.010) & 1.00(0.000) & 0.57(0.001) \\
+& alignment A3 & 0.20 [0.18,0.23](0.284) & 0.03(0.446) & 0.03(0.451) & 0.45(0.204) & 0.35(0.176) \\
+& gridiness & 0.87 [0.84,0.89](0.424) & 0.78(1.000) & 0.79(1.000) & 1.00(0.125) & 0.76(0.200) \\
+& node-edge & 0.88 [0.86,0.90](0.004) & 0.89(0.000) & 1.00(0.000) & 0.78(0.011) & 0.74(0.016) \\
+& flow & 0.59 [0.56,0.62](0.131) & 0.50(0.211) & 0.50(0.211) & 1.00(0.000) & 1.00(0.000) \\
 \midrule
-Reactome & crossings alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.056) & 1.00 (0.066) \\
-& overlap alone & 1.00 [1.00, 1.00] (0.000) & 0.76 (0.022) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) \\
-& length alone & 0.00 [0.00, 0.00] (0.234) & 0.35 (0.005) & 0.26 (0.009) & 0.00 (0.232) & 0.00 (0.205) \\
-& stress alone & 0.00 [0.00, 0.00] (0.212) & 1.00 (0.034) & 0.85 (0.042) & 0.00 (0.177) & 0.00 (0.197) \\
-& orthogonality alone & 0.17 [0.15, 0.18] (0.193) & 0.00 (0.277) & 0.00 (0.277) & 0.15 (0.256) & 0.12 (0.203) \\
-& alignment A1 alone & 0.21 [0.19, 0.24] (0.004) & 0.06 (0.009) & 0.06 (0.010) & 1.00 (0.000) & 0.42 (0.002) \\
-& alignment A3 alone & 0.10 [0.08, 0.12] (0.300) & 0.03 (0.430) & 0.03 (0.428) & 0.39 (0.206) & 0.31 (0.213) \\
-& gridiness alone & 0.65 [0.62, 0.68] (0.640) & 0.77 (1.000) & 0.75 (1.000) & 0.95 (0.176) & 0.74 (0.306) \\
-& node-edge alone & 1.00 [0.94, 1.00] (0.000) & 0.93 (0.000) & 1.00 (0.000) & 0.80 (0.007) & 0.75 (0.021) \\
-& flow alone & 0.62 [0.60, 0.67] (0.096) & 0.45 (0.217) & 0.44 (0.222) & 1.00 (0.000) & 1.00 (0.000) \\
+Reactome & crossings & 1.00 [1.00,1.00](0.000) & 1.00(0.000) & 1.00(0.000) & 1.00(0.056) & 1.00(0.066) \\
+& overlap & 1.00 [1.00,1.00](0.000) & 0.76(0.022) & 1.00(0.000) & 1.00(0.000) & 1.00(0.000) \\
+& length & 0.00 [0.00,0.00](0.234) & 0.35(0.005) & 0.26(0.009) & 0.00(0.232) & 0.00(0.205) \\
+& stress & 0.00 [0.00,0.00](0.212) & 1.00(0.034) & 0.85(0.042) & 0.00(0.177) & 0.00(0.197) \\
+& orthogonality & 0.17 [0.15,0.18](0.193) & 0.00(0.277) & 0.00(0.277) & 0.15(0.256) & 0.12(0.203) \\
+& alignment A1 & 0.21 [0.19,0.24](0.004) & 0.06(0.009) & 0.06(0.010) & 1.00(0.000) & 0.42(0.002) \\
+& alignment A3 & 0.10 [0.08,0.12](0.300) & 0.03(0.430) & 0.03(0.428) & 0.39(0.206) & 0.31(0.213) \\
+& gridiness & 0.65 [0.62,0.68](0.640) & 0.77 (1.000) & 0.75 (1.000) & 0.95(0.176) & 0.74(0.306) \\
+& node-edge & 1.00 [0.94,1.00](0.000) & 0.93(0.000) & 1.00(0.000) & 0.80(0.007) & 0.75(0.021) \\
+& flow & 0.62 [0.60,0.67](0.096) & 0.45(0.217) & 0.44(0.222) & 1.00(0.000) & 1.00(0.000) \\
 \midrule
-BPMN & crossings alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) \\
-& overlap alone & 1.00 [1.00, 1.00] (0.000) & 0.41 (0.073) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) \\
-& length alone & 0.00 [0.00, 0.00] (0.291) & 0.42 (0.006) & 0.27 (0.014) & 0.00 (0.250) & 0.00 (0.273) \\
-& stress alone & 0.00 [0.00, 0.00] (0.203) & 1.00 (0.017) & 0.90 (0.024) & 0.00 (0.169) & 0.00 (0.190) \\
-& orthogonality alone & 0.73 [0.70, 0.75] (0.011) & 0.00 (0.280) & 0.00 (0.278) & 0.26 (0.167) & 0.25 (0.139) \\
-& alignment A1 alone & 0.91 [0.87, 0.97] (0.000) & 0.06 (0.011) & 0.06 (0.011) & 0.89 (0.000) & 0.62 (0.001) \\
-& alignment A3 alone & 0.31 [0.29, 0.33] (0.207) & 0.00 (0.453) & 0.00 (0.452) & 0.19 (0.168) & 0.20 (0.155) \\
-& gridiness alone & 0.95 [0.94, 0.97] (0.176) & 0.78 (1.000) & 0.78 (1.000) & 0.79 (0.219) & 0.69 (0.250) \\
-& node-edge alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 0.82 (0.003) & 0.76 (0.016) \\
-& flow alone & 0.85 [0.82, 0.87] (0.045) & 0.62 (0.121) & 0.60 (0.123) & 1.00 (0.000) & 1.00 (0.000) \\
+BPMN & crossings & 1.00 [1.00,1.00](0.000) & 1.00(0.000) & 1.00(0.000) & 1.00(0.000) & 1.00(0.000) \\
+& overlap & 1.00 [1.00,1.00](0.000) & 0.41(0.073) & 1.00(0.000) & 1.00(0.000) & 1.00(0.000) \\
+& length & 0.00 [0.00,0.00](0.291) & 0.42(0.006) & 0.27(0.014) & 0.00(0.250) & 0.00(0.273) \\
+& stress & 0.00 [0.00,0.00](0.203) & 1.00(0.017) & 0.90(0.024) & 0.00(0.169) & 0.00(0.190) \\
+& orthogonality & 0.73 [0.70,0.75](0.011) & 0.00(0.280) & 0.00(0.278) & 0.26(0.167) & 0.25(0.139) \\
+& alignment A1 & 0.91 [0.87,0.97](0.000) & 0.06(0.011) & 0.06(0.011) & 0.89(0.000) & 0.62(0.001) \\
+& alignment A3 & 0.31 [0.29,0.33](0.207) & 0.00(0.453) & 0.00(0.452) & 0.19(0.168) & 0.20(0.155) \\
+& gridiness & 0.95 [0.94,0.97](0.176) & 0.78(1.000) & 0.78(1.000) & 0.79(0.219) & 0.69(0.250) \\
+& node-edge & 1.00 [1.00,1.00](0.000) & 1.00(0.000) & 1.00(0.000) & 0.82(0.003) & 0.76(0.016) \\
+& flow & 0.85 [0.82,0.87](0.045) & 0.62(0.121) & 0.60(0.123) & 1.00(0.000) & 1.00(0.000) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -757,7 +763,7 @@ term convicts the force-directed and multicriteria energies, not the layered eng
 \input{figures/test}
 
 \begin{center}\footnotesize
-\begin{tabular}{lp{8.2cm}l}
+\begin{tabular}{lp{6.3cm}l}
 \toprule
 term & definition & zero when \\
 \midrule
@@ -886,6 +892,7 @@ repair.
 \texttt{neato}'s (\texttt{profile.py --sweep}):
 
 \begin{center}\footnotesize
+\fontsize{6}{7.2}\selectfont\setlength{\tabcolsep}{1.6pt}
 \begin{tabular}{lrrrrrrrrrrrr}
 \toprule
  & \multicolumn{4}{c}{WikiPathways} & \multicolumn{4}{c}{Reactome} & \multicolumn{4}{c}{BPMN} \\
@@ -965,7 +972,7 @@ it touches.
 Each format's stored routes, as a fraction of the edges in the band:
 
 \begin{center}\scriptsize
-\begin{tabular}{lrrl}
+\begin{tabular}{lrrp{5.6cm}}
 \toprule
 corpus & edges & with a waypoint & by what the file stores \\
 \midrule
@@ -1060,21 +1067,22 @@ The columns are those of Section~\ref{sec:results}: the Hodges--Lehmann shift of
 $q_{0.02}$, hand against \texttt{dot}, with the Holm-adjusted signed-rank $p$.
 
 \begin{center}\scriptsize
+\fontsize{6}{7.2}\selectfont\setlength{\tabcolsep}{1.6pt}
 \begin{tabular}{lrrrrrr}
 \toprule
  & \multicolumn{2}{c}{WikiPathways} & \multicolumn{2}{c}{Reactome} & \multicolumn{2}{c}{BPMN} \\
-energy & HL [95\%] & $p$ & HL [95\%] & $p$ & HL [95\%] & $p$ \\
+energy & HL [95\%] &$p$ & HL [95\%] &$p$ & HL [95\%] &$p$ \\
 \midrule
-crossings & $-0.04$ [$-0.07$, $-0.01$] & 0.016 & $+0.02$ [$-0.01$, $+0.05$] & 0.30 & $+0.10$ [$+0.08$, $+0.12$] & $<$1e-4 \\
-overlap & $-0.14$ [$-0.18$, $-0.11$] & $<$1e-4 & $-0.07$ [$-0.10$, $-0.06$] & 0.0024 & $-0.22$ [$-0.29$, $-0.11$] & $<$1e-4 \\
-length & $-0.01$ [$-0.03$, $+0.00$] & 0.27 & $-0.03$ [$-0.05$, $-0.01$] & 0.017 & $-0.09$ [$-0.12$, $-0.06$] & $<$1e-4 \\
-stress & $-0.03$ [$-0.04$, $-0.00$] & 0.022 & $-0.03$ [$-0.05$, $-0.01$] & 0.0048 & $-0.08$ [$-0.11$, $-0.05$] & $<$1e-4 \\
-orthogonality & $+0.01$ [$-0.00$, $+0.04$] & 0.27 & $+0.02$ [$+0.00$, $+0.04$] & 0.036 & $+0.43$ [$+0.41$, $+0.45$] & $<$1e-4 \\
-alignment A1 & $-0.46$ [$-0.49$, $-0.43$] & $<$1e-4 & $-0.70$ [$-0.73$, $-0.67$] & $<$1e-4 & $+0.04$ [$-0.01$, $+0.09$] & 0.14 \\
-alignment A3 & $-0.25$ [$-0.28$, $-0.22$] & $<$1e-4 & $-0.28$ [$-0.31$, $-0.26$] & $<$1e-4 & $+0.13$ [$+0.10$, $+0.16$] & $<$1e-4 \\
-gridiness & $-0.13$ [$-0.15$, $-0.11$] & $<$1e-4 & $-0.29$ [$-0.32$, $-0.26$] & $<$1e-4 & $+0.21$ [$+0.17$, $+0.25$] & $<$1e-4 \\
-node--edge & $+0.13$ [$+0.10$, $+0.16$] & $<$1e-4 & $+0.18$ [$+0.15$, $+0.21$] & $<$1e-4 & $+0.26$ [$+0.23$, $+0.28$] & $<$1e-4 \\
-flow & $-0.40$ [$-0.42$, $-0.38$] & $<$1e-4 & $-0.33$ [$-0.35$, $-0.31$] & $<$1e-4 & $-0.17$ [$-0.19$, $-0.14$] & $<$1e-4 \\
+crossings & $-0.04$ [$-0.07$,$-0.01$] &0.016 & $+0.02$ [$-0.01$, $+0.05$] &0.30 & $+0.10$ [$+0.08$, $+0.12$] &$<$1e-4 \\
+overlap & $-0.14$ [$-0.18$,$-0.11$] &$<$1e-4 & $-0.07$ [$-0.10$,$-0.06$] &0.0024 & $-0.22$ [$-0.29$,$-0.11$] &$<$1e-4 \\
+length & $-0.01$ [$-0.03$, $+0.00$] &0.27 & $-0.03$ [$-0.05$,$-0.01$] &0.017 & $-0.09$ [$-0.12$,$-0.06$] &$<$1e-4 \\
+stress & $-0.03$ [$-0.04$,$-0.00$] &0.022 & $-0.03$ [$-0.05$,$-0.01$] &0.0048 & $-0.08$ [$-0.11$,$-0.05$] &$<$1e-4 \\
+orthogonality & $+0.01$ [$-0.00$, $+0.04$] &0.27 & $+0.02$ [$+0.00$, $+0.04$] &0.036 & $+0.43$ [$+0.41$, $+0.45$] &$<$1e-4 \\
+alignment A1 & $-0.46$ [$-0.49$,$-0.43$] &$<$1e-4 & $-0.70$ [$-0.73$,$-0.67$] &$<$1e-4 & $+0.04$ [$-0.01$, $+0.09$] &0.14 \\
+alignment A3 & $-0.25$ [$-0.28$,$-0.22$] &$<$1e-4 & $-0.28$ [$-0.31$,$-0.26$] &$<$1e-4 & $+0.13$ [$+0.10$, $+0.16$] &$<$1e-4 \\
+gridiness & $-0.13$ [$-0.15$,$-0.11$] &$<$1e-4 & $-0.29$ [$-0.32$,$-0.26$] &$<$1e-4 & $+0.21$ [$+0.17$, $+0.25$] &$<$1e-4 \\
+node--edge & $+0.13$ [$+0.10$, $+0.16$] &$<$1e-4 & $+0.18$ [$+0.15$, $+0.21$] &$<$1e-4 & $+0.26$ [$+0.23$, $+0.28$] &$<$1e-4 \\
+flow & $-0.40$ [$-0.42$,$-0.38$] &$<$1e-4 & $-0.33$ [$-0.35$,$-0.31$] &$<$1e-4 & $-0.17$ [$-0.19$,$-0.14$] &$<$1e-4 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1133,7 +1141,7 @@ generator and every number: \texttt{results/nulls.py}.
 The rest, each with the test that excluded it and the numbers it turned on:
 
 \begin{center}\small
-\begin{tabular}{@{}p{2.5cm}p{4.1cm}p{7.7cm}@{}}
+\begin{tabular}{@{}p{2.2cm}p{3.7cm}p{7.0cm}@{}}
 \toprule
 alternative & test & result \\
 \midrule
@@ -1246,7 +1254,7 @@ doing.
 \section{Related work, tabulated}\label{app:related}
 
 \begin{center}\small
-\begin{tabular}{@{}p{3.5cm}p{5.2cm}p{5.6cm}@{}}
+\begin{tabular}{@{}p{3.1cm}p{4.7cm}p{5.2cm}@{}}
 \toprule
 work & what it did & what it gives, and what it leaves \\
 \midrule
