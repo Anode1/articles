@@ -36,5 +36,14 @@ and tested.
 7. Limitations: contamination (seats recall upstream fixes, observed and
    quotable), quota-priced meter, one lab in phase 1.
 
+8. Future: memory as the third layer. A team's memory has a shared
+   sequential part (the iac log), a private associative part per name
+   (an ais each: the small relevant subset a seat chose to keep, keyed
+   in its own words, i.e. its bias made durable), and optionally a shared
+   associative part (a project ais surviving every model swap). Real
+   tenure replaces prompted tenure (the hsearch cohort recipe failed on
+   the latter). Private indexes are a diversity source manufacturable
+   within one lab: identical weights, different priors.
+
 Register: ~/articles/STYLE.md; claims carry numbers; the flow analysis
 (../cross_lab/runs/board/.../FLOW.md) supplies the qualitative specimens.
