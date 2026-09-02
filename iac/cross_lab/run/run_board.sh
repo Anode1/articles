@@ -74,7 +74,7 @@ for SEAT in $SEATS; do
     MODEL=$(echo "$MODELS" | cut -d, -f$i)
     STREAMS=/media/vas/kuldata/iac/streams/board-$ID-$STAMP
     mkdir -p "$STREAMS"
-    IAC_FROM=$SEAT claude -p "You are $SEAT (model $MODEL), one of three seats fixing one issue together over an iac message board. Read $ROOM/BRIEF.md and follow it exactly. Your name: $SEAT" \
+    APPORT_REPORT_DIR=/tmp/cross_lab_apport IAC_FROM=$SEAT claude -p "You are $SEAT (model $MODEL), one of three seats fixing one issue together over an iac message board. Read $ROOM/BRIEF.md and follow it exactly. Your name: $SEAT" \
       --model "$MODEL" --max-turns "$TURNS" \
       --allowedTools "Read" "Glob" "Grep" "Edit" "Write" "Bash" \
       --verbose --output-format stream-json > "$STREAMS/$SEAT.stream.jsonl" 2> "$OUT/$SEAT.stderr" &

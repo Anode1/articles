@@ -35,7 +35,7 @@ git -C "$WORK" checkout -q FETCH_HEAD
 
 STREAMS=/media/vas/kuldata/iac/streams/solo-$ID-$STAMP
 mkdir -p "$STREAMS"
-claude -p "You are fixing one issue in the repository at $WORK (checked out at the relevant commit). The issue is in $WORK/PROBLEM.md. Read it, locate the fault, and fix it by editing the repository. Do not create new test files; do not commit. When the fix is in place, stop." \
+APPORT_REPORT_DIR=/tmp/cross_lab_apport claude -p "You are fixing one issue in the repository at $WORK (checked out at the relevant commit). The issue is in $WORK/PROBLEM.md. Read it, locate the fault, and fix it by editing the repository. Do not create new test files; do not commit. When the fix is in place, stop." \
   --model "$MODEL" --max-turns "$TURNS" \
   --allowedTools "Read" "Glob" "Grep" "Edit" "Write" "Bash" \
   --verbose --output-format stream-json > "$STREAMS/seat.stream.jsonl" 2> "$OUT/seat.stderr" || true
