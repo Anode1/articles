@@ -1,0 +1,26 @@
+diff --git a/sphinx/ext/inheritance_diagram.py b/sphinx/ext/inheritance_diagram.py
+index 6e39855..40af906 100644
+--- a/sphinx/ext/inheritance_diagram.py
++++ b/sphinx/ext/inheritance_diagram.py
+@@ -412,10 +412,19 @@ def html_visit_inheritance_diagram(self: HTML5Translator, node: inheritance_diag
+     pending_xrefs = cast(Iterable[addnodes.pending_xref], node)
+     for child in pending_xrefs:
+         if child.get('refuri') is not None:
++            refuri = child.get('refuri')
+             if graphviz_output_format == 'SVG':
+-                urls[child['reftitle']] = "../" + child.get('refuri')
++                # SVG links are relative to the SVG file location (_images/).
++                # refuri may be relative to the current document, so we need to
++                # make it relative to the build root first.
++                if not refuri.startswith('/'):
++                    # refuri is relative to the current document directory
++                    current_dir = current_filename.rsplit('/', 1)[0] if '/' in current_filename else ''
++                    if current_dir:
++                        refuri = current_dir + '/' + refuri
++                urls[child['reftitle']] = "../" + refuri
+             else:
+-                urls[child['reftitle']] = child.get('refuri')
++                urls[child['reftitle']] = refuri
+         elif child.get('refid') is not None:
+             if graphviz_output_format == 'SVG':
+                 urls[child['reftitle']] = '../' + current_filename + '#' + child.get('refid')

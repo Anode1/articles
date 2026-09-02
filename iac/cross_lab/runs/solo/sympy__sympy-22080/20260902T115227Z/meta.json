@@ -1,0 +1,9 @@
+{
+ "subtype": "error_max_turns",
+ "num_turns": 61,
+ "total_cost_usd": 0.6275984000000002,
+ "duration_s": 309,
+ "model_usage_usd": {
+  "claude-haiku-4-5-20251001": 0.6276
+ }
+}

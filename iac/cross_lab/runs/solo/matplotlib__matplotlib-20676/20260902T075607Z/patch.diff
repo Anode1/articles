@@ -1,0 +1,19 @@
+diff --git a/lib/matplotlib/widgets.py b/lib/matplotlib/widgets.py
+index a199e45..b0cd937 100644
+--- a/lib/matplotlib/widgets.py
++++ b/lib/matplotlib/widgets.py
+@@ -2369,7 +2369,14 @@ class ToolLineHandles:
+         line_fun = ax.axvline if self.direction == 'horizontal' else ax.axhline
+         self._line_props = line_props
+ 
++        # Save axis limits before creating lines, since axvline/axhline can
++        # auto-scale the axis even if the line is not visible
++        xlim = ax.get_xlim()
++        ylim = ax.get_ylim()
+         self.artists = [line_fun(p, **line_props) for p in positions]
++        # Restore axis limits to their original values
++        ax.set_xlim(xlim)
++        ax.set_ylim(ylim)
+ 
+     @property
+     def positions(self):

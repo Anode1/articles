@@ -1,0 +1,32 @@
+diff --git a/lib/matplotlib/widgets.py b/lib/matplotlib/widgets.py
+index a199e45..e86e63b 100644
+--- a/lib/matplotlib/widgets.py
++++ b/lib/matplotlib/widgets.py
+@@ -2156,11 +2156,22 @@ class SpanSelector(_SelectorWidget):
+             self.artists.append(self._rect)
+ 
+     def _setup_edge_handle(self, props):
+-        self._edge_handles = ToolLineHandles(self.ax, self.extents,
+-                                             direction=self.direction,
+-                                             line_props=props,
+-                                             useblit=self.useblit)
+-        self.artists.extend([line for line in self._edge_handles.artists])
++        # Temporarily disable autoscaling to prevent the initial handle
++        # positions from affecting the axes limits
++        autoscale_on = self.ax.get_autoscale_on()
++        xlim = self.ax.get_xlim()
++        ylim = self.ax.get_ylim()
++        self.ax.set_autoscale_on(False)
++        try:
++            self._edge_handles = ToolLineHandles(self.ax, self.extents,
++                                                 direction=self.direction,
++                                                 line_props=props,
++                                                 useblit=self.useblit)
++            self.artists.extend([line for line in self._edge_handles.artists])
++        finally:
++            self.ax.set_xlim(xlim)
++            self.ax.set_ylim(ylim)
++            self.ax.set_autoscale_on(autoscale_on)
+ 
+     def _press(self, event):
+         """Button press event handler."""

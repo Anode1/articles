@@ -1,0 +1,25 @@
+diff --git a/sklearn/utils/_set_output.py b/sklearn/utils/_set_output.py
+index 335773c..71c1e55 100644
+--- a/sklearn/utils/_set_output.py
++++ b/sklearn/utils/_set_output.py
+@@ -127,9 +127,19 @@ def _wrap_data_with_container(method, data_to_wrap, original_input, estimator):
+         return data_to_wrap
+ 
+     # dense_config == "pandas"
++    # Check if data shape has changed (e.g., due to aggregation).
++    # If the number of rows differs, don't use the original input's index
++    # to avoid shape mismatch errors.
++    original_index = getattr(original_input, "index", None)
++    n_samples_original = getattr(original_input, "shape", (None,))[0]
++    n_samples_output = getattr(data_to_wrap, "shape", (None,))[0]
++
++    if original_index is not None and n_samples_original != n_samples_output:
++        original_index = None
++
+     return _wrap_in_pandas_container(
+         data_to_wrap=data_to_wrap,
+-        index=getattr(original_input, "index", None),
++        index=original_index,
+         columns=estimator.get_feature_names_out,
+     )
+ 

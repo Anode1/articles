@@ -1,0 +1,22 @@
+diff --git a/sympy/printing/latex.py b/sympy/printing/latex.py
+index ad4d7d9..9478c32 100644
+--- a/sympy/printing/latex.py
++++ b/sympy/printing/latex.py
+@@ -157,10 +157,15 @@ def __init__(self, settings=None):
+         }
+ 
+         self._settings['mul_symbol_latex'] = \
+-            mul_symbol_table[self._settings['mul_symbol']]
++            mul_symbol_table[self._settings['mul_symbol']] \
++            if self._settings['mul_symbol'] in mul_symbol_table \
++            else self._settings['mul_symbol']
+ 
+         self._settings['mul_symbol_latex_numbers'] = \
+-            mul_symbol_table[self._settings['mul_symbol'] or 'dot']
++            mul_symbol_table[self._settings['mul_symbol'] or 'dot'] \
++            if (self._settings['mul_symbol'] is None or
++                self._settings['mul_symbol'] in mul_symbol_table) \
++            else self._settings['mul_symbol']
+ 
+         self._delim_dict = {'(': ')', '[': ']'}
+ 

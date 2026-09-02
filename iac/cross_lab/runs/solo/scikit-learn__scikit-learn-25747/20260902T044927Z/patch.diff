@@ -1,0 +1,60 @@
+diff --git a/sklearn/utils/_set_output.py b/sklearn/utils/_set_output.py
+index 335773c..55a1e0a 100644
+--- a/sklearn/utils/_set_output.py
++++ b/sklearn/utils/_set_output.py
+@@ -15,9 +15,9 @@ def _wrap_in_pandas_container(
+ ):
+     """Create a Pandas DataFrame.
+ 
+-    If `data_to_wrap` is a DataFrame, then the `columns` and `index` will be changed
+-    inplace. If `data_to_wrap` is a ndarray, then a new DataFrame is created with
+-    `columns` and `index`.
++    If `data_to_wrap` is a DataFrame, then the `columns` will be changed inplace and
++    its own index is kept. If `data_to_wrap` is a ndarray, then a new DataFrame is
++    created with `columns` and `index`.
+ 
+     Parameters
+     ----------
+@@ -34,7 +34,8 @@ def _wrap_in_pandas_container(
+         `range(n_features)`.
+ 
+     index : array-like, default=None
+-        Index for data.
++        Index for data. Ignored if `data_to_wrap` is already a dataframe, in which
++        case its index is left unchanged.
+ 
+     Returns
+     -------
+@@ -55,8 +56,6 @@ def _wrap_in_pandas_container(
+     if isinstance(data_to_wrap, pd.DataFrame):
+         if columns is not None:
+             data_to_wrap.columns = columns
+-        if index is not None:
+-            data_to_wrap.index = index
+         return data_to_wrap
+ 
+     return pd.DataFrame(data_to_wrap, index=index, columns=columns)
+diff --git a/sklearn/utils/tests/test_set_output.py b/sklearn/utils/tests/test_set_output.py
+index ac73ca0..4e84956 100644
+--- a/sklearn/utils/tests/test_set_output.py
++++ b/sklearn/utils/tests/test_set_output.py
+@@ -25,7 +25,7 @@ def test__wrap_in_pandas_container_dense():
+ 
+ 
+ def test__wrap_in_pandas_container_dense_update_columns_and_index():
+-    """Check that _wrap_in_pandas_container overrides columns and index."""
++    """Check that _wrap_in_pandas_container overrides columns and keeps the index."""
+     pd = pytest.importorskip("pandas")
+     X_df = pd.DataFrame([[1, 0, 3], [0, 0, 1]], columns=["a", "b", "c"])
+     new_columns = np.asarray(["f0", "f1", "f2"], dtype=object)
+@@ -33,7 +33,9 @@ def test__wrap_in_pandas_container_dense_update_columns_and_index():
+ 
+     new_df = _wrap_in_pandas_container(X_df, columns=new_columns, index=new_index)
+     assert_array_equal(new_df.columns, new_columns)
+-    assert_array_equal(new_df.index, new_index)
++
++    # The index of a dataframe is kept as is
++    assert_array_equal(new_df.index, X_df.index)
+ 
+ 
+ def test__wrap_in_pandas_container_error_validation():

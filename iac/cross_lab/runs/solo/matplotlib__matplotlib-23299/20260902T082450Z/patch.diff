@@ -1,0 +1,15 @@
+diff --git a/lib/matplotlib/__init__.py b/lib/matplotlib/__init__.py
+index c268a56..ca9b1f2 100644
+--- a/lib/matplotlib/__init__.py
++++ b/lib/matplotlib/__init__.py
+@@ -1175,7 +1175,9 @@ def get_backend():
+     --------
+     matplotlib.use
+     """
+-    return rcParams['backend']
++    # Use dict.__getitem__ to avoid triggering the __getitem__ special handling
++    # which calls switch_backend and closes all figures (#23299)
++    return dict.__getitem__(rcParams, 'backend')
+ 
+ 
+ def interactive(b):

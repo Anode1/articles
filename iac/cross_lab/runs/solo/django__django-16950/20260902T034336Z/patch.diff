@@ -1,0 +1,41 @@
+diff --git a/django/forms/models.py b/django/forms/models.py
+index 3fa04b8..26e6c70 100644
+--- a/django/forms/models.py
++++ b/django/forms/models.py
+@@ -1177,7 +1177,10 @@ class BaseInlineFormSet(BaseModelFormSet):
+                 to_field = self.instance._meta.get_field(kwargs["to_field"])
+             else:
+                 to_field = self.instance._meta.pk
+-            if to_field.has_default():
++            # Only the primary key is regenerated on save, so a non-primary
++            # key target keeps the value assigned when the instance was
++            # created, otherwise it would be saved as null.
++            if to_field.has_default() and to_field.primary_key:
+                 setattr(self.instance, to_field.attname, None)
+ 
+         form.fields[name] = InlineForeignKeyField(self.instance, **kwargs)
+diff --git a/tests/model_formsets/test_uuid.py b/tests/model_formsets/test_uuid.py
+index 2097bde..1b3965f 100644
+--- a/tests/model_formsets/test_uuid.py
++++ b/tests/model_formsets/test_uuid.py
+@@ -80,14 +80,17 @@ class InlineFormsetTests(TestCase):
+         formset = FormSet()
+         self.assertIsNone(formset.forms[0].fields["parent"].initial)
+ 
+-    def test_inlineformset_factory_nulls_default_pks_alternate_key_relation(self):
++    def test_inlineformset_factory_default_pk_alternate_key_relation(self):
+         """
+         #24958 - Variant of test_inlineformset_factory_nulls_default_pks for
+         the case of a parent object with a UUID alternate key and a child
+-        object that relates to that alternate key.
++        object that relates to that alternate key. The alternate key isn't
++        regenerated on save, so its default must be preserved.
+         """
+         FormSet = inlineformset_factory(
+             ParentWithUUIDAlternateKey, ChildRelatedViaAK, fields="__all__"
+         )
+         formset = FormSet()
+-        self.assertIsNone(formset.forms[0].fields["parent"].initial)
++        self.assertEqual(
++            formset.forms[0].fields["parent"].initial, formset.instance.uuid
++        )

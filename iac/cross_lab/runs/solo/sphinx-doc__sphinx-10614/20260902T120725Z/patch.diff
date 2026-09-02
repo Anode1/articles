@@ -1,0 +1,87 @@
+diff --git a/sphinx/ext/graphviz.py b/sphinx/ext/graphviz.py
+index 8b21d9e..df34213 100644
+--- a/sphinx/ext/graphviz.py
++++ b/sphinx/ext/graphviz.py
+@@ -218,27 +218,35 @@ class GraphvizSimple(SphinxDirective):
+ 
+ 
+ def fix_svg_relative_paths(self: SphinxTranslator, filepath: str) -> None:
+-    """Change relative links in generated svg files to be relative to imgpath."""
++    """Change relative links in generated svg files to be relative to imgpath.
++
++    Links in the dot source are relative to the document being written.  The
++    browser resolves links inside an embedded SVG against the SVG file itself,
++    which lives in the image directory, so rewrite them against that.
++    """
+     tree = ET.parse(filepath)  # NoQA: S314
+     root = tree.getroot()
+     ns = {'svg': 'http://www.w3.org/2000/svg', 'xlink': 'http://www.w3.org/1999/xlink'}
+     href_name = '{http://www.w3.org/1999/xlink}href'
+     modified = False
+ 
++    # both directories are relative to the output directory
++    doc_dir = posixpath.dirname(self.builder.get_target_uri(self.builder.current_docname))
++    img_dir = self.builder.imagedir
++
+     for element in chain(
+         root.findall('.//svg:image[@xlink:href]', ns),
+         root.findall('.//svg:a[@xlink:href]', ns),
+     ):
+         scheme, hostname, url, query, fragment = urlsplit(element.attrib[href_name])
+-        if hostname:
++        if hostname or url.startswith('/'):
+             # not a relative link
+             continue
+ 
+-        old_path = path.join(self.builder.outdir, url)
+-        new_path = path.relpath(
+-            old_path,
+-            start=path.join(self.builder.outdir, self.builder.imgpath),
+-        )
++        old_path = posixpath.normpath(posixpath.join(doc_dir, url))
++        new_path = posixpath.relpath(old_path, start=img_dir)
++        if url.endswith('/'):
++            new_path += '/'
+         modified_url = urlunsplit((scheme, hostname, new_path, query, fragment))
+ 
+         element.set(href_name, modified_url)
+diff --git a/sphinx/ext/inheritance_diagram.py b/sphinx/ext/inheritance_diagram.py
+index 6e39855..843cf30 100644
+--- a/sphinx/ext/inheritance_diagram.py
++++ b/sphinx/ext/inheritance_diagram.py
+@@ -33,6 +33,7 @@ from __future__ import annotations
+ import builtins
+ import hashlib
+ import inspect
++import posixpath
+ import re
+ from collections.abc import Iterable
+ from importlib import import_module
+@@ -405,20 +406,20 @@ def html_visit_inheritance_diagram(self: HTML5Translator, node: inheritance_diag
+     graph_hash = get_graph_hash(node)
+     name = 'inheritance%s' % graph_hash
+ 
+-    # Create a mapping from fully-qualified class names to URLs.
++    # Create a mapping from fully-qualified class names to URLs.  All URLs are
++    # relative to the current document; for SVG output render_dot() rewrites
++    # them relative to the image directory the SVG is embedded from.
+     graphviz_output_format = self.builder.env.config.graphviz_output_format.upper()
+-    current_filename = self.builder.current_docname + self.builder.out_suffix
++    current_filename = posixpath.basename(
++        self.builder.get_target_uri(self.builder.current_docname)) or './'
+     urls = {}
+     pending_xrefs = cast(Iterable[addnodes.pending_xref], node)
+     for child in pending_xrefs:
+         if child.get('refuri') is not None:
+-            if graphviz_output_format == 'SVG':
+-                urls[child['reftitle']] = "../" + child.get('refuri')
+-            else:
+-                urls[child['reftitle']] = child.get('refuri')
++            urls[child['reftitle']] = child.get('refuri')
+         elif child.get('refid') is not None:
+             if graphviz_output_format == 'SVG':
+-                urls[child['reftitle']] = '../' + current_filename + '#' + child.get('refid')
++                urls[child['reftitle']] = current_filename + '#' + child.get('refid')
+             else:
+                 urls[child['reftitle']] = '#' + child.get('refid')
+ 

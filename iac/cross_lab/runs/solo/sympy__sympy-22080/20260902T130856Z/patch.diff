@@ -1,0 +1,38 @@
+diff --git a/sympy/printing/codeprinter.py b/sympy/printing/codeprinter.py
+index ba0e746..a0583d4 100644
+--- a/sympy/printing/codeprinter.py
++++ b/sympy/printing/codeprinter.py
+@@ -495,6 +495,14 @@ def _print_Mul(self, expr):
+             if item.base in b:
+                 b_str[b.index(item.base)] = "(%s)" % b_str[b.index(item.base)]
+ 
++        # When we have a negative sign and Mod in the numerator,
++        # we need to parenthesize it because in Python, unary minus has
++        # higher precedence than modulo, so -x % y means (-x) % y, not -(x % y)
++        if sign and a:
++            for i, item in enumerate(a):
++                if item.__class__.__name__ == 'Mod':
++                    a_str[i] = "(%s)" % a_str[i]
++
+         if not b:
+             return sign + '*'.join(a_str)
+         elif len(b) == 1:
+diff --git a/sympy/printing/str.py b/sympy/printing/str.py
+index 4c6e122..19d5df6 100644
+--- a/sympy/printing/str.py
++++ b/sympy/printing/str.py
+@@ -356,6 +356,14 @@ def apow(i):
+             if item.base in b:
+                 b_str[b.index(item.base)] = "(%s)" % b_str[b.index(item.base)]
+ 
++        # When we have a negative sign and Mod in the numerator,
++        # we need to parenthesize it because in Python, unary minus has
++        # higher precedence than modulo, so -x % y means (-x) % y, not -(x % y)
++        if sign and a:
++            for i, item in enumerate(a):
++                if item.__class__.__name__ == 'Mod':
++                    a_str[i] = "(%s)" % a_str[i]
++
+         if not b:
+             return sign + '*'.join(a_str)
+         elif len(b) == 1:

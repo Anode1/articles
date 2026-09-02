@@ -1,0 +1,48 @@
+diff --git a/sympy/printing/codeprinter.py b/sympy/printing/codeprinter.py
+index ba0e746..0d3d819 100644
+--- a/sympy/printing/codeprinter.py
++++ b/sympy/printing/codeprinter.py
+@@ -9,7 +9,7 @@
+ from sympy.core.mul import _keep_coeff
+ from sympy.core.symbol import Symbol
+ from sympy.printing.str import StrPrinter
+-from sympy.printing.precedence import precedence
++from sympy.printing.precedence import precedence, PRECEDENCE
+ 
+ 
+ class requires:
+@@ -453,8 +453,6 @@ def _print_Not(self, expr):
+ 
+     def _print_Mul(self, expr):
+ 
+-        prec = precedence(expr)
+-
+         c, e = expr.as_coeff_Mul()
+         if c < 0:
+             expr = _keep_coeff(-c, e)
+@@ -462,6 +460,13 @@ def _print_Mul(self, expr):
+         else:
+             sign = ""
+ 
++        # Factors are parenthesized using the precedence of Mul itself,
++        # regardless of whether a leading sign was extracted above: e.g.
++        # -Mod(x, y) must render as "-(x % y)", not "-x % y", since a bare
++        # unary minus binds tighter than the operators used for a Mod or
++        # comparison factor and would silently change the value.
++        prec = PRECEDENCE["Mul"]
++
+         a = []  # items in the numerator
+         b = []  # items that are in the denominator (if any)
+ 
+diff --git a/sympy/printing/precedence.py b/sympy/printing/precedence.py
+index 47ff463..9a2c9c2 100644
+--- a/sympy/printing/precedence.py
++++ b/sympy/printing/precedence.py
+@@ -48,6 +48,7 @@
+     "KroneckerProduct": PRECEDENCE["Mul"],
+     "Equality": PRECEDENCE["Mul"],
+     "Unequality": PRECEDENCE["Mul"],
++    "Mod": PRECEDENCE["Mul"],
+ }
+ 
+ # Sometimes it's not enough to assign a fixed precedence value to a

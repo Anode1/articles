@@ -1,0 +1,41 @@
+diff --git a/lib/matplotlib/axes/_base.py b/lib/matplotlib/axes/_base.py
+index 10ab40b..be22d5d 100644
+--- a/lib/matplotlib/axes/_base.py
++++ b/lib/matplotlib/axes/_base.py
+@@ -2371,7 +2371,7 @@ class _AxesBase(martist.Artist):
+         # issue #2150 - we update the limits if patch has non zero width
+         # or height.
+         if (isinstance(patch, mpatches.Rectangle) and
+-                ((not patch.get_width()) and (not patch.get_height()))):
++                ((not patch.get_width()) or (not patch.get_height()))):
+             return
+         p = patch.get_path()
+         vertices = p.vertices if p.codes is None else p.vertices[np.isin(
+diff --git a/lib/matplotlib/widgets.py b/lib/matplotlib/widgets.py
+index a199e45..fb09507 100644
+--- a/lib/matplotlib/widgets.py
++++ b/lib/matplotlib/widgets.py
+@@ -2156,11 +2156,18 @@ class SpanSelector(_SelectorWidget):
+             self.artists.append(self._rect)
+ 
+     def _setup_edge_handle(self, props):
+-        self._edge_handles = ToolLineHandles(self.ax, self.extents,
+-                                             direction=self.direction,
+-                                             line_props=props,
+-                                             useblit=self.useblit)
+-        self.artists.extend([line for line in self._edge_handles.artists])
++        # Temporarily disable autoscaling to prevent the initial handle
++        # positions from affecting the axes limits
++        autoscale_on = self.ax.get_autoscale_on()
++        self.ax.set_autoscale_on(False)
++        try:
++            self._edge_handles = ToolLineHandles(self.ax, self.extents,
++                                                 direction=self.direction,
++                                                 line_props=props,
++                                                 useblit=self.useblit)
++            self.artists.extend([line for line in self._edge_handles.artists])
++        finally:
++            self.ax.set_autoscale_on(autoscale_on)
+ 
+     def _press(self, event):
+         """Button press event handler."""

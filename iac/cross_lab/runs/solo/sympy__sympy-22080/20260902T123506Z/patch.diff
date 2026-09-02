@@ -1,0 +1,25 @@
+diff --git a/sympy/printing/codeprinter.py b/sympy/printing/codeprinter.py
+index ba0e746..529dd37 100644
+--- a/sympy/printing/codeprinter.py
++++ b/sympy/printing/codeprinter.py
+@@ -495,6 +495,20 @@ def _print_Mul(self, expr):
+             if item.base in b:
+                 b_str[b.index(item.base)] = "(%s)" % b_str[b.index(item.base)]
+ 
++        # Parenthesize Mod in factors when there are multiple factors or a negative sign,
++        # since % has the same precedence as * in Python and thus needs explicit parentheses
++        # to preserve meaning. E.g., expr * Mod(a, b) should be expr * (a % b), and
++        # -Mod(a, b) should be -(a % b), not -a % b (which is parsed as (-a) % b)
++        from sympy.core.mod import Mod
++        if len(a) > 1 or sign == "-":
++            a_str_with_mod_parens = []
++            for item, item_str in zip(a, a_str):
++                if isinstance(item, Mod):
++                    a_str_with_mod_parens.append("(%s)" % item_str)
++                else:
++                    a_str_with_mod_parens.append(item_str)
++            a_str = a_str_with_mod_parens
++
+         if not b:
+             return sign + '*'.join(a_str)
+         elif len(b) == 1:

@@ -1,0 +1,16 @@
+diff --git a/lib/matplotlib/__init__.py b/lib/matplotlib/__init__.py
+index c268a56..a8f9e78 100644
+--- a/lib/matplotlib/__init__.py
++++ b/lib/matplotlib/__init__.py
+@@ -1087,7 +1087,10 @@ def rc_context(rc=None, fname=None):
+              plt.plot(x, y)  # uses 'print.rc'
+ 
+     """
+-    orig = rcParams.copy()
++    orig = dict(rcParams.copy())
++    # Restoring the unresolved backend sentinel would trigger a new backend
++    # resolution on the next access, which closes all open figures.
++    del orig['backend']
+     try:
+         if fname:
+             rc_file(fname)

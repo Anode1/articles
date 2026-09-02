@@ -1,0 +1,26 @@
+diff --git a/django/forms/models.py b/django/forms/models.py
+index 3fa04b8..723d918 100644
+--- a/django/forms/models.py
++++ b/django/forms/models.py
+@@ -1171,14 +1171,20 @@ class BaseInlineFormSet(BaseModelFormSet):
+             kwargs["to_field"] = self.fk.remote_field.field_name
+ 
+         # If we're adding a new object, ignore a parent's auto-generated key
+-        # as it will be regenerated on the save request.
++        # as it will be regenerated on the save request. The parent's actual
++        # attribute value is restored afterwards so that a field default
++        # (e.g. a UUID) isn't lost when the parent instance is later saved.
+         if self.instance._state.adding:
+             if kwargs.get("to_field") is not None:
+                 to_field = self.instance._meta.get_field(kwargs["to_field"])
+             else:
+                 to_field = self.instance._meta.pk
+             if to_field.has_default():
++                to_field_value = getattr(self.instance, to_field.attname)
+                 setattr(self.instance, to_field.attname, None)
++                form.fields[name] = InlineForeignKeyField(self.instance, **kwargs)
++                setattr(self.instance, to_field.attname, to_field_value)
++                return
+ 
+         form.fields[name] = InlineForeignKeyField(self.instance, **kwargs)
+ 

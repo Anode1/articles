@@ -1,0 +1,45 @@
+diff --git a/django/db/migrations/loader.py b/django/db/migrations/loader.py
+index 8c30862..d075fcc 100644
+--- a/django/db/migrations/loader.py
++++ b/django/db/migrations/loader.py
+@@ -84,11 +84,6 @@ class MigrationLoader:
+                     continue
+                 raise
+             else:
+-                # Empty directories are namespaces.
+-                # getattr() needed on PY36 and older (replace w/attribute access).
+-                if getattr(module, '__file__', None) is None:
+-                    self.unmigrated_apps.add(app_config.label)
+-                    continue
+                 # Module is not a package (e.g. migrations.py).
+                 if not hasattr(module, '__path__'):
+                     self.unmigrated_apps.add(app_config.label)
+diff --git a/docs/releases/3.1.txt b/docs/releases/3.1.txt
+index 6b3fa0b..7d1948b 100644
+--- a/docs/releases/3.1.txt
++++ b/docs/releases/3.1.txt
+@@ -155,7 +155,8 @@ Management Commands
+ Migrations
+ ~~~~~~~~~~
+ 
+-* ...
++* Migrations are now loaded also from directories without ``__init__.py``
++  files.
+ 
+ Models
+ ~~~~~~
+diff --git a/tests/migrations/test_loader.py b/tests/migrations/test_loader.py
+index 0f0a590..ae897c5 100644
+--- a/tests/migrations/test_loader.py
++++ b/tests/migrations/test_loader.py
+@@ -193,8 +193,8 @@ class LoaderTests(TestCase):
+         with override_settings(MIGRATION_MODULES={"migrations": "migrations.faulty_migrations.namespace"}):
+             loader = MigrationLoader(connection)
+             self.assertIn(
+-                "migrations", loader.unmigrated_apps,
+-                "App missing __init__.py in migrations module not in unmigrated apps."
++                "migrations", loader.migrated_apps,
++                "App missing __init__.py in migrations module not in migrated apps."
+             )
+ 
+     @override_settings(
