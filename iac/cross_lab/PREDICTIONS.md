@@ -27,3 +27,16 @@ Predictions:
    hsearch project measured as dominant.
 3. If (2) holds, the gain will exceed the HOMO-vs-SOLO gain, i.e. the
    norm matters more than the board.
+
+## Refinement, same day: what the threshold thresholds on
+
+A probabilistic answerer becomes a know/do-not-know binary under a
+threshold; that is Chow's reject option (1957), optimal when a wrong
+answer costs more than silence. For coding seats the usable threshold is
+not verbalized confidence (poorly calibrated) but an execution receipt:
+a claim may be posted only with the command and output that support it.
+"Know" is then demonstrated, not felt, and room logs become scorable for
+receipted versus bare claims.
+
+4. Among norm variants, receipts-required will beat say-IDK-when-unsure,
+   which will beat the standard brief, at matched budget.
