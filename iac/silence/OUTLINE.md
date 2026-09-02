@@ -21,7 +21,7 @@ and tested.
 4. Mechanism design, not exhortation: receipts turn cheap talk into
    costly signals; the append-only total order is the commitment device
    (claim race in the pilot arbitrated by ordering alone).
-5. Predictions 1-6 (PREDICTIONS.md, dated before board data), the
+5. Predictions 1-6 (../cross_lab/PREDICTIONS.md, dated before board data), the
    metrics table, and the pre-registered sign test.
 6. Results: [socket: phase-1 table; norm-variant table; branch-width and
    conformity counts from room logs].
@@ -29,4 +29,4 @@ and tested.
    quotable), quota-priced meter, one lab in phase 1.
 
 Register: ~/articles/STYLE.md; claims carry numbers; the flow analysis
-(runs/board/.../FLOW.md) supplies the qualitative specimens.
+(../cross_lab/runs/board/.../FLOW.md) supplies the qualitative specimens.
