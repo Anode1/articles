@@ -54,3 +54,18 @@ from room logs: distinct root-cause hypotheses posted before convergence.
 5. HOMO boards will average ~1 branch; boards that fail will mostly have
    committed early to a wrong branch; where HETERO (phase 2) beats HOMO,
    it will show more branches on exactly those instances.
+
+## Same day: competition over agreement
+
+Reputation requires an iterated game: a spawned subagent has nothing at
+stake, an iac peer's durable name outlives every task, so a track record
+is implementable (Hearsay-II carried it as credibility weights). LLM
+seats conform to a posted peer position more readily than humans; the
+pilot's post-diagnosis messages added confirmation, not challenge.
+Measurables per room log: agreement posts carrying no new evidence
+(conformity rate); the final patch's key claim attributed to the seat
+that first posted it with a receipt (contribution).
+
+6. A competition norm (agreement without new evidence is noise; dissent
+   that survives verification is the credited contribution) will raise
+   branch width and solve rate over the plain abstention norms.
