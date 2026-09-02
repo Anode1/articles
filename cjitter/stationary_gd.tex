@@ -75,14 +75,17 @@ a person put a box from one describing how they ranked the result. Where it fail
 fitted weights are the criteria's mutual trade-offs rather than the person's, and the term
 the person did optimise stays unlearned because it was never offered.
 
-The assumption has a direct test, one criterion at a time. Take a diagram a person drew. Move
-one box a small distance in each of several directions and ask whether any of the moves
-lowers the criterion. If none does, the box is \emph{held}: the person has put it where the
-criterion wants it, or where the criterion has stopped caring. Do this for every box and
-the fraction held says how much of the layout is a local minimum of that criterion; the
-criterion's value says how well it is met. A criterion that holds every box at value zero
-is one the person satisfied; one that holds no box is one the person did not consider, or
-traded away.
+What is measured, and what should change. Before this paper the practice is to tune the
+weights on human layouts as if each were a minimum of the energy; nobody had checked at
+the coordinates. The check, one criterion at a time: take a diagram a person drew, move
+each box a small distance in sixteen directions, and ask whether any move lowers the
+criterion. A box no move improves is \emph{held}; the fraction of boxes held, $q$, is
+the number every table of this paper reports, and the criterion's value beside it says
+how well it is met. A criterion that holds every box at value zero is one the person
+satisfied; one that holds none is one the person did not consider, or traded away. After
+the measurement the suggestion is concrete: offer alignment among the terms before any
+fit, and judge a fitted energy by how much of a held-out human layout it holds, not by
+its residual.
 
 The test puts coordinates and judgement on opposite sides. People prefer low-stress
 drawings and read them better \cite{mooney25, dwyer09}, while the drawings people make
