@@ -55,10 +55,12 @@ Protocol, in order:
    Never edit a file another seat has claimed and not released.
 4. Edit the shared checkout. Run tests if the repo allows it.
 5. When your part is in: $IAC send $ROOM '*' "[<name>] DONE: <what you did>"
-6. Wait for others: $IAC recv $ROOM <your name> 120
-   Exit 1 means timeout: run the same recv again, at most 4 times total,
-   then post your final state and finish. Exit 0 means a message: act on
-   it and return to this step. When all three have posted DONE, finish.
+6. Wait for others: $IAC recv $ROOM <your name> 120 -a -e 300
+   Exit 0: one or more messages arrived, act on them, return here.
+   Exit 1: timeout, run the same recv again, at most 4 times total,
+   then post your final state and finish.
+   Exit 3: you are alone, the other seats are gone; post your final
+   state and finish. When all three have posted DONE, finish.
 
 Every message under 60 words, prefixed [<name>]. Do not create new test
 files. Do not commit. Disagreement is data: post it, do not silently
@@ -95,6 +97,7 @@ print(json.dumps(res))
 EOF
 done
 echo "/media/vas/kuldata/iac/streams/board-$ID-$STAMP" > "$OUT/streams.path"
+git -C "$HOME/iac" rev-parse --short HEAD > "$OUT/iac.rev" 2>/dev/null || true
 git -C "$WORK/repo" diff > "$OUT/patch.diff"
 cp "$ROOM/BRIEF.md" "$OUT/BRIEF.md"
 $IAC log "$ROOM" > "$OUT/room-log.txt" 2>/dev/null || true
