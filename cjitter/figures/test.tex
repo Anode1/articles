@@ -1,36 +1,21 @@
 \begin{figure}[t]\centering
 \begin{tikzpicture}[x=1cm,y=1cm,line width=0.4pt,font=\footnotesize]
-% ---- left panel: held
-\begin{scope}
   \draw[fill=black!8,draw=black!40] (-0.55,1.62) rectangle (0.55,2.22);
   \draw[fill=black!8,draw=black!40] (1.70,-0.30) rectangle (2.55,0.30);
   \draw[fill=black!8,draw=black!40] (-2.40,-0.30) rectangle (-1.60,0.30);
   \draw[densely dotted,black!40] (0,0) circle (1.12);
-  \foreach \a in {0,22.5,...,337.5}{
-    \draw[-{Stealth[length=1.6mm]},black!55] (\a:0.64) -- (\a:1.08);}
-  \draw[fill=orange!30,draw=orange!80!black,line width=0.8pt]
-       (-0.5,-0.28) rectangle (0.5,0.28);
-  \node[font=\scriptsize,black!65] at (56.25:1.36) {$d$};
-  \node[anchor=north,align=center,font=\scriptsize] at (0,-1.30)
-       {every move raises it\\\emph{held}};
-\end{scope}
-% ---- right panel: not held
-\begin{scope}[xshift=6.6cm]
-  \draw[fill=black!8,draw=black!40] (-0.55,1.62) rectangle (0.55,2.22);
-  \draw[fill=black!8,draw=black!40] (1.70,-0.30) rectangle (2.55,0.30);
-  \draw[fill=black!8,draw=black!40] (-2.40,-0.30) rectangle (-1.60,0.30);
-  \draw[densely dotted,black!40] (0,0) circle (1.12);
-  \foreach \a in {0,22.5,...,337.5}{
-    \draw[-{Stealth[length=1.6mm]},black!22] (\a:0.64) -- (\a:1.08);}
+  \foreach \a in {0,22.5,45,67.5,112.5,135,157.5,180,202.5,225,247.5,270,292.5,315,337.5}{
+    \draw[-{Stealth[length=1.6mm]},black!40] (\a:0.64) -- (\a:1.08);}
   \draw[-{Stealth[length=2.4mm]},black,line width=1pt] (90:0.64) -- (90:1.08);
   \draw[fill=orange!30,draw=orange!80!black,line width=0.8pt]
        (-0.5,-0.28) rectangle (0.5,0.28);
-  \node[anchor=north,align=center,font=\scriptsize] at (0,-1.30)
-       {one move lowers it\\\emph{not held}};
-\end{scope}
+  \node[font=\scriptsize,black!65] at (33.75:1.38) {$d$};
+  \node[anchor=west,font=\scriptsize,align=left] at (0.75,1.30)
+       {a move that lowers the criterion:\\the box is not held};
 \end{tikzpicture}
-\caption{The test, one box and one criterion. The box is moved a distance $d$, two per cent
-of the drawing's width, in each of sixteen exact directions, and the criterion is
-recomputed. A box is held when no move lowers it.}
+\caption{The test, one box and one criterion. The box is moved a distance $d$, two per
+cent of the drawing's width, in each of sixteen exact directions, and the criterion is
+recomputed. If some move lowers it (the dark arrow), the box is not held; if every move
+raises it, the box is \emph{held}.}
 \label{fig:test}
 \end{figure}

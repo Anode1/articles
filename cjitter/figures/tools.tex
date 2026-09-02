@@ -94,7 +94,7 @@
 \draw[fill=black!12,draw=black!55] (0.000,2.838) rectangle (0.326,3.099);
 \draw[fill=black!12,draw=black!55] (0.140,1.997) rectangle (0.271,2.127);
 \draw[fill=black!12,draw=black!55] (0.124,5.090) rectangle (0.215,5.181);
-\node[anchor=north,font=\scriptsize] at (2.59,-0.12) {\texttt{dot}};
+\node[anchor=north,font=\scriptsize] at (0.39,-0.12) {\texttt{dot}};
 \end{tikzpicture} &
 \begin{tikzpicture}[x=1cm,y=1cm,line width=0.3pt]
 \draw[gray!70] (0.604,0.277) -- (0.881,0.277);
@@ -190,14 +190,16 @@
 \draw[fill=black!12,draw=black!55] (0.412,1.406) rectangle (0.739,1.667);
 \draw[fill=black!12,draw=black!55] (0.279,0.943) rectangle (0.410,1.073);
 \draw[fill=black!12,draw=black!55] (0.253,1.545) rectangle (0.345,1.636);
-\node[anchor=north,font=\scriptsize] at (1.01,-0.12) {\texttt{neato}};
+\node[anchor=north,font=\scriptsize] at (0.51,-0.12) {\texttt{neato}};
 \end{tikzpicture}
 \end{tabular}
-\caption{The same graph, the same box sizes, four layouts, one scale.
-The hand drawing and the two
-layered tools share the profile the test reads: held under overlap, free under length and
-stress. \texttt{neato} minimises stress and is the control that gives the test its power,
-held at 1.00 under stress where every hand layout reads 0.00. The tool layouts carry no
-waypoints, so their edges are drawn as chords.}
+\caption{The same graph, the same box sizes, four layouts, one scale: the hand
+drawing as stored, and the tool controls of Section~\ref{sec:method}. The hand drawing
+and the two layered tools share the profile the test reads: held under overlap, free
+under length and stress. \texttt{neato} minimises stress and is the control that gives
+the test its power, held at 1.00 under stress where every hand layout reads 0.00; it is
+run as shipped, boxes left where they overlap, and its overlap-removed variant is the
+\texttt{prism} control of the tables. The tool layouts carry no waypoints, so their
+edges are drawn as chords.}
 \label{fig:tools}
 \end{figure}

@@ -22,33 +22,30 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \maketitle
 
 \begin{abstract}
-Diagram editors ship an automatic layout; MySQL Workbench calls it \texttt{Arrange >
-Autolayout}. Underneath is a cost, a weighted sum of complaints: boxes overlap,
-connected boxes sit far apart, edge lengths vary. The program moves boxes until the sum
-stops falling. 4{,}890 hand drawings were just pooled into a corpus, and the standing
-proposal is to learn the cost's weights from drawings like these. That only works if a
-finished drawing sits at a minimum of the cost. Nobody had checked at the coordinates.
+Diagram editors ship an automatic layout; in MySQL Workbench it is one button,
+Autolayout. Behind the button is a cost: boxes must not overlap, connected boxes should
+sit close, edge lengths should come out even. A corpus of several thousand hand-made
+drawings was published last year, and the standing plan is to tune the cost's weights
+on drawings like these. The plan rests on an assumption: a drawing a person kept is
+already a minimum of the cost. Nobody had checked.
 
-The check is simple. Take a diagram a person drew and accepted. Move each box by two
-per cent of the drawing width, in sixteen directions, and ask whether any move lowers a
-criterion; a box no move improves is held. We ran this on 853 working diagrams,
-biological pathways and business processes, on 136 lab drawings, and, as controls, on
-\texttt{neato}, \texttt{dot} and ELK layouts of the same graphs.
+The check is simple. Take a drawing. Nudge every box a little, in every direction, and
+ask whether any nudge makes the cost better. If none does, the box is where the cost
+wants it. We ran this on 989 real diagrams, pathways, business processes and lab
+drawings, and on machine layouts of the same graphs for comparison.
 
-The answer is one-sided. Edge length and stress hold almost no box a person placed,
-while the same test holds \texttt{neato}'s own layouts fully, so it does see a minimum
-where one exists. Overlap is satisfied exactly. What does hold the drawings is a
-criterion the costs do not carry: alignment into rows and columns. It holds a fifth to
-most of the median hand diagram and almost nothing in any optimised, random or
-grid-snapped layout. A hand layout is a layered layout with partial alignment, and the
-4{,}890-drawing corpus shows the same profile.
+The result is lopsided. Under the distance terms almost every hand-placed box has a
+better spot nearby; the same test finds nothing to improve in the machine's own
+layouts, so it does see a minimum where one exists. What people do satisfy is a rule
+the costs do not contain: boxes lined up in rows and columns. Hand drawings are
+aligned, and machine and random layouts are not, in every corpus we touched, the new
+one included.
 
-A cost fitted to hand coordinates therefore learns the trade-offs between its own
-terms, not the drawer's. Whether the person aligned the boxes or the editor's guide did,
-the coordinates cannot tell; for fitting it makes no difference, the term is held and
-missing either way. The fix is an addition: offer alignment among the terms, keep
-length and stress, whose preference evidence stands, and report how many boxes the
-fitted cost holds at layouts people accepted.
+So a cost tuned on human drawings learns nothing about the human: the one habit the
+drawings carry is not on offer. Whether the person aligned the boxes or the editor's
+guide did, the coordinates cannot say, and for tuning it does not matter. The fix is
+one addition. Offer alignment among the terms, keep the rest, and report how much of a
+human drawing any tuned cost holds still.
 \end{abstract}
 
 \section{Introduction}
