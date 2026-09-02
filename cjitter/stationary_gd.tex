@@ -480,9 +480,8 @@ constrains $y$, so the A1 hold of 0.91 could be the container's
 which no horizontal lane imposes; 13\% a row shared with a box of another lane or of no
 lane, which no lane imposes either; 57\% a row within one lane. Those lanes are a median
 6.3 box heights tall (quartiles 3.7 and 9.4; 3\% under two box heights), so the row
-placement inside them was chosen, not forced. At most the choice of row count is the
-lane's; where the box sits on that row, and the 43\% held across or against the lanes, is
-the person's.
+placement inside them was chosen, not forced; where the box sits on its row, and the
+43\% held across or against the lanes, is the person's.
 
 \paragraph{The paired tests.} Per corpus, hand against \texttt{dot} on each criterion
 alone: the Hodges--Lehmann shift of $q_{0.02}$ with its 95\% interval, zeros dropped, and
@@ -627,18 +626,19 @@ instead by an alignment into rows and columns that, HOLA's gridiness step aside
 \cite{hola16}, no standard energy prices.
 
 A method that learns weights from such layouts must offer alignment among its terms or it
-fits nothing the person did. For a tool builder that is one addition and one number, not a
-subtraction: edge length and stress keep their weight, since a term inert at human
-coordinates is not thereby unwanted and the preference evidence runs the other way
+fits nothing the person did. For a tool builder that is one addition and one number:
+edge length and stress keep their weight, since a term inert at human coordinates is
+not thereby unwanted and the preference evidence runs the other way
 \cite{mooney25, dwyer09}. The number to report is the fraction of boxes
 the energy holds when started from a layout a person accepted: $q_{0.02}$ as
 Section~\ref{sec:method} fixes it, sixteen directions, fitted $L$, alignment A1, on
 layouts held out from any fit, with the decrease and active columns beside it, since the
 degenerate fit of Section~\ref{sec:results} reaches 0.99 by weighting a term everyone
-satisfies and a bare held fraction can always be bought that way. The charge is also
-bounded: \texttt{dot} and ELK hold alignment at 0.42 to 1.00 without pricing it, layering
-aligns as a side effect, so the missing term convicts the force-directed and
-multicriteria energies, not the layered engines.
+satisfies and a bare held fraction can always be bought that way; the constructive
+check is Appendix~\ref{app:reinsert}, where the offered term lands a reinserted box on
+the person's row or column 22 to 49\% more often. The charge is also bounded:
+\texttt{dot} and ELK hold alignment at 0.42 to 1.00 without pricing it, so the missing
+term convicts the force-directed and multicriteria energies, not the layered engines.
 
 \begin{thebibliography}{99}
 \bibitem{gj83} M.~R. Garey, D.~S. Johnson. Crossing Number is NP-Complete. \emph{SIAM
@@ -1227,6 +1227,18 @@ commit, platform, tool versions, seeds and the SHA-256 of the archives and the c
 as measured. The tracked \texttt{data/bpmn\_population\_a1.csv} rebuilds the abstract's
 0.87 from a clone; the repository carries derived coordinates and ids, never archive
 content, and the two biological corpora are CC-licensed exports.
+
+\section{The reinsertion benchmark}\label{app:reinsert}
+
+\paragraph{Reinsertion.} A constructive check of the recommendation
+(\texttt{reinsert.c}, \texttt{results/reinsert.md}): delete each box in turn and let an
+energy place it against the frozen rest, the distance to the person's position the
+score. Every energy beats chance, 0.18 to 0.23 of the drawing width against 0.52 to
+0.54, and adding A1 to $C{+}O{+}L$ moves the median distance not at all: the
+neighbourhood is the distance terms' choice. The rail is alignment's: with A1 offered,
+the box lands within 0.005 of the person's row or column in 0.127, 0.101 and 0.226 of
+placements against 0.085, 0.083 and 0.162 without it, chance 0.02, McNemar $z$ = 4.5 to
+14.3.
 
 \section{Related work, tabulated}\label{app:related}
 
