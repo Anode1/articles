@@ -99,9 +99,8 @@ the findings are these.
 \item Overlap holds every box of the median hand diagram at value zero in every corpus, as
   it does in every tool that removes overlaps; the term is nonzero in 4 to 8\% of hand
   diagrams. People satisfy it exactly.
-\item Length and stress hold a hand-placed box almost nowhere, median diagram 0.00 in all
-  three corpora and 25 to 78 boxes of roughly 7{,}000 each, while
-  \texttt{neato}'s stress layouts are held at 1.00. No reweighting repairs it: a weight of
+\item Length and stress hold a hand-placed box almost nowhere, median diagram 0.00 in
+  all three corpora, while \texttt{neato}'s stress layouts are held at 1.00. No reweighting repairs it: a weight of
   0.001 on either term drops the held fraction of the sum below 0.015.
 \item Alignment into rows and columns holds 0.52, 0.21 and 0.87 against \texttt{neato}'s
   0.06 and 0.07 for a grid-snapped random layout. The base energy omits it and the hand
@@ -112,7 +111,6 @@ the findings are these.
   remove.
 \item Crossings and node--edge separation hold every box because they are flat at this
   radius, not because they are met.
-\item Orthogonality is partly held: 0.19, 0.17 and 0.73 by hand.
 \item The corpus of the standing proposal behaves the same: on its 1{,}072 drawings in
   the band, length and stress hold 0.00 and alignment 0.87.
 \end{enumerate}
@@ -191,8 +189,8 @@ or ``held under overlap'' would be a property of sparse graphs and not of the pe
 The descents, the control and the paired statistics come from \texttt{cjitter}, a C library
 of four stochastic searches over a box of real variables: hill climbing with restarts,
 simulated annealing, a genetic algorithm, and uniform sampling as the control. Every run is
-byte-reproducible from its seed on every platform, every method constant is a visible
-field, and \texttt{cjitter\_compare} runs all four at the same budget on the same seeds and
+byte-reproducible from its seed on every platform, and
+\texttt{cjitter\_compare} runs all four at the same budget on the same seeds and
 reports an exact paired sign test, Holm-corrected, against the control. ``Better than
 uniform sampling at equal cost'' is the only claim it lets a search make.
 
@@ -304,7 +302,7 @@ climber uncapped, 60{,}000 evaluations, $q_d$ measured where it stops. The step
 schedule, the reported columns and the pilot's step lesson are
 Appendix~\ref{app:descent}.
 
-\paragraph{Fitting.} Weights on the simplex, the linear program of Section~\ref{sec:foundations} over every node and direction of a corpus (about 120{,}000 inequalities, HiGHS), the residual its value per node; because the residual depends on the terms' scales and $q$ does not, $q$ under the fitted weights is reported beside it, on the fitting diagrams and held out under $5 \times 2$ cross-validation (five seeded halvings, each half fitted and scored on the other). Inverse optimisation is degenerate whenever a term is satisfied exactly: overlap holds every node, so any weight vector with all its weight on overlap has residual zero and the program returns it. The informative output is the sweep, $q$ as the weight on one term grows from 0 with the rest on crossings and overlap.
+\paragraph{Fitting.} Weights on the simplex, the linear program of Section~\ref{sec:foundations} over every node and direction of a corpus (about 120{,}000 inequalities, HiGHS), the residual its value per node; the residual depends on the terms' scales and $q$ does not, so both are reported, on the fitting diagrams and held out under $5 \times 2$ cross-validation (five seeded halvings, each half fitted and scored on the other). Inverse optimisation is degenerate whenever a term is satisfied exactly: overlap holds every node, so any weight vector with all its weight on overlap has residual zero and the program returns it. The informative output is the sweep, $q$ as the weight on one term grows from 0 with the rest on crossings and overlap.
 
 \paragraph{Statistics.} The unit of inference is the diagram. Per corpus, hand against
 a control is the Wilcoxon signed-rank test with the exact sign test beside it and the
@@ -369,20 +367,14 @@ BPMN & crossings alone & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000)
 \end{center}
 
 \paragraph{The sums.} The same test under the summed energies, equal weights; the grid
-is Appendix~\ref{app:sums}. Read down a hand column. Overlap holds every box
-at value zero; so it does in every tool layout that removes overlaps, and \texttt{neato}
-without removal is the only layout it does not hold, so crossings and overlap together
-separate a hand layout from that configuration and from nothing else. Length and stress hold
-almost no hand-placed box, 0.3 to 1.1 per cent per corpus, and \texttt{neato}'s stress
-layouts are held under stress at 1.00, so
-the zero is the layout's and not the test's; \texttt{dot}, which is layered and prices no
-distance, scores 0.00 on both as the hand layouts do. Hand and \texttt{neato} part furthest on alignment A1, and \texttt{dot}
-and ELK score high on it too because a layer is a row; a layout snapped to the same grid
-with no author
-holds 0.065, 0.075 and 0.067 (Section~\ref{sec:alternatives}). Under $T_A$, $q$ counts
-the fraction of boxes within $d/2$ of sharing a coordinate, not the fraction exactly on
-one; the term has its corner there, so it tracks the exact-tie fractions of
-Section~\ref{sec:corpora} to within a few points.
+is Appendix~\ref{app:sums}. Overlap holds every box at value zero in every layout that
+removes overlaps; length and stress hold almost no hand-placed box, 0.3 to 1.1 per cent
+per corpus, while \texttt{neato}'s stress layouts are held at 1.00, so the zero is the
+layout's and not the test's. Hand and \texttt{neato} part furthest on alignment A1;
+\texttt{dot} and ELK score high on it because a layer is a row, and a layout snapped to
+the same grid with no author holds 0.065 to 0.075 (Section~\ref{sec:alternatives}).
+Under $T_A$, $q$ counts boxes within $d/2$ of sharing a coordinate, so it tracks the
+exact-tie fractions of Section~\ref{sec:corpora} to within a few points.
 
 Crossings, overlap and node--edge are flat at this radius (their decrease and active columns: Appendix~\ref{app:flat}), and their $q$ is not read beside
 The three terms above the rule are the flat ones and their $q$ should not be read beside
@@ -421,7 +413,8 @@ is Appendix~\ref{app:flat}.
 \paragraph{Sensitivities.} The radius, the direction count, the reference length, the
 box extent measured border to border, the tie tolerance and the routes closed to chords
 are each swept in Appendix~\ref{app:sens}; the 1{,}008-cell grid over them flips no
-verdict. The A1 levels are sixteen-direction upper bounds; the gap to every control survives at 64.
+verdict, the A1 levels are sixteen-direction upper bounds, and the gap to every
+control survives at 64.
 
 \paragraph{Descent and chance.} The secondary estimand's table is
 Appendix~\ref{app:descent}; its load-bearing line is the power: the converged
@@ -500,13 +493,23 @@ $-0.05$); below it on flow everywhere
 orthogonality ($+0.43$), the criteria \texttt{dot} trades away.
 
 
+\paragraph{Reinsertion.} The constructive check: delete each box in turn and let an
+energy place it against the frozen rest (\texttt{reinsert.c}), the distance to the
+person's position the score. Every energy beats chance, 0.18 to 0.23 of the drawing
+width against 0.52 to 0.54, and adding A1 to $C{+}O{+}L$ moves the median distance not
+at all: the neighbourhood is the distance terms' choice. The rail is alignment's: with
+A1 offered, the box lands within 0.005 of the person's row or column in 0.127, 0.101
+and 0.226 of placements against 0.085, 0.083 and 0.162 without it (chance 0.02, McNemar
+$z$ up to 14.3; robustness in Appendix~\ref{app:reinsert}).
+
 \paragraph{The fourth corpus, restored.} The pre-registration named HOLA's formative
 drawings \cite{hola16} and the previous draft dropped them without a word. Restored: 136
 drawings, 17 participants each laying out the same 8 abstract graphs, scraped from the
 study's published SVGs (provenance beside \texttt{data/hola.txt}), chord edges,
 below this paper's 15-box band and free of every diagram notation. The pattern holds:
 overlap and crossings 1.00, length and stress 0.00, alignment 0.50, between Reactome's
-0.21 and BPMN's 0.91. Node--edge holds 1.00, so H4 fails here too. Clustering and corpus agreement: Appendix~\ref{app:dedup}. These are drawings
+0.21 and BPMN's 0.91; node--edge 1.00, so H4 fails here too (clustering and corpus
+agreement: Appendix~\ref{app:dedup}). These are drawings
 from a study tool rather than a diagram editor, which bears on the guide question of
 Section~\ref{sec:alternatives}; the corpus does not record whether that tool drew
 alignment aids.
@@ -514,8 +517,8 @@ alignment aids.
 \paragraph{The motivating corpus.} The GD Collection itself \cite{gdcoll25} runs through
 the same test on the terms that need neither box extent nor edge direction: 1{,}072 of
 its 4{,}890 drawings have a largest component in the 15 to 40 band
-(chord edges, zero box sizes; provenance is not per drawing, and 69\% of harvested
-figures reproduce their source in the collection's own audit; \texttt{results/gdcoll.py}). The profile is the paper's: length and stress
+(chord edges, zero box sizes; the provenance and audit caveats stand,
+\texttt{results/gdcoll.py}). The profile is the paper's: length and stress
 hold 0.00, at exactly zero in 82 and 84\% of drawings; crossings 1.00; orthogonality
 0.06; alignment A1 holds 0.87 of the median drawing, with 0.43 of drawings at exactly
 1.00 and 0.06 at zero. The corpus the standing proposal would fit first is held by the
@@ -571,8 +574,8 @@ registered is unrun).
   its figures came from xfig, Ipe and hand-coded PostScript with no shared guide, 0.60
   in 2006 to 2014 and 0.95 in the TikZ years, where a typed coordinate is alignment
   chosen by hand; and WikiPathways is flat at 0.47 to 0.53 across four generations of
-  WP numbers, so no gradient follows PathVisio's releases. No single editor's aid
-  produces the hold; what stays open is only whether some aid does in each era.
+  WP numbers. No single editor's aid produces the hold; what stays open is only
+  whether some aid does in each era.
 \end{enumerate}
 
 The rest are excluded one by one in Appendix~\ref{app:alts}, each with the test that
@@ -634,9 +637,8 @@ the energy holds when started from a layout a person accepted: $q_{0.02}$ as
 Section~\ref{sec:method} fixes it, sixteen directions, fitted $L$, alignment A1, on
 layouts held out from any fit, with the decrease and active columns beside it, since the
 degenerate fit of Section~\ref{sec:results} reaches 0.99 by weighting a term everyone
-satisfies and a bare held fraction can always be bought that way; the constructive
-check is Appendix~\ref{app:reinsert}, where the offered term lands a reinserted box on
-the person's row or column 22 to 49\% more often. The charge is also bounded:
+satisfies and a bare held fraction can always be bought that way. The charge is also
+bounded:
 \texttt{dot} and ELK hold alignment at 0.42 to 1.00 without pricing it, so the missing
 term convicts the force-directed and multicriteria energies, not the layered engines.
 
@@ -1230,15 +1232,12 @@ content, and the two biological corpora are CC-licensed exports.
 
 \section{The reinsertion benchmark}\label{app:reinsert}
 
-\paragraph{Reinsertion.} A constructive check of the recommendation
-(\texttt{reinsert.c}, \texttt{results/reinsert.md}): delete each box in turn and let an
-energy place it against the frozen rest, the distance to the person's position the
-score. Every energy beats chance, 0.18 to 0.23 of the drawing width against 0.52 to
-0.54, and adding A1 to $C{+}O{+}L$ moves the median distance not at all: the
-neighbourhood is the distance terms' choice. The rail is alignment's: with A1 offered,
-the box lands within 0.005 of the person's row or column in 0.127, 0.101 and 0.226 of
-placements against 0.085, 0.083 and 0.162 without it, chance 0.02, McNemar $z$ = 4.5 to
-14.3.
+The robustness of the rail gain (\texttt{results/reinsert.md}): another seed moves it
+by at most 0.003 and twice the budget by 0.005; the matched-budget uniform-sampling
+control keeps it (+0.030, +0.020 and +0.036); at the tighter tolerance of 0.0025 it
+grows on BPMN to +0.085, so the placements are exactly on the rail, not near it; the
+diagram-clustered 95\% intervals are [+0.032, +0.052], [+0.010, +0.026] and [+0.052,
++0.074].
 
 \section{Related work, tabulated}\label{app:related}
 
