@@ -40,3 +40,17 @@ receipted versus bare claims.
 
 4. Among norm variants, receipts-required will beat say-IDK-when-unsure,
    which will beat the standard brief, at matched budget.
+
+## Same day: branch width
+
+A homogeneous board has authority bias with no authority: seats share one
+prior, so the first diagnosis posted reads as independent confirmation
+and the board commits to one branch (the pilot converged in 11 s, zero
+alternatives raised). Anchors: Hong & Page 2004 (shared heuristics, shared
+local optimum), Jeppesen & Lakhani 2010 (distance from expertise raises
+solve odds), CAIB/Vaughan on the searched-branch pathology. Measurable
+from room logs: distinct root-cause hypotheses posted before convergence.
+
+5. HOMO boards will average ~1 branch; boards that fail will mostly have
+   committed early to a wrong branch; where HETERO (phase 2) beats HOMO,
+   it will show more branches on exactly those instances.
