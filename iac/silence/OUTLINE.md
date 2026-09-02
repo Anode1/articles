@@ -7,6 +7,14 @@ by evidence (Chow's reject option as a posting rule), and priors differ
 (else the first post is false confirmation); each condition is testable
 and tested.
 
+0. The intensive bet. Extensive development scales the substrate:
+   larger models, larger clusters, buyers measured in governments. The
+   intensive path raises capability per dollar on hardware a person
+   owns, by organization: simple agents, a free-silence board,
+   evidence-gated claims. The meter is solves per dollar at matched
+   budget; the paper reports where organization pays and where the
+   substrate simply wins (innovation as compression: Gavrilov,
+   innovation_compression).
 1. The classic blackboard worked by abstention. Hearsay-II knowledge
    sources fired only when their condition matched; credibility weights;
    the board held justified claims. LLM seats invert the default.
