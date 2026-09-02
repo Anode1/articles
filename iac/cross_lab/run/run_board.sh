@@ -72,7 +72,7 @@ PIDS=""
 for SEAT in $SEATS; do
     i=$((i+1))
     MODEL=$(echo "$MODELS" | cut -d, -f$i)
-    STREAMS=/media/vas/kuldata/iac/streams/board-$ID-$STAMP
+    STREAMS=$HOME/.local/share/cross_lab/streams/board-$ID-$STAMP
     mkdir -p "$STREAMS"
     APPORT_REPORT_DIR=/tmp/cross_lab_apport IAC_FROM=$SEAT claude -p "You are $SEAT (model $MODEL), one of three seats fixing one issue together over an iac message board. Read $ROOM/BRIEF.md and follow it exactly. Your name: $SEAT" \
       --model "$MODEL" --max-turns "$TURNS" \
@@ -83,7 +83,7 @@ done
 wait $PIDS || true
 
 for SEAT in $SEATS; do
-    python3 - "/media/vas/kuldata/iac/streams/board-$ID-$STAMP/$SEAT.stream.jsonl" > "$OUT/$SEAT.json" <<'EOF' || true
+    python3 - "$HOME/.local/share/cross_lab/streams/board-$ID-$STAMP/$SEAT.stream.jsonl" > "$OUT/$SEAT.json" <<'EOF' || true
 import json, sys
 res = {}
 for line in open(sys.argv[1]):
@@ -96,7 +96,7 @@ for line in open(sys.argv[1]):
 print(json.dumps(res))
 EOF
 done
-echo "/media/vas/kuldata/iac/streams/board-$ID-$STAMP" > "$OUT/streams.path"
+echo "$HOME/.local/share/cross_lab/streams/board-$ID-$STAMP" > "$OUT/streams.path"
 git -C "$HOME/iac" rev-parse --short HEAD > "$OUT/iac.rev" 2>/dev/null || true
 git -C "$WORK/repo" diff > "$OUT/patch.diff"
 cp "$ROOM/BRIEF.md" "$OUT/BRIEF.md"

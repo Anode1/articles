@@ -32,13 +32,18 @@ Design: [README.md](README.md). Population: [harvest/](harvest/README.md).
 
 - `~/articles/iac/cross_lab` (NVMe, git): everything reproduction of the
   article needs: harvest, briefs, patches, run metadata, room logs.
-- `/media/vas/kuldata/iac` (USB3, ~700G), symlinked as
-  `~/articles/iac/external_data`: bulk that must survive but not travel in
-  git, chiefly evaluation logs under `evals/`. Docker's data-root is
-  `/media/vas/kuldata/docker`. The three kul directories beside it
-  (`data`, `data2`, `staging`) belong to another project: never touch.
+- `~/.local/share/cross_lab` (NVMe): everything a run needs while it
+  runs: the swebench venv, harness logs (`evals/`), per-seat streams
+  (`streams/`), orchestrator logs (`logs/`). Docker and containerd stay at
+  their defaults on the root disk; images are retired per group to fit.
+- `/media/vas/kuldata/iac` (USB2 enclosure, ~700G), symlinked as
+  `~/articles/iac/external_data`: archive only, synced from the local
+  tree when a phase ends. The link drops on its own; a run must never
+  depend on it (it did once and stalled). The three kul directories
+  beside it (`data`, `data2`, `staging`) belong to another project:
+  never touch.
 - `/tmp` scratch: seat workdirs (`CROSS_LAB_WORK` in `run/run_solo.sh`),
-  disposable.
+  disposable; seat crash reports go to `/tmp/cross_lab_apport`.
 
 ## Running a SOLO attempt
 
@@ -70,10 +75,10 @@ condition). Runner script not yet written; model it on `run/run_solo.sh` plus
 
 ## Evaluation
 
-Docker is installed, data-root on the kuldata disk, and the dataset name that
-works with swebench 5.0.2 is `SWE-bench/SWE-bench_Verified` (prebuilt
+Docker is installed (defaults, root disk), and the dataset name that works
+with swebench 5.0.2 is `SWE-bench/SWE-bench_Verified` (prebuilt
 per-instance images; the old `princeton-nlp/` name lacks the `image` field
-and fails). One patch, from the venv at `/media/vas/kuldata/iac/venv`:
+and fails). One patch, from the venv at `~/.local/share/cross_lab/venv`:
 
     sg docker -c "$VENV/bin/python -m swebench.harness.run_evaluation \
       --dataset_name SWE-bench/SWE-bench_Verified \

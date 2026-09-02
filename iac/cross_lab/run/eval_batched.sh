@@ -9,8 +9,8 @@ set -uo pipefail
 CHUNK=${1:-6}
 HERE=$(cd "$(dirname "$0")" && pwd)
 CL=$HERE/..
-E=/media/vas/kuldata/iac/evals/screen-sonnet
-VENVPY=/media/vas/kuldata/iac/venv/bin/python
+E=$HOME/.local/share/cross_lab/evals/screen-sonnet
+VENVPY=$HOME/.local/share/cross_lab/venv/bin/python
 RUN_ID=screen-sonnet
 MIN_FREE_G=6
 mkdir -p "$E"

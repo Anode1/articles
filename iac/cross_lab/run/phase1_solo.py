@@ -11,8 +11,8 @@ import glob, json, os, shutil, subprocess, sys, datetime
 
 CL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUN = os.path.join(CL, "run")
-E = "/media/vas/kuldata/iac/evals/phase1"
-VENVPY = "/media/vas/kuldata/iac/venv/bin/python"
+E = os.path.expanduser("~/.local/share/cross_lab/evals/phase1")
+VENVPY = os.path.expanduser("~/.local/share/cross_lab/venv/bin/python")
 B = 3.00
 MODELS = ["haiku", "sonnet", "opus", "fable"]
 GROUP = 6
