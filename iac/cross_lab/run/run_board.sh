@@ -74,10 +74,10 @@ for SEAT in $SEATS; do
     MODEL=$(echo "$MODELS" | cut -d, -f$i)
     STREAMS=$HOME/.local/share/cross_lab/streams/board-$ID-$STAMP
     mkdir -p "$STREAMS"
-    APPORT_REPORT_DIR=/tmp/cross_lab_apport IAC_FROM=$SEAT claude -p "You are $SEAT (model $MODEL), one of three seats fixing one issue together over an iac message board. Read $ROOM/BRIEF.md and follow it exactly. Your name: $SEAT" \
+    (cd "$WORK/repo" && APPORT_REPORT_DIR=/tmp/cross_lab_apport IAC_FROM=$SEAT claude -p "You are $SEAT (model $MODEL), one of three seats fixing one issue together over an iac message board. Read $ROOM/BRIEF.md and follow it exactly. Your name: $SEAT" \
       --model "$MODEL" --max-turns "$TURNS" \
       --allowedTools "Read" "Glob" "Grep" "Edit" "Write" "Bash" \
-      --verbose --output-format stream-json > "$STREAMS/$SEAT.stream.jsonl" 2> "$OUT/$SEAT.stderr" &
+      --verbose --output-format stream-json > "$STREAMS/$SEAT.stream.jsonl" 2> "$OUT/$SEAT.stderr") &
     PIDS="$PIDS $!"
 done
 wait $PIDS || true
