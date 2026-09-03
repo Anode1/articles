@@ -74,10 +74,32 @@ than fable alone (16), better than sonnet (10) and haiku (3). On this
 population, three coordinated seats bought less than one strong seat at
 lower cost.
 
-Room logs for the 22 runs are archived under runs/board/; the counts for
-PREDICTIONS.md items 1, 5 and 6 (early wrong branch, branch width,
-conformity) are the next analysis and do not depend on the primary
-outcome.
+## Why the board lost, from the five room logs
+
+Read against a resolving solo patch for the same instance:
+
+    instance           board did                              solo did
+    sympy-20916 (x2)   the same one-line source fix, plus     the source fix only
+                       edits to the test file the hidden
+                       test patch also edits; that test fails
+    matplotlib-23299   three diagnoses, all three fixes        one file
+                       stacked ("both good"), plus a test edit
+    sphinx-10614       "two bugs", two files patched; one     one file
+                       seat wiped another's edit (git checkout)
+    astropy-14369      grammar restructured wholesale; an      a narrower grammar fix
+                       invalid unit now parses, two tests break
+    matplotlib-26208   three identical diagnoses, one           a different approach
+                       implementation, verified, wrong          in the same file
+
+No seat stayed silent and no seat deferred wrongly. The board added:
+more files, more fixes, test edits, broader rewrites. The protocol has
+no subtraction step, so the shared tree is the union of three confident
+contributions, and every run ends with all three posting VERIFIED or
+FINAL over a patch larger than the fix. Four of five losses are consensus
+by union (PREDICTIONS.md item 6, agreeableness in additive form); the
+fifth is a convergent wrong branch (item 5). Item 1 holds at the
+verification stage rather than the diagnosis stage. The norm this
+implies is stated in PREDICTIONS.md as item 7.
 
 ## Limitations
 

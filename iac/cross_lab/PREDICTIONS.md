@@ -69,3 +69,17 @@ that first posted it with a receipt (contribution).
 6. A competition norm (agreement without new evidence is noise; dissent
    that survives verification is the credited contribution) will raise
    branch width and solve rate over the plain abstention norms.
+
+## 2026-09-03, post hoc from the five board losses (not a prediction)
+
+The losses were additive, not silent: stacked fixes, test-file edits,
+wholesale rewrites, a union of three confident contributions with no
+subtraction step, each run closing on a chorus of VERIFIED. Recorded as
+observation; the item below is the prediction it produces, written
+before any run tests it.
+
+7. A subtractive brief (no test edits; minimal diff; any seat may veto a
+   peer's addition; every change carries a receipt against the issue's
+   own reproduction; the integrator's job is to remove) will resolve at
+   least 3 of the 5 instances the standard brief lost, with the standard
+   brief rerun on the same 5 as the dispersion control.
