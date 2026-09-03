@@ -1,0 +1,45 @@
+diff --git a/sympy/ntheory/residue_ntheory.py b/sympy/ntheory/residue_ntheory.py
+index 9a3052d..1d978e4 100644
+--- a/sympy/ntheory/residue_ntheory.py
++++ b/sympy/ntheory/residue_ntheory.py
+@@ -765,16 +765,21 @@ def nthroot_mod(a, n, p, all_roots=False):
+     [8, 11]
+     >>> nthroot_mod(68, 3, 109)
+     23
++    >>> nthroot_mod(17*17, 5, 17, True)
++    [0]
+     """
+     from sympy.core.numbers import igcdex
+     a, n, p = as_int(a), as_int(n), as_int(p)
+     if n == 2:
+         return sqrt_mod(a, p, all_roots)
+     # see Hackman "Elementary Number Theory" (2009), page 76
+-    if not is_nthpow_residue(a, n, p):
+-        return None
+     if not isprime(p):
+         raise NotImplementedError("Not implemented for composite p")
++    if a % p == 0:
++        # p is prime, so p | x**n implies p | x: 0 is the only root
++        return [0] if all_roots else 0
++    if not is_nthpow_residue(a, n, p):
++        return None
+ 
+     if (p - 1) % n == 0:
+         return _nthroot_mod1(a, n, p, all_roots)
+diff --git a/sympy/ntheory/tests/test_residue.py b/sympy/ntheory/tests/test_residue.py
+index d485454..70af0d0 100644
+--- a/sympy/ntheory/tests/test_residue.py
++++ b/sympy/ntheory/tests/test_residue.py
+@@ -186,6 +186,12 @@ def test_residue():
+                 else:
+                     assert res is None
+ 
++    # Test a % p == 0 case (e.g., issue sympy/sympy#18199)
++    assert nthroot_mod(0, 5, 17) == 0
++    assert nthroot_mod(0, 5, 17, all_roots=True) == [0]
++    assert nthroot_mod(17*17, 5, 17) == 0
++    assert nthroot_mod(17*17, 5, 17, all_roots=True) == [0]
++
+     assert legendre_symbol(5, 11) == 1
+     assert legendre_symbol(25, 41) == 1
+     assert legendre_symbol(67, 101) == -1

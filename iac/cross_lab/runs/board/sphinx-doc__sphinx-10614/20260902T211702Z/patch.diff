@@ -1,0 +1,61 @@
+diff --git a/sphinx/ext/graphviz.py b/sphinx/ext/graphviz.py
+index 8b21d9e..6738c49 100644
+--- a/sphinx/ext/graphviz.py
++++ b/sphinx/ext/graphviz.py
+@@ -237,7 +237,7 @@ def fix_svg_relative_paths(self: SphinxTranslator, filepath: str) -> None:
+         old_path = path.join(self.builder.outdir, url)
+         new_path = path.relpath(
+             old_path,
+-            start=path.join(self.builder.outdir, self.builder.imgpath),
++            start=path.join(self.builder.outdir, self.builder.imagedir),
+         )
+         modified_url = urlunsplit((scheme, hostname, new_path, query, fragment))
+ 
+diff --git a/sphinx/ext/inheritance_diagram.py b/sphinx/ext/inheritance_diagram.py
+index 6e39855..7c8cc38 100644
+--- a/sphinx/ext/inheritance_diagram.py
++++ b/sphinx/ext/inheritance_diagram.py
+@@ -33,10 +33,12 @@ from __future__ import annotations
+ import builtins
+ import hashlib
+ import inspect
++import posixpath
+ import re
+ from collections.abc import Iterable
+ from importlib import import_module
+ from typing import Any, cast
++from urllib.parse import urlsplit
+ 
+ from docutils import nodes
+ from docutils.nodes import Node
+@@ -408,17 +410,25 @@ def html_visit_inheritance_diagram(self: HTML5Translator, node: inheritance_diag
+     # Create a mapping from fully-qualified class names to URLs.
+     graphviz_output_format = self.builder.env.config.graphviz_output_format.upper()
+     current_filename = self.builder.current_docname + self.builder.out_suffix
++    current_dirname = posixpath.dirname(current_filename)
+     urls = {}
+     pending_xrefs = cast(Iterable[addnodes.pending_xref], node)
+     for child in pending_xrefs:
+-        if child.get('refuri') is not None:
+-            if graphviz_output_format == 'SVG':
+-                urls[child['reftitle']] = "../" + child.get('refuri')
++        refuri = child.get('refuri')
++        if refuri is not None:
++            if graphviz_output_format == 'SVG' and not urlsplit(refuri).netloc:
++                # The SVG is written once into the image directory and embedded
++                # with an <object> tag, so its links resolve relative to that
++                # file rather than to the embedding document.  *refuri* is
++                # relative to the current document, so make it relative to the
++                # output directory; fix_svg_relative_paths() then rebases it
++                # onto the image directory.
++                urls[child['reftitle']] = posixpath.join(current_dirname, refuri)
+             else:
+-                urls[child['reftitle']] = child.get('refuri')
++                urls[child['reftitle']] = refuri
+         elif child.get('refid') is not None:
+             if graphviz_output_format == 'SVG':
+-                urls[child['reftitle']] = '../' + current_filename + '#' + child.get('refid')
++                urls[child['reftitle']] = current_filename + '#' + child.get('refid')
+             else:
+                 urls[child['reftitle']] = '#' + child.get('refid')
+ 

@@ -1,0 +1,24 @@
+seat1-opus|*|1788378792|411
+[seat1-opus] DIAGNOSIS: rc_context exit does dict.update(rcParams, orig), restoring the _auto_backend_sentinel saved before plt.figure() resolved it. Later get_backend() reads rcParams['backend'], hits the sentinel in RcParams.__getitem__, calls plt.switch_backend(sentinel), and pyplot.py:225 close('all') runs unconditionally at the top, destroying Gcf.figs. Fix: only close when the backend actually changes.
+seat1-opus|*|1788378798|368
+[seat1-opus] CLAIM: lib/matplotlib/pyplot.py . Plan: move close('all') out of the top of switch_backend; capture old_backend = dict.__getitem__(rcParams,'backend') after the sentinel branch returns, and close('all') at the end only if not cbook._str_equal(old_backend, newbackend). Someone else take the test in lib/matplotlib/tests/test_rcparams.py or test_pyplot.py.
+seat2-sonnet|*|1788378799|711
+[seat2-sonnet] DIAGNOSIS: rc_context() does orig=rcParams.copy() (dict.copy, raw, keeps sentinel if backend unresolved), then finally: dict.update(rcParams, orig) which bypasses RcParams.__setitem__. If backend was still the sentinel when entering rc_context but got resolved to a real backend inside (e.g. by plt.figure()), exit resets rcParams['backend'] raw storage back to the sentinel. Next get_backend() call re-triggers switch_backend(sentinel), which does close("all") first -> wipes Gcf.figs -> then re-resolves. Fix: rc_context should restore via RcParams.__setitem__ (or dict.update on a plain dict copy of validated values), not raw dict.update, or capture already-resolved backend before restoring.
+seat3-haiku|*|1788378799|283
+[seat3-haiku] DIAGNOSIS: get_backend() triggers rcParams['backend'].__getitem__, which calls switch_backend() with sentinel value, executing close('all') and clearing Gcf.figs. Issue: rc_context() restores rcParams via dict.update() bypassing validation, leaving backend as sentinel.
+seat3-haiku|*|1788378809|261
+[seat3-haiku] Both good. Seat1 fix: switch_backend only close if backend changes. Seat2 fix: rc_context restore via __setitem__. Both needed - seat1 handles general case, seat2 fixes rc_context root cause. I'll take CLAIM: lib/matplotlib/__init__.py rc_context.
+seat3-haiku|*|1788378831|172
+[seat3-haiku] DONE: Changed rc_context to use rcParams.update(orig) instead of dict.update(rcParams, orig) in finally block. Validated with reproduction case - test passes.
+seat2-sonnet|*|1788378847|306
+[seat2-sonnet] CLAIM: lib/matplotlib/tests/test_pyplot.py . Agree with seat1's plan (close only when backend actually changes). Will add test_switch_backend_no_close: switch_backend('agg') twice keeps the figure alive, switching to a different backend ('svg') closes it. Waiting for pyplot.py edit to land.
+seat2-sonnet|*|1788379065|393
+[seat2-sonnet] DONE: Added test_switch_backend_no_close to lib/matplotlib/tests/test_pyplot.py (same-backend switch keeps figures, different-backend switch closes them). Verified issue's exact repro script now passes, and test_pyplot.py (24 tests) + test_pickle.py + test_figure.py pass against the current fix (1 unrelated pre-existing failure from a stale compiled _path.so, not our change).
+seat1-opus|*|1788379167|334
+[seat1-opus] DONE: pyplot.py switch_backend: dropped close('all') at the top, captured old_backend = dict.__getitem__(rcParams,'backend') after the sentinel branch, close('all') at the end only if not cbook._str_equal(old_backend, newbackend). Ran test_pyplot.py + test_rcparams.py: 222 pass, same 4 pre-existing env failures as HEAD.
+seat1-opus|*|1788379167|419
+[seat1-opus] DATA: measured all four combinations. My pyplot fix alone does not fix the repro (recursive switch_backend still closes); seat3's __init__ fix alone leaves same-backend switch closing figures. Both together: correct. seat3, consider the upstream form instead: orig = dict(rcParams.copy()); del orig['backend'], keeping dict.update. Same behaviour, 111us vs 289us per rc_context, no revalidation. Your call.
+seat3-haiku|*|1788379172|252
+[seat3-haiku] FINAL: All three fixes in place and tested: (1) rc_context validates on restore, (2) switch_backend closes only on actual change, (3) new regression test added. Issue resolved - figures no longer cleared by get_backend() after rc_context.
+seat1-opus|*|1788379179|375
+[seat1-opus] FINAL: repo state verified end to end against a built matplotlib: issue repro passes, same-backend switch keeps figures, different-backend switch closes them, test_pyplot.py + test_rcparams.py 222 pass (4 failures also present at HEAD). No objection to seat3 keeping rcParams.update(orig); the upstream del orig['backend'] form was only faster, not more correct.

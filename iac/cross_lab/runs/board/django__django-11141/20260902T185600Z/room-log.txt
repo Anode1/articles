@@ -1,0 +1,24 @@
+seat1-opus|*|1788375387|380
+[seat1-opus] DIAGNOSIS: loader.py:87-90 marks any module without __file__ as unmigrated, which kills implicit namespace packages. Discovery already uses pkgutil.iter_modules(module.__path__), so the check is dead weight. Fix: delete those 4 lines; the following 'not hasattr(module, __path__)' check still rejects migrations.py. questioner.py:48-53 already handles namespace dirs.
+seat3-haiku|*|1788375387|211
+[seat3-haiku] DIAGNOSIS: loader.py lines 89-91 reject namespace packages (no __file__). questioner.py already handles both __file__ and __path__. Remove __file__ check since pkgutil.iter_modules() uses __path__.
+seat1-opus|*|1788375394|236
+[seat1-opus] CLAIM: django/db/migrations/loader.py . We agree on the fix. seat3-haiku, seat2-sonnet: please do not edit that file; take verification instead (run tests/migrations + tests/migrate_signals). I will post DONE with the diff.
+seat3-haiku|*|1788375397|76
+[seat3-haiku] CLAIM: verification (tests/migrations + tests/migrate_signals)
+seat2-sonnet|*|1788375421|563
+[seat2-sonnet] DIAGNOSIS: loader.py load_disk() (line ~89) drops apps into unmigrated_apps whenever getattr(module,'__file__',None) is None. That's true for implicit namespace packages (no __init__.py), even though pkgutil.iter_modules() (used since #23406) works fine via __path__ on namespace pkgs. Fix: delete the __file__ check, keep only the 'not hasattr(module, __path__)' check (catches non-package migrations.py). Also test_loader.py:test_load_empty_dir asserts namespace dir -> unmigrated_apps; that assumption flips and the test needs updating to match.
+seat1-opus|*|1788375423|295
+[seat1-opus] loader.py edited: __file__ check removed. Full migrations suite: 1 failure, test_loader.test_load_empty_dir, which asserts the exact old behaviour we deleted. It is obsolete, not a regression. CLAIM: tests/migrations/test_loader.py to remove that method. Object now if you disagree.
+seat2-sonnet|*|1788375426|222
+[seat2-sonnet] CLAIM: tests/migrations/test_loader.py (update test_load_empty_dir, which currently asserts namespace dir -> unmigrated_apps; will flip to match new behavior) and docs/releases changelog entry if applicable.
+seat1-opus|*|1788375437|336
+[seat1-opus] RELEASE tests/migrations/test_loader.py: seat2-sonnet claimed it first, it is yours. Flip is fine; the namespace fixture has no .py migrations so it lands in migrated_apps with an empty migration set. DONE: django/db/migrations/loader.py, lines 87-91 removed, __path__ check kept. 114 tests, only test_load_empty_dir fails.
+seat2-sonnet|*|1788375470|360
+[seat2-sonnet] DONE: updated test_load_empty_dir to assert namespace-package migrations dir now goes to migrated_apps (not unmigrated_apps), matching loader.py's fix. Ran with PYTHONPATH=repo, --parallel=1 (parallel runner broken on py3.12 here, unrelated). migrations.test_loader: 24/24 pass. Full migrations suite: 518/518 pass. No new test files, no commit.
+seat3-haiku|*|1788375475|105
+[seat3-haiku] DONE: verified migrate_signals tests all 3/3 pass. Namespace packages now work as intended.
+seat1-opus|*|1788375478|289
+[seat1-opus] Reviewed the combined diff: loader.py + test_loader.py only, coherent, matches the ticket. Nit for seat2-sonnet, your call: assertNotIn message reads 'is unmigrated apps', drop 'is' or make it 'is in unmigrated apps'. Waiting on seat3-haiku verification, then we are finished.
+seat1-opus|*|1788375484|248
+[seat1-opus] All three DONE. Final state: loader.py __file__ check removed (mine), test_load_empty_dir flipped (seat2-sonnet), migrations 518/518 and migrate_signals 3/3 (seat2, seat3). Two files touched, no new tests, nothing committed. Finishing.

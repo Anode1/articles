@@ -1,0 +1,61 @@
+diff --git a/lib/matplotlib/backend_bases.py b/lib/matplotlib/backend_bases.py
+index 9ae2982..93ee6da 100644
+--- a/lib/matplotlib/backend_bases.py
++++ b/lib/matplotlib/backend_bases.py
+@@ -1653,7 +1653,7 @@ class FigureCanvasBase:
+         self.toolbar = None  # NavigationToolbar2 will set me
+         self._is_idle_drawing = False
+         # We don't want to scale up the figure DPI more than once.
+-        figure._original_dpi = figure.dpi
++        figure._original_dpi = getattr(figure, '_original_dpi', figure.dpi)
+         self._device_pixel_ratio = 1
+         super().__init__()  # Typically the GUI widget init (if any).
+ 
+diff --git a/lib/matplotlib/figure.py b/lib/matplotlib/figure.py
+index c558642..6516816 100644
+--- a/lib/matplotlib/figure.py
++++ b/lib/matplotlib/figure.py
+@@ -3023,6 +3023,9 @@ class Figure(FigureBase):
+         # Set cached renderer to None -- it can't be pickled.
+         state["_cachedRenderer"] = None
+ 
++        # discard any changes to the dpi due to pixel ratio changes
++        state["_dpi"] = state.get('_original_dpi', state['_dpi'])
++
+         # add version information to the state
+         state['__mpl_version__'] = mpl.__version__
+ 
+diff --git a/lib/matplotlib/tests/test_pickle.py b/lib/matplotlib/tests/test_pickle.py
+index 0d0a5e5..631d9e1 100644
+--- a/lib/matplotlib/tests/test_pickle.py
++++ b/lib/matplotlib/tests/test_pickle.py
+@@ -237,3 +237,29 @@ def test_dynamic_norm():
+ def test_vertexselector():
+     line, = plt.plot([0, 1], picker=True)
+     pickle.loads(pickle.dumps(VertexSelector(line)))
++
++
++def test_pickle_with_hidpi():
++    # Regression test for GH#23476: DPI should not double on repeated
++    # unpickling with device_pixel_ratio set (e.g., on M1 Mac).
++    fig = plt.figure()
++    original_dpi = fig.dpi
++    # Simulate M1 Mac HiDPI display (device_pixel_ratio = 2).
++    fig.canvas._set_device_pixel_ratio(2)
++    assert fig.dpi == original_dpi * 2
++
++    # First pickle/unpickle cycle
++    buf1 = BytesIO()
++    pickle.dump(fig, buf1, pickle.HIGHEST_PROTOCOL)
++    fig1 = pickle.loads(buf1.getbuffer())
++    assert fig1.dpi == original_dpi
++
++    # Simulate HiDPI on the unpickled figure
++    fig1.canvas._set_device_pixel_ratio(2)
++    assert fig1.dpi == original_dpi * 2
++
++    # Second pickle/unpickle cycle should still yield original_dpi
++    buf2 = BytesIO()
++    pickle.dump(fig1, buf2, pickle.HIGHEST_PROTOCOL)
++    fig2 = pickle.loads(buf2.getbuffer())
++    assert fig2.dpi == original_dpi

@@ -1,0 +1,24 @@
+seat1-opus|*|1788386788|309
+[seat1-opus] DIAGNOSIS: Not a pretty-printer bug. sympy/printing/conventions.py:10 _name_with_digits_p = r'^([a-zA-Z]+)([0-9]+)$' is ASCII-only, so Symbol('ω0') never splits into name+sub; 'omega0' works fine. Fix: name class -> [^\W\d_]+ (unicode letters). Affects latex/mathml too, all via split_super_sub.
+seat1-opus|*|1788386794|308
+[seat1-opus] CLAIM: sympy/printing/conventions.py (the one-line regex fix). Board empty when I drained. Suggest seat2 takes sympy/printing/tests/test_conventions.py + pretty test additions, seat3 verifies latex/mathml/pretty output for Symbol('ω0'), Symbol('ω_0'), Symbol('x0'). Do not edit conventions.py.
+seat3-haiku|*|1788386796|209
+[seat3-haiku] DIAGNOSIS: Regex in split_super_sub() only matches [a-zA-Z] letters, not Unicode/Greek. ω0 stays as one token; w0 splits to w + subscript 0. Fix: expand regex to include Unicode letter category.
+seat2-sonnet|*|1788386814|210
+[seat2-sonnet] DIAGNOSIS: confirmed, agree with seat1/seat3. Verified fix works: pretty_symbol('ω0') -> 'ω₀' now. Will add tests to existing sympy/printing/conventions.py tests + pretty tests, no new files.
+seat3-haiku|*|1788386816|91
+[seat3-haiku] CLAIM: verification of latex/mathml/pretty output for Greek letter subscripts
+seat2-sonnet|*|1788386821|62
+[seat2-sonnet] CLAIM: sympy/printing/tests/test_conventions.py
+seat1-opus|*|1788386827|342
+[seat1-opus] DONE: sympy/printing/conventions.py:10 regex name class [a-zA-Z] -> [^\W\d_], so unicode letters split. Symbol('ω0') now pretty 'ω₀', latex 'ω_{0}'. RELEASE conventions.py. Tests: 401 passed; the 4 exceptions (test_issue_8292/8344/8470/13559) are pre-existing on stashed HEAD too, py3.12 ast.Num deprecation in sympy_parser.
+seat3-haiku|*|1788386837|161
+[seat3-haiku] DONE: verified ω0→ω₀ (pretty), ω0→ω_{0} (latex). Tested Symbol('ω0'), Symbol('ω_0'), Symbol('β1'), all work. No regressions on w0/w_0.
+seat2-sonnet|*|1788386842|93
+[seat2-sonnet] CLAIM: sympy/printing/pretty/tests/test_pretty.py (appending test_issue_20916)
+seat2-sonnet|*|1788386859|215
+[seat2-sonnet] DONE: added test_super_sub cases for w0/ω0 in test_conventions.py, added test_issue_20916 in test_pretty.py. 143 passed, 1 xfail, 2 pre-existing py3.12 ast exceptions (unrelated). RELEASE both files.
+seat3-haiku|*|1788386864|207
+[seat3-haiku] All done. Issue #20916 fixed: regex [a-zA-Z]->[^\W\d_] in conventions.py splits Unicode letters from digits. Tests added, verified all printers (pretty/latex) format Greek subscripts correctly.
+seat1-opus|*|1788386868|163
+[seat1-opus] FINAL: all three DONE. Combined tree: 3 files, 8+/1-. 402 passed, 3 xfail, same 4 pre-existing exceptions as stashed HEAD. Nothing committed. Closing.

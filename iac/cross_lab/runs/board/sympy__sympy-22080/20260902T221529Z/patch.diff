@@ -1,0 +1,64 @@
+diff --git a/sympy/codegen/tests/test_rewriting.py b/sympy/codegen/tests/test_rewriting.py
+index c8af626..32dfa83 100644
+--- a/sympy/codegen/tests/test_rewriting.py
++++ b/sympy/codegen/tests/test_rewriting.py
+@@ -266,10 +266,10 @@ def test_create_expand_pow_optimization():
+     # gh issue 15335
+     assert cc(x**(-4)) == '1.0/(x*x*x*x)'
+     assert cc(x**(-5)) == 'pow(x, -5)'
+-    assert cc(-x**4) == '-x*x*x*x'
+-    assert cc(x**4 - x**2) == '-x*x + x*x*x*x'
++    assert cc(-x**4) == '-(x*x*x*x)'
++    assert cc(x**4 - x**2) == '-(x*x) + x*x*x*x'
+     i = Symbol('i', integer=True)
+-    assert cc(x**i - x**2) == 'pow(x, i) - x*x'
++    assert cc(x**i - x**2) == 'pow(x, i) - (x*x)'
+     # gh issue 20753
+     cc2 = lambda x: ccode(optimize(x, [create_expand_pow_optimization(
+         4, base_req=lambda b: b.is_Function)]))
+diff --git a/sympy/printing/codeprinter.py b/sympy/printing/codeprinter.py
+index ba0e746..f2de271 100644
+--- a/sympy/printing/codeprinter.py
++++ b/sympy/printing/codeprinter.py
+@@ -9,7 +9,7 @@
+ from sympy.core.mul import _keep_coeff
+ from sympy.core.symbol import Symbol
+ from sympy.printing.str import StrPrinter
+-from sympy.printing.precedence import precedence
++from sympy.printing.precedence import precedence, PRECEDENCE
+ 
+ 
+ class requires:
+@@ -487,7 +487,19 @@ def _print_Mul(self, expr):
+ 
+         a = a or [S.One]
+ 
+-        a_str = [self.parenthesize(x, prec) for x in a]
++        if len(a) == 1 and sign == "-":
++            # Unary minus does not have a SymPy class, and hence there's no
++            # precedence weight associated with it, Python's unary minus has
++            # an operator precedence between multiplication and exponentiation,
++            # so we use this to compute a weight.
++            a_str = [self.parenthesize(a[0], 0.5*(PRECEDENCE["Pow"]+PRECEDENCE["Mul"]))]
++        elif sign == "-":
++            # the sign is printed on its own, so what follows it is a plain
++            # product and has to be parenthesized as one: precedence(expr) of
++            # a negative Mul is that of Add, which is too low here.
++            a_str = [self.parenthesize(x, PRECEDENCE["Mul"]) for x in a]
++        else:
++            a_str = [self.parenthesize(x, prec) for x in a]
+         b_str = [self.parenthesize(x, prec) for x in b]
+ 
+         # To parenthesize Pow with exp = -1 and having more than one Symbol
+diff --git a/sympy/printing/precedence.py b/sympy/printing/precedence.py
+index 47ff463..9a2c9c2 100644
+--- a/sympy/printing/precedence.py
++++ b/sympy/printing/precedence.py
+@@ -48,6 +48,7 @@
+     "KroneckerProduct": PRECEDENCE["Mul"],
+     "Equality": PRECEDENCE["Mul"],
+     "Unequality": PRECEDENCE["Mul"],
++    "Mod": PRECEDENCE["Mul"],
+ }
+ 
+ # Sometimes it's not enough to assign a fixed precedence value to a

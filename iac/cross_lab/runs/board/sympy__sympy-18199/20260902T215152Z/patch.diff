@@ -1,0 +1,35 @@
+diff --git a/sympy/ntheory/residue_ntheory.py b/sympy/ntheory/residue_ntheory.py
+index 9a3052d..0239900 100644
+--- a/sympy/ntheory/residue_ntheory.py
++++ b/sympy/ntheory/residue_ntheory.py
+@@ -776,6 +776,10 @@ def nthroot_mod(a, n, p, all_roots=False):
+     if not isprime(p):
+         raise NotImplementedError("Not implemented for composite p")
+ 
++    if a % p == 0:
++        # p is prime, so x**n = 0 mod p has the single root x = 0
++        return [0] if all_roots else 0
++
+     if (p - 1) % n == 0:
+         return _nthroot_mod1(a, n, p, all_roots)
+     # The roots of ``x**n - a = 0 (mod p)`` are roots of
+diff --git a/sympy/ntheory/tests/test_residue.py b/sympy/ntheory/tests/test_residue.py
+index d485454..69dd6ab 100644
+--- a/sympy/ntheory/tests/test_residue.py
++++ b/sympy/ntheory/tests/test_residue.py
+@@ -186,6 +186,15 @@ def test_residue():
+                 else:
+                     assert res is None
+ 
++    # Test for a = 0 (issue #18199)
++    assert nthroot_mod(0, 5, 17) == 0
++    assert nthroot_mod(0, 5, 17, True) == [0]
++    assert nthroot_mod(289, 5, 17, True) == [0]  # 289 = 17*17 = 0 mod 17
++    for p in primerange(5, 30):
++        for n in range(2, p):
++            assert nthroot_mod(0, n, p) == 0
++            assert nthroot_mod(0, n, p, True) == [0]
++
+     assert legendre_symbol(5, 11) == 1
+     assert legendre_symbol(25, 41) == 1
+     assert legendre_symbol(67, 101) == -1

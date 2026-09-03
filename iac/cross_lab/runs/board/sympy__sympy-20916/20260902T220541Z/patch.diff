@@ -1,0 +1,42 @@
+diff --git a/sympy/printing/conventions.py b/sympy/printing/conventions.py
+index 9a3be6b..5e3aa1a 100644
+--- a/sympy/printing/conventions.py
++++ b/sympy/printing/conventions.py
+@@ -7,7 +7,7 @@
+ from collections.abc import Iterable
+ from sympy import Derivative
+ 
+-_name_with_digits_p = re.compile(r'^([a-zA-Z]+)([0-9]+)$')
++_name_with_digits_p = re.compile(r'^([^\W\d_]+)([0-9]+)$')
+ 
+ 
+ def split_super_sub(text):
+diff --git a/sympy/printing/pretty/tests/test_pretty.py b/sympy/printing/pretty/tests/test_pretty.py
+index 42fae77..a19fb3c 100644
+--- a/sympy/printing/pretty/tests/test_pretty.py
++++ b/sympy/printing/pretty/tests/test_pretty.py
+@@ -7386,6 +7386,11 @@ def test_issue_18272():
+     '⎪  │              ⎜⎜⎪   ─     otherwise⎟          ⎟⎪\n'\
+     '⎩  │              ⎝⎝⎩   2              ⎠          ⎠⎭'
+ 
++def test_issue_20916():
++    assert upretty(Symbol('ω0')) == 'ω₀'
++    assert upretty(Symbol('α1')) == 'α₁'
++
++
+ def test_Str():
+     from sympy.core.symbol import Str
+     assert pretty(Str('x')) == 'x'
+diff --git a/sympy/printing/tests/test_conventions.py b/sympy/printing/tests/test_conventions.py
+index 87689aa..36a6b55 100644
+--- a/sympy/printing/tests/test_conventions.py
++++ b/sympy/printing/tests/test_conventions.py
+@@ -30,6 +30,8 @@ def test_super_sub():
+     assert split_super_sub("alpha_11") == ("alpha", [], ["11"])
+     assert split_super_sub("alpha_11_11") == ("alpha", [], ["11", "11"])
+     assert split_super_sub("") == ("", [], [])
++    assert split_super_sub("w0") == ("w", [], ["0"])
++    assert split_super_sub("\N{GREEK SMALL LETTER OMEGA}0") == ("\N{GREEK SMALL LETTER OMEGA}", [], ["0"])
+ 
+ 
+ def test_requires_partial():

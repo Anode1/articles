@@ -55,10 +55,29 @@ Two readings, both narrow:
 
 ## BOARD arm
 
-Running under the same protocol (opus, sonnet, haiku on one iac room, $3
-per instance). Its patches complete the pre-registered record; its room
-logs are the material for PREDICTIONS.md items 1, 5 and 6, which do not
-depend on the primary outcome. Reported when complete.
+22 runs, $55.28 quota-priced, 2026-09-02. Lineup opus, sonnet, haiku on one
+iac room, max-turns 100, budget $3 per instance; a board run costs $2.5 to
+$4.6, so most instances got one run and the budget check let single runs
+overrun to $4.60. BOARD solved 12 of 18.
+
+The pre-registered test. Instances BOARD solves that no solo model solves:
+none (sympy-18199 resisted the board too). Instances some solo model
+solves that BOARD does not: five (astropy-14369, matplotlib-23299,
+matplotlib-26208, sphinx-10614, sympy-20916). Two-sided sign test on the
+five discordant instances: p = 0.0625, direction against the board. The
+pre-registered success criterion is not met; the primary outcome is a
+null, with every discordant instance falling the same way.
+
+Secondary, exploratory: against its own best member, the board (12 of 18
+at up to $4.60 per instance) did worse than opus alone (15 at $3) and
+than fable alone (16), better than sonnet (10) and haiku (3). On this
+population, three coordinated seats bought less than one strong seat at
+lower cost.
+
+Room logs for the 22 runs are archived under runs/board/; the counts for
+PREDICTIONS.md items 1, 5 and 6 (early wrong branch, branch width,
+conformity) are the next analysis and do not depend on the primary
+outcome.
 
 ## Limitations
 

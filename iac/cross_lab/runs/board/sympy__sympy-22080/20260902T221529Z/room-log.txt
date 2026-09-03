@@ -1,0 +1,22 @@
+seat3-haiku|*|1788387399|287
+[seat3-haiku] DIAGNOSIS: -Mod(x,y) renders as -x%y instead of -(x%y) in pycode. Root cause: _print_Mul treats Mod like higher-prec subexpr, doesn't parenthesize it. Python % and * share precedence but SymPy gives Mod=70 > Mul=50. Need parenthesize logic for Mod when in negation context.
+seat1-opus|*|1788387428|360
+[seat1-opus] DIAGNOSIS: pycode._print_Mod emits 'a % b' (Mul-level in Python) but precedence(Mod) is Func=70, so nothing above it parenthesizes. -Mod(x,y) -> Mul(-1,Mod) prints '-x % y' = (-x)%y. Fix: add 'Mod': PRECEDENCE['Mul'] in printing/precedence.py, plus unary-minus case in CodePrinter._print_Mul (parenthesize at 0.5*(Pow+Mul)). Two files, splittable.
+seat1-opus|*|1788387440|396
+[seat1-opus] CLAIM: sympy/printing/codeprinter.py (import PRECEDENCE; in _print_Mul, when single numerator factor and sign=='-', parenthesize at 0.5*(PRECEDENCE['Pow']+PRECEDENCE['Mul'])). Proposal: seat3-haiku takes sympy/printing/precedence.py, one line: "Mod": PRECEDENCE["Mul"] in PRECEDENCE_VALUES. seat2-sonnet: run printing+lambdify tests, report fallout. Both changes are needed together.
+seat3-haiku|*|1788387443|49
+[seat3-haiku] CLAIM: sympy/printing/precedence.py
+seat3-haiku|*|1788387455|140
+[seat3-haiku] DONE: Added 'Mod': PRECEDENCE['Mul'] to PRECEDENCE_VALUES in sympy/printing/precedence.py, Mod precedence now 50 matching Mul.
+seat1-opus|*|1788387511|317
+[seat1-opus] codeprinter.py edited: unary-minus parenthesize at 55, plus prec now computed after stripping the sign (else -2*Mod(x,y) still printed -2*x % y). Both fixed, verified numerically. Side effect: -x/7*Mod -> -(1/7)*(x % y), extra parens on Rational coeffs in code printers. Running sympy/printing/tests now.
+seat2-sonnet|*|1788387535|434
+[seat2-sonnet] DIAGNOSIS: PythonCodePrinter._print_Mod (sympy/printing/pycode.py:235) prints 'x % y' unwrapped. Mod inherits Function precedence(70), so StrPrinter._print_Mul (shared base) never parenthesizes it under a leading '-' or another factor, giving wrong Python semantics (-x%y != -(x%y)). Fix: wrap output like c.py's _print_Mod does: '({} % {})'. Will update the one existing test_pycode.py assertion (line 32) accordingly.
+seat1-opus|*|1788387618|357
+[seat1-opus] DISAGREE seat2: do not wrap pycode._print_Mod in parens. It is already fixed: precedence Mod=50 (seat3) + my codeprinter._print_Mul change give -(x % y), (-x) % y, -2*(x % y), and Mod(x,2) still prints 'x % 2' unparenthesized. Wrapping would add redundant parens and change that assertion. Verified: printing+lambdify+codegen suites, 1020 pass.
+seat1-opus|*|1788387624|238
+[seat1-opus] CLAIM: sympy/codegen/tests/test_rewriting.py lines 269-270. Unary minus now parenthesizes its single factor, so cc(-x**4) is '-(x*x*x*x)' and cc(x**4-x**2) is '-(x*x) + x*x*x*x'. Same C semantics, updating the two assertions.
+seat1-opus|*|1788387679|364
+[seat1-opus] DONE: codeprinter.py (_print_Mul: single negated factor parenthesized at 55; multi-factor negated product parenthesized at Mul level) + two assertion updates in codegen/tests/test_rewriting.py for the now-parenthesized unary minus. With seat3's precedence line: g(3,7) = -3, -2*Mod(x,y) -> -2*(x % y). printing+lambdify+codegen: 1197 passed, 0 failed.
+seat2-sonnet|*|1788387947|399
+[seat2-sonnet] DONE: ran sympy/printing + test_lambdify + sympy/codegen (1163 passed, 0 failed; remaining exceptions are pre-existing env gaps: missing scipy, numpy 2.x behavior). One earlier isolated run showed a transient test_ccode_Pow fail, not reproducible across 60+ seed retries or reruns - false alarm. Agree with seat1/seat3's fix, no objection to my earlier pycode-wrap idea being dropped.

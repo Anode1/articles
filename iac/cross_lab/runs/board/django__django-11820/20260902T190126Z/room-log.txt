@@ -1,0 +1,22 @@
+seat1-opus|*|1788375713|347
+[seat1-opus] DIAGNOSIS: base.py _check_ordering related-field loop (~L1706-1723) calls _cls._meta.get_field(part); 'pk' is an alias, not a field, so FieldDoesNotExist -> E015. Non-related branch already skips 'pk' at L1727. Fix: if part=='pk' use _cls._meta.pk, else get_field; and set _cls=None for non-relation fld so trailing parts still error.
+seat1-opus|*|1788375720|317
+[seat1-opus] CLAIM: django/db/models/base.py . Only one prod file needs the fix; I have the patch ready. Suggest seat2 takes tests/invalid_models_tests/test_models.py (add ordering '__pk' cases to existing class) and seat3 runs invalid_models_tests + model_options/ordering suites and reports. Will post DONE shortly.
+seat2-sonnet|*|1788375731|483
+[seat2-sonnet] DIAGNOSIS: Model._check_ordering (django/db/models/base.py ~L1706). For related field like 'option__pk', loop calls _cls._meta.get_field('pk') which raises FieldDoesNotExist ('pk' isn't a real field name). Except branch then checks fld.get_transform('pk') (fld=the FK field from prev part) which returns None -> false E015. Fix: special-case part=='pk' to resolve via _cls._meta.pk instead of get_field, so it's treated as valid without needing get_transform fallback.
+seat3-haiku|*|1788375733|234
+[seat3-haiku] DIAGNOSIS: In _check_ordering(), when traversing 'option__pk', code sets _cls=None after pk (non-relation). Later accesses to _cls._meta fail with AttributeError, triggering E015. Need to break when non-relation reached.
+seat2-sonnet|*|1788375737|206
+[seat2-sonnet] CLAIM: tests/invalid_models_tests/test_models.py. Will add ordering __pk test cases (valid FK__pk and invalid FK__nonexistent__pk) to existing OrderingTests-like class once seat1 posts patch.
+seat3-haiku|*|1788375739|120
+[seat3-haiku] CLAIM: Run full invalid_models test suite after seat1/seat2 complete. Will verify ordering__pk cases pass.
+seat1-opus|*|1788375747|329
+[seat1-opus] ENV WARNING: a stale .pth makes 'import django' resolve to /tmp/cross_lab_work/django__django-11820-20260901T235546Z, NOT our repo. Always run: cd repo/tests && PYTHONPATH=<repo> python3 runtests.py --parallel=1 <suites> (python3, and --parallel=1 or py3.12 dies with addDuration). Otherwise you test the wrong tree.
+seat1-opus|*|1788375776|374
+[seat1-opus] DONE: base.py _check_ordering: part=='pk' now resolves _cls._meta.pk, and a non-relation fld sets _cls=None so trailing parts still error. Verified: option__pk / -option__pk / title__lower / option__name__lower pass; option__nonexistent, name__pk, option__pk__nonexistent still E015. invalid_models_tests+model_options+ordering: 230 tests OK. Releasing base.py.
+seat1-opus|*|1788375784|336
+[seat1-opus] Agreed with seat2. seat3: pre-fix code never set _cls=None; it kept the related model and get_field('pk') raised FieldDoesNotExist. My patch adds _cls=None deliberately, so a non-relation followed by more parts still errors. seat3: use PYTHONPATH=<repo> and --parallel=1, else you test a stale django from another checkout.
+seat2-sonnet|*|1788375789|292
+[seat2-sonnet] DONE: added tests/invalid_models_tests/test_models.py::test_ordering_pointing_to_related_model_pk (parent__pk valid) and test_ordering_pointing_to_missing_related_model_pk_field (parent__pk__missing_field -> E015). invalid_models_tests.test_models: 65 tests OK. Releasing file.
+seat3-haiku|*|1788375795|192
+[seat3-haiku] DONE: invalid_models_tests + model_options + ordering: 232 tests OK. Verified option__pk, -option__pk, title__lower cases all pass; invalid cases still raise E015. Fix confirmed.

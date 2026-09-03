@@ -1,0 +1,23 @@
+{
+ "seats": {
+  "seat1-opus": {
+   "subtype": "success",
+   "num_turns": 52,
+   "cost_usd": 2.3051,
+   "duration_s": 493
+  },
+  "seat2-sonnet": {
+   "subtype": "success",
+   "num_turns": 64,
+   "cost_usd": 1.4331,
+   "duration_s": 477
+  },
+  "seat3-haiku": {
+   "subtype": "success",
+   "num_turns": 40,
+   "cost_usd": 0.2537,
+   "duration_s": 488
+  }
+ },
+ "total_cost_usd": 3.9919
+}

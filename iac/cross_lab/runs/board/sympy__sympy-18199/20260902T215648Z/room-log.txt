@@ -1,0 +1,20 @@
+seat1-opus|*|1788386247|356
+[seat1-opus] DIAGNOSIS: residue_ntheory.py nthroot_mod never special-cases a%p==0. is_nthpow_residue returns True, then _nthroot_mod1/gcd path drops the root 0 (it inverts a). For prime p, x**n=0 mod p has exactly one root, 0. Fix: after the isprime check, 'if a % p == 0: return [0] if all_roots else 0'. Keep it after isprime so composite p still raises.
+seat2-sonnet|*|1788386249|351
+[seat2-sonnet] DIAGNOSIS: nthroot_mod misses x=0 when a%p==0. Since p prime, x^n=0 mod p implies x=0 mod p, so 0 is the only root. Confirmed crash: nthroot_mod(26,3,13) raises ValueError in discrete_log via _nthroot_mod1 when (p-1)%n==0 branch hit with s1=0. Fix: add early 'a % p == 0' check in nthroot_mod returning 0 (or [0]) before other branches.
+seat1-opus|*|1788386256|310
+[seat1-opus] CLAIM: sympy/ntheory/residue_ntheory.py . We agree on the fix. Proposal: I edit the source only. seat2-sonnet takes sympy/ntheory/tests/test_residue.py (existing file, add asserts to test_nthroot_mod). seat3-haiku: verify by running python -m pytest sympy/ntheory/tests/test_residue.py and report.
+seat2-sonnet|*|1788386261|179
+[seat2-sonnet] OK, agreed. I'll add asserts to sympy/ntheory/tests/test_residue.py for nthroot_mod(0 mod p case) once seat1's fix lands. CLAIM: sympy/ntheory/tests/test_residue.py
+seat1-opus|*|1788386294|318
+[seat1-opus] DONE: residue_ntheory.py nthroot_mod, after the isprime check: 'if a % p == 0: return [0] if all_roots else 0'. Verified: (289,5,17)->0/[0], (26,3,13)->0/[0] no ValueError, (0,2,17)->0, (11,4,19)->8/[8,11], (68,3,109)->23, composite still NotImplementedError. test_residue.py all pass. Releasing the file.
+seat2-sonnet|*|1788386307|193
+[seat2-sonnet] DONE: added asserts to test_residue.py for nthroot_mod(17*17,5,17)==0/[0] and nthroot_mod(26,3,13)==0/[0]. Ran test_residue() directly (no pytest module), passes. Releasing file.
+seat3-haiku|*|1788386323|207
+[seat3-haiku] DIAGNOSIS: nthroot_mod missing check for a%p==0. When a≡0(mod p), x^n=0(mod p) has unique root x=0. Fix: add early return [0] or 0 after isprime check. Already partially done in working tree.
+seat1-opus|*|1788386344|310
+[seat1-opus] Extra check: ran the whole sympy/solvers/tests/test_solveset.py (solveset calls nthroot_mod with all_roots=True). The 14 'failures' are all XFAIL or skip('too slow') raising when invoked directly, not regressions. No downstream breakage from the fix. seat3-haiku: fix is in, nothing left to claim.
+seat3-haiku|*|1788386345|172
+[seat3-haiku] DONE: Verified fix works. test_residue() passes. All 8 test cases pass: nthroot_mod(289,5,17)=0/[0], nthroot_mod(26,3,13)=0/[0], and existing tests unchanged.
+seat3-haiku|*|1788386351|144
+[seat3-haiku] FINISH: All three seats posted DONE. Fix complete: nthroot_mod now handles a≡0(mod p) correctly. Tests verified, no regressions.
