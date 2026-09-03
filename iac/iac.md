@@ -7,7 +7,7 @@
 
 ## Abstract
 
-Coordinating multiple LLM agents on a single machine is widely treated as a messaging problem, to be solved with a message queue, an inter-agent protocol, or a hosted bus. We argue this misidentifies the constraint. An LLM agent is not a fast, concurrent consumer but a slow, serial one: it processes a single message per turn, each turn costs seconds, and it cannot parallelize its own reasoning. Moreover, between turns it is not a running process at all, and so has no thread, socket, or event loop on which a message can be delivered. The scarce primitive is therefore not throughput or buffering but a *wakeup*: an interrupt inlet by which an inbound message can rouse an otherwise dormant agent. We show that the only wakeup available to a stateless, harness-invoked agent is the return of a blocking receive executed in a cheap child process, which the harness re-invokes on exit: one model activation per message rather than per poll. Given this, the transport collapses to its minimal form: an append-only per-room log, advisory file locking for ordering and presence, and a blocking `recv`: structurally the Unix local-mail (mbox) delivery model, repurposed. We present `iac`, a dependency-free C99 reference implementation (~900 lines, one binary, no runtime), characterize the token-cost model that motivates moving the poll out of the model and into C, situate the design against the current field of agent-coordination tools and protocols, and report an experience in which a fleet of agents used `iac` to develop `iac` itself. The contribution is not a new mechanism (every part is decades old) but an argument that, for this class of consumer, the correct engineering answer is the smallest one: a wakeup, not a broker.
+Coordinating multiple LLM agents on a single machine is widely treated as a messaging problem, to be solved with a message queue, an inter-agent protocol, or a hosted bus. We argue this misidentifies the constraint. An LLM agent is not a fast, concurrent consumer but a slow, serial one: it processes a single message per turn, each turn costs seconds, and it cannot parallelize its own reasoning. Moreover, between turns it is not a running process at all, and so has no thread, socket, or event loop on which a message can be delivered. The scarce primitive is therefore not throughput or buffering but a *wakeup*: an interrupt inlet by which an inbound message can rouse an otherwise dormant agent. We show that the only wakeup available to a stateless, harness-invoked agent is the return of a blocking receive executed in a cheap child process, which the harness re-invokes on exit: one model activation per message rather than per poll. Given this, the transport collapses to its minimal form: an append-only per-room log, advisory file locking for ordering and presence, and a blocking `recv`: structurally the Unix local-mail (mbox) delivery model, repurposed. We present `iac`, a dependency-free C99 reference implementation (~1,100 lines, one binary, no runtime), characterize the token-cost model that motivates moving the poll out of the model and into C, situate the design against the current field of agent-coordination tools and protocols, and report an experience in which a fleet of agents used `iac` to develop `iac` itself. The contribution is not a new mechanism (every part is decades old) but an argument that, for this class of consumer, the correct engineering answer is the smallest one: a wakeup, not a broker.
 
 ---
 
@@ -52,7 +52,7 @@ Coordinating multiple LLM agents on a single machine is widely treated as a mess
 - Observation: this is structurally **Unix local mail** (an append-only mbox the delivery agent locks, read forward), pointed at agents instead of people.
 
 ### 7. Reference implementation: iac
-- ~900 lines C99, zero dependencies, one binary; POSIX only (`flock`, `writev`, `pread`/`pwrite`, `dirent`, `inotify` on Linux with a poll fallback).
+- ~1,100 lines C99, zero dependencies, one binary; POSIX only (`flock`, `writev`, `pread`/`pwrite`, `dirent`, `inotify` on Linux with a poll fallback).
 - Verbs (`send`/`recv`/`drain`/`ack`/`ask`/`join`/`hold`/`who`/`log`/`compact`); the three receive-loop shapes (drain-per-turn / background `recv` / bash `while`-driver) and when each applies.
 - Engineering discipline: no heap on any path (footprint = f(struct sizes), not data), bounded strings, single-exit cleanup: the Power-of-Ten / MISRA-C:2012 register; CI builds + sanitizers (ASan/UBSan) on Linux and macOS.
 
@@ -91,7 +91,7 @@ All at github.com/Anode1/iac unless noted. Every design, cost, and behavior clai
 - `doc/ORCHESTRATION.md`: the verbs as a control plane, and the messenger-vs-board comparison.
 - `doc/INTEGRATION.md`: the ~40-line external-messenger bridge (the hosted / remote-ingress path).
 - `doc/ROADMAP.md`: bounded log growth and stale-name reaping (declared future work).
-- `*.c`, `*.h`, `tests.c`: the ~900-line C99 implementation and the end-to-end test suite (drives the real binary; p2p, broadcast, order, claim, presence, recovery).
+- `*.c`, `*.h`, `tests.c`: the ~1,100-line C99 implementation and the end-to-end test suite (drives the real binary; p2p, broadcast, order, claim, presence, recovery).
 - AIS `doc/dev/STYLE.md`: the engineering discipline (no-heap, bounded strings, single-exit) iac conforms to.
 
 ### B. Author's related work

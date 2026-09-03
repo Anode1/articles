@@ -43,11 +43,12 @@ and Mondoux (2023) on machine-learned triage acuity scores, CC BY 4.0.
 The code for the measurements is in the project repositories, which are linked from each paper:
 [SMBPANN](https://github.com/Anode1/SMBPANN), [ais](https://github.com/Anode1/ais),
 [iac](https://github.com/Anode1/iac), [bpnn](https://github.com/Anode1/bpnn),
-[linearr](https://github.com/Anode1/linearr).
+[linearr](https://github.com/Anode1/linearr), [cjitter](https://github.com/Anode1/cjitter).
 
 Shorter pieces and working notes are in [notes](https://github.com/Anode1/notes).
-The context-renormalization paper has its own repository:
-[context-renormalization](https://github.com/Anode1/context-renormalization).
+The context-renormalization paper has its own repository,
+[context-renormalization](https://github.com/Anode1/context-renormalization); it is superseded by
+*Compress the Access, Not the Store* above.
 
 ## Building
 
