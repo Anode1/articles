@@ -17,7 +17,6 @@ concept DOI, which always resolves to the latest version; a paper not yet deposi
 | [`MISRA_C_vs_CPP`](MISRA_C_vs_CPP/README.md) | When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks | [10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993); a shorter version under review at IEEE Software since 31 August 2026 |
 | [`ais`](ais/README.md) | Compress the Access, Not the Store, and the AIS priority and provenance record | [10.5281/zenodo.20764255](https://doi.org/10.5281/zenodo.20764255), [10.5281/zenodo.20647048](https://doi.org/10.5281/zenodo.20647048) |
 | [`ControlModel`](ControlModel/README.md) | Artifact Promotion as a Control Model for Stable Cloud Deployment, and its implementation case study | [10.5281/zenodo.20451078](https://doi.org/10.5281/zenodo.20451078), [10.5281/zenodo.20528904](https://doi.org/10.5281/zenodo.20528904); the case study (with Enkli Ylli) is the arXiv submission, the control-model note stays on Zenodo |
-| [`BPFNN_Coursework`](BPFNN_Coursework/README.md) | Backpropagation Feed-Forward Neural Networks (1997 undergraduate thesis, revised); implemented in [`bpnn`](https://github.com/Anode1/bpnn) | [10.5281/zenodo.20450525](https://doi.org/10.5281/zenodo.20450525) |
 | [`cjitter`](cjitter/README.md) | What Holds a Hand-Drawn Diagram? A negative result | not deposited; targeting GD 2027. The metaphor-benchmark audit is withdrawn; its tables live in the library |
 | [`bpnn`](bpnn/README.md) | What a Benchmark Can Resolve: training noise as a ceiling on architecture comparison | unpublished and unsubmitted |
 
@@ -28,6 +27,7 @@ arXiv in its present form.
 
 | directory | article | DOI or status |
 | --- | --- | --- |
+| [`BPFNN_Coursework`](BPFNN_Coursework/README.md) | Backpropagation Feed-Forward Neural Networks, a 1997 seminar report, revised in 2026: a tutorial, cited for lineage; implemented in [`bpnn`](https://github.com/Anode1/bpnn) | [10.5281/zenodo.20450525](https://doi.org/10.5281/zenodo.20450525) |
 | [`intelligence_compressors`](intelligence_compressors/README.md) | Intelligence Is the Discovery of Compressors | [10.5281/zenodo.20440110](https://doi.org/10.5281/zenodo.20440110) |
 | [`innovation_compression`](innovation_compression/README.md) | Chaos Makes Many, Compression Keeps Few: Where Innovation Comes From | [10.5281/zenodo.20603482](https://doi.org/10.5281/zenodo.20603482) |
 | [`ConditionalProbability`](ConditionalProbability/README.md) | Conditional Probability in Diagnostic Testing: An Isomorphism Between Tree Diagrams, Bayes' Theorem, Contingency Tables and ARR/RRR | [10.5281/zenodo.20449608](https://doi.org/10.5281/zenodo.20449608); declined by medRxiv on 26 May 2026 under its institutional-affiliation policy, rejected by Advances in Health Sciences Education |
