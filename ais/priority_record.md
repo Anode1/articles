@@ -1,7 +1,7 @@
 # Priority and Provenance Record (AIS)
 
 **Author:** Vasili Gavrilov, ORCID 0009-0007-9371-5994. Handles: GitHub `Anode1`, LiveJournal `siberean`, SourceForge `vgavrilov`.
-**This record:** 2026-06 (concise edition). Deposited to Zenodo (DOI 10.5281/zenodo.20647048), SHA-256 anchored via OpenTimestamps, committed under signed git tags.
+**This record:** 2026-06 (concise edition). Deposited to Zenodo (DOI 10.5281/zenodo.20647047), SHA-256 anchored via OpenTimestamps, committed under signed git tags.
 
 ## Purpose
 A dated, citable record that the author conceived and implemented these ideas by the dates below. It establishes **credit and provenance, not patent rights** (disclosed long ago; independent commercial implementations now exist). Where an idea has prior art, the claim is **independence and non-derivation, not novelty**.
