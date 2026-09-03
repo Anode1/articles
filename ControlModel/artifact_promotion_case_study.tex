@@ -31,8 +31,8 @@
 
 \title{The Artifact Promotion Control Model: An Implementation Case Study\\
 \large Build on Target Machines vs.\ Build Once and Promote Artifacts}
-\author{Vasili Gavrilov \and Enkli Ylli}
-\date{}
+\author{Vasili Gavrilov \and Enkli Ylli, PhD, CISSP, CCSP}
+\date{First version 3 June 2026; revised 25 August and 2 September 2026}
 
 \begin{document}
 \maketitle
@@ -86,7 +86,7 @@ Model B:
     source repository -> controlled build -> artifact store -> deployment -> runtime configuration -> runtime
 \end{lstlisting}
 
-Model A is fine for local development, prototypes, single-machine systems, and short-lived test hosts. Its limitation is not logical impossibility but that it collapses several responsibilities (source checkout, dependency resolution, build, deployment placement, runtime execution) onto each target instance, which makes the separations required for controlled release operationally difficult.
+Model A is fine for local development, prototypes, single-machine systems, and short-lived test hosts. Its limitation is that it collapses several responsibilities (source checkout, dependency resolution, build, deployment placement, runtime execution) onto each target instance, which makes the separations required for controlled release operationally difficult.
 
 Model B makes the release boundary explicit. The production instance receives a known deployable unit. It does not create the release by compiling source during deployment.
 
@@ -104,7 +104,7 @@ Model A tendency                      Model B
                                          "what is in prod?" -> an artifact id
 \end{lstlisting}
 
-Architects and engineers frequently treat these two models as interchangeable deployment plumbing, which is part of why the distinction is worth drawing carefully. The difference is not merely architectural preference: building binaries once and deploying the same artifact to every environment is a continuous-delivery practice that the multi-year DevOps Research and Assessment program associates, in its published research, with higher software-delivery performance~\cite{Accelerate}. The control properties developed through the rest of Part~I depend on the build sitting off the target; they are lost, quietly, the moment it moves on.
+Architects and engineers frequently treat these two models as interchangeable deployment plumbing, which is why the distinction needs drawing. The difference is more than architectural preference: building binaries once and deploying the same artifact to every environment is a continuous-delivery practice that the multi-year DevOps Research and Assessment program associates, in its published research, with higher software-delivery performance~\cite{Accelerate}. The control properties developed through the rest of Part~I depend on the build sitting off the target; they are lost, quietly, the moment it moves on.
 
 \section{Control Domains and the Promotion Boundary}
 
@@ -181,7 +181,7 @@ Three operational properties follow directly from the artifact-identity boundary
 
 \textbf{Partial-fleet deployment cannot silently split the fleet.} Consider a ten-instance fleet. Under Model~A, each instance independently checks out source, resolves dependencies, and builds. If seven succeed and three fail, on a transient network fault, a dependency-registry outage, or a local disk or package-state problem, the fleet is left running two different versions of the application behind one load balancer, and the split is not visible from any single build log. Under Model~B, every instance receives the same already-built artifact; an instance either has that artifact and runs it or does not start. The mixed-version fleet is structurally prevented rather than monitored for.
 
-\textbf{The production host carries less.} Model~A requires a source-control client, a language runtime sufficient to \emph{build} and not merely to run, a build tool, and a working source checkout to be present on every production instance. Each is an independent patching obligation, an addition to the host's vulnerability surface, and a potential source of information disclosure if an instance is compromised. Model~B requires only the application runtime and a deployment procedure; the build toolchain and the source checkout are absent from production entirely. A smaller production surface is easier to harden, to patch, and to reason about. A related availability property follows: because Model~A places a source-control client and a dependency resolver on the deploy path, a source-control outage, an expired credential, a branch-protection change, or a blocked network egress can prevent a deployment; under Model~B the approved artifact is already present and installs without reaching any external system.
+\textbf{The production host carries less.} Model~A requires a source-control client, a language runtime sufficient to \emph{build}, not only to run, a build tool, and a working source checkout to be present on every production instance. Each is an independent patching obligation, an addition to the host's vulnerability surface, and a potential source of information disclosure if an instance is compromised. Model~B requires only the application runtime and a deployment procedure; the build toolchain and the source checkout are absent from production entirely. A smaller production surface is easier to harden, to patch, and to reason about. A related availability property follows: because Model~A places a source-control client and a dependency resolver on the deploy path, a source-control outage, an expired credential, a branch-protection change, or a blocked network egress can prevent a deployment; under Model~B the approved artifact is already present and installs without reaching any external system.
 
 \section{Regulatory Frameworks Under Which the Model's Properties Become Required}
 
