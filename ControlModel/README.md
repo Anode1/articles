@@ -18,6 +18,6 @@ expected in healthcare, finance, federal and defense systems.
 
 | file | what it is |
 | --- | --- |
-| artifact_promotion_control_model.tex, .pdf | the control model, [doi:10.5281/zenodo.20451078](https://doi.org/10.5281/zenodo.20451078) |
-| artifact_promotion_case_study.tex, .pdf | the implementation case study, [doi:10.5281/zenodo.20528904](https://doi.org/10.5281/zenodo.20528904) |
+| artifact_promotion_control_model.tex, .pdf | the control model, [doi:10.5281/zenodo.20451077](https://doi.org/10.5281/zenodo.20451077) |
+| artifact_promotion_case_study.tex, .pdf | the implementation case study, [doi:10.5281/zenodo.20528903](https://doi.org/10.5281/zenodo.20528903) |
 | ci_approaches.txt, argument_for_B_approach_over_A.txt | the working notes behind the comparison |

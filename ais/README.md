@@ -24,4 +24,4 @@ provenance record.
 
 [compress_the_access.pdf](compress_the_access.pdf),
 [doi:10.5281/zenodo.20764255](https://doi.org/10.5281/zenodo.20764255). The provenance
-record is [doi:10.5281/zenodo.20647048](https://doi.org/10.5281/zenodo.20647048).
+record is [doi:10.5281/zenodo.20647047](https://doi.org/10.5281/zenodo.20647047).
