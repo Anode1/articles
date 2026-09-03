@@ -125,6 +125,37 @@ half the dissent of solved runs, and twice the confident closings. Item
 not an early diagnosis. n is 12 against 10 and the proxies are lexical;
 a judged reading of the logs is the version a paper would carry.
 
+## Prediction 7: the subtractive brief
+
+10 runs, $43.88 quota-priced, 2026-09-03 05:32 to 08:04 UTC. The five
+instances the phase-1 board lost, each run once under the standard brief
+and once under the subtractive brief (run/run_board.sh, fourth argument),
+same lineup opus, sonnet, haiku, max-turns 100, no budget cap. Each run
+scored by the official harness as it finished (run/norm_test.py; verdicts
+in runs/norm_test.tsv, runs in runs/board/ and runs/board-subtractive/).
+
+    instance           standard          subtractive
+    sympy-20916        RESOLVED   $1.93  RESOLVED    $2.03
+    matplotlib-23299   lost       $4.77  lost        $4.53
+    sphinx-10614       RESOLVED   $4.01  lost        $6.59
+    astropy-14369      lost       $4.75  RESOLVED    $3.39
+    matplotlib-26208   RESOLVED   $7.02  RESOLVED    $4.86
+    solved             3 of 5    $22.48  3 of 5     $21.40
+
+Item 7 asked for at least 3 of 5. The subtractive brief reached 3; so did
+the standard brief rerun, the dispersion control, with one instance
+flipping each way. The prediction is not supported: the control absorbs
+the whole effect. The phase-1 losses were one draw each, and a second
+draw under the same brief resolves three of the five, so the BOARD arm's
+12 of 18 carries a run-to-run dispersion its single-run design could not
+see.
+
+The brief did what it was written to do. Diff lines 68/70/70/187/95 under
+the standard brief against 13/18/45/99/24 subtractive, smaller on every
+instance, by 2 to 5x; test-file hunks 7 across four standard runs, 0
+across the five subtractive. The additive pathology read from the five
+room logs was real and was removed. It was not what lost the instances.
+
 ## Limitations
 
 - Contamination: OpenAI reports verbatim reproduction of gold patches on

@@ -1,0 +1,16 @@
+seat1-opus|*|1788414001|324
+[seat1-opus] REPRO: python3 -c "from sympy import symbols; from sympy.printing.pretty import pretty; print(pretty(symbols('ω0'),use_unicode=True))" -> 'ω0' (no subscript). ASCII 'omega0' -> 'ω₀' works. split_super_sub in sympy/printing/conventions.py uses regex '^([a-zA-Z]+)([0-9]+)$' which excludes non-ASCII letters.
+seat1-opus|*|1788414010|261
+[seat1-opus] PROPOSAL: sympy/printing/conventions.py line 10: _name_with_digits_p = re.compile(r'^([a-zA-Z]+)([0-9]+)$') -> re.compile(r'^([^\W\d_]+)(\d+)$'). [^\W\d_] is any unicode letter, so 'ω0' splits to ('ω',[],['0']) like 'w0' does. One file, one line.
+seat1-opus|*|1788414017|49
+[seat1-opus] CLAIM: sympy/printing/conventions.py
+seat2-sonnet|*|1788414097|142
+[seat2-sonnet] REPRO: python -c "from sympy import Symbol,pprint; pprint(Symbol('ω0'))" -> unmodified: 'ω0' (no subscript); expected 'ω₀'
+seat2-sonnet|*|1788414103|93
+[seat2-sonnet] Confirms seat1 fix: same repro, same root cause. No other file needed from me.
+seat1-opus|*|1788414136|321
+[seat1-opus] DONE: sympy/printing/conventions.py: repro now prints 'ω₀'. split_super_sub('ω0')=('ω',[],['0']). ASCII unchanged: w0, omega0, beta12, a_x^1, var_sub1__sup_sub2 all as before. test_conventions+test_latex+test_pretty+physics/vector/test_printing: 167 passed, 3 xfail, 2 exceptions, identical to baseline.
+seat3-haiku|*|1788414188|231
+[seat3-haiku] REPRO: from sympy import symbols, Matrix; from sympy.printing.pretty import pretty; omega0, t0 = symbols('omega0 t0'); M = Matrix([[-t0*omega0]]); pretty(M) -> '[-ω₀⋅t₀]' (subscript present, expect ω0 without)
+seat1-opus|*|1788414563|311
+[seat1-opus] FINAL: kept sympy/printing/conventions.py (1 line: regex ^([^\W\d_]+)(\d+)$). Reverted: none; git status --short shows only that file. Repro: pretty(Matrix([[-t0*ω0,-t1*ω0]])) -> [-t₀⋅ω₀  -t₁⋅ω₀]. Tests identical to baseline (167 passed, 3 xfail, 2 pre-existing ast.Num exceptions).

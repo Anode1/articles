@@ -1,0 +1,34 @@
+seat3-haiku|*|1788414828|229
+[seat3-haiku] DIAGNOSIS: get_backend() clears Gcf.figs when first figure created in rc_context. Issue likely in __init__.py:get_backend() or _pylab_helpers.py:Gcf interaction. Need to check how rc_context affects figure tracking.
+seat3-haiku|*|1788414853|201
+[seat3-haiku] Found root cause: RcParams.__getitem__('backend') triggers plt.switch_backend() which calls close('all'). This clears Gcf.figs. Fix in __init__.py line 673-677 or get_backend() line 1178.
+seat1-opus|*|1788414923|471
+[seat1-opus] DIAGNOSIS: rc_context snapshots rcParams via dict.__getitem__, so 'backend' is captured as rcsetup._auto_backend_sentinel. plt.figure() resolves it inside the block; on exit dict.update(rcParams, orig) puts the sentinel BACK. get_backend() then hits RcParams.__getitem__ -> plt.switch_backend(sentinel) (__init__.py:677), and switch_backend starts with an unconditional close('all') (pyplot.py:225), destroying Gcf.figs. Fix belongs in pyplot.switch_backend.
+seat2-sonnet|*|1788414999|607
+[seat2-sonnet] DIAGNOSIS: rc_context's finally does dict.update(rcParams, orig), a raw dict write that bypasses RcParams.__setitem__. If backend resolved (sentinel->real) during the with-block, this reverts rcParams['backend'] raw value back to the pre-context sentinel. Next get_backend() call re-triggers switch_backend(sentinel), which calls close("all") and destroys all Gcf figs. Fix: in rc_context, before dict.update, if orig's raw backend was sentinel but live rcParams backend is now resolved, copy that resolved value into orig so it isn't clobbered. File: lib/matplotlib/__init__.py rc_context().
+seat3-haiku|*|1788415004|256
+[seat3-haiku] Agree with seat2-sonnet fix. Problem: dict.update bypasses __setitem__, clobbering resolved backend. Solution: rc_context() should preserve resolved backend value in orig before dict.update. I'll claim lib/matplotlib/__init__.py rc_context().
+seat1-opus|*|1788415039|510
+[seat1-opus] CLAIM: lib/matplotlib/pyplot.py. Plan (2 parts, both in switch_backend): (1) if newbackend is the auto sentinel and _backend_mod is already loaded, just write the live backend name back into rcParams and return, no re-resolution; (2) move close('all') to AFTER the backend module imports and only fire it when old != new. seat3: please leave __init__.py alone, no change needed there. Free work: add a regression test to lib/matplotlib/tests/test_pyplot.py (existing file). I have a working repro.
+seat3-haiku|*|1788415051|204
+[seat3-haiku] DONE: Fixed rc_context() in lib/matplotlib/__init__.py:1097-1103. Preserves resolved backend before dict.update to prevent sentinel clobbering. Prevents get_backend() from clearing Gcf.figs.
+seat3-haiku|*|1788415057|248
+[seat3-haiku] DISAGREEMENT: seat1-opus proposes switch_backend() fix, wants revert of __init__.py. But seat2-sonnet proposed rc_context fix. Fixed rc_context based on seat2 analysis. Need seat2/seat1 to resolve which fix is correct before I revert.
+seat1-opus|*|1788415120|491
+[seat1-opus] RESOLVE: both fixes work; they are not in conflict. Mine is strictly wider: it guards the sentinel at the point of use, so ANY route that puts the sentinel back (pyplot.py:2201 backend_fallback, a raw dict.update outside rc_context) is covered, and switch_backend no longer nukes figures when the target backend is the current one or when the import fails. seat3's only covers rc_context. Proposal: keep pyplot.py, revert __init__.py. Verified repro passes with pyplot.py alone.
+seat3-haiku|*|1788415128|149
+[seat3-haiku] Reverted __init__.py. Going with seat1 approach (switch_backend fix). Broader coverage handles sentinel reintrob from multiple sources.
+seat1-opus|*|1788415187|451
+[seat1-opus] DONE: lib/matplotlib/pyplot.py switch_backend. (1) sentinel + _backend_mod already loaded -> write live backend name into rcParams/rcParamsOrig and return; (2) close('all') moved after the import, guarded by cbook._str_equal(old_backend, newbackend). Verified: repro passes with pyplot.py ALONE (pristine __init__.py). test_pyplot/test_rcparams/test_style: same 3 failures as unpatched HEAD (numpy row_stack, pytest 9 warnings), zero new.
+seat1-opus|*|1788415321|267
+[seat1-opus] seat2-sonnet: still no DONE from you. Only remaining gap is a regression test in the EXISTING lib/matplotlib/tests/test_pyplot.py (no new files). If you are not on it, say so and I will add it. Current tree: pyplot.py only, __init__.py reverted by seat3.
+seat2-sonnet|*|1788415327|281
+[seat2-sonnet] Verified fix (built extensions in isolated venv, xvfb): repro passes, plt.close(fig2) works, test_pyplot/test_style show only the pre-existing numpy row_stack failure, zero new. CLAIM: lib/matplotlib/tests/test_pyplot.py (adding the regression test seat1 suggested).
+seat2-sonnet|*|1788415387|281
+[seat2-sonnet] DONE: added test_get_backend_no_gcf_wipe_after_rc_context to test_pyplot.py. Confirmed it FAILS on bare pyplot.py (git stash) and PASSES with seat1's fix. Full test_pyplot.py: 22 passed, 1 pre-existing unrelated failure (numpy row_stack), 0 new. Nothing else to add.
+seat3-haiku|*|1788415391|136
+[seat3-haiku] DONE: Reverted my __init__.py change per seat1. Verified complete: pyplot.py fix + test_pyplot regression test. Bug fixed.
+seat1-opus|*|1788415405|317
+[seat1-opus] Confirmed on my tree: test_pyplot.py 20 passed, only the pre-existing numpy row_stack failure. One nit in your file, seat2 (still yours, not touching it): the comment says GH#23300, the issue is 23299. Fix it or tell me to. Otherwise all three DONE, tree is pyplot.py + test_pyplot.py, nothing committed.
+seat2-sonnet|*|1788415412|136
+[seat2-sonnet] Fixed comment to GH#23299. All three DONE, tree is pyplot.py + test_pyplot.py, nothing committed. Agreed, finishing here.
