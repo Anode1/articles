@@ -5,7 +5,7 @@ is not deposited.**
 
 `stationary.tex`, *What Holds a Hand-Drawn Diagram?*, the full version, every
 sensitivity inline; `stationary_gd.tex` is the same paper in GD's `gd-lipics` class,
-500 lines of main matter and the sensitivities in an appendix, for GD 2027, Track 2. Fitting a layout
+734 lines of main matter and the sensitivities in an appendix, for GD 2027, Track 2. Fitting a layout
 energy to human drawings by inverse optimisation assumes the drawings sit at a minimum of
 some weighted sum of the standard criteria. Tested one criterion at a time on 853 hand-drawn
 diagrams of 15 to 40 boxes, that assumption fails. Overlap holds every box at zero. Uniform
@@ -14,11 +14,11 @@ diagram of 0.00, and not for want of anything to gain. The criterion that does h
 layout, and that the energy omits, is alignment into rows and columns: 0.52 and 0.21 on the
 two biological corpora and 0.87 over the full BPMN population, against 0.06 for `neato`. A
 hand layout is a layered layout with partial alignment. Measurements are in
-`example/diagrams`.
+`example/diagrams` in the [cjitter repository](https://github.com/Anode1/cjitter).
 
 The metaphor-benchmark audit that stood beside it is withdrawn: a correction inherits the
-audience of what it corrects. Its verdict tables remain in the library's
-`example/metaphors`.
+audience of what it corrects. Its verdict tables remain in
+`example/metaphors` in the [cjitter repository](https://github.com/Anode1/cjitter).
 
 | file | what it is |
 | --- | --- |
