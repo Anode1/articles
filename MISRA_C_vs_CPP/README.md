@@ -2,13 +2,13 @@
 
 **A measure of what an AI coding agent must read before it can change one
 endpoint safely, applied to six stacks in three pairs, plain C against idiomatic C++, plain Java
-with JDBC against Spring Boot 4, vanilla JavaScript against React, with 430
+with JDBC against Spring Boot, vanilla JavaScript against React, with 430
 controlled agent runs behind it.**
 
 The paper: [tokens_to_trace.pdf](tokens_to_trace.pdf), published as
 [doi:10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993).
 
-The results in four lines. Counted the same way, whole files, the plain C
+The results. Counted the same way, whole files, the plain C
 path is 90k tokens against 257k for idiomatic C++ (taskwarrior); matched
 for identical behavior in seven small C/C++ pairs, C++ text is only 1.17x
 C. Plain Java with JDBC keeps its whole path (7.6k tokens) inside the
@@ -27,7 +27,10 @@ application file states: @RequestParam bound minLen while the URL said
 min_len, and Jackson emitted nameLength where the task said name_length.
 The fifteen conventions on that path are stated in 31,535 tokens of
 version-pinned documentation sources (cat3.py), four times the plain
-side's whole deciding text.
+side's whole deciding text. The web pair: vanilla JavaScript and React
+need the same 1.1k tokens to write, but React adds 283k of its own
+machinery outside the project, and a change that crosses a component
+boundary cost React 100% more turns than vanilla (70 runs, frontend/).
 
 Why, in short. Objects are for people: a class is a bundle sized to a
 human working set, an interface is a promise a human can hold whole, and
@@ -51,6 +54,10 @@ What is here:
 | pairs/gen-v1-as-run.py, NOTE-v1.md | the first execution's generator, archived as run |
 | endpoint/ | the two-stack endpoint experiment: both service builds (plain/, spring/), tasks.py, hidden.py (HTTP grader with selfcheck), run.py; run twice (runs/, runs2/) |
 | cat3.py | category-3 token count for the endpoint stack: the documentation sources stating each convention, fetched at the exact BOM tags; emits cat3.json |
+| frontend/ | the web pair: both builds (plain/, react/), hidden.py (grader), run.py, cdp.py (drives the browser over the DevTools protocol), DESIGN.md, and its runs |
+| sites/ | the repeated-sites experiment (25 runs asking one change at N call sites): gen.py, tasks.py, hidden.py, run.py, runs/ |
+| pilot/ | the cross-language pilot that fixed the run budget: langs.py, overhead.py, fixtures, runs/ |
+| tables.py | the paper's tables, drawn from the run records |
 | ieee_software.tex, .pdf, figs.py | the IEEE Software version and its charts, drawn from the raw run records |
 | measure.py, external.py, jpa.py, dup.py | corpus measurements the paper cites |
 
@@ -59,6 +66,8 @@ overridable env vars; the public subjects re-fetch from the repositories
 cited in the paper; one subject is private and its rows ship redacted, so
 the public systems reproduce without it). `python3 pairs/hidden.py
 selfcheck` verifies the experiment harness; `python3 pairs/run.py` reruns
-the experiment against a local `claude` CLI. The measured JSON outputs and
-raw run records are not in this repository; they ship as
+the experiment against a local `claude` CLI. The pilot and sites run records are in their `runs/`
+directories here; the pairs, endpoint and frontend records, the generated
+JSON (`closures.json`, `cat3.json`) and the second rater's grading
+(`second_rater.txt`) are not tracked in this repository and ship as
 `run_records.zip` with the paper's Zenodo deposit.
