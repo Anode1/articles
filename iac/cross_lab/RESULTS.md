@@ -101,6 +101,30 @@ fifth is a convergent wrong branch (item 5). Item 1 holds at the
 verification stage rather than the diagnosis stage. The norm this
 implies is stated in PREDICTIONS.md as item 7.
 
+## Counts over the 22 phase-1 board logs
+
+Automated proxies, rough by construction (run/analyze_room.py plus regular
+expressions; branches = diagnoses naming disjoint file sets; dissent =
+disagree/veto/conflict/wrong; verified = VERIFIED or FINAL posts). Twelve
+solved runs against ten lost:
+
+    proxy                         solved   lost
+    messages per run               15.3    12.5
+    diagnoses posted                3.0     2.9
+    branches (disjoint file sets)   2.0     2.6
+    agreement posts                 2.2     2.1
+    agreement without a receipt     1.2     1.2
+    dissent posts                   1.2     0.6
+    VERIFIED or FINAL posts         0.8     1.6
+
+Against PREDICTIONS.md: item 5 expected the losses to be narrow, one
+branch committed early; the losses were wider, and merged. Item 6
+(agreement over evidence) reads in the dissent row: lost runs carried
+half the dissent of solved runs, and twice the confident closings. Item
+1 holds at closing: the confident wrong claim is the chorus of VERIFIED,
+not an early diagnosis. n is 12 against 10 and the proxies are lexical;
+a judged reading of the logs is the version a paper would carry.
+
 ## Limitations
 
 - Contamination: OpenAI reports verbatim reproduction of gold patches on
