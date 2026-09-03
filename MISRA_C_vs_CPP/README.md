@@ -30,7 +30,7 @@ version-pinned documentation sources (cat3.py), four times the plain
 side's whole deciding text. The web pair: vanilla JavaScript and React
 need the same 1.1k tokens to write, but React adds 283k of its own
 machinery outside the project, and a change that crosses a component
-boundary cost React 100% more turns than vanilla (70 runs, frontend/).
+boundary cost React 100% more turns than vanilla (frontend/).
 
 Why, in short. Objects are for people: a class is a bundle sized to a
 human working set, an interface is a promise a human can hold whole, and
