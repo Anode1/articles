@@ -20,5 +20,5 @@ answer is the smallest one.
 `experiment/` holds the token-cost measurement (`tokenbill.py` and its results). A fleet of
 agents used iac to develop iac, and that experience is reported in the paper.
 
-[paper/iac.pdf](paper/iac.pdf),
+[iac.pdf](iac.pdf),
 [doi:10.5281/zenodo.21206970](https://doi.org/10.5281/zenodo.21206970).

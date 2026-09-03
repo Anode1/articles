@@ -1,7 +1,7 @@
 # Everything in this directory is published to https://github.com/Anode1/articles.
-# Anything that must not be published lives in ~/articles-local instead, which says why.
-# The only things ignored here are files a build regenerates, and a credential pattern as a
-# backstop.
+# Anything that must not be published (drafts, emails, endorsement letters, credentials)
+# lives in a PRIVATE/ directory beside the work it belongs to; git never sees those.
+# Only `git add -f` can override the rule, so never use it in this tree.
 
 # LaTeX build artifacts
 *.aux
@@ -34,3 +34,6 @@ venv/
 
 # Private: how Vasili writes. Kept on disk, never published.
 STYLE.md
+
+# Private material beside the work: emails, drafts, letters, keys. Never published.
+PRIVATE/
