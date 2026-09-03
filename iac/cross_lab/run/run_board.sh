@@ -3,16 +3,17 @@
 # iac room for coordination. HOMO = same model three times; HETERO = one
 # model per lab (a non-claude seat needs its vendor CLI on PATH; until the
 # keys exist this runs claude-only).
-#   run/run_board.sh <instance_id> <model1,model2,model3> [max_turns_per_seat]
+#   run/run_board.sh <instance_id> <model1,model2,model3> [max_turns_per_seat] [standard|subtractive]
+# The fourth argument selects the brief; subtractive runs land in runs/board-subtractive/.
 # Archives: collective patch (git diff of the shared tree), per-seat cost
 # JSON, and the room log, under runs/board/<id>/<stamp>/.
 set -euo pipefail
 
-ID=$1; MODELS=$2; TURNS=${3:-80}
+ID=$1; MODELS=$2; TURNS=${3:-80}; VARIANT=${4:-standard}
 HERE=$(cd "$(dirname "$0")" && pwd)
 TASKS=$HERE/../harvest/tasks.json
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
-OUT=$HERE/../runs/board/$ID/$STAMP
+OUT=$HERE/../runs/board$([ "$VARIANT" = standard ] || echo "-$VARIANT")/$ID/$STAMP
 WORK=${CROSS_LAB_WORK:-/tmp/cross_lab_work}/board-$ID-$STAMP
 ROOM=$WORK/room
 IAC=${IAC_BIN:-$HOME/iac/iac}
@@ -38,6 +39,7 @@ git -C "$WORK/repo" checkout -q FETCH_HEAD
 
 SEATS=$(echo "$MODELS" | tr ',' '\n' | awk '{print "seat" NR "-" $0}')
 
+if [ "$VARIANT" = standard ]; then
 cat > "$ROOM/BRIEF.md" <<EOF
 # BRIEF: fix one issue, as a team of three
 
@@ -66,6 +68,47 @@ Every message under 60 words, prefixed [<name>]. Do not create new test
 files. Do not commit. Disagreement is data: post it, do not silently
 overwrite another seat's edit.
 EOF
+else
+cat > "$ROOM/BRIEF.md" <<EOF
+# BRIEF: fix one issue, as a team of three, by subtraction
+
+Seats: $(echo $SEATS | tr '\n' ' '). Your name and model are in your prompt.
+The issue: $WORK/PROBLEM.md. The shared checkout you all edit: $WORK/repo.
+The board room (use the full path in every command): $ROOM
+
+The rule this team runs on: a wrong addition costs more than a missing
+one. Nothing enters the shared tree without a receipt, and the team's
+last act is removal.
+
+Protocol, in order:
+1. $IAC join $ROOM <your name>
+2. Reproduce the issue before anything else: a command or short script
+   that shows the failure on the unmodified tree. Post its output:
+   $IAC send $ROOM '*' "[<name>] REPRO: <command> -> <what it printed>"
+   Post before reading any board message. No repro, no diagnosis.
+3. Post the smallest change you believe fixes the repro, as one file and
+   one hunk if possible: $IAC send $ROOM '*' "[<name>] PROPOSAL: <file>: <change>"
+   Then $IAC drain $ROOM <your name> and read the others.
+4. Claim before editing: $IAC send $ROOM '*' "[<name>] CLAIM: <path>".
+   Edit only the file you claimed. Never edit, add or delete a test.
+   Never touch a file that is not in your own proposal.
+5. Any seat may veto any edit, its own included, with a receipt:
+   $IAC send $ROOM '*' "[<name>] VETO: <file>: <the repro output that shows it unnecessary or harmful>"
+   The author of a vetoed edit reverts it (git checkout -- <file>) and says so.
+6. When your change is in and the repro passes, post the receipt:
+   $IAC send $ROOM '*' "[<name>] DONE: <file>: repro now prints <output>"
+7. seat1 is the integrator and finishes by subtraction: run the repro on
+   the final tree, list every modified file (git status --short), and
+   revert anything the repro does not need. Post:
+   $IAC send $ROOM '*' "[seat1] FINAL: <files kept> <files reverted> <repro output>"
+8. Wait for others: $IAC recv $ROOM <your name> 120 -a -e 300
+   Exit 0: messages arrived, act on them, return here.
+   Exit 1: timeout, run the same recv again, at most 4 times total.
+   Exit 3: you are alone; finish.
+
+Every message under 60 words, prefixed [<name>]. Do not commit.
+EOF
+fi
 
 i=0
 PIDS=""
@@ -100,6 +143,7 @@ echo "$HOME/.local/share/cross_lab/streams/board-$ID-$STAMP" > "$OUT/streams.pat
 git -C "$HOME/iac" rev-parse --short HEAD > "$OUT/iac.rev" 2>/dev/null || true
 git -C "$WORK/repo" diff > "$OUT/patch.diff"
 cp "$ROOM/BRIEF.md" "$OUT/BRIEF.md"
+echo "$VARIANT" > "$OUT/brief.variant"
 $IAC log "$ROOM" > "$OUT/room-log.txt" 2>/dev/null || true
 python3 - "$OUT" <<'EOF' > "$OUT/meta.json"
 import glob, json, sys
