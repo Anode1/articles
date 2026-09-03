@@ -1,8 +1,9 @@
 # Tokens-to-trace
 
 **A measure of what an AI coding agent must read before it can change one
-endpoint safely, applied to plain C, idiomatic C++, plain Java with JDBC,
-and Spring Boot 4, with 430 controlled agent runs behind it.**
+endpoint safely, applied to six stacks in three pairs, plain C against idiomatic C++, plain Java
+with JDBC against Spring Boot 4, vanilla JavaScript against React, with 430
+controlled agent runs behind it.**
 
 The paper: [tokens_to_trace.pdf](tokens_to_trace.pdf), published as
 [doi:10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993).
