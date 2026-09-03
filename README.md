@@ -14,7 +14,7 @@ concept DOI, which always resolves to the latest version; a paper not yet deposi
 | --- | --- | --- |
 | [`iac`](iac/README.md) | A Wakeup, Not a Broker: The Minimal Transport for Coordinating Stateless LLM Agents | [10.5281/zenodo.21206970](https://doi.org/10.5281/zenodo.21206970); arXiv cs.MA submission pending endorsement |
 | [`smbpann`](smbpann/README.md) | The Imposed and Emergent Pieces of Convolution Under an Energy Budget | [10.5281/zenodo.21423177](https://doi.org/10.5281/zenodo.21423177) |
-| [`MISRA_C_vs_CPP`](MISRA_C_vs_CPP/README.md) | When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks | [10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993) |
+| [`MISRA_C_vs_CPP`](MISRA_C_vs_CPP/README.md) | When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks | [10.5281/zenodo.22113993](https://doi.org/10.5281/zenodo.22113993); a shorter version under review at IEEE Software since 31 August 2026 |
 | [`ais`](ais/README.md) | Compress the Access, Not the Store, and the AIS priority and provenance record | [10.5281/zenodo.20764255](https://doi.org/10.5281/zenodo.20764255), [10.5281/zenodo.20647048](https://doi.org/10.5281/zenodo.20647048) |
 | [`ControlModel`](ControlModel/README.md) | Artifact Promotion as a Control Model for Stable Cloud Deployment, and its implementation case study | [10.5281/zenodo.20451078](https://doi.org/10.5281/zenodo.20451078), [10.5281/zenodo.20528904](https://doi.org/10.5281/zenodo.20528904) |
 | [`BPFNN_Coursework`](BPFNN_Coursework/README.md) | Backpropagation Feed-Forward Neural Networks (1997 undergraduate thesis, revised); implemented in [`bpnn`](https://github.com/Anode1/bpnn) | [10.5281/zenodo.20450525](https://doi.org/10.5281/zenodo.20450525) |
@@ -30,7 +30,7 @@ arXiv in its present form.
 | --- | --- | --- |
 | [`intelligence_compressors`](intelligence_compressors/README.md) | Intelligence Is the Discovery of Compressors | [10.5281/zenodo.20440110](https://doi.org/10.5281/zenodo.20440110) |
 | [`innovation_compression`](innovation_compression/README.md) | Chaos Makes Many, Compression Keeps Few: Where Innovation Comes From | [10.5281/zenodo.20603482](https://doi.org/10.5281/zenodo.20603482) |
-| [`ConditionalProbability`](ConditionalProbability/README.md) | Conditional Probability in Diagnostic Testing: An Isomorphism Between Tree Diagrams, Bayes' Theorem, Contingency Tables and ARR/RRR | [10.5281/zenodo.20449608](https://doi.org/10.5281/zenodo.20449608) |
+| [`ConditionalProbability`](ConditionalProbability/README.md) | Conditional Probability in Diagnostic Testing: An Isomorphism Between Tree Diagrams, Bayes' Theorem, Contingency Tables and ARR/RRR | [10.5281/zenodo.20449608](https://doi.org/10.5281/zenodo.20449608); declined by medRxiv on 26 May 2026 under its institutional-affiliation policy, rejected by Advances in Health Sciences Education |
 | [`atree`](atree/README.md) | The Atree Format: A Scalable Binary-Path Notation for Ancestral Genealogies | [10.5281/zenodo.20587715](https://doi.org/10.5281/zenodo.20587715) |
 | [`energy`](energy/README.md) | A Substack piece on pricing grid power for data centres, with its charts and the script that draws them | Substack |
 
