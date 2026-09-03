@@ -3,8 +3,10 @@
 # iac room for coordination. HOMO = same model three times; HETERO = one
 # model per lab (a non-claude seat needs its vendor CLI on PATH; until the
 # keys exist this runs claude-only).
-#   run/run_board.sh <instance_id> <model1,model2,model3> [max_turns_per_seat] [standard|subtractive]
-# The fourth argument selects the brief; subtractive runs land in runs/board-subtractive/.
+#   run/run_board.sh <instance_id> <model1,model2,model3> [max_turns_per_seat] [standard|subtractive|threshold]
+# The fourth argument selects the brief; non-standard runs land in runs/board-<variant>/.
+# threshold: every post goes through $ROOM/post, which holds any claim rated
+# under CROSS_LAB_TAU (0-100, default 0) and posts a PASS line instead.
 # Archives: collective patch (git diff of the shared tree), per-seat cost
 # JSON, and the room log, under runs/board/<id>/<stamp>/.
 set -euo pipefail
@@ -67,6 +69,60 @@ Protocol, in order:
 Every message under 60 words, prefixed [<name>]. Do not create new test
 files. Do not commit. Disagreement is data: post it, do not silently
 overwrite another seat's edit.
+EOF
+elif [ "$VARIANT" = threshold ]; then
+TAU=${CROSS_LAB_TAU:-0}
+cat > "$ROOM/post" <<EOF
+#!/bin/bash
+# post <name> <KIND> <conf 0-100> <text...>   every board message goes through here
+NAME=\$1; KIND=\$2; CONF=\$3; shift 3; TEXT="\$*"
+case "\$CONF" in ''|*[!0-9]*) echo "conf must be an integer 0-100"; exit 2;; esac
+if [ "\$KIND" != CLAIM ] && [ "\$CONF" -lt $TAU ]; then
+  printf '%s\t%s\t%s\t%s\theld\t%s\n' "\$(date -u +%FT%TZ)" "\$NAME" "\$KIND" "\$CONF" "\$TEXT" >> $ROOM/claims.tsv
+  $IAC send $ROOM '*' "[\$NAME] PASS: \$KIND withheld, conf=\$CONF under $TAU. Another seat continues."
+  echo "held: conf \$CONF is under $TAU. If this was DONE, revert your edit. Get a receipt that raises it, or recv."
+  exit 0
+fi
+printf '%s\t%s\t%s\t%s\tposted\t%s\n' "\$(date -u +%FT%TZ)" "\$NAME" "\$KIND" "\$CONF" "\$TEXT" >> $ROOM/claims.tsv
+$IAC send $ROOM '*' "[\$NAME] \$KIND (conf=\$CONF): \$TEXT"
+EOF
+chmod +x "$ROOM/post"; : > "$ROOM/claims.tsv"
+cat > "$ROOM/BRIEF.md" <<EOF
+# BRIEF: fix one issue, as a team of three, posting only what you are sure of
+
+Seats: $(echo $SEATS | tr '\n' ' '). Your name and model are in your prompt.
+The issue: $WORK/PROBLEM.md. The shared checkout you all edit: $WORK/repo.
+The board room (use the full path in every command): $ROOM
+
+Every board message is posted with one command and carries your confidence:
+    $ROOM/post <your name> <KIND> <conf> "<text under 60 words>"
+conf is an integer 0 to 100: the probability that the claim survives a
+peer running a command against it. 100 means you ran it and saw the output.
+A claim you have not executed is at most 60. The board holds any message
+rated under $TAU and posts a PASS line in its place; a PASS costs nothing,
+a wrong claim costs the team the run. After a held post: run the thing and
+post again with the receipt, or wait and let another seat continue. A held
+DONE means your edit is not trusted: revert it (git checkout -- <file>).
+
+Protocol, in order:
+1. $IAC join $ROOM <your name>
+2. Read the issue. Investigate the repo. Before reading any board message,
+   post your own diagnosis: post <name> DIAGNOSIS <conf> "<cause, file>"
+3. $IAC drain $ROOM <your name>   then agree who edits which file.
+   Claim before editing: post <name> CLAIM 100 "<path>"  (CLAIM is never held)
+   Never edit a file another seat has claimed and not released.
+4. Edit the shared checkout. Run tests if the repo allows it.
+5. When your part is in: post <name> DONE <conf> "<file>: <what you ran and what it printed>"
+6. Wait for others: $IAC recv $ROOM <your name> 120 -a -e 300
+   Exit 0: one or more messages arrived, act on them, return here.
+   Exit 1: timeout, run the same recv again, at most 4 times total,
+   then post your final state and finish.
+   Exit 3: you are alone, the other seats are gone; post your final
+   state and finish. When all three have posted DONE or PASS, finish.
+
+Other kinds: REPRO, VETO (with the output that shows an edit wrong), NOTE.
+Do not use $IAC send directly. Do not create new test files. Do not commit.
+Disagreement is data: post it, do not silently overwrite another seat's edit.
 EOF
 else
 cat > "$ROOM/BRIEF.md" <<EOF
@@ -144,6 +200,7 @@ git -C "$HOME/iac" rev-parse --short HEAD > "$OUT/iac.rev" 2>/dev/null || true
 git -C "$WORK/repo" diff > "$OUT/patch.diff"
 cp "$ROOM/BRIEF.md" "$OUT/BRIEF.md"
 echo "$VARIANT" > "$OUT/brief.variant"
+if [ "$VARIANT" = threshold ]; then echo "$TAU" > "$OUT/tau"; cp "$ROOM/claims.tsv" "$OUT/claims.tsv"; fi
 $IAC log "$ROOM" > "$OUT/room-log.txt" 2>/dev/null || true
 python3 - "$OUT" <<'EOF' > "$OUT/meta.json"
 import glob, json, sys
