@@ -12,7 +12,7 @@
 \title{\textbf{The Imposed and Emergent Pieces of Convolution Under an Energy Budget}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Reference implementation:
 \url{https://github.com/Anode1/SMBPANN}.}}
-\date{July 2026}
+\date{First version 21 July 2026; revised 2 September 2026}
 
 \begin{document}
 \maketitle
@@ -26,8 +26,8 @@ translation invariance rewards it. The compact aligned local filter emerges only
 shared feature the way real genetics does, rather than on a single edge, and composition on the channel
 axis does not emerge from the task label alone; in two dimensions that axis meets a capacity wall at
 three operations which four interventions fail to move. On top of the priors a ConvNet hardwires (locality,
-translatability), the free dimensions organize to the task: compact fields, and a depth that grows with the
-required receptive field while overshooting it.
+translatability), the free dimensions organize to the task: compact fields, and a depth that grows with
+the receptive field while overshooting it.
 
 The contribution is the decomposition, and one mechanism it turns up. A connection cost as a lens on
 emergent structure has precedent; we turn it on \emph{convolution}, and report a mechanism that does not
@@ -36,10 +36,9 @@ not on a single edge), a map of which pieces are imposed and which emerge with t
 including the measured boundary where composition needs supervision, and a control showing that the
 directed search does real work: at a matched budget it finds a tidier, more energy-efficient solution than
 random search, and a modestly more accurate one. The rest reproduces textbook inductive-bias facts,
-verified against matched baselines. Every comparison is paired by seed and tested (Wilcoxon
-signed-rank, or McNemar's exact test for solve counts, Holm-corrected within each experiment); each
-experiment states its seed count and regenerates from a named probe in the reference implementation
-(appendix).
+verified against matched baselines. Every comparison is paired by seed and tested (Wilcoxon signed-rank or McNemar's exact test,
+Holm-corrected); each experiment states its seed count and regenerates from a named probe in the
+reference implementation.
 \end{abstract}
 
 \section{Introduction}
@@ -295,7 +294,7 @@ manages only $15/24$, eight discordant seeds all favouring the free search
 more trainable depth. So block diversity buys nothing while the required reach is small, and the reuse
 heuristic is the near-optimum there, measured rather than assumed; but its edge fades as the task deepens,
 foreshadowing the two-operation task below
-where heterogeneity becomes not merely helpful but required. This mirrors cell-based NAS (ENAS, DARTS),
+where heterogeneity becomes required. This mirrors cell-based NAS (ENAS, DARTS),
 which search one cell and stack it.
 
 \subsection{Recombination is required when a task needs two different operations}
@@ -449,8 +448,11 @@ from scratch by regularization~\cite{neyshabur}; those results obtain locality a
 evolutionary energy budget that pays per connection, which of the remaining pieces the pressure yields on
 its own and which it does not: a complementary, more scaffolded probe, not the same emergence. Which of
 convolution's pieces carries the advantage, locality or weight sharing, is itself a studied
-decomposition~\cite{indbias,localshare}, generally finding locality the dominant bias; we add the
-emergence-under-evolution axis and the composition boundary to it. \textbf{NEAT}, \textbf{HyperNEAT}, and
+decomposition~\cite{indbias,localshare}, generally finding locality the dominant bias, and sparse local
+connectivity has since been shown to give non-vacuous generalization bounds in a regime where
+fully-connected networks provably fail~\cite{liang2026} (added September 2026); those results impose the
+sparsity, where we ask whether it emerges. We add the emergence-under-evolution axis and the composition
+boundary to that decomposition. \textbf{NEAT}, \textbf{HyperNEAT}, and
 Cellular Encoding evolve topology but \emph{grow from a minimal seed}, the opposite direction to pruning
 from exhaustive. \textbf{Cell-based NAS} (ENAS, regularized evolution) reuses one cell and stacks it,
 which our reuse observations echo. The essential difference is the \emph{use} of the GA: evolutionary NAS
@@ -584,6 +586,8 @@ Statistics paragraph. \texttt{./pairstat -{}-selftest} checks it against hand-co
  learning a sparse code for natural images. \emph{Nature} 381, 1996.
 \bibitem{indbias} Z.~Wang, L.~Wu. Theoretical Analysis of Inductive Biases in Deep Convolutional Networks.
  \emph{NeurIPS} 2023.
+\bibitem{liang2026} T.~Liang, E.~Singh, R.~Parhi, A.~Cloninger, Y.-X.~Wang. Does Sparse Connectivity Improve
+Generalization? Convolutional Networks Below the Edge of Stability. arXiv:2603.04807, 2026.
 \bibitem{localshare} A.~Lahoti, S.~Karp, E.~Winston, A.~Singh, Y.~Li. Role of Locality and Weight Sharing in
  Image-Based Tasks: A Sample Complexity Separation between CNNs, LCNs, and FCNs. arXiv:2403.15707, 2024.
 \bibitem{djw2002} S.~Droste, T.~Jansen, I.~Wegener. On the analysis of the (1+1) evolutionary algorithm.
