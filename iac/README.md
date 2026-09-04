@@ -18,10 +18,7 @@ part is decades old; the argument is that for this class of consumer the correct
 answer is the smallest one.
 
 `experiment/` holds the token-cost measurement (`tokenbill.py` and its results). A fleet of
-agents used iac to develop iac, and that experience is reported in the paper. `cross_lab/` is
-the later experiment on the board: whether a team of seats solves what no solo model does, with
-its pre-registration, predictions, runs and results; the paper's second existence proof, three
-seats repairing a Django issue to a harness-verified result, comes from its pilot.
+agents used iac to develop iac, and that experience is reported in the paper.
 
 [iac.pdf](iac.pdf),
 [doi:10.5281/zenodo.21206970](https://doi.org/10.5281/zenodo.21206970).

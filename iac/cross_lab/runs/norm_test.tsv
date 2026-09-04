@@ -1,6 +1,0 @@
-instance	standard	cost	subtractive	cost
-sympy__sympy-20916	RESOLVED	1.93	RESOLVED	2.03
-matplotlib__matplotlib-23299	unresolved	4.77	unresolved	4.53
-sphinx-doc__sphinx-10614	RESOLVED	4.01	unresolved	6.59
-astropy__astropy-14369	unresolved	4.75	RESOLVED	3.39
-matplotlib__matplotlib-26208	RESOLVED	7.02	RESOLVED	4.86
