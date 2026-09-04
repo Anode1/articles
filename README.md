@@ -12,12 +12,6 @@ the profile page <https://github.com/Anode1>, so that it is never out of step wi
 A `PRIVATE/` directory beside a paper, when present, is ignored by git and holds drafts,
 letters and keys.
 
-## Related work by others
-
-[`related`](related/README.md) holds papers by other authors that bear on the work here,
-redistributed under their own licences and unmodified. At present that is Hall, Galaev, Gavrilov
-and Mondoux (2023) on machine-learned triage acuity scores, CC BY 4.0.
-
 The code for the measurements is in the project repositories, which are linked from each paper:
 [SMBPANN](https://github.com/Anode1/SMBPANN), [ais](https://github.com/Anode1/ais),
 [iac](https://github.com/Anode1/iac), [bpnn](https://github.com/Anode1/bpnn),
