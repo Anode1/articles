@@ -156,6 +156,38 @@ instance, by 2 to 5x; test-file hunks 7 across four standard runs, 0
 across the five subtractive. The additive pathology read from the five
 room logs was real and was removed. It was not what lost the instances.
 
+## Phase 2, first two points: tau 0 against tau 90
+
+20 runs, $87.62 quota-priced, 2026-09-03 19:30 to 2026-09-04 00:19 UTC
+(PHASE2.md; rows in runs/threshold.tsv). Five instances, two draws each,
+threshold brief, lineup opus, sonnet, haiku.
+
+    tau   solved   dollars   solves/$   claims held   gate bypassed
+     0    7 of 10   43.09     0.162          0             0
+    90    6 of 10   44.53     0.135         30             0
+
+One solve apart, which the registration calls noise. Per instance, tau 90
+lost astropy-14369 and sphinx-10614 on both draws where tau 0 took each
+once; the rest matched.
+
+What the 30 holds bought. No seat ever stopped after a hold: the next
+post came every time, 21 of 30 rated 90 or above, and 7 of those with no
+command run in between (a NOTE at 85 reposted at 100, a DIAGNOSIS at 85
+followed by a CLAIM at 100). The other 22 ran something first, and a few
+were the intended path (a DIAGNOSIS at 60 followed by a REPRO at 100
+after four commands). The haiku seat took 21 of the 30 holds. Mean stated
+confidence was 92 under tau 0 and 93 under tau 90, against a brief that
+caps an unexecuted claim at 60: the seats rate above the gate by default
+and re-rate to pass it. Of posted claims rated 90 or above, DONE posts in
+runs the harness scored unresolved: 14 of 103 under tau 0, 17 of 108
+under tau 90.
+
+Against PHASE2.md: 8 undetermined at two points, direction against the
+threshold; 9 holds (over 10% at both points); 10 fails, no seat passed
+and stayed silent; 11 fails, zero bypasses. The registered next point is
+tau 45. Stated confidence is the parameter, and the seats set it; a
+threshold on a self-report is met by the report moving.
+
 ## Limitations
 
 - Contamination: OpenAI reports verbatim reproduction of gold patches on

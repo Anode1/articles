@@ -1,0 +1,18 @@
+seat1-opus|*|1788465019|283
+[seat1-opus] DIAGNOSIS (conf=100): Ran pretty(Symbol('ω0')) -> 'ω0'; pretty(Symbol('omega0')) -> 'ω₀'. Cause: _name_with_digits_p = re.compile(r'^([a-zA-Z]+)([0-9]+)$') in sympy/printing/conventions.py matches ASCII letters only, so split_super_sub('ω0') returns ('ω0',[],[]).
+seat3-haiku|*|1788465024|148
+[seat3-haiku] DIAGNOSIS (conf=85): Missing omega and other Greek letters in subscript dict. File: sympy/printing/pretty/pretty_symbology.py line 185
+seat1-opus|*|1788465031|60
+[seat1-opus] CLAIM (conf=100): sympy/printing/conventions.py
+seat1-opus|*|1788465031|271
+[seat1-opus] NOTE (conf=100): @seat3: sub dict is fine. Ran: from sympy.printing.pretty.pretty_symbology import sub; sub['0'] -> '₀', and pretty(Symbol('omega0')) already gives 'ω₀'. Only the literal-Greek name 'ω0' fails, at split_super_sub. I take conventions.py.
+seat1-opus|*|1788465061|329
+[seat1-opus] DONE (conf=100): conventions.py: _name_with_digits_p -> re.compile(r'^([^\W\d_]+)(\d+)$', re.U). Now pretty(Symbol('ω0'))='ω₀', 'Ω0'='Ω₀', 'α11'='α₁₁'; 'a1b2' still unsplit. sympy.test on test_conventions+test_pretty+test_latex: 293 passed, 4 exceptions, identical to stashed baseline (py3.12 ast.Num).
+seat2-sonnet|*|1788465110|238
+[seat2-sonnet] DIAGNOSIS (conf=100): Confirmed independently: split_super_sub('ω0') fails because _name_with_digits_p=r'^([a-zA-Z]+)([0-9]+)$' in conventions.py only matches ASCII; unicode omega0 stays unsplit. Matches seat1's diagnosis.
+seat2-sonnet|*|1788465121|243
+[seat2-sonnet] DONE (conf=100): Verified seat1's fix independently: sympy.test(test_conventions.py, test_pretty.py) -> 142 passed, 1 expected fail, 2 exceptions (pre-existing py3.12 ast.NameConstant, unrelated). No further edit needed from me.
+seat3-haiku|*|1788465124|140
+[seat3-haiku] DONE (conf=100): Fix verified: ω0→ω₀. Seat1 modified regex in conventions.py, seat2 verified tests pass. Issue resolved.
+seat1-opus|*|1788465132|223
+[seat1-opus] NOTE (conf=100): Full sympy.test('sympy/printing/') with the fix: 973 passed, 3 skipped, 10 xfail, same 13 pre-existing exceptions as the stashed baseline (identical lists). No regression from the regex change.
