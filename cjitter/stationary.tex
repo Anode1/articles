@@ -33,7 +33,8 @@ The check is simple, one criterion at a time. Take a drawing. Nudge every box a 
 in sixteen directions, and ask whether any nudge lowers the criterion; a box no nudge
 improves is held. We ran this on 853 working diagrams, biological pathways and business
 processes, on 136 lab drawings, and, for comparison, on tool-made and random layouts of
-the same graphs.
+the same graphs. The criteria, the corpora and the exclusions were pre-registered and
+signed before the measurement.
 
 The result is lopsided between the criteria. Under uniform edge length and stress, the
 two terms that price distances, the median hand drawing has no held box at all, while
@@ -916,6 +917,24 @@ detected pitch, out of scope as registered. Nothing registered is unrun.
   chosen by hand; and WikiPathways is flat at 0.47 to 0.53 across four generations of
   WP numbers, so no gradient follows PathVisio's releases. No single editor's aid
   produces the hold; what stays open is only whether some aid does in each era.
+
+\item \textbf{These are drawings, not working diagrams}, so the effect belongs to making a
+  picture rather than to maintaining one. Tested once, outside the corpora, on an
+  anonymized production schema of 44 tables and its 59 foreign-key edges, whose last
+  migration added ten tables that the maintainer placed by hand into the frozen
+  thirty-four (\texttt{example/erd} in the reference implementation). Redrawing those ten
+  uniformly in the canvas box 2,000 times leaves the maintainer separable on box overlap
+  area and on nothing else: $P = 0.000$ there, 0 against a random median of
+  $6.97 \times 10^{4}$, against 0.478 on spread from the centroid, 0.690 on exact ties and
+  0.174 on alignment to foreign-key neighbours. Overlap holds and the distance term does
+  not, which is the profile of the corpora. Alignment does not hold either, and the reason
+  is the base rate rather than the maintainer: 34 frozen tables leave about 100 candidate
+  lines on each axis of a $2{,}889 \times 1{,}916$ canvas, so a random draw already sits on
+  14 of the 20 axes where the maintainer sits on 12, $P = 0.915$ (0.918 and 0.908 at seeds
+  2 and 3). The test is a null over redrawings rather than the nudge, and one diagram, so
+  it bounds the claim instead of repeating it: what a person's coordinates hold is
+  measurable when the coordinates are all theirs, and ten boxes placed into an existing
+  frozen drawing do not carry it.
 \end{enumerate}
 
 The rest, each with the test that excluded it and the numbers it turned on:
