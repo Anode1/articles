@@ -23,8 +23,3 @@ Triage and Acuity Scale score from presenting complaint, clinical modifiers,
 age, sex and self-reported pain. The model was tuned toward up-triaging, and
 predicts the same score in 47.4% of cases and the same or more acute score in
 95.0%.
-
-It sits beside the length-of-stay work in this repository: the same Ontario
-hospital administrative data, the same question of what a model fitted to it
-can and cannot be trusted to do, and the same choice to accept a biased
-prediction where the direction of the bias is the safe one.
