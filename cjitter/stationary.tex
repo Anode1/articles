@@ -263,8 +263,7 @@ The BPMN archive is mixed: of the 21{,}784 models the parser reads, 13{,}435 hav
 edge a BPMN flow or association and the rest are EPC, Petri net and UML models, whose flow
 elements carry stencils outside the connector set and so become degree-2 nodes under the
 node rules. Only the 13{,}435 enter, 6{,}723 of them in the band, and the first 300 by
-model id are used; the two biological corpora are used whole. An earlier version of this
-study took 147 models without the filter, two fifths of them read as bipartite graphs.
+model id are used; the two biological corpora are used whole.
 
 A diagram enters as its largest connected component (194 of the 248 Reactome graphs and
 120 of the 300 BPMN graphs in the band are the component of a larger diagram; no
@@ -368,7 +367,7 @@ The chords are the sensitivity.
 \paragraph{Directional test.} Radius $d \in \{0.005, 0.01, 0.02, 0.05\}$ of the drawing
 width, sixteen directions, every node, each term alone and the sums of the tables. Primary cell $d = 0.02$. The directions are exact to double precision (a series evaluated in the first quadrant and rotated), and a move that lowers the energy by less than $10^{-12}$ of its value is a tie; an earlier build with directions off by up to $4 \times 10^{-6}$ counted the shift that error made as an improvement and read alignment lower by up to 0.04. Deterministic: no seed, no budget. Every median carries a 95\% bootstrap interval over diagrams (1000 resamples). An interval of [0.00, 0.00] or [1.00, 1.00] is a pileup at the boundary, not precision: 87 to 92\% of hand diagrams sit at exactly 0.00 under length and stress, and 62 to 85\% of \texttt{neato}'s at exactly 1.00 under stress (\texttt{results/robustness.md}).
 
-\paragraph{Tool controls.} The same graphs with the same box sizes and edge directions laid out by \texttt{neato} (\texttt{-Gstart=1}, so the file reproduces), by \texttt{neato} with \texttt{-Goverlap=false} (prism), by \texttt{dot}, and by ELK layered 0.12.0 (\texttt{elkjs}, direction RIGHT, every other option at its default), the engine the BPMN and KIELER editors run; a check in the binary confirms each control is the same graphs.
+\paragraph{Tool controls.} The same graphs with the same box sizes and edge directions laid out by \texttt{neato} (\texttt{-Gstart=1}, so the file reproduces), by \texttt{neato} with \texttt{-Goverlap=false} (prism), by \texttt{dot}, and by ELK layered 0.12.0~\cite{schulze14} (\texttt{elkjs}, direction RIGHT, every other option at its default), the engine the BPMN and KIELER editors run; a check in the binary confirms each control is the same graphs.
 
 \paragraph{Descent, secondary.} Through the library: hill climbing from the hand layout,
 one node per proposal, first step $d/2$ per coordinate, the step halved after 200 rejected
@@ -699,9 +698,9 @@ term: alignment carries 0.95, 0.92 and 0.89 of the weight with the held-out $q$ 
 0.248 [0.236, 0.260], 0.149 [0.142, 0.157] and 0.660 [0.647, 0.674]. Offered all eight
 terms it returns to the degenerate vertex where one is open, WikiPathways' held-out $q$
 swinging [0.235, 0.991] across splits, while on BPMN, where no term is exact, it places
-0.86 on alignment and holds a stable 0.514 [0.503, 0.525]. An earlier draft ran this fit
-with the smooth A3 kernel in the alignment column and concluded that nothing is
-identified; under the corner form that conclusion was the kernel's, not the data's. The
+0.86 on alignment and holds a stable 0.514 [0.503, 0.525]. The fit is sensitive to the alignment
+kernel: with the smooth A3 column it identifies nothing, and the corner form is what the
+LP responds to. The
 sweep: the fraction of the corpus's nodes held as a weight $w$ on one term joins
 crossings and overlap at equal weight:
 
@@ -802,8 +801,8 @@ within 0.05 of the true position under both energies, the rail rate rises from 0
 near-stratum sizes barely move, a further sign the neighbourhood is not alignment's
 doing.
 
-\paragraph{The fourth corpus, restored.} The pre-registration named HOLA's formative
-drawings \cite{hola16} and the previous draft dropped them without a word. Restored: 136
+\paragraph{The fourth corpus.} The pre-registration named HOLA's formative
+drawings \cite{hola16}: 136
 drawings, 17 participants each laying out the same 8 abstract graphs, scraped from the
 study's published SVGs (\texttt{data/hola.txt}, provenance beside it), chord edges,
 below this paper's 15-box band and free of every diagram notation. The pattern holds:
@@ -837,7 +836,7 @@ The hold sits below the small band's 0.52, 0.21 and 0.91, so larger diagrams car
 alignment, and crossings stop holding every biological box (0.97 and 0.98): size buys
 improving crossing moves.
 
-\paragraph{Null layouts.} Review asked for the chance line under every term, not only
+\paragraph{Null layouts.} The chance line under every term, not only
 alignment. Uniform random layouts of the same graphs, chord geometry, one draw per
 diagram, seeds from the diagram ids: alignment 0.06 to 0.07 against hand 0.52, 0.21 and
 0.91; node--edge 0.11 to 0.12 against 0.76 to 0.87; flow 0.26 to 0.41 against 0.59 to
@@ -870,8 +869,7 @@ hand-placed boxes against alignment's 0.52, 0.21 and 0.91. Node--edge is priced 
 standard energy and alignment is not, so the omitted-term conclusion stands, but the
 registered ranking was wrong and the recorded prediction with it. H5, exploratory, stress
 holds the hand layout less than \texttt{neato}'s: holds, 0.00 against 1.00. The registered
-fourth corpus, HOLA's formative drawings, was dropped undeclared from the previous draft;
-it is restored above. The deduplication pass is run in Section~\ref{sec:corpora} and
+fourth corpus, HOLA's formative drawings, is measured in Section~\ref{sec:results}. The deduplication pass is run in Section~\ref{sec:corpora} and
 the 41--100 band above. The registered pitch radius, the last item, is run too
 (\texttt{results/pitch.md}): at $d$ = one grid pitch, 0.0008 to 0.0017 of the width,
 hand length and stress hold 0.00 with 0.99 to 1.00 of diagrams exactly there, A1 keeps
@@ -901,7 +899,7 @@ the radius table in units of box width and of median edge length.
   (Figure~\ref{fig:controls}). Displacing the hand layouts
   past $d/2$ takes them to that same level (0.097, 0.095 and 0.200 at a half-width of 15,
   0.065, 0.061 and 0.062 at 120). The grid is available to the random layout and does not
-  produce the effect. Two additions after review: a random layout snapped to the
+  produce the effect. Two further nulls: a random layout snapped to the
   plausible working pitch of five units holds 0.076, the same 0.07 as at pitch one, so
   the null is not flattered by the finest pitch; and the jittered hand layouts begin
   falling well below $d/2$ (0.59 on BPMN at a half-width of 5), so the corner argument
@@ -1202,6 +1200,8 @@ multicriteria energies, not the layered engines.
  arXiv:2604.03417, 2026.
 \bibitem{ahmed20} R.~Ahmed, F.~De Luca, S.~Devkota, S.~Kobourov, M.~Li. Graph Drawing via
  Gradient Descent, (GD)$^2$. \emph{Graph Drawing (GD 2020)}, LNCS, 3--17, 2020.
+\bibitem{schulze14} C.~D. Schulze, M.~Sp\"onemann, R.~von Hanxleden. Drawing Layered Graphs
+ with Port Constraints. \emph{Journal of Visual Languages and Computing} 25(2):89--106, 2014.
 \bibitem{kamada89} T.~Kamada, T.~Kawai. An Algorithm for Drawing General Undirected Graphs.
  \emph{Information Processing Letters} 31:7--15, 1989.
 \bibitem{gansner05} E.~R. Gansner, Y.~Koren, S.~C. North. Graph Drawing by Stress
