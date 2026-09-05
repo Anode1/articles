@@ -5,7 +5,7 @@ a diagram a person laid out is a local minimum of no weighting of the standard l
 energy with positive weight on a distance term, and the criterion that does hold its
 boxes, alignment into rows and columns, is one neither base energy prices.**
 
-`stationary.tex`, *A Hand-Drawn Diagram Is Held by Alignment and by No Distance Term*.
+`stationary.tex`, *Hand-Drawn Diagrams Are Not Minima of Edge-Length or Stress Energies*.
 Fitting a layout energy to human drawings by inverse optimisation assumes the drawings
 sit at a minimum of some weighted sum of the standard criteria. Tested one criterion at a
 time on 853 working diagrams of 15 to 40 boxes, 136 laboratory drawings and 1,072
