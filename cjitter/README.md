@@ -1,24 +1,27 @@
 # One paper on one library
 
 **It reads [cjitter](https://github.com/Anode1/cjitter), and it is a negative result:
-the assumption that a person's diagram sits at a minimum of the standard layout criteria
-fails, and the criterion that does hold their boxes is one no tuned cost contains.**
+a diagram a person laid out is a local minimum of no weighting of the standard layout
+energy, and the criterion that does hold its boxes, alignment into rows and columns, is
+one no force-directed or multicriteria energy prices.**
 
-`stationary.tex`, *What Holds a Hand-Drawn Diagram?*, the full version, every
-sensitivity inline; `stationary_gd.tex` is the same paper in GD's `gd-lipics` class,
-734 lines of main matter and the sensitivities in an appendix, for GD 2027, Track 2. Fitting a layout
-energy to human drawings by inverse optimisation assumes the drawings sit at a minimum of
-some weighted sum of the standard criteria. Tested one criterion at a time on 853 hand-drawn
-diagrams of 15 to 40 boxes, that assumption fails. Overlap holds every box at zero. Uniform
-edge length and stress hold 0.3 to 1.1% of hand-placed boxes per corpus, with a median
-diagram of 0.00, and not for want of anything to gain. The criterion that does hold a hand
-layout, and that the energy omits, is alignment into rows and columns: 0.52 and 0.21 on the
-two biological corpora and 0.87 over the full BPMN population, against 0.06 for `neato`. A
-hand layout is a layered layout with partial alignment. Measurements are in
-`example/diagrams` in the [cjitter repository](https://github.com/Anode1/cjitter).
+`stationary.tex`, *A Hand-Drawn Diagram Is Held by Alignment and by No Distance Term*.
+Fitting a layout energy to human drawings by inverse optimisation assumes the drawings
+sit at a minimum of some weighted sum of the standard criteria. Tested one criterion at a
+time on 853 working diagrams of 15 to 40 boxes, 136 laboratory drawings and 1,072
+drawings from the graph-drawing proceedings, that assumption fails. Overlap holds every
+box at zero. Uniform edge length and stress hold 0.00 of the median drawing in every
+corpus while a stress minimiser's own layouts are held at 1.00, and a weight of 0.001 on
+either term holds under 0.015 of the boxes. Alignment puts 58, 36 and 81 per cent of
+hand-placed boxes in a row or column of three or more, none of the stress minimiser's,
+and a pairwise alignment term holds 0.52, 0.21 and 0.85 of them against 0.06 by chance.
+Whether the hand or the editor's guide aligned them the coordinates cannot say, and for a
+fit it does not matter. Measurements are in `example/diagrams` in the
+[cjitter repository](https://github.com/Anode1/cjitter).
 
 [stationary.pdf](stationary.pdf),
-[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827).
+[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827) (the first
+edition; the version here is not yet deposited).
 
 The metaphor-benchmark audit that stood beside it is withdrawn: a correction inherits the
 audience of what it corrects. Its verdict tables remain in
@@ -26,7 +29,9 @@ audience of what it corrects. Its verdict tables remain in
 
 | file | what it is |
 | --- | --- |
-| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan `stationary.tex` was run to |
+| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan the study was run to; its hypotheses and outcomes are the paper's last appendix |
+| stationary_gd.tex | the first edition in GD's `gd-lipics` class, not rebuilt from the current text |
 | figures/ | the TikZ figures the paper includes |
-| verified.bib | every citation checked: DOI resolved, PDF read |
+| verified.bib | every citation checked: DOI resolved, PDF read, or the note says what was not |
+| corpora/ | the three raw archives and a clone of the WikiPathways database repository, not in git |
 | gd-lipics-v3.cls, lipics-v2021.cls | the GD submission class and the LIPIcs class it wraps |
