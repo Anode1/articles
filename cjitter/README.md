@@ -1,7 +1,8 @@
 # One paper on one library
 
-**It reads [cjitter](https://github.com/Anode1/cjitter), it is a negative result, and it
-is not deposited.**
+**It reads [cjitter](https://github.com/Anode1/cjitter), and it is a negative result:
+the assumption that a person's diagram sits at a minimum of the standard layout criteria
+fails, and the criterion that does hold their boxes is one no tuned cost contains.**
 
 `stationary.tex`, *What Holds a Hand-Drawn Diagram?*, the full version, every
 sensitivity inline; `stationary_gd.tex` is the same paper in GD's `gd-lipics` class,
@@ -15,6 +16,9 @@ layout, and that the energy omits, is alignment into rows and columns: 0.52 and 
 two biological corpora and 0.87 over the full BPMN population, against 0.06 for `neato`. A
 hand layout is a layered layout with partial alignment. Measurements are in
 `example/diagrams` in the [cjitter repository](https://github.com/Anode1/cjitter).
+
+[stationary.pdf](stationary.pdf),
+[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827).
 
 The metaphor-benchmark audit that stood beside it is withdrawn: a correction inherits the
 audience of what it corrects. Its verdict tables remain in
