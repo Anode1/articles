@@ -14,7 +14,7 @@ since their per-entity ratios describe a book, not a system.
 """
 import json, os, re, subprocess, sys
 
-ROOT = os.path.expanduser("~/corpora/ext-java")
+ROOT = os.path.expanduser("~/articles/MISRA_C_vs_CPP/corpora/ext-java")
 SKIP_DIR = re.compile(r"/(test|tests|target|build|generated)/", re.I)
 PAT = {
     "entity":     re.compile(r"@Entity\b"),

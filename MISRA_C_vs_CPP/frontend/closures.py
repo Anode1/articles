@@ -6,7 +6,7 @@ both sides, by the rule that puts MySQL below the line and Hibernate above
 it: React varies by version and the application configures it, so it is
 counted.
 
-  REACT_SRC=~/corpora/react-v19 python3 closures.py
+  REACT_SRC=~/articles/MISRA_C_vs_CPP/corpora/react-v19 python3 closures.py
 
 React source: facebook/react tag v19.1.0, commit 4a9df08157f001c01b078d259748512211233dcf.
 The category-2 list is one rater's derivation and has not been blind-checked.
@@ -15,7 +15,7 @@ import os, sys, json
 import tiktoken
 
 here = os.path.dirname(os.path.abspath(__file__))
-REACT = os.path.expanduser(os.environ.get("REACT_SRC", "~/corpora/react-v19"))
+REACT = os.path.expanduser(os.environ.get("REACT_SRC", "~/articles/MISRA_C_vs_CPP/corpora/react-v19"))
 enc = tiktoken.get_encoding("o200k_base")
 
 CAT1 = {

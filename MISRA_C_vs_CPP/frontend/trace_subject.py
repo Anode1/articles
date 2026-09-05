@@ -8,13 +8,13 @@ text and is recorded, the generated ~shared/api/generated/* among them.
 Sibling page modules pulled in only by the router table are excluded from
 the screen-path count and included in the full-trace count.
 
-  SUBJECT=~/corpora/rw-react-fsd python3 trace_subject.py
+  SUBJECT=~/articles/MISRA_C_vs_CPP/corpora/rw-react-fsd python3 trace_subject.py
 """
 import os, re, sys
 
 import tiktoken
 
-ROOT = os.path.expanduser(os.environ.get("SUBJECT", "~/corpora/rw-react-fsd"))
+ROOT = os.path.expanduser(os.environ.get("SUBJECT", "~/articles/MISRA_C_vs_CPP/corpora/rw-react-fsd"))
 ENTRIES = ["src/app/index.tsx", "src/app/browser-router.tsx",
            "src/pages/profile/profile.route.ts",
            "src/pages/profile/profile.ui.tsx",

@@ -15,7 +15,7 @@ Usage:  venv/bin/python external.py [--json out.json]
 import json, os, re, subprocess, sys
 import measure as M
 
-ROOT = os.path.expanduser("~/corpora")
+ROOT = os.path.expanduser("~/articles/MISRA_C_vs_CPP/corpora")
 GENERATED = []
 
 # main implementation directory of each project, named so the selection is checkable

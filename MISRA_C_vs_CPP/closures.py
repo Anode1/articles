@@ -22,10 +22,10 @@ ENC = tiktoken.get_encoding("o200k_base")
 ROOTS = {
     "SYSTEM_A_ROOT": os.environ.get("SYSTEM_A_ROOT", ""),
     "AIS_ROOT": os.environ.get("AIS_ROOT", os.path.expanduser("~/ais/c")),
-    "TASK_ROOT": os.environ.get("TASK_ROOT", os.path.expanduser("~/corpora/taskwarrior/src")),
-    "SPRING_ROOT": os.environ.get("SPRING_ROOT", os.path.expanduser("~/corpora/realworld-springboot-java")),
-    "SPRING_FW_ROOT": os.environ.get("SPRING_FW_ROOT", os.path.expanduser("~/corpora/spring-fw-src")),
-    "MONO_ROOT": os.environ.get("MONO_ROOT", os.path.expanduser("~/corpora/monocypher")),
+    "TASK_ROOT": os.environ.get("TASK_ROOT", os.path.expanduser("~/articles/MISRA_C_vs_CPP/corpora/taskwarrior/src")),
+    "SPRING_ROOT": os.environ.get("SPRING_ROOT", os.path.expanduser("~/articles/MISRA_C_vs_CPP/corpora/realworld-springboot-java")),
+    "SPRING_FW_ROOT": os.environ.get("SPRING_FW_ROOT", os.path.expanduser("~/articles/MISRA_C_vs_CPP/corpora/spring-fw-src")),
+    "MONO_ROOT": os.environ.get("MONO_ROOT", os.path.expanduser("~/articles/MISRA_C_vs_CPP/corpora/monocypher")),
 }
 
 # (label, path, first_line, last_line); None lines = whole file.
