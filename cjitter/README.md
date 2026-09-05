@@ -2,8 +2,8 @@
 
 **It reads [cjitter](https://github.com/Anode1/cjitter), and it is a negative result:
 a diagram a person laid out is a local minimum of no weighting of the standard layout
-energy, and the criterion that does hold its boxes, alignment into rows and columns, is
-one no force-directed or multicriteria energy prices.**
+energy with positive weight on a distance term, and the criterion that does hold its
+boxes, alignment into rows and columns, is one neither base energy prices.**
 
 `stationary.tex`, *A Hand-Drawn Diagram Is Held by Alignment and by No Distance Term*.
 Fitting a layout energy to human drawings by inverse optimisation assumes the drawings
@@ -14,7 +14,9 @@ box at zero. Uniform edge length and stress hold 0.00 of the median drawing in e
 corpus while a stress minimiser's own layouts are held at 1.00, and a weight of 0.001 on
 either term holds under 0.015 of the boxes. Alignment puts 58, 36 and 81 per cent of
 hand-placed boxes in a row or column of three or more, none of the stress minimiser's,
-and a pairwise alignment term holds 0.52, 0.21 and 0.85 of them against 0.06 by chance.
+and a pairwise alignment term holds 0.52, 0.21 and 0.85 of them against 0.06 to 0.07 by
+chance; offered every term, the fit puts 0.81 of its weight on alignment in the one corpus
+where no term is satisfied exactly.
 Whether the hand or the editor's guide aligned them the coordinates cannot say, and for a
 fit it does not matter. Measurements are in `example/diagrams` in the
 [cjitter repository](https://github.com/Anode1/cjitter).
