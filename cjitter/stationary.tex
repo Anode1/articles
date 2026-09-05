@@ -34,8 +34,8 @@ The check is simple, one criterion at a time. Take a drawing. Nudge every box a 
 in sixteen directions, and ask whether any nudge lowers the criterion; a box no nudge
 improves is held. We ran this on 853 working diagrams, biological pathways and business
 processes, on 136 lab drawings, and, for comparison, on tool-made and random layouts of
-the same graphs. The criteria, the corpora and the exclusions were pre-registered and
-signed before the measurement.
+the same graphs. The test and the three corpora were pre-registered and signed before the
+measurement.
 
 The result is lopsided between the criteria. Under uniform edge length and stress, the
 two terms that price distances, the median hand drawing has no held box at all, while
@@ -110,8 +110,10 @@ the findings are these.
 
 \begin{enumerate}\itemsep2pt
 \item Overlap holds every box of the median hand diagram at value zero in every corpus, as
-  it does in every tool that removes overlaps; the term is nonzero in 4 to 8\% of hand
-  diagrams. People satisfy it exactly.
+  it does in every tool that removes overlaps; the term is above the reported precision in
+  4 to 8\% of hand diagrams and some box has an overlap-lowering move in 4 to 18\%, the
+  gap being diagrams whose overlap is positive but too small to print. People satisfy it
+  to within that.
 \item Length and stress hold a hand-placed box almost nowhere, median diagram 0.00 in all
   three corpora and 25 to 78 boxes of roughly 7{,}000 each, while
   \texttt{neato}'s stress layouts are held at 1.00. No reweighting repairs it: a weight of
@@ -123,8 +125,10 @@ the findings are these.
 \item Reading direction does not close the gap. Flow holds 0.59 to 0.85 by hand where
   \texttt{dot} and ELK hold 1.00: the person tolerates a backward edge the layered tools
   remove.
-\item Crossings and node--edge separation hold every box because they are flat at this
-  radius, not because they are met. Only 3 to 30\% of diagrams offer any improving move.
+\item Crossings hold every box because they are flat at this radius, not because they are
+  met: only 3 to 30\% of diagrams offer any improving move. Node--edge separation holds
+  every box in Reactome and BPMN and 0.88 of them in WikiPathways, and is active in 15 to
+  64\%.
 \item Orthogonality is partly held: 0.19, 0.17 and 0.73 by hand.
 \item The corpus of the standing proposal behaves the same: on its 1{,}072 drawings in
   the band, length and stress hold 0.00 and alignment 0.87.
@@ -873,7 +877,9 @@ the 41--100 band above. The registered pitch radius, the last item, is run too
 hand length and stress hold 0.00 with 0.99 to 1.00 of diagrams exactly there, A1 keeps
 its gap (0.11 and 0.83 against \texttt{neato}'s 0.00 and 0.04), and \texttt{neato}'s
 stress at 0.76 and 0.80 extends the radius sweep's left edge; WikiPathways has no
-detected pitch, out of scope as registered. Nothing registered is unrun.
+detected pitch, out of scope as registered. Two registered items are unrun and are
+recorded as such in Section~\ref{sec:alternatives}: containment as a hard constraint, and
+the radius table in units of box width and of median edge length.
 
 \section{What else could produce this}\label{sec:alternatives}
 
