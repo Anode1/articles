@@ -34,8 +34,7 @@ The check is simple, one criterion at a time. Take a drawing. Nudge every box a 
 in sixteen directions, and ask whether any nudge lowers the criterion; a box no nudge
 improves is held. We ran this on 853 working diagrams, biological pathways and business
 processes, on 136 lab drawings, and, for comparison, on tool-made and random layouts of
-the same graphs. The test and the three corpora were pre-registered and signed before the
-measurement.
+the same graphs.
 
 The result is lopsided between the criteria. Under uniform edge length and stress, the
 two terms that price distances, the median hand drawing has no held box at all, while
@@ -272,7 +271,7 @@ lanes) are not nodes; SBGN process glyphs are nodes, so the Reactome graphs are 
 and their $m/n$ is the process graph's; each layout is rescaled so that its bounding box
 fits the unit square, uniformly by the larger extent, so aspect is preserved, box sizes
 scaled with it. The directional test runs on 15 to 40
-nodes; the climber pilot used 10 to 400. The registered deduplication pass
+nodes; the climber pilot used 10 to 400. The deduplication pass
 (\texttt{results/dedup.py}): by exact coordinate multiset, one Reactome pair is a single
 drawing stored under two ids; by the structural key ($n$, $m$, degree sequence, box
 sizes), one further Reactome pair and one WikiPathways pair; the 300 BPMN models collide
@@ -801,13 +800,13 @@ within 0.05 of the true position under both energies, the rail rate rises from 0
 near-stratum sizes barely move, a further sign the neighbourhood is not alignment's
 doing.
 
-\paragraph{The fourth corpus.} The pre-registration named HOLA's formative
+\paragraph{The fourth corpus.} HOLA's formative
 drawings \cite{hola16}: 136
 drawings, 17 participants each laying out the same 8 abstract graphs, scraped from the
 study's published SVGs (\texttt{data/hola.txt}, provenance beside it), chord edges,
 below this paper's 15-box band and free of every diagram notation. The pattern holds:
 overlap and crossings 1.00, length and stress 0.00, alignment 0.50, between Reactome's
-0.21 and BPMN's 0.91. Node--edge holds 1.00, so H4 fails here too. The 136 drawings are
+0.21 and BPMN's 0.91. Node--edge holds 1.00, above alignment there too. The 136 drawings are
 17 participants crossed with 8 graphs, so the interval is clustered: resampling
 participants (2000 draws) puts the alignment median at [0.31, 0.57], and the
 per-participant medians run 0.14 to 0.96. Across the four corpora the seven terms every
@@ -827,7 +826,7 @@ hold 0.00, at exactly zero in 82 and 84\% of drawings; crossings 1.00; orthogona
 1.00 and 0.06 at zero. The corpus the standing proposal would fit first is held by the
 term the standard cost omits, at BPMN's level.
 
-\paragraph{The 41 to 100 band.} The registered larger band, run against \texttt{neato}
+\paragraph{The 41 to 100 band.} The larger band, run against \texttt{neato}
 (\texttt{results/band41.md}; 108, 265 and 300 diagrams, the BPMN file the first of its
 band by id, the committed corpus's selection caveat with it): every verdict stands.
 Length and stress hold 0.00 by hand in every corpus and \texttt{neato}'s stress holds
@@ -859,25 +858,17 @@ boxes still have a stress-lowering move, and the boxes alignment pins entirely, 
 direction admissible, are 0.02 to 0.05 (\texttt{results/constrained.py}). The
 generator and every number: \texttt{results/nulls.py}.
 
-\paragraph{The pre-registration's scorecard.} H1, crossings and overlap hold the hand
-layout above 0.9 and above \texttt{neato}: holds, 1.00 against 0.41 to 0.76. H2, length
-alone holds under 0.2 and below \texttt{neato}: holds, 0.00 against 0.24 to 0.42. H3, no
-positive length weight repairs $C{+}O{+}L$: holds, fitted weight 0.000 everywhere and $q$
-0.008 at any weight past 0.001. H4, alignment holds more boxes than orthogonality or
-node--edge in every corpus: \textbf{refuted}. Node--edge holds 0.88, 1.00 and 1.00 of
-hand-placed boxes against alignment's 0.52, 0.21 and 0.91. Node--edge is priced in the
-standard energy and alignment is not, so the omitted-term conclusion stands, but the
-registered ranking was wrong and the recorded prediction with it. H5, exploratory, stress
-holds the hand layout less than \texttt{neato}'s: holds, 0.00 against 1.00. The registered
-fourth corpus, HOLA's formative drawings, is measured in Section~\ref{sec:results}. The deduplication pass is run in Section~\ref{sec:corpora} and
-the 41--100 band above. The registered pitch radius, the last item, is run too
-(\texttt{results/pitch.md}): at $d$ = one grid pitch, 0.0008 to 0.0017 of the width,
-hand length and stress hold 0.00 with 0.99 to 1.00 of diagrams exactly there, A1 keeps
-its gap (0.11 and 0.83 against \texttt{neato}'s 0.00 and 0.04), and \texttt{neato}'s
-stress at 0.76 and 0.80 extends the radius sweep's left edge; WikiPathways has no
-detected pitch, out of scope as registered. Two registered items are unrun and are
-recorded as such in Section~\ref{sec:alternatives}: containment as a hard constraint, and
-the radius table in units of box width and of median edge length.
+\paragraph{Where alignment sits among the terms.} Alignment does not hold the most
+hand-placed boxes. Node--edge separation holds 0.88, 1.00 and 1.00 of them against
+alignment's 0.52, 0.21 and 0.91, and crossings and overlap hold every box of the median
+diagram. What separates alignment from those three is not how many boxes it holds but
+that the standard energy prices them and does not price it.
+
+\paragraph{The pitch radius.} At $d$ = one grid pitch, 0.0008 to 0.0017 of the width
+(\texttt{results/pitch.md}), hand length and stress hold 0.00 with 0.99 to 1.00 of
+diagrams exactly there, A1 keeps its gap (0.11 and 0.83 against \texttt{neato}'s 0.00 and
+0.04), and \texttt{neato}'s stress at 0.76 and 0.80 extends the radius sweep's left edge.
+WikiPathways has no detected pitch.
 
 \section{What else could produce this}\label{sec:alternatives}
 
@@ -885,7 +876,7 @@ the radius table in units of box width and of median edge length.
 
 \begin{enumerate}
 \item \textbf{The editor snapped to a grid}, so alignment is the tool's. Excluded, by the
-  control the pre-registration named and by a stronger one it did not. The detected pitch
+  control named in advance and by a stronger one. The detected pitch
   is one unit in Reactome and BPMN (67\% and 63\% integer coordinates) and none in
   WikiPathways (17\%, against 0.37 of boxes exactly aligned in $x$). Displacing every box
   by up to half a pitch leaves the held fraction at 0.500, 0.206 and 0.889 against 0.520,

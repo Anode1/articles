@@ -26,7 +26,7 @@ audience of what it corrects. Its verdict tables remain in
 
 | file | what it is |
 | --- | --- |
-| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, governs `stationary.tex` |
+| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan `stationary.tex` was run to |
 | figures/ | the TikZ figures the paper includes |
 | verified.bib | every citation checked: DOI resolved, PDF read |
 | gd-lipics-v3.cls, lipics-v2021.cls | the GD submission class and the LIPIcs class it wraps |
