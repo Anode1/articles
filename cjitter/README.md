@@ -21,7 +21,7 @@ Whether the hand or the editor's guide aligned them the coordinates cannot say, 
 fit it does not matter. Measurements are in `example/diagrams` in the
 [cjitter repository](https://github.com/Anode1/cjitter).
 
-[stationary.pdf](stationary.pdf),
+[stationary.pdf](stationary.pdf), [stationary_supplement.pdf](stationary_supplement.pdf),
 [doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827) (the first
 edition; the version here is not yet deposited).
 
@@ -31,6 +31,7 @@ audience of what it corrects. Its verdict tables remain in
 
 | file | what it is |
 | --- | --- |
+| stationary_supplement.tex | the sensitivities, controls and secondary estimands, one section each, cited from the paper as Supplement S1 to S9 |
 | PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan the study was run to; its hypotheses and outcomes are the paper's last appendix |
 | stationary_gd.tex | the first edition in GD's `gd-lipics` class, not rebuilt from the current text |
 | figures/ | the TikZ figures the paper includes |
