@@ -25,9 +25,10 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 Diagram editors ship an automatic layout; in MySQL Workbench it is one menu command,
 Autolayout. Behind such commands is a cost, a weighted sum of complaints: boxes
 overlap, connected boxes sit far apart, edge lengths vary. A corpus of several thousand
-hand-made drawings was published last year, and one standing proposal is to tune the
-cost's weights on drawings like these, treating each drawing a person kept as a minimum
-of the cost. Nobody had checked whether it is one.
+hand-made drawings was published last year, and the standing proposal since 1994 is to
+learn the cost's weights from drawings like these. Fitting them to the coordinates,
+rather than to which drawing a person preferred, assumes each drawing a person kept is a
+minimum of the cost. Nobody had checked whether it is one.
 
 The check is simple, one criterion at a time. Take a drawing. Nudge every box a little,
 in sixteen directions, and ask whether any nudge lowers the criterion; a box no nudge
@@ -43,8 +44,8 @@ where one exists. What holds the hand drawings instead is a criterion the tuned 
 do not contain: alignment into rows and columns. It holds a fifth to most of the median
 hand drawing against almost none of a force-directed or random layout; the layered
 tools align too, but by construction, without a term for it. The new corpus shows the
-same hand profile. People are known to prefer low-stress drawings; at the coordinates
-they do not produce them.
+same hand profile. People prefer the drawings a stress minimiser makes; at the
+coordinates they do not draw that way.
 
 So a cost tuned on hand coordinates learns the trade-offs among its own terms, not the
 drawer's. Whether the person aligned the boxes or the editor's snap guide did, the
