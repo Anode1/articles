@@ -45,12 +45,11 @@ the base terms with positive weight on a distance term holds a hand layout.
 Offered the base energy, inverse optimisation returns all weight on overlap or crossings,
 the terms every layout satisfies. What the coordinates do hold is alignment into rows and
 columns: 58, 36 and 81 per cent of the median drawing's boxes lie in an alignment of three
-or more, none of the stress minimiser's, and a pairwise alignment term holds 0.52, 0.21
-and 0.85 of them against 0.06 to 0.07 by chance and 0.06 to 0.09 after snapping a random
+or more, none of the stress minimiser's, and a pairwise alignment term holds, at sixteen
+directions, 0.52, 0.21 and 0.85 of them against 0.06 to 0.07 by chance and 0.06 to 0.09 after snapping a random
 layout to the same grid, the count tracking the share of boxes that share an exact
 coordinate with another, 0.54, 0.17 and 0.87. Neither base energy, Davidson and Harel's
-sum or stress, prices it; confined to the terms no layout satisfies exactly, the fit puts
-0.88 to 0.95 of its weight on alignment with a stable held-out hold. Whether the person aligned the boxes or the editor's guide did, the
+sum or stress, prices it. Whether the person aligned the boxes or the editor's guide did, the
 coordinates cannot say, and for fitting it does not matter. Offer alignment among the
 terms before any fit, and judge a fitted energy by the fraction of a held-out drawing's
 boxes it holds under the terms no layout satisfies exactly.
@@ -184,8 +183,9 @@ accepted, inverse optimisation asks for the weights $w$ under which they are nea
 stationary \cite{keshavarz11, chan19}. With the directional differences
 $D_{iv} T_k = T_k(x + d\,v^{(i)}) - T_k(x)$ in hand, node $i$ is held under $w$ exactly
 when $\sum_k w_k D_{iv} T_k \ge 0$ for all $v$, a set of linear inequalities in $w$. The
-residual is the smallest total violation over $w$ on the simplex, a linear program, and it
-is zero only if some weighting makes the layout a local minimum. Two properties of that
+residual is the smallest total violation over $w$ on the simplex, the normalisation that
+keeps the trivial vertex in the feasible set, a linear program, and it is zero only if
+some weighting makes the layout a local minimum. Two properties of that
 program decide what a fit can return. A term with $D_{iv} T_k < 0$ for some $v$ at almost
 every node can take positive weight only where another term rises in that direction;
 under the base energy nothing else moves there, and the sweep of
@@ -243,6 +243,7 @@ $T_N$ node--edge & squared shortfall of node to foreign route distance below $(w
 $T_F$ flow & mean over directed edges of the backward component along the reading direction $u$, over length & no edge runs back \\
 \bottomrule
 \end{tabular}
+\caption{The terms. $n$ nodes, $m$ edges, box $i$ of width $w_i$ and height $h_i$, $L$ fitted to the layout under test.}
 \end{table}
 
 The base energy is $T_C + T_O + T_L$ at weights $(1,1,1)$, three terms of the family that
@@ -298,6 +299,7 @@ HOLA formative drawings \cite{hola16} & study tool & 136 & (4--13) & 136 & \\
 GD Collection \cite{gdcoll25} & mixed & 4,890 & 1,072 & 1,072 & \\
 \bottomrule
 \end{tabular}
+\caption{The corpora.}
 \end{table}
 
 The first three are working documents: Reactome diagrams are laid out by curators,
@@ -319,7 +321,8 @@ of the interval over diagrams (\texttt{results/dedup.py}, \texttt{results/drawer
 
 The two further collections are drawings, not working diagrams. HOLA's formative
 corpus is 17 participants each laying out the same 8 abstract graphs in the study's own
-orthogonal editor, 136 drawings of 4 to 13 nodes, scraped from the study's published SVGs;
+orthogonal editor, 136 drawings of 4 to 13 nodes, scraped from the study's published SVGs and redistributed
+as research data without an explicit licence;
 the corpus does not record whether that editor drew alignment aids, and at 4 to 13 boxes
 the test radius is a smaller fraction of a box than in the band (its distance-term zeros
 stand at radii 0.01 and 0.05 too). The GD Collection is
@@ -365,7 +368,10 @@ alignment of three or more, none of \texttt{neato}'s, and 88, 82 and 76 per cent
 \texttt{dot}'s, since a layer is a row; the gridiness $q$ on \texttt{neato}'s layouts is
 the step's flatness, so alignment is compared on the value, with the A1 hold beside it as
 the count a fit needs. The A1 hold tracks the exact-tie fractions of
-Section~\ref{sec:corpora} to within a few points, as a corner term should. Alignment does
+Section~\ref{sec:corpora} to within a few points, as a corner term should, and it is an
+upper bound that falls with the direction count, to 0.39, 0.07 and 0.82 at sixty-four
+against a chance line of 0.03, 0.03 and 0.00 (Supplement~S2); the gridiness value does
+not move with it. Alignment does
 not hold the most boxes: node--edge separation holds 0.88 to 1.00 and crossings and
 overlap hold every box. What separates alignment from those three is that the base
 energies price them and do not price it.
@@ -392,6 +398,7 @@ alignment A1   & 0.52 & 0.066 & 92\%  & 0.21 & 0.069 & 100\% & 0.85 & 0.059 & 63
 flow           & 0.59 & 0.010 & 90\%  & 0.62 & 0.012 & 96\%  & 0.86 & 0.004 & 71\% \\
 \bottomrule
 \end{tabular}
+\caption{Beside $q$: \emph{dec}, the median over diagrams of the mean best decrease a single move finds as a fraction of the term's value, and \emph{active}, the share of diagrams in which any box has an improving move.}
 \end{table}
 
 The three terms above the rule are flat at this radius: on BPMN only 3\% of diagrams
@@ -424,8 +431,10 @@ carries 0.95, 0.92 and 0.88 of the weight with the held-out $q$ stable at 0.248 
 0.260], 0.149 [0.142, 0.157] and 0.651 [0.617, 0.689], the brackets the range over the ten
 splits. Under the smooth A3 kernel the same fit puts its weight on flow and orthogonality
 (0.58 and 0.32 on WikiPathways, 0.57 and 0.25 on BPMN), all of it on node--edge in
-Reactome with an unstable held-out hold, and 0.04 to 0.08 on alignment: the corner is
-what the program responds to. The sweep, the fraction of the corpus's boxes
+Reactome with an unstable held-out hold, and 0.04 to 0.08 on alignment, at a held-out
+hold within 0.03 of the corner kernel's (\texttt{results/fit/report\_a3\_old.txt}, the
+first-300 run, and \texttt{results/bpmnr\_fit.md}): the hold does not identify alignment
+over flow and orthogonality, the corner does. The sweep, the fraction of the corpus's boxes
 held as a weight $w$ on one term joins crossings and overlap at equal weight:
 
 \begin{table}[!htbp]\centering\small
@@ -441,6 +450,7 @@ alignment A1 & 0.506 & 0.516 & 0.243 & 0.238 & 0.790 & 0.794 \\
 flow & 0.576 & 0.606 & 0.613 & 0.625 & 0.811 & 0.819 \\
 \bottomrule
 \end{tabular}
+\caption{The sweep: the fraction of a corpus's boxes held as a weight $w$ on one term joins crossings and overlap at equal weight.}
 \end{table}
 
 The fall is a step, not a slope: whatever weight length or stress carries, the sum holds
@@ -454,7 +464,7 @@ alignment collapses the median $C{+}O{+}A_1$ hold from 0.51, 0.22 and 0.85 to 0.
 and 0.13; and under the constrained model of the layout literature, stress subject to
 alignment constraints \cite{ipsepcola06, dunnart08, setcola18}, 0.88 to 0.90 of the
 median diagram's boxes still have a stress-lowering move among the directions that do
-not raise A1 (\texttt{results/constrained.py}).
+not raise A1 (\texttt{results/constrained.py}, first 300).
 
 \paragraph{The two further collections.} The same test on the drawings of
 Section~\ref{sec:corpora} that are not working diagrams gives the same profile. HOLA's 136
@@ -521,6 +531,7 @@ Reading direction is the missing constraint & the flow term & flow holds 0.59 to
 The tools are the wrong tools & ELK layered, the engine the BPMN editors run & its profile is \texttt{dot}'s: distance terms 0.00, flow 1.00, alignment 0.42 to 0.59 \\
 \bottomrule
 \end{tabular}
+\caption{The remaining alternatives, each with the test that excluded it.}
 \end{table}
 
 \section{Related work}\label{sec:related}
@@ -552,6 +563,7 @@ Flud \cite{flud22} & annealing continued from crowd layouts of pathway diagrams,
 O'Donovan, Agarwala, Hertzmann \cite{odonovan14} & a 122-parameter energy over single-page designs fitted by inverse optimisation, each example taken as optimal: the assumption examined here; their term set contains alignment \\
 \bottomrule
 \end{tabular}
+\caption{What is known, by how it was asked.}
 \end{table}
 
 Alignment as a human criterion is known since 2012 in graph drawing \cite{purchase12}
@@ -573,8 +585,8 @@ here.
 \section{What follows}\label{sec:discussion}
 
 Coordinates a person accepted are not minima of the energy in use. The failure is
-specific: overlap is met exactly, uniform edge length and stress are nowhere near met,
-and what holds the boxes instead is an alignment into rows and columns that neither base
+specific: overlap is met exactly, uniform edge length and stress are nowhere near met and
+carry no weight from 0.001 up, and what holds the boxes instead is an alignment into rows and columns that neither base
 energy prices. The charge is bounded twice: \texttt{dot} and ELK hold alignment at 0.42
 to 1.00 without pricing it, since layering aligns as a side effect, so the missing term
 convicts the energies and not the layered engines; and the energies that do price
@@ -614,8 +626,7 @@ coordinate fit weights neither.
 
 \paragraph{Limits.} The alignment count is specific to box-and-arrow diagrams of 4 to 100
 boxes drawn in editors with guides, it falls with size, and its level is stated at
-sixteen directions, where the corner's resolution is $0.19\,d$; at sixty-four it reads
-0.39, 0.07 and 0.82 against a chance line of 0.03, 0.03 and 0.00. The hand is not separated
+sixteen directions, where the corner's resolution is $0.19\,d$. The hand is not separated
 from the guide. The GD Collection is measured on chord edges with no box sizes and does
 not record who made its figures. The distance terms read 0.00 on every layout that is
 not a minimiser's output, so the negative result separates hand layouts from converged
