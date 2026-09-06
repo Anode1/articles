@@ -16,6 +16,7 @@
 \setlist[itemize]{leftmargin=1.45em,itemsep=0.18em,topsep=0.15em}
 \setlist[enumerate]{leftmargin=1.45em,itemsep=0.18em,topsep=0.15em}
 \renewcommand{\arraystretch}{1.16}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
 \lstset{
   basicstyle=\ttfamily\footnotesize,
@@ -38,18 +39,57 @@
 \maketitle
 
 \begin{abstract}
-A previous treatment by the first author~\cite{ControlModel} presented artifact promotion as a control model for cloud deployment, comparing build-on-target with build-once-and-promote in accessible engineering prose. This paper has two parts. Part~I restates the control model in stricter form, covering the release object, the control domains a deployment crosses, the artifact-versus-environment identity distinction, source-control compromise as a control-domain question, and the regulatory frameworks under which the model's properties become structurally required rather than merely preferable. Part~II is an anonymized implementation case study of a production web application on Amazon Web Services, in which the only manual deployment step is the upload of a versioned artifact to an S3 bucket and every subsequent stage runs autonomously. It reports 31 rolling deployments on the production fleet, timed stage by stage from the platform's own records, and 92 days of production operation under the model: 22 releases built once and promoted in 29 days, the service levels of the deployed system, the resource that bound at deploy time rather than under user load, and the two release units the pipeline did not cover.
+Artifact promotion means building the software once and moving that same built copy through the test and production environments, instead of building it again on each server. A previous treatment by the first author~\cite{ControlModel} presented it as a control model for cloud deployment, comparing build-on-target with build-once-and-promote in accessible engineering prose. This paper has two parts. Part~I restates the model in stricter form: the release object, the control domains a deployment crosses, the artifact-versus-environment identity distinction, source-control compromise as a control-domain question, and the regulatory controls whose integrity and change-control requirements the model's properties meet more directly than build-on-target does. Part~II is an anonymized implementation case study of a production web application on Amazon Web Services. A release is one command on the release engineer's machine, and the artifact's path from upload to running fleet is autonomous. Part~II reports 31 production rollouts timed stage by stage from the platform's own records, the release cadence, the service levels of the application, a control table stating which controls the implementation has and which it lacks, and the two release units the pipeline did not cover.
 
-\textbf{Contributions.} The parts of the model are each stated elsewhere: the build-once principle in \emph{Continuous Delivery}~\cite{ContinuousDelivery}, the build/release/run split in the Twelve-Factor App~\cite{TwelveFactor}, deployment of approved binaries only in Google's binary authorization~\cite{BAB,BSRS}, separation as a supply-chain security property~\cite{Okafor}, and the pipeline-side reading of the frameworks in NIST SP~800-204D~\cite{NIST800204D}. The paper (1)~assembles them as one control model, with the control domains named and the promotion boundary as their interface, holding equally for container images, virtual-machine images, operating-system packages, and versioned archives; (2)~separates where a secret is stored from when it is resolved, and shows that build-time injection is incompatible with promotion; (3)~frames deployment-time dependency resolution as an adversarial supply-chain surface that grows with the number of transitive dependencies; (4)~derives a separation of release authority from runtime-secret authority; (5)~translates the cited compliance frameworks (FedRAMP/SI-7, SOX~404, FFIEC, DO-178C, FDA~21~CFR~Part~11, HIPAA, DoD~IL) into the concrete obligations they place on engineers, not only auditors; and (6)~reports the production record.
+\textbf{Contributions.} The parts of the model are each stated elsewhere: the build-once principle in \emph{Continuous Delivery}~\cite{ContinuousDelivery}, the build/release/run split in the Twelve-Factor App~\cite{TwelveFactor}, deployment of approved binaries only in Google's binary authorization~\cite{BAB,BSRS}, separation as a supply-chain security property~\cite{Okafor}, and the pipeline-side reading of the frameworks in NIST SP~800-204D~\cite{NIST800204D}. The paper (1)~assembles them as one control model, naming who owns each part of the path from source code to a running system and where the hand-off between them is, whatever form the built copy takes; (2)~states that injecting a secret at build time breaks artifact identity, so promotion requires secrets resolved at runtime; (3)~restates, with Zimmermann et al.'s figure, why downloading libraries at deployment time is an attack surface that grows with the number of libraries; (4)~derives from the absence of secrets in the artifact that the releasing role needs no production password; (5)~names, for seven regulatory frameworks, the deploy-time evidence each asks for and which model can produce it; and (6)~reports the production record, including what the implementation does not do.
 \end{abstract}
 
 \section*{Preface: Why Now}
 
 The CVE program published just over 40,000 vulnerabilities in 2024, roughly 38\% more than in 2023, the seventh consecutive record year, and submissions have grown fast enough to backlog the National Vulnerability Database~\cite{CVEStats}. Within that, software supply-chain attacks, which target the build and distribution path rather than a flaw in the running application, are a documented and growing class: the European Union Agency for Cybersecurity reports a marked rise in their number and sophistication~\cite{ENISA}, and a peer-reviewed systematization catalogues 107 attack vectors drawn from 94 real incidents~\cite{Ladisa}.
 
-These attacks exploit access to source code or to third-party build inputs at deployment time. In March 2025 a widely consumed continuous-integration action was compromised: its version tags were repointed to code that extracted secrets from the runner process and wrote them, encoded, into workflow logs, where on public repositories anyone could read them~\cite{TJActions}. Over twenty thousand repositories depended on it. Under any deployment model where the production execution path consumes source code or third-party build inputs at deployment time, one upstream compromise becomes a production incident on the next rollout.
+These attacks land on the build and on the path from the build to production. In March 2025 a widely consumed continuous-integration action was compromised: its version tags were repointed to code that extracted secrets from the build runner and wrote them, encoded, into workflow logs, where on public repositories anyone could read them~\cite{TJActions}. Over twenty thousand repositories depended on it. That attack hit the build step. Under a build-on-target model there is one such step per production server; under promotion there is one, whose runner has to be defended as production. The model's contribution is to confine that surface to one place with one audit trail, not to remove it.
 
-Where a deployment failure is a safety failure, in aviation control, infusion pumps, medical imaging, industrial process control, the regulatory regimes require deployment evidence that build-on-target models produce only with substantial extra effort, if at all. Part~I makes the architectural argument and enumerates the frameworks. Part~II documents what the implementation looks like, how long it takes, and what is easy to get wrong.
+Where a deployment failure is a safety or financial failure, in aviation, pharmaceutical manufacturing, federal and defence systems, and banking, the regulators require deployment evidence that build-on-target models produce only with substantial extra effort, if at all. Part~I makes the architectural argument and names the frameworks. Part~II documents what one implementation looks like, how long it takes, what controls it has and lacks, and what is easy to get wrong.
+
+\section*{Terms}
+
+The paper uses a small vocabulary, given here in plain words. A reader from compliance, audit, or programme management needs no more than this table to follow Parts~I and~II.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+Term & Meaning in this paper \\
+\midrule
+Build & Turning source code into runnable software. \\
+Controlled build & A build whose machine, tools, inputs, and log are recorded and access-restricted. Part~II's build is not one; see the control table. \\
+Artifact & The built, deployable copy of the software: one file or image, with a version number and a fingerprint. \\
+Promotion & Moving that same artifact from one environment to the next, test and then production, without building it again. \\
+Environment & One complete installation of the system. Part~II has three: DEV, UAT (user-acceptance testing), and PROD (production). \\
+Source control & The system that holds the source code and every change to it. A tag is a named point in that history. \\
+Hash & A fingerprint computed from the exact bytes of a file; any change changes it. A cryptographic hash (SHA-256) cannot be forged for a chosen file; MD5 can. \\
+Checksum & A hash used to detect accidental corruption. It proves nothing about who produced the file. \\
+Signature & A hash sealed with a private key, so that it also proves who produced the file. \\
+Provenance & A signed record of what went into a build: the source revision, the machine, the tools. \\
+Approval & A recorded decision, by a named person, that an artifact may go to an environment. \\
+Instance, fleet & One server running the application, and all of them together behind one entry point, the load balancer. \\
+Content-delivery network & The service that serves the web pages and media from copies near the user. \\
+Runtime configuration & The settings and passwords a running copy needs, which differ per environment. \\
+Secret & A password, key, or token whose disclosure causes harm. \\
+Dependency & A library the software needs. A transitive dependency is one pulled in by another library. \\
+Registry & A download site for libraries or images, public or private. \\
+Rolling deployment & Updating the servers a batch at a time, in place, with a health check after each batch, so the service stays up. \\
+Rollback & Putting the previous artifact back. \\
+Schema migration & A change to the structure of the database, applied separately from the software. \\
+Snapshot & A copy of the database at a moment, from which a new database can be restored. \\
+Worker & A separate background program of the system, on its own server. \\
+Hook & A script the platform runs on a server at a fixed point of a deployment. \\
+IAM & The cloud provider's permission system: which identity may read or write which resource. \\
+Control domain & A set of assets with one owner, one audit trail, and one blast radius, the extent of harm if it is compromised. \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
 \part*{Part I: The Control Model}
 
@@ -64,41 +104,41 @@ A stricter framing is:
 Which approved artifact is currently deployed?
 \end{quote}
 
-``Latest code'' is a property of a version-control repository and changes whenever a commit lands. An \emph{approved artifact} is a concrete object: it has a version label, an integrity hash, a source revision identifier, a build timestamp, an approval record, a deployment history, and a rollback path. Engineers, project managers, testers, auditors, and stakeholders can reason about one object with these attributes; they cannot reason coherently about ``the latest code'', because each is looking at a different moving snapshot of it. In this paper the release is the artifact selected for deployment.
+``Latest code'' is a property of a version-control repository and changes whenever a commit lands. An \emph{approved artifact} is a concrete object: it has a version number, a fingerprint of its bytes, a record of which source revision it was built from and when, an approval, a deployment history, and a known previous version to go back to. Engineers, project managers, testers, auditors, and stakeholders can reason about one object with these attributes; they cannot reason coherently about ``the latest code'', because each is looking at a different moving snapshot of it. In this paper the release is the artifact selected for deployment.
 
 \section{Two Deployment Models}
 
-Environment names vary by organization: development, integration, quality assurance, staging, user acceptance, pre-production, production, disaster recovery, customer replicas. A deployment model that depends on them is not transferable. The model here depends on one property: where in the topology the build occurs.
+Environment names vary by organization: development, integration, quality assurance, staging, user acceptance, pre-production, production, disaster recovery, customer replicas. A deployment model that depends on them is not transferable. The model here depends on one property: where the build happens.
 
-\textbf{Model A: build on target.} Each deployment instance retrieves the source revision for the intended release, resolves every direct and transitive dependency against external sources, builds on the instance, and deploys the locally produced bytes.
+\textbf{Model A: build on target.} Each deployment instance retrieves the source revision for the intended release, downloads every library it needs from external sites, builds on the server, and runs what it built.
 
-\textbf{Model B: build once and promote.} One controlled build produces a deployable artifact identified by a version label and a content hash. The same artifact is stored, identified, approved, and promoted through the environments without rebuild.
+\textbf{Model B: build once and promote.} One build produces an artifact identified by a version number and a fingerprint. The same artifact is stored, approved, and promoted through the environments without being built again.
 
 \begin{lstlisting}
 Model A:
     source repository -> target instance -> local build -> local deploy -> runtime
 
 Model B:
-    source repository -> controlled build -> artifact store -> deployment -> runtime configuration -> runtime
+    source repository -> build -> artifact store -> deployment -> runtime configuration -> runtime
 \end{lstlisting}
 
-Model A is fine for local development, prototypes, single-machine systems, and short-lived test hosts. Its limitation is that it collapses source checkout, dependency resolution, build, deployment placement, and runtime execution onto each target instance, which makes the separations that controlled release needs operationally difficult. Model B makes the release boundary explicit: the production instance receives a known deployable unit and does not create the release by compiling during deployment.
+Model A is fine for local development, prototypes, single-machine systems, and short-lived test hosts. Its limitation is that it puts source retrieval, library download, build, installation, and execution all on each production server, which makes the separations that controlled release needs operationally difficult. Model B makes the release boundary explicit: the production server receives a known deployable unit and does not create the release by compiling during deployment.
 
-The models also select an environment differently. Under Model~B the environment is determined by which artifact and which runtime configuration are deployed, so one source trunk remains the single source of truth. Under Model~A, teams grow per-environment branches to carry the differences, and those branches drift: a fix cherry-picked into one is missed in another, and \emph{what is in production?} becomes a forensic exercise rather than a lookup. The same drift is documented for configuration repositories under GitOps, where a branch per environment is named as an anti-pattern for the same reasons~\cite{Kapelonis}.
+The models also select an environment differently. Under Model~B the environment is determined by which artifact and which runtime configuration are deployed, so one line of development remains the single source of truth. Under Model~A, teams grow a separate copy of the source per environment to carry the differences, and those copies drift: a fix applied to one is missed in another, and \emph{what is in production?} becomes a forensic exercise rather than a lookup. The same drift is documented for the configuration repositories of container platforms, where a copy per environment is named as an anti-pattern for the same reasons~\cite{Kapelonis}.
 
 \begin{lstlisting}
 Model A tendency                      Model B
   main                                  main   (single source of truth)
-   |  cherry-pick (drifts)               |
-   +--> dev  branch                      |   one controlled build
-   +--> qa   branch  <- picks missed     v
-   +--> prod branch  <- picks missed    artifact-X.Y.zip
+   |  copied by hand (drifts)            |
+   +--> dev  copy                        |   one build
+   +--> qa   copy   <- fixes missed      v
+   +--> prod copy   <- fixes missed     artifact-X.Y.zip
                                           |  promoted unchanged
   "what is in prod?" -> forensic         +--> DEV -> UAT -> PROD
                                          "what is in prod?" -> an artifact id
 \end{lstlisting}
 
-Architects often treat the two models as interchangeable plumbing. Building binaries once and deploying the same artifact to every environment is the practice the DevOps Research and Assessment program associates, in its published research, with higher software-delivery performance~\cite{Accelerate}, and the control properties of the rest of Part~I depend on the build sitting off the target; they are lost, quietly, the moment it moves on.
+Architects often treat the two models as interchangeable plumbing. Building the binaries once is the first principle of Humble and Farley's deployment pipeline~\cite{ContinuousDelivery}, and the control properties of the rest of Part~I depend on the build sitting off the target; they are lost, quietly, the moment it moves on.
 
 \section{Control Domains and the Promotion Boundary}
 
@@ -113,86 +153,86 @@ Runtime environment    :  configuration and secrets
 Application instance   :  execution
 \end{lstlisting}
 
-These are control domains in the security-architecture sense: each has its own ownership, audit trail, and compromise scope. The claim is that source-code evolution and production change are operated in different control domains, and that the promotion boundary is the interface between them. The build subsystem may be a release master's workstation or a hosted CI service; the model is defined by building the deployable unit once, giving it a stable identity, and promoting it, not by the product.
+Each line is a control domain: it has its own owner, its own audit trail, and its own blast radius. The claim is that source-code evolution and production change are operated in different control domains, and that the promotion boundary is the interface between them. The build may run on a release engineer's workstation or on a hosted build service; the model is defined by building the deployable unit once, giving it a stable identity, and promoting it. Whether that build is \emph{controlled} in the sense of the Terms table is a separate property, and Part~II's is not.
 
-The model's parts are established. The binary-repository literature (JFrog Artifactory, Sonatype Nexus) names the verb \emph{promotion} and makes the artifact store the system of record for release identity. \emph{Continuous Delivery}~\cite{ContinuousDelivery} states the principle in its chapter on the deployment pipeline: build the binaries once, deploy the same way to every environment, and check the hash recorded at build time at each stage. The \emph{Twelve-Factor App}~\cite{TwelveFactor} canonicalized the build / release / run split. The control-domain reading is Google's: Binary Authorization for Borg admits to production only binaries whose signed provenance names the reviewed source and the sandboxed build, and the engineer who deploys is not the engineer who wrote the change~\cite{BAB,BSRS}. Okafor et al.\ name \emph{separation} as one of three properties a secure supply chain needs, with transparency and validity~\cite{Okafor}; the \emph{DevOps Handbook} works the segregation-of-duties case for SOX and PCI through the pipeline~\cite{DevOpsHandbook}; NIST SP~800-204D places the same trust boundaries inside the CI/CD stages~\cite{NIST800204D}; and the integrity mechanisms the boundary depends on, content-addressable identity, signing, and provenance, are the subject of SLSA~\cite{SLSA}, in-toto~\cite{InToto}, Sigstore~\cite{Sigstore}, and reproducible builds~\cite{ReproBuilds}. This paper adds nothing to those mechanisms. It draws the boundary they share, states what the two models do to it, and reports one implementation.
+The model's parts are established. The binary-repository literature (JFrog Artifactory, Sonatype Nexus) names the verb \emph{promotion} and makes the artifact store the system of record for release identity. \emph{Continuous Delivery}~\cite{ContinuousDelivery} states the principle in its chapter on the deployment pipeline: build the binaries once, deploy the same way to every environment, and check the hash recorded at build time at each stage. The \emph{Twelve-Factor App}~\cite{TwelveFactor} canonicalized the build / release / run split. The control-domain reading is Google's: Binary Authorization for Borg admits to production only binaries whose signed provenance names the reviewed source and the sandboxed build, and the engineer who deploys is not the engineer who wrote the change~\cite{BAB,BSRS}. Okafor et al.\ name \emph{separation} as one of three properties a secure supply chain needs, with transparency and validity~\cite{Okafor}; the \emph{DevOps Handbook} works the segregation-of-duties case for SOX and PCI through the pipeline~\cite{DevOpsHandbook}; NIST SP~800-204D places the same trust boundaries inside the CI/CD stages~\cite{NIST800204D}; and the mechanisms the boundary depends on, fingerprinting, digital signing, and provenance, are the subject of SLSA~\cite{SLSA}, in-toto~\cite{InToto}, Sigstore~\cite{Sigstore}, and reproducible builds~\cite{ReproBuilds}. Published deployment experience reports place the practice in industry: continuous deployment at Facebook and OANDA~\cite{Savor}, the systematic review of continuous integration, delivery, and deployment by Shahin et al.~\cite{Shahin}, immutable server images~\cite{Fowler}, and GitOps as the container-side form of promotion~\cite{Beetz}; the DORA research associates continuous-delivery practice with delivery performance~\cite{Accelerate}. This paper adds nothing to those mechanisms. It draws the boundary they share, states what the two models do to it, and reports one implementation, including the admission checks that implementation lacks.
 
 \section{Artifact Formats and the Layer of Promotion}
 
-The artifact format is an implementation choice within the model: a versioned archive deployed onto a prepared instance with a pre-installed runtime, the format of Part~II; a container image promoted through a registry; a virtual-machine image promoted through an image repository; an operating-system package (deb, rpm, msi); a language-runtime archive (jar, war, wheel, gem); a filesystem or block-device snapshot. Each draws a different boundary between what is in the artifact and what the host is assumed to have, and the control-domain claims apply to all: each has a stable identity, each can be hashed, signed, scanned, approved, and archived independently of source control, and each promotes without rebuild. The choice turns on artifact size, host-preparation cost, isolation, and the frameworks below, not on the model. A team that already promotes container images through a registry, or archives through an object store, is using the model.
+The form of the artifact is an implementation choice within the model: a versioned archive installed onto a prepared server, the form used in Part~II; a container image; a whole virtual-machine image; an operating-system package; a language-specific package; a disk snapshot. Each draws a different boundary between what is in the artifact and what the server is assumed to have, and the control-domain claims apply to all: each has a stable identity, each can be fingerprinted, signed, scanned for vulnerabilities, approved, and archived independently of source control, and each promotes without being built again. The choice turns on artifact size, server-preparation cost, isolation, and the frameworks below, not on the model. A team that already promotes container images, or archives through cloud storage, is using the model.
 
 \section{Environment-Scoped Runtime Configuration}
 
-A second separation, distinct from source/build/artifact, is between artifact identity and environment identity. The source is identical for every environment; the artifact, built bytes and deployment scripts, is identical for every environment; environment-specific runtime data is in neither. That data has two categories. \textbf{Secrets}: database passwords, API credentials, encryption keys, OAuth client secrets, mail-transport credentials, whose disclosure causes immediate harm. \textbf{Operational configuration}: connection strings, internal service URLs, distribution and bucket identifiers, feature flags, regional identifiers, environment markers, which may not be secret but define the environment the artifact runs in. Both belong to the runtime environment. The implementation rule is that \emph{the artifact does not know in which environment it is running}: it starts on a prepared instance and reads its configuration from one authoritative source, whether a protected file, a configuration-management system, a managed secrets store, or a mounted volume.
+A second separation, distinct from source/build/artifact, is between artifact identity and environment identity. The source is identical for every environment; the artifact, built bytes and deployment scripts, is identical for every environment; environment-specific runtime data is in neither. That data has two categories. \textbf{Secrets}: database passwords, API credentials, encryption keys, OAuth client secrets, mail-transport credentials, whose disclosure causes immediate harm. \textbf{Operational configuration}: database addresses, internal service addresses, storage identifiers, feature switches, region names, environment markers, which may not be secret but define the environment the artifact runs in. Both belong to the runtime environment. The implementation rule is that \emph{the artifact does not know in which environment it is running}: it starts on a prepared server and reads its configuration from one authoritative source, whether a protected file on the server, a configuration-management system, or the cloud provider's secrets service.
 
-A further distinction is between secrets resolved at runtime on the instance and secrets injected into the artifact at build time. Runtime resolution leaves each secret in one place; build-time injection copies it into the artifact, and two copies leak more easily than one. Injection also breaks artifact identity: an artifact carrying one environment's secrets is no longer the same artifact deployed elsewhere. Whether a secret lives in a protected file or a managed store is an implementation choice of comparable security posture; whether it is resolved at runtime or injected at build time is a model-level decision that determines whether the artifact stays promotable. Part~II resolves all secrets at runtime for this reason.
+A further distinction is between secrets resolved at runtime on the server and secrets injected into the artifact at build time. Runtime resolution leaves each secret in one place; build-time injection copies it into the artifact, and two copies leak more easily than one. Injection also breaks artifact identity: an artifact carrying one environment's secrets is no longer the same artifact deployed elsewhere. Whether a secret lives in a protected file or a managed store is an implementation choice with a different security posture, since a managed store gives per-secret access logs, rotation, and no copy at rest on the server, and a file gives none of these; both keep the artifact promotable. Whether the secret is resolved at runtime or injected at build time is the model-level decision. Part~II resolves all secrets at runtime, into files on the server.
 
-Model~A does not logically require secrets in source control, and a disciplined team can run it with runtime configuration correctly; the objection is structural. When every target instance performs checkout, dependency resolution, build-profile selection, compilation, and deployment, the boundaries among source, build configuration, deployment configuration, and runtime configuration are easier to blur, and environment-specific files, branches, profiles, and overrides accumulate near the checkout. The accidental commit is not hypothetical: a longitudinal scan of public GitHub found secrets leaking at thousands per day, and 81\% of those found were still present two weeks later~\cite{Meli}; the practices that prevent it are catalogued by Basak et al.~\cite{Basak}.
+Model~A does not logically require secrets in source control, and a disciplined team can run it with runtime configuration correctly; the objection is structural. When every production server retrieves source, downloads libraries, builds, and installs, the boundaries among source, build settings, deployment settings, and runtime settings are easier to blur, and environment-specific files and overrides accumulate next to the source. The accidental commit is not hypothetical: a longitudinal scan of public GitHub found secrets leaking at thousands per day, and 81\% of those found were still present two weeks later~\cite{Meli}; the practices that prevent it are catalogued by Basak et al.~\cite{Basak}.
 
-\textbf{Release authority is separate from runtime-secret authority.} Because the artifact contains no secrets, the person who builds and promotes it needs no access to any environment's secrets. The release master produces an approved artifact and triggers its promotion without holding production credentials; an environment administrator provisions the secrets into the per-environment configuration source. The two are distinct roles, held by different people, and a second person with environment access can roll back or redeploy without the release master. Under Model~A, where deploying is itself a build run with the deploying identity's access, deploying tends to demand the same access as operating the environment.
+\textbf{Release authority can be separate from runtime-secret authority.} Because the artifact contains no secrets, the person who builds and promotes it needs no access to any environment's secrets. The release engineer can produce an artifact and trigger its promotion without holding any production password, while an environment administrator places the secrets in the per-environment configuration store, and a second person with environment access can roll back or redeploy without the release engineer. The separation is of duties and of where the secret is stored, not of capability: deployed code runs with the server's permissions and can read what the server can read, so whoever can deploy code can, through that code, reach the secrets. It becomes a capability boundary only when the deploy step verifies what it deploys. Under Model~A, where deploying is itself a build run with the deploying identity's access, even the separation of duties is hard to arrange.
 
 \section{Source-Control Compromise and Control-Domain Separation}
 
-If source control is compromised, every model requires incident response; an attacker who can alter source can affect a future build. The difference is the control path from the compromise to a production incident. Under Model~A, production instances consume the repository at deployment time, so source control is on the production execution path on every deploy and a repository compromise becomes a production compromise on the next cycle. Under Model~B, production receives a previously produced artifact whose identity has been hashed, signed, scanned, approved, and archived. The compromise still affects a future build, but it does not rewrite the identity of an artifact already in production, reveal runtime secrets, or force production to compile from the current repository state. The security property is not that source control cannot be compromised; it is that the compromise has a contained and auditable blast radius rather than an immediate path to runtime execution.
+If source control is compromised, every model requires incident response; an attacker who can alter source can affect a future build. The difference is the control path from the compromise to a production incident. Under Model~A, production servers consume the repository at deployment time, so source control is on the production execution path on every deploy and a repository compromise becomes a production compromise on the next cycle. Under Model~B, production receives an artifact built before the compromise or after it. The compromise reaches production only through a subsequent build and upload, so the exposure is one human step, with whatever review, scan, or signature check sits in that step; Part~II has none beyond the upload itself. The artifact already deployed keeps its identity, and source control is not on the deploy path. What the model adds is two control domains whose compromise reaches production without touching source control at all, the build host and the artifact store, and those two must be defended as production.
 
 \section{Operational Properties}
 
 Three properties follow from the artifact-identity boundary, and they are the ones an operations team feels first.
 
-\textbf{Rollback is artifact selection, not rebuild.} Under Model~B, reverting a bad release redeploys a previously approved artifact still present, by identity, in the store: the bytes that ran yesterday run again. Under Model~A, rollback selects an earlier revision and rebuilds it on every instance, with the same toolchain-drift exposure as the original deployment and no guarantee that today's rebuild reproduces last week's bytes. The rebuild does not reproduce even when the recipe is a container file: of 1{,}096 Docker images rebuilt from their original Dockerfiles in one study, 70 reproduced the same installed package versions and 4 were bitwise identical~\cite{DockerRepro}.
+\textbf{Rollback is artifact selection, not rebuild.} Under Model~B, reverting a bad release redeploys a previously approved artifact still present, by identity, in the store: the bytes that ran yesterday run again. Under Model~A, rollback selects an earlier revision and rebuilds it on every server, with the same toolchain-drift exposure as the original deployment and no guarantee that today's rebuild reproduces last week's bytes. The rebuild does not reproduce even when the recipe is a container definition: of 1{,}096 container images rebuilt from their original definitions in one study, 70 reproduced the same installed library versions and 4 were identical byte for byte~\cite{DockerRepro}.
 
-\textbf{Partial-fleet deployment cannot silently split the fleet.} In a ten-instance fleet under Model~A, each instance checks out, resolves, and builds on its own. If seven succeed and three fail, on a transient network fault, a registry outage, or a local package-state problem, the fleet runs two versions behind one load balancer and no single build log shows it. Under Model~B every instance receives the same built artifact; an instance either runs it or does not start. The mixed-version fleet is prevented rather than monitored for.
+\textbf{A partial deployment is visible.} In a fleet of ten servers under Model~A, each retrieves, downloads, and builds on its own. If seven succeed and three fail, on a passing network fault, a registry outage, or a local problem, the fleet runs two versions behind one entry point and no single build log shows it. Under Model~B every server receives the same built artifact, and the platform that installs it knows which servers have it. What happens next depends on the rollout policy: under an in-place rolling update the platform halts on the failed batch and reports the split, leaving the completed batches on the new version; under an immutable or additional-batch policy the new servers are discarded and the fleet stays whole. The split is reported in the first case and prevented in the second; under Model~A it is neither.
 
-\textbf{The production host carries less.} Model~A puts a source-control client, a runtime sufficient to build, a build tool, and a source checkout on every production instance; each is a patching obligation, an addition to the vulnerability surface, and a disclosure risk if the instance is compromised. Model~B needs the application runtime and a deployment procedure. A related availability property follows: under Model~A a source-control outage, an expired credential, a branch-protection change, or blocked egress can prevent a deployment; under Model~B the approved artifact is already present and installs without reaching any external system.
+\textbf{The production server carries less.} Model~A puts the source-control software, the build tools, and a copy of the source on every production server; each is a patching obligation, an addition to the attack surface, and a disclosure risk if the server is compromised. Model~B needs the application runtime and a deployment procedure. A related availability property follows: under Model~A a source-control outage, an expired credential, or blocked outbound network access can prevent a deployment; under Model~B the approved artifact is already present and installs without reaching any system outside the cloud account.
 
-\section{Regulatory Frameworks Under Which the Properties Become Required}
+\section{Regulatory Controls the Properties Serve}
 
-The frameworks below are written in the vocabulary of auditors, but the obligations land on the engineers who operate the deployment, so each entry states what the team must be able to show at deploy time and why build-on-target cannot show it. The research literature on continuous delivery in safety-critical settings treats the same requirement from the process side, as the obligation to re-verify every delivered build against the safety analysis~\cite{VostWagner}.
+No framework below requires build-once or promotion. Each requires an outcome: integrity verification, change control with segregation of duties, traceability to a validated executable, or no unapproved software inside a boundary. Promotion is one means, and the entries state, for each framework, the deploy-time evidence it asks for and why build-on-target cannot supply it. The frameworks are written in the vocabulary of auditors, but the obligations land on the engineers who operate the deployment. The research literature on continuous delivery in safety-critical settings treats the same requirement from the process side, as the obligation to re-verify every delivered build against the safety analysis~\cite{VostWagner}.
 
-\textit{FedRAMP and NIST SP 800-53 control SI-7.} FedRAMP authorizes cloud services that handle U.S.\ federal data on the controls of SP~800-53~\cite{NIST80053}, and SI-7 (``Software, Firmware, and Information Integrity'') requires detecting unauthorized change to executable code and configuration, in practice by verifying each artifact's hash at deploy time against the value recorded at build time. Promotion records the hash once, stores it with the release identity, and re-verifies it before the instance accepts the artifact; under Model~A each host builds its own bytes from a local toolchain and leaves nothing fixed to verify against.
+\textit{FedRAMP and NIST SP 800-53.} FedRAMP authorizes cloud services that handle U.S.\ federal data on the controls of SP~800-53~\cite{NIST80053}. SI-7 (``Software, Firmware, and Information Integrity'') requires integrity-verification tools and a response to a failed check; the Moderate baseline adds SI-7(1), checks at start-up or on a schedule, and the High baseline adds SI-7(15), authentication of code before installation. CM-5 restricts who may change what, and CM-14 requires signed components. Promotion supplies the reference value these checks need: a fingerprint recorded once at build time, stored with the release, and compared before a server accepts the artifact. Under Model~A each server builds its own bytes and leaves nothing fixed to check against.
 
-\textit{Sarbanes--Oxley Section 404.} Section~404 requires management of public companies to assess internal controls over financial reporting, which drives segregation of duties between code authors and production operators. Granting a production machine the authority to compile arbitrary remote source grants every code author production-execution rights. Promotion makes the separation mechanical, the resolution the \emph{DevOps Handbook} reaches for the same controls~\cite{DevOpsHandbook}: the commit, the approved artifact, and the promotion step each carry their own owner and audit trail.
+\textit{Sarbanes--Oxley Section 404.} Section~404~\cite{SOX} requires management of a public company to assess, and its auditor to attest, internal control over financial reporting. Segregation of duties between code author and production deployer is not in the statute; it arrives through the auditor's tests of change management, which ask who can move a change into production and whether an approval exists for each. Where a production server may pull and compile source without a gate, every author holds production-execution rights. Promotion makes the separation mechanical, the resolution the \emph{DevOps Handbook} reaches for the same controls~\cite{DevOpsHandbook}: the commit, the approved artifact, and the promotion step each carry their own owner and audit trail.
 
-\textit{FFIEC IT Examination Handbook.} The handbook the U.S.\ banking regulators examine against expects controlled, auditable change management with development, test, and production separated. When an examiner asks for the change record of what is in production, promotion answers with an artifact identity, an approval, a deploy timestamp, and a rollback record; Model~A answers with a history reconstructed from per-machine build logs.
+\textit{FFIEC IT Examination Handbook.} The handbook the U.S.\ banking regulators examine against~\cite{FFIEC} expects a change record with a request, approvals, test evidence, a back-out plan, and a post-implementation review. Promotion supplies the artifact identity, the deploy timestamp, and the rollback record in that change record; the request, test evidence, and approval come from the change-management system in either model. Model~A supplies the identity only as a history reconstructed from per-server build logs.
 
-\textit{RTCA DO-178C.} The civil-aviation software standard mandates traceability from requirements through source and executable object code to the verification record, and certification accepts one specific, frozen executable. A deployment that recompiles on each target ships bytes that were never the verified ones.
+\textit{RTCA DO-178C.} The civil-aviation software guidance~\cite{DO178C}, recognized through FAA AC~20-115D, identifies one executable object code by part number in the Software Configuration Index, records in the environment configuration index the compiler, linker, and options that produced it, and binds the verification record to that executable. A deployment that recompiles on each target ships bytes the index does not name. A workstation build with no recorded toolchain, as in Part~II, would not meet it either.
 
-\textit{FDA 21 CFR Part 11.} The rule on electronic records in pharmaceutical, biotech, and medical-device processes requires records of system change that are ``trustworthy, reliable, and \ldots equivalent to paper records,'' which presumes an identifiable change unit. That unit is the artifact with its validation runs executed against those exact bytes; a per-host compile produces bytes no electronic record describes.
+\textit{FDA 21 CFR Part 11.} The rule on electronic records in pharmaceutical, biotech, and medical-device processes~\cite{Part11} requires validated systems (11.10(a)) and secure, time-stamped audit trails (11.10(e)); FDA's software-validation guidance ties validation to the installed version. The validated unit is therefore the artifact with the validation runs executed against those exact bytes. A per-server compile produces bytes no validation record describes.
 
-\textit{HIPAA Security Rule.} Its technical safeguards for electronic protected health information include integrity controls, which in deployment reduce to the SI-7 obligation: show that the bytes serving patient data are the approved bytes.
+\textit{HIPAA Security Rule.} The Security Rule's integrity standard, 45~CFR~164.312(c)~\cite{HIPAA}, protects the health data itself. Software change control enters through the risk-management requirement of 164.308(a)(1): a covered entity that lists uncontrolled deployment as a risk needs a control, and a fingerprinted, promoted artifact is one.
 
-\textit{Department of Defense Impact Levels IL-4 to IL-6.} Higher impact levels run in enclaves with restricted or no public egress, so a model that checks out source and resolves dependencies at deploy time has nothing to reach; only a self-contained approved artifact crosses the boundary. The Department's own reference design implements exactly this, a curated registry of approved, hardened container images accepted once and carried across classification levels without rebuild~\cite{DoDDevSecOps}.
+\textit{Department of Defense Impact Levels IL-4 to IL-6.} The DoD Cloud Computing Security Requirements Guide~\cite{CCSRG} defines the levels. IL-4 and IL-5 restrict internet access to the DoD boundary; IL-6 has none. A model that fetches source and libraries at deploy time depends on an approved mirror inside each boundary; a self-contained artifact crosses it with one transfer. The Department's reference design implements this as a curated registry of approved, hardened container images, re-scanned inside each enclave~\cite{DoDDevSecOps}.
 
-Promotion does not by itself produce compliance with any of these; compliance is a larger system property. The point of the enumeration is that the boundaries the frameworks require are the boundaries the model establishes, and that a team expecting to be evaluated under any of them is better off drawing them early than under audit pressure. The same byte-identity property is also wanted where no mandate exists: in latency-sensitive systems tuned with specific optimization flags, profile-guided compilation, and pinned dependencies, a per-target rebuild on heterogeneous hosts introduces timing variance between instances nominally running the same release, and promoting one tuned artifact removes it by construction.
+Promotion does not by itself produce compliance with any of these; compliance is a larger system property. The point of the enumeration is that the boundaries the frameworks require are the boundaries the model establishes, and that a team expecting to be evaluated under any of them is better off drawing them early than under audit pressure.
 
 \section{Common Objections}
 
-\textbf{``Old artifacts ship vulnerabilities.''} Old artifacts should not be promoted indefinitely. Vulnerability response is cleaner under promotion: rebuild once, identify, scan, approve, promote. The alternative is coordinating source pulls and local builds across a fleet with no way to verify that all instances built equivalent bytes.
+\textbf{``Old artifacts ship vulnerabilities.''} Old artifacts should not be promoted indefinitely, and a bundled library receives no upstream fix until the artifact is rebuilt. Vulnerability response is cleaner under promotion: rebuild once, identify, scan, approve, promote. The alternative is coordinating source pulls and local builds across a fleet with no way to verify that all servers built equivalent bytes.
 
 \textbf{``This is overengineering.''} An artifact store, a versioned package, a deployment procedure, and an environment-scoped configuration set establish the boundary. The complexity of larger implementations belongs to the systems they support.
 
-\textbf{``Source on the server helps debugging.''} Production debugging uses logs, metrics, traces, symbols, source maps, source archives, or controlled diagnostic packages. A source checkout on production is not a release process.
+\textbf{``Source on the server helps debugging.''} Production debugging uses logs, metrics, and controlled diagnostic packages. A copy of the source on the production server is not a release process.
 
-\textbf{``Promotion means committing to one CI vendor.''} The controlled build can run on a workstation, Jenkins, GitHub Actions, GitLab CI, Azure Pipelines, AWS CodeBuild, or anything else controlled. The model is defined by building once, giving the artifact an identity, and promoting it. Part~II builds on a workstation and deploys through CodeBuild used as a script runner; nothing in the model requires either.
+\textbf{``Promotion means committing to one CI vendor.''} The build can run on a workstation, Jenkins, GitHub Actions, GitLab CI, Azure Pipelines, AWS CodeBuild, or anything else. The model is defined by building once, giving the artifact an identity, and promoting it. Part~II builds on a workstation and deploys through an AWS service used as a script runner; nothing in the model requires either.
 
 \part*{Part II: Implementation Case Study}
 
 \section{Setting}
 
-The system is a production web application: a backend exposing a REST API, a static frontend served from a content-delivery network, and a relational database in a managed service. The backend language is immaterial to what follows. The fleet is stateless application instances behind an application load balancer; version control is a single shared trunk with annotated release tags. The infrastructure is on Amazon Web Services, and the specific services (S3, EventBridge, CodeBuild, Elastic Beanstalk, CloudFront) are named because a recipe is useful only if concrete; equivalents exist elsewhere. Withheld is anything that would grant access or identify the deployment: account identifiers, IAM principals, bucket names, distribution identifiers, hostnames.
+The system is a production web application: a server side answering requests from the browser, web pages served from a content-delivery network, and a relational database run by the cloud provider. The programming language is immaterial to what follows. The fleet is interchangeable application servers behind one load balancer; the source is one shared line of development with a tag per release. The infrastructure is on Amazon Web Services, and the specific services (S3, EventBridge, CodeBuild, Elastic Beanstalk, CloudFront) are named because a recipe is useful only if concrete; equivalents exist elsewhere. Withheld is anything that would grant access or identify the deployment: account identifiers, permission roles, storage names, hostnames. All dates and times are UTC.
 
-The pipeline was built on a development environment in June 2026 and stood up for user-acceptance testing and production on 26 and 29 July 2026; the development environment was retired on 11 August. The production fleet is two instances, one per availability zone, deployed in rolling batches of one. The rolling-deployment timings in Results are from the production fleet; the operating figures are from the environment that carried the production traffic in the window, two instances against the smallest burstable database class.
+There are three environments. The pipeline was built on DEV in June 2026 and stood up on PROD on 27 July and on UAT on 29 July 2026; DEV was retired on 11 August. Before the pipeline, each environment was installed by a hand-run script on a single server. Through the period reported here UAT carried the live users while PROD was being brought up, so UAT is the environment with users behind its figures and PROD the one whose rollouts are timed. Both fleets are two servers in two availability zones, updated in place one server at a time with a health check after each. The system was not subject to any framework named in Part~I, no audit was performed, and no compliance is claimed.
 
 \section{Materials and Methods}
 
 \subsection{The deployment pipeline}
 
-A release is one command on the release master's machine: a release build that produces a versioned zip, then an upload of that zip to the environment's S3 bucket. The upload is the only manual action.
+A release is one command on the release engineer's machine: a build that produces a versioned zip file, then an upload of that file to the environment's release store. The upload is the only action on the artifact's path; what the command does besides is in the section on uncovered units. The listing below is the path the upload sets off. A non-technical reader can take it as: the upload is noticed; a script publishes the web pages and hands the artifact to the platform; the platform installs it on each server in turn; each server fetches its own settings as it starts.
 
 \begin{lstlisting}
-Release master (local):
+Release engineer (local):
     release build  produces  artifact-<VER>.zip   (built locally; no cloud build)
-    aws s3 cp      artifact-<VER>.zip -> s3://<artifact-bucket-for-env>
+    aws s3 cp      artifact-<VER>.zip -> s3://<release-store-for-env>
         |
         | S3 ObjectCreated event
         v
@@ -202,128 +242,204 @@ Amazon EventBridge rule (one per environment)
 AWS CodeBuild project (source = NO_SOURCE)
         | downloads the artifact from S3
         | runs the deployment script (buildspec):
-        |     - sync static assets to the CloudFront origin bucket
+        |     - sync static assets to the CloudFront origin bucket (with delete)
         |     - create a CloudFront invalidation
         |     - assemble the Elastic Beanstalk source bundle from the artifact
         |     - upload bundle, CreateApplicationVersion, UpdateEnvironment
+        |     - poll until the environment is Ready; verify the status endpoint
         v
-AWS Elastic Beanstalk
-        | rolls each EC2 instance to the new application version
+AWS Elastic Beanstalk (in-place rolling update, one server per batch)
+        | installs the new application version on each server in turn
         v
-Per EC2 instance, at predeploy (.platform hook):
-        | the hook probes each candidate config bucket in S3;
-        |   the instance role's IAM policy grants s3:GetObject on
-        |   exactly one bucket - the one for this instance's environment
+Per server, at predeploy (.platform hook):
+        | the hook probes each candidate config store in S3;
+        |   the server's IAM role may read exactly one, its environment's
         | pulls the config files to local paths, sets owner and mode
         v
 Application restarts and reads its config on startup
 \end{lstlisting}
 
-The release build records the artifact's identity, a checksum and a build time, so every promoted zip carries the hash and timestamp named in the Release Object section. That value, recorded at build time, is what an instance verifies against at deploy time and what identifies the artifact through promotion and rollback, the concrete form of the SI-7 requirement. For tamper evidence the hash should be collision-resistant; a faster checksum still catches corruption in transit.
+\subsection{Trust boundary}
 
-\subsection{CodeBuild runs the deployment and builds nothing}
+Whoever can write to an environment's release store can deploy any code to that environment: the script deploys whatever lands, there is no approval step between upload and production, and the deployed code, including the predeploy hook, runs with the server's permissions. That write permission is therefore the production change permission and has to be granted as one. The build records an MD5 checksum beside the zip, and the project's release archive records a SHA-256; no stage of the pipeline verifies either before installation, and both are written by the identity that writes the zip, so they detect corruption in transit and identify the artifact, and they are not tamper evidence. The artifact is not signed, not scanned, and generates no provenance; the build is on a workstation whose machine and tools no system records. The release and configuration stores are versioned and encrypted at rest, so an upload under an existing name keeps the previous bytes retrievable; the uploader's identity is not recorded by the pipeline, since S3 data-event logging was not enabled. Approval is implicit in the upload, with no separate record and no second approver, and nothing checks that the artifact uploaded to PROD is the one that ran on UAT. Each of these is a one-step addition, and each is absent. The control table at the end of Methods states them together.
 
-The CodeBuild project's source is \texttt{NO\_SOURCE}, and the product name works against the reader: no compilation occurs in this stage. The artifact was built before the upload. CodeBuild is an event-triggered, IAM-scoped script runner that downloads the artifact and executes the deployment script against the control plane; it checks out no source and resolves no dependencies. Engineers reading the architecture for the first time assume the build happens here and look in the wrong place when diagnosing a failure, so documentation of this pattern should say on first mention that CodeBuild is the trigger-and-deploy step.
+\subsection{The service named CodeBuild runs the deployment and builds nothing}
 
-\subsection{Dependency materialization}
+The CodeBuild project's source is \texttt{NO\_SOURCE}, and the product name works against the reader: no compilation occurs in this stage. The artifact was built before the upload. CodeBuild is used as a script runner, started by the upload and permitted only what the deployment needs: it downloads the artifact and runs the deployment script; it retrieves no source and downloads no libraries. Engineers reading the architecture for the first time assume the build happens here and look in the wrong place when diagnosing a failure.
 
-The artifact contains every third-party library the application runs with; nothing is resolved at deployment or at instance start against any hosted registry. Resolving transitive dependencies at deploy time has two failure modes that need no adversary: a maintainer withdraws a published version and a tree that resolved last week no longer does, and two builds of the same revision weeks apart select different transitive versions and produce different bytes. The third is adversarial. Every public registry is a code-injection surface, and the risk grows with the number of transitive dependencies: installing an average npm package implicitly trusts about 80 others~\cite{Zimmermann}, and malicious packages are a recurring, catalogued class of attack~\cite{Ohm,Ladisa}. Under Model~A that resolution happens at deploy time, on or near production, on every rollout. Under Model~B it happens once, at build time, away from production; the resolved set is captured in the artifact, can be scanned and pinned before approval, and is never re-fetched. The cost is a larger artifact and no free upstream patches; the gain is byte-deterministic builds from a revision and immunity to upstream removals.
+The script publishes the web pages before it hands the artifact to the platform, deliberately: the new pages reference asset names the old pages do not, and the reverse order would leave a window in which new server code serves pages whose assets are missing. The cost is the mirror window: on every rollout the new pages precede the new server code by the six minutes of the rollout, on a rollback the old pages precede the old code, and a script that fails after the publish step, which the three refused runs in Results did, leaves the newer pages against the older code until the next successful run. Content-hashed asset names with the entry pages published last would close both windows; the implementation has not done this.
+
+\subsection{Libraries}
+
+The application's third-party libraries are committed to the source repository and reviewed as code; nothing is downloaded at build time or at deploy time from any registry. Downloading libraries at deploy time fails in two ways that need no adversary: a maintainer withdraws a published version and a download that worked last week no longer does, and two builds of the same source weeks apart pick different library versions and produce different bytes. The third is adversarial. Every public registry is a code-injection surface, and the risk grows with the number of transitive dependencies: installing an average npm package implicitly trusts about 80 others~\cite{Zimmermann}, and malicious packages are a recurring, catalogued class of attack~\cite{Ohm,Ladisa}. Under Model~A that download happens at deploy time, on or near production, on every rollout. Under Model~B it happens at most once, at build time, away from production, and here not at all. The cost is that a bundled library receives no upstream fix until someone updates it and rebuilds; the implementation keeps no software bill of materials and scans nothing, so that obligation rests on the reviewers.
 
 \subsection{Environment identity via IAM scoping}
 
-Each instance must learn which environment it is in so as to fetch the right configuration. An operating-system variable would be a second source of truth that can drift, plus a templating step per deploy; a managed secrets store adds latency and a credential lifecycle to learn one string. Instead, each environment's instance role is granted \texttt{s3:GetObject} on exactly one configuration bucket. The predeploy hook tries each candidate bucket; IAM lets exactly one succeed, and that bucket is the environment. As defense in depth the fetched configuration carries an explicit environment marker, the hook cross-checks it against the bucket name, and on a mismatch the instance refuses to start.
+Each server must learn which environment it is in so as to fetch the right settings. The platform does carry an environment name, and a setting could be placed on the server by hand; the point of the design is stronger than either: a server cannot read another environment's secrets whatever it believes about itself, because each environment's servers are permitted to read exactly one configuration store. At start-up the hook tries each candidate store in a fixed order and takes the first the permission system allows; if none is allowed it refuses to start. It does not detect two, which would mean an over-granted policy; the fetched settings carry an environment marker that the hook compares with the store's name, and that comparison catches a file uploaded to the wrong store, not an over-granted policy. Each start-up also produces denied probes on the other environments' stores, which a security monitor will flag unless allow-listed.
 
 \subsection{Per-environment configuration}
 
-The per-environment configuration is a few files: application properties, logging, and the application server's own configuration. They are uploaded once per environment from a secured machine and never written by the pipeline. The artifact is bit-identical across environments; the environment-specific data, including database and mail-transport credentials, lives only in the configuration buckets under encryption at rest and access control. The same keys appear in every environment with different values. Because the artifact carries no secrets and the buckets are written out of band, triggering a deployment needs only the right to upload an artifact, so the role that releases and the role that holds production secrets need not be the same person. A managed secrets service is an equally valid store.
+The per-environment configuration is a few files: the application's settings, its logging settings, and the web server's settings. They are uploaded once per environment from a secured machine and never written by the pipeline. The artifact is identical byte for byte across environments; the environment-specific data, including database and mail credentials, lives in the configuration stores, encrypted and access-controlled, and, once fetched, in files on each server's disk, readable by the service account. Because the artifact carries no secrets and the stores are written separately, triggering a deployment needs only the right to upload an artifact, so the role that releases and the role that holds production secrets can be different people. In this implementation they were not: one person wrote code, built it on a workstation, uploaded it, and, from 19 August, migrated the production database and restarted the worker from the same workstation. The separation Part~I describes was available under the model and was not exercised.
+
+\subsection{Control table}
+
+The table states, for the controls an auditor would ask about, what this implementation produces, which identity produces it, and where the answer is ``not implemented''.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}lYY@{}}
+\toprule
+Control & Evidence the pipeline produces & Status \\
+\midrule
+Artifact identity & Version number in the file name; MD5 beside the zip; SHA-256 in the release archive; platform version label & Implemented, not verified at deploy \\
+Integrity check at deploy & None & Not implemented \\
+Signature, provenance & None; workstation build & Not implemented \\
+Vulnerability scan, bill of materials & None & Not implemented \\
+Approval & The upload event, by the release engineer & No separate record, no second approver \\
+Segregation of duties & Possible under the model & Not exercised: author, builder, releaser, and database operator were one person \\
+Same artifact in UAT and PROD & By procedure: the same zip is uploaded & Not checked \\
+Deployment record & Runner build history; platform event log per server & Implemented; retention not set beyond platform defaults \\
+Uploader identity & Not recorded by the pipeline & Needs S3 data-event logging, not enabled \\
+Artifact retention & Versioned release store; project release archive & Implemented; no stated lifecycle \\
+Rollback & Re-upload of a previous artifact from the archive; the platform's own version-label rollback exists and is unused & Implemented, not exercised \\
+Test evidence tied to an artifact & UAT deployment is the only pre-production exposure; its outcome is not logged against the artifact & Not implemented \\
+Build environment recorded & No & Not implemented \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
 \section{Results}
 
-The application is about 121{,}000 non-blank lines of backend source and 88{,}000 of frontend source; the artifact is 10~MB.
+The application is about 121{,}000 lines of server-side source and 88{,}000 of browser-side source; the artifact is 10~MB.
 
 \subsection{The first autonomous deployment}
 
-The first autonomous end-to-end deployment, on a single-instance development environment, took about 90 seconds from upload to the running application reporting the new version on its status endpoint: about 5 s for the S3 event and CodeBuild startup, 30 s for the runner's work (artifact download, static sync, CDN invalidation, bundle assembly, version creation, environment update), 28 s for the single-instance rollout, and 5 s for the health check and verification.
+The first autonomous end-to-end deployment, on the one-server DEV environment, took about 90 seconds from upload to the running application reporting its new version: about 5 s for the upload to be noticed, 30 s for the script's own work, 28 s to install on the one server, and 5 s for the health check.
 
 \subsection{Rolling deployment on the production fleet}
 
-The runner and the platform each keep their own timestamps, so every production deployment can be timed after the fact: the runner's build history gives its start and end, and the platform's event log gives the start of the environment update, each instance's completion, and the moment the new version is reported deployed. The table pairs them for the 31 successful rollouts to the two-instance production fleet between 28 July and 3 September 2026, deployed in two batches of one with a health-check interval after each.
+The runner and the platform each keep their own timestamps, so every PROD deployment can be timed after the fact: the runner's build history gives its start and end, and the platform's event log gives the start of the environment update, each server's completion, and the moment the new version is reported deployed. The table pairs them for the 31 rollouts between 28 July and 3 September 2026 in which both records are complete; the individual rows are in the Appendix. The policy is the platform's in-place rolling update with a batch of one server and its default health-check thresholds, which were not tuned.
 
 \begin{center}
 \begin{tabularx}{\textwidth}{@{}Xrr@{}}
 \toprule
 Stage & median & range \\
 \midrule
-Runner start to environment update starting (static sync, CDN invalidation, bundle assembly, version creation) & 27~s & 11 to 39~s \\
-First instance: new version installed and reported & 36~s & 36 to 38~s \\
-Second instance, from the first instance's completion (health gating, then the same installation) & 170~s & 150 to 172~s \\
-From the second instance's completion to the platform reporting the new version deployed & 138~s & 127 to 149~s \\
-Environment update, start to reported deployed & 344~s & 319 to 360~s \\
-Runner, start to end & 398~s & 352 to 411~s \\
+Script start to the platform beginning the update (web pages published, package assembled, version registered) & 27~s & 11 to 39~s \\
+First server: bundle downloaded, settings fetched, application started and answering & 36~s & 36 to 38~s \\
+Second server, from the first server's completion (health check, then the same installation) & 170~s & 150 to 172~s \\
+From the second server's completion to the platform reporting the new version deployed & 138~s & 127 to 149~s \\
+Platform update, start to reported deployed & 344~s & 319 to 360~s \\
+Script, start to end (the difference from the row above is the script's own polling and status check) & 398~s & 352 to 411~s \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-The 26 rollouts on the other environment differ only in the first row, 72~s against 27~s, from a larger static synchronization; the platform stages match to within a few seconds. The artifact's installation on an instance is 36 seconds and does not vary; the other five minutes are the platform's rolling policy, and a faster rollout comes from the batch size and the health interval, not from the artifact. The spread is 15\% of the median end to end, so a deploy that runs long is a signal in itself.
+The 26 rollouts on UAT differ only in the first row, 72~s against 27~s, from more web pages to publish; the platform stages match to within a few seconds. The first server's row, 36 to 38~s across 31 rollouts, is the whole of what the artifact costs a server: download, settings, start. The second server's row and the settle row are the same health gate twice, the load balancer's healthy threshold times its check interval plus the platform's own reporting cadence, and they contain a second 36-second installation. A faster rollout comes from those thresholds and the batch size, and a slower application start would lengthen the gate. The spread is 15\% of the median end to end, so a deploy that runs long is a signal in itself. Under Model~A the 36-second row would also carry a source retrieval, a library download, and a build per server, with their variation, and would have to fit the platform's per-server command timeout; the gates around it would be unchanged.
 
-The record also holds the fleet property claimed in Part~I. The first production rollout, on 27 July, failed on one of the two instances; the platform aborted the update, kept the running version on the whole fleet, and the second attempt five minutes later succeeded. Three later runner executions failed within 20 seconds without touching the fleet, because a second artifact was uploaded while a rollout was still in progress and the platform refused the update until the environment was ready; the remedy was to upload again after completion.
+The stand-up day is not in the table. On 27 July the first PROD rollout failed on one of the two servers; the platform halted the update, reported the split, and left that server unhealthy while the other served, so the fleet was one server for the five minutes until the second attempt, which the platform's log shows completing on both servers while the runner's own verification reported the run as failed. Three later runs, on 14, 19, and 24 August, ended within 20 seconds of starting because a second artifact was uploaded while a rollout was still in progress and the platform refused a new update until the environment was ready; each had already published the newer web pages, and the remedy was to upload again after completion. In all, 36 runs: 31 complete, 2 on the stand-up day, 3 refused.
 
 \subsection{Release cadence}
 
-The project carries 63 tagged releases since its first in March 2026. In the 29 days from 27 July to 24 August 2026, the first month in which both remaining environments ran the pipeline, 22 were built once on the release master's machine and uploaded. A promotion to the next environment is the upload of the same zip to that environment's bucket; nothing is rebuilt and no second tag is cut. The platform's version label joins the artifact version to the runner's build number, so two uploads of one artifact are distinguishable in the history while the bytes are not.
+The project carries 63 tagged releases since its first in March 2026. In the 29 days from 27 July to 24 August 2026, the first four weeks after PROD ran the pipeline, 22 were built once on the release engineer's machine and uploaded. A promotion to the next environment is the upload of the same zip file to that environment's store; nothing is built again and no second tag is cut. The platform's version label joins the artifact version to the script run's number, so the history can tell two uploads of the same file apart while the file is the same.
 
-\subsection{Production operation}
+\subsection{Service levels of the application}
 
-The figures below are from 92 days of access logs and platform metrics on the environment carrying the production traffic, taken on 1 August 2026. The first row is why the others need a filter: health checks and scanner probes are 96\% of the log, and a latency or error figure over the unfiltered log describes the load balancer.
+The figures below are the application's, on UAT, over the 92 days from 1 May to 1 August 2026, taken from access logs and the load balancer's metrics. For 89 of those days UAT was installed by the previous, hand-run path; the pipeline reached it on 29 July. They therefore describe the deployed application and say nothing about the model; they are reported because the same application ran on under the model with no change in service, and because the connection budget below rests on them. Health checks and internet scanners are 96\% of the log, so the other rows are computed over user requests only, identified by their path.
 
 \begin{center}
 \begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
-Requests in 92 days & 504{,}616 health checks, about 40{,}000 scanner probes, 20{,}851 API requests \\
-Latency, API requests & p95 64~ms, p99 316 to 392~ms \\
-Errors & 28 HTTP 500 in 20{,}851 requests, 0.13\% \\
-Largest load carried & 124 concurrent users, 15.6\% peak database CPU, 7 of 60 connections \\
+Requests in 92 days & 504{,}616 health checks, about 40{,}000 scanner probes, 20{,}851 user requests \\
+Response time, user requests & 95 of 100 answered within 64~ms; 99 of 100 within 316 to 392~ms, the range across measurement days \\
+Errors & 28 server errors (HTTP 5xx) in 20{,}851 requests, 0.13\% \\
+Largest load carried & 124 users with a session open in the same five minutes, 15.6\% peak database processor use, 7 database connections open of a limit of 60 \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-The database is the smallest burstable class the platform offers, so these are a floor, not a capacity. The resource that binds first is connections, and it binds on fleet size rather than on users, because each instance holds its own pool:
+The database is the smallest size the provider offers, so these are a floor, not a capacity. The resource that would run out first is database connections, and its budget is set by the number of servers rather than by the number of users: each server holds a pool that may grow to a ceiling of 22 connections, and the budget must assume every pool at its ceiling:
 
 \begin{lstlisting}
-instances x pool size  +  1 worker  +  3 internal  <  0.8 x max_connections
+servers x pool ceiling  +  1 worker  +  3 internal  <=  0.8 x database limit
 \end{lstlisting}
 
-On the measured environment it stood at 48 of 48. A rolling deploy, and a rollback, is the one moment when two batches of instances hold pools at once, so pool exhaustion appears during a deploy rather than under user load. The budget has to be sized for both batches, and when it is short the fix is the database class, since an added instance consumes the scarce resource rather than relieving it.
+On UAT it is 2 x 22 + 1 + 3 = 48, which is 0.8 x 60, so the budget is exactly spent. This is a computation; no rollout in the record exhausted connections, and the peak observed was 7. Under the in-place rolling policy used here old and new servers do not coexist, so a deploy does not double the demand; what does is a second fleet, an added server, a rollback that leaves a previous tier running, or a policy that adds a batch, and the one exhaustion the team saw came from a previous tier kept alive for rollback during the migration to the pipeline. When the budget is short the fixes, in order of cost, are a smaller pool ceiling, closing the pool on shutdown, a connection proxy, and a larger database; an added server consumes the scarce resource rather than relieving it.
 
 \subsection{What the promotion boundary did not cover}
 
-A release of this system is three units: the artifact, the schema migrations it may carry, and a worker process that runs as a separate JVM on a persistent host outside the fleet. The pipeline promoted the first. The other two were runbook steps, and an application deploy left the worker running the previous release's code until someone restarted it. The failure is silent: the old worker admits or refuses work by the previous release's rules, and the symptom is that nothing happens, not an error. On 19 August 2026 the release command was extended to drive all three units: it uploads the artifact, applies pending migrations only if the environment's recorded schema version is behind the repository's, after a database snapshot on production, and repoints and restarts the worker on every release, unconditionally, because the alternative is a hand-kept list of what the worker loads, and such a list rots.
+A release of this system is three units: the artifact, the database changes it may carry, and a background worker program that runs on a separate permanent server outside the fleet and obtains the new release by downloading the same zip from the release store. The pipeline promoted the first. The other two were runbook steps, and an application deploy left the worker running the previous release's code until someone restarted it. The failure is silent: the old worker admits or refuses work by the previous release's rules, and the symptom is that nothing happens, not an error. On 19 August 2026 the release command was extended to drive all three units: it uploads the artifact, applies outstanding database changes only if the environment's recorded database version is behind, after a database snapshot on PROD, and restarts the worker on the new release every time, unconditionally, because the alternative is a hand-kept list of what the worker loads, and such a list rots. The restart is graceful: the job in hand finishes first. The order has a hazard of its own: the upload returns in seconds and the rollout runs for six minutes, so the database change is applied while one server runs each release. The rule that makes this safe is that every database change must be tolerated by the release before it, and it is a rule, not a check.
 
-The second hazard is of the same kind. The configuration is pulled by the predeploy hook at instance launch; editing the bucket changes nothing running, and restarting the application server does not re-run the hook. A configuration change reaches the fleet only through an instance refresh.
+The second hazard is of the same kind. The settings are fetched by the hook when the platform deploys to a server; editing the store changes nothing already running, and restarting the application does not fetch again. A settings change reaches the fleet by a redeploy of the current version, which re-runs the hook, or by replacing the servers, not by a restart.
 
 \section{Discussion}
 
-The two models diverge at fleet scale and on rollback. Under Model~A the build and dependency resolution are paid once per instance and grow with the fleet; under Model~B the build is paid once. Across 31 rollouts the artifact's installation on an instance is a constant 36 seconds. Under Model~A that step would also carry a checkout, a resolution, and a compilation per instance, with their variance, while the platform's five minutes of health gating around it would be unchanged: the rollout time is a property of the rolling policy, and the model's term in it is fixed and small.
+Part~I predicts that the models diverge at fleet scale and on rollback. The record fixes the Model~B side of that comparison and measures nothing on the Model~A side. Across 31 rollouts the artifact's cost on a server is 36 to 38 seconds, and the rest of the six minutes is the platform's health gating, which either model would pay; what Model~A would add is a build inside that 36-second term on every server, with its variation and its dependence on external sites.
 
-A rollback here is the same operation as a deploy. The promotion command uploads the previously promoted artifact, the runner and the platform run the same stages, static assets included, and the version label records a lower number, so the table is also its duration and it draws on the same connection budget. No rollback was needed in the window. The schema does not roll back with the artifact; its rollback is manual, which is the usual discipline. The release command takes a named database snapshot before it migrates a shared environment and refuses to migrate one it cannot snapshot; a restore creates a new database instance rather than overwriting the old, and the configuration is repointed at it. The artifact rolls back through the pipeline in six minutes; the data rolls back by hand, from a snapshot whose existence the pipeline guaranteed.
+A rollback here is the same operation as a deploy: the promotion command uploads the previously promoted artifact, from the project's release archive, and the script and the platform run the same stages, web pages included, so the table is also its expected duration. None was needed in the window. The platform's own rollback, re-selecting a retained version label, is faster and skips the web-page step, which is why it is not used. The database does not roll back with the artifact; its rollback is manual, from the snapshot the release command takes before it migrates a shared environment, and a restore creates a new database rather than overwriting the old.
 
-Two of the production figures are explained by something other than the deployment model. The application is on the plain side of the pairs measured in the first author's tokens-to-trace study~\cite{TokensToTrace}: servlets over JDBC with hand-written SQL, a static frontend without a framework, no code generation and no build-time dependency resolution. That discipline is out of scope here. It accounts for the latency row, where a request passes through nothing between the servlet and the database, and for the pace: about 209{,}000 non-blank lines and 63 releases in ten months from the first commit, by four contributors. The deployment model made each release a single upload; it did not make them fast to write.
+The response-time and cadence figures are properties of the application, not of the deployment model. The application is one of the plain stacks measured in the first author's tokens-to-trace study~\cite{TokensToTrace}, server code that talks to the database directly and web pages without a framework, and the authors' view is that this is where those figures come from; that claim is not tested here.
 
-The finding the authors would state first to a team adopting the model is the uncovered release units: draw the promotion boundary around everything a release changes, and treat a unit the pipeline does not carry as a half release until it does.
+The finding the authors would state first to a team adopting the model is the uncovered release units: draw the promotion boundary around everything a release changes, and treat a unit the pipeline does not carry as a half release until it does. The second is the control table: the promotion boundary is where the checks go, and drawing the boundary without the checks gives the audit trail and the rollback, not the assurance.
 
-\section{Limitations}
+\section{Limitations and Threats to Validity}
 
-One application on one cloud platform; multi-region rollouts, blue-green and canary overlays, and stateful-workload migrations are out of scope. No rollback occurred in the window. The deployment timings are from two-instance fleets under one rolling policy; a larger fleet or another batch size changes the platform's share of the time, not the artifact's. The operating figures were taken on the smallest burstable database class and bound the model from below. Schema migrations run from the release command outside the autonomous pipeline; carrying them inside it raises correctness questions not addressed here. The regulatory section names the regimes and does not attempt the control-by-control mapping a compliance package requires.
+Both authors built and operate the pipeline and extracted every figure from their own accounts; the per-rollout timings are in the Appendix so that the summary can be checked. No Model~A deployment of this system was measured, so the comparison in the Discussion is reasoning from Part~I, not a result. The system was under no named framework and no audit; the control table is the authors' own reading. One application, one cloud provider, one region; multi-region rollouts, blue-green and canary overlays, and stateful-workload migrations are out of scope. The deployment timings are from two-server fleets under one rolling policy with default thresholds; a larger fleet or a different policy changes the platform's share of the time, not the artifact's. The service-level figures predate the pipeline on the environment they were taken from. The connection budget was computed, not observed at its bound. The pipeline has no signature check, no scan, and no approval gate between upload and production. Database changes run from the release command outside the autonomous pipeline; carrying them inside it raises correctness questions not addressed here. The regulatory section names the regimes and does not attempt the control-by-control mapping a compliance package requires.
 
 \section{Conclusion}
 
-A pipeline whose only manual step is the upload of a versioned artifact can be operated reliably under two conditions: the environment identity is carried by IAM scoping rather than by a mutable side channel, and each instance pulls its configuration at start from one environment-scoped source. Part~I argued that artifact promotion is the right control model. Part~II reports that the mechanism is small, that it carried 22 releases in its first month with a 36-second installation per instance inside a six-minute rolling policy, and that the two things it got wrong were both outside the boundary it drew: a release unit the pipeline did not promote, and a configuration change that reaches a running fleet only by replacing it.
+A pipeline in which the artifact's path from upload to running fleet is autonomous can be operated reliably under two conditions: each server learns its environment from what it is permitted to read rather than from a setting placed by hand, and each server fetches its settings at start from one per-environment store. Part~I argued that artifact promotion is the right control model. Part~II reports that the mechanism is small, that it carried 22 releases in its first month with a 36-second installation per server inside a six-minute rollout, that it draws the promotion boundary and places none of the checks on it, and that the two things it got wrong were both outside the boundary it drew: a release unit the pipeline did not promote, and a settings change that reaches a running fleet only by a redeploy.
 
 \section*{Author Note}
 
-The first author's prior work spans the regulated domains treated here. In a Canadian provincial health system he produced and distributed hashable binary packages, in C and Java, to hospitals, health-care facilities, and medical-education institutions under the province's health-information-protection law and federal privacy legislation, the Canadian counterparts of the HIPAA Security Rule, which made a fixed, hashable binary a precondition for distribution. He also built financial rule engines, among them a provincial consolidation of financial and statistical accounts that ranked first among provinces for data quality.
+The first author's prior work spans the regulated domains treated here. In a Canadian provincial health system he produced and distributed hashable binary packages, in C and Java, to hospitals, health-care facilities, and medical-education institutions under the province's health-information-protection law; the distributing organization required a fixed, hashable binary as a precondition. He also built financial rule engines, among them a provincial consolidation of financial and statistical accounts.
 
-The second author implemented the deployment infrastructure of Part~II: the event-triggered runner, the managed platform environment, and the IAM scoping. He holds a PhD and is a certified cloud- and information-security practitioner (CISSP, CCSP).
+The second author implemented the deployment infrastructure of Part~II: the upload-triggered script, the managed platform environment, and the permission scoping. He holds a PhD and is a certified cloud- and information-security practitioner (CISSP, CCSP).
+
+\appendix
+\section{The 31 production rollouts}
+
+Times in UTC; durations in seconds. Columns: script start; script start to platform update starting; first server installed; second server, from the first's completion; second server's completion to reported deployed; platform update, start to reported deployed; script, start to end.
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}rlrrrrrr@{}}
+\toprule
+\# & start & prep & server 1 & server 2 & settle & platform & script \\
+\midrule
+1 & 28 Jul 02:55 & 26 & 36 & 172 & 131 & 344 & 398 \\
+2 & 28 Jul 03:11 & 30 & 36 & 172 & 141 & 354 & 402 \\
+3 & 28 Jul 14:54 & 23 & 36 & 172 & 142 & 355 & 396 \\
+4 & 29 Jul 01:31 & 26 & 37 & 166 & 141 & 349 & 398 \\
+5 & 29 Jul 18:47 & 25 & 37 & 164 & 138 & 344 & 398 \\
+6 & 31 Jul 21:06 & 25 & 36 & 151 & 128 & 320 & 366 \\
+7 & 02 Aug 19:12 & 24 & 36 & 171 & 138 & 350 & 396 \\
+8 & 04 Aug 03:42 & 24 & 36 & 170 & 137 & 349 & 396 \\
+9 & 04 Aug 19:52 & 24 & 36 & 161 & 139 & 340 & 396 \\
+10 & 08 Aug 21:57 & 24 & 36 & 163 & 128 & 332 & 366 \\
+11 & 08 Aug 23:54 & 23 & 36 & 170 & 128 & 338 & 364 \\
+12 & 09 Aug 02:11 & 34 & 36 & 171 & 137 & 349 & 406 \\
+13 & 11 Aug 01:03 & 26 & 36 & 170 & 138 & 348 & 398 \\
+14 & 11 Aug 19:57 & 29 & 36 & 164 & 138 & 344 & 401 \\
+15 & 11 Aug 20:57 & 26 & 36 & 170 & 149 & 360 & 398 \\
+16 & 12 Aug 19:04 & 28 & 36 & 160 & 138 & 339 & 369 \\
+17 & 14 Aug 20:46 & 29 & 36 & 170 & 138 & 349 & 401 \\
+18 & 14 Aug 21:16 & 28 & 36 & 161 & 130 & 330 & 370 \\
+19 & 19 Aug 15:21 & 35 & 36 & 170 & 129 & 340 & 406 \\
+20 & 19 Aug 18:08 & 32 & 36 & 170 & 139 & 350 & 404 \\
+21 & 19 Aug 21:19 & 25 & 37 & 164 & 128 & 334 & 366 \\
+22 & 20 Aug 15:50 & 30 & 38 & 163 & 138 & 344 & 402 \\
+23 & 24 Aug 18:43 & 29 & 36 & 170 & 128 & 339 & 370 \\
+24 & 25 Aug 01:35 & 27 & 36 & 170 & 138 & 348 & 401 \\
+25 & 26 Aug 18:24 & 30 & 36 & 150 & 128 & 319 & 373 \\
+26 & 27 Aug 04:29 & 33 & 36 & 171 & 131 & 342 & 406 \\
+27 & 27 Aug 18:52 & 27 & 36 & 160 & 127 & 328 & 368 \\
+28 & 30 Aug 22:57 & 39 & 36 & 170 & 138 & 349 & 411 \\
+29 & 02 Sep 02:31 & 30 & 36 & 160 & 128 & 328 & 371 \\
+30 & 02 Sep 02:41 & 11 & 36 & 159 & 128 & 328 & 352 \\
+31 & 03 Sep 19:08 & 34 & 36 & 171 & 138 & 351 & 407 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \begin{thebibliography}{99}
 \footnotesize\setlength{\itemsep}{0.25em}
@@ -408,6 +524,36 @@ V\"ost, S., \& Wagner, S. (2017). Keeping Continuous Deliveries Safe. In \textit
 
 \bibitem{TokensToTrace}
 Gavrilov, V. (2026). \textit{When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks.} Zenodo. \url{https://doi.org/10.5281/zenodo.22113993}
+
+\bibitem{SOX}
+Sarbanes--Oxley Act of 2002, Pub.\ L.\ 107--204, \S404, 15 U.S.C.\ \S7262.
+
+\bibitem{FFIEC}
+Federal Financial Institutions Examination Council. \textit{IT Examination Handbook}: Architecture, Infrastructure, and Operations (2021); Development, Acquisition, and Maintenance (2024). \url{https://ithandbook.ffiec.gov/}
+
+\bibitem{DO178C}
+RTCA. (2011). \textit{DO-178C, Software Considerations in Airborne Systems and Equipment Certification.}
+
+\bibitem{Part11}
+U.S. Food and Drug Administration. 21 CFR Part 11, \textit{Electronic Records; Electronic Signatures}, 62 FR 13430 (1997), and \textit{General Principles of Software Validation} (2002).
+
+\bibitem{HIPAA}
+45 CFR Part 164, Subpart C, \textit{Security Standards for the Protection of Electronic Protected Health Information}, \S\S164.308, 164.312.
+
+\bibitem{CCSRG}
+Defense Information Systems Agency. \textit{Department of Defense Cloud Computing Security Requirements Guide.} \url{https://public.cyber.mil/dccs/}
+
+\bibitem{Savor}
+Savor, T., Douglas, M., Gentili, M., Williams, L., Beck, K., \& Stumm, M. (2016). Continuous Deployment at Facebook and OANDA. In \textit{2016 IEEE/ACM 38th International Conference on Software Engineering Companion (ICSE-C)}. \url{https://doi.org/10.1145/2889160.2889223}
+
+\bibitem{Shahin}
+Shahin, M., Babar, M.~A., \& Zhu, L. (2017). Continuous Integration, Delivery and Deployment: A Systematic Review on Approaches, Tools, Challenges and Practices. \textit{IEEE Access}, 5, 3909--3943. \url{https://doi.org/10.1109/ACCESS.2017.2685629}
+
+\bibitem{Fowler}
+Morris, K. (2013). \textit{Immutable Server.} \url{https://martinfowler.com/bliki/ImmutableServer.html}
+
+\bibitem{Beetz}
+Beetz, F., \& Harrer, S. (2022). GitOps: The Evolution of DevOps? \textit{IEEE Software}, 39(4), 70--75. \url{https://doi.org/10.1109/MS.2021.3119106}
 
 \end{thebibliography}
 
