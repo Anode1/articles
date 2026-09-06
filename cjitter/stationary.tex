@@ -15,7 +15,7 @@
 \renewcommand{\topfraction}{0.9}\renewcommand{\bottomfraction}{0.9}
 \renewcommand{\textfraction}{0.05}\renewcommand{\floatpagefraction}{0.85}
 
-\title{\textbf{Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies}}
+\title{\textbf{Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies, and Their Boxes Align Instead}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
 table's script: \url{https://github.com/Anode1/cjitter}, directory
 \texttt{example/diagrams}.}}
@@ -566,8 +566,13 @@ O'Donovan, Agarwala, Hertzmann \cite{odonovan14} & a 122-parameter energy over s
 \caption{What is known, by how it was asked.}
 \end{table}
 
-Alignment as a human criterion is known since 2012 in graph drawing \cite{purchase12}
-and since 1985 in drawing editors: Pavlidis and Van Wyk's beautifier inferred alignment constraints from the
+The learned quality scores, from graph features \cite{kwon18, deepdrawing19} or from
+the drawn image \cite{haleem19}, the aggregated aesthetics metric of Huang, Huang and
+Lin \cite{huang16}, and the evolutionary searches that took a criterion's relative
+weight from user rankings \cite{rosete99, barbosa01}, sit with Masui and Klammler: none
+tests whether an example is a minimum of the learned score. Alignment as a human
+criterion is known since 2012 in graph drawing \cite{purchase12} and since 1985 in
+drawing editors: Pavlidis and Van Wyk's beautifier inferred alignment constraints from the
 near-alignments of a rough drawing \cite{pvw85}, Igarashi et al.\ made the inference
 interactive \cite{igarashi97}, and the guides of Section~\ref{sec:alternatives} are their
 descendants. Energies and constraint systems that price it exist: HOLA's gridiness step
@@ -749,6 +754,24 @@ Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside 
  Stress in Graph Drawings: Perception, Preference, and Performance. In \emph{33rd
  International Symposium on Graph Drawing and Network Visualization} (GD 2025), LIPIcs 357,
  38:1--38:23, 2025.
+\bibitem{kwon18} O.-H. Kwon, T.~Crnovrsanin, K.-L. Ma. What Would a Graph Look Like in
+ This Layout? A Machine Learning Approach to Large Graph Visualization. \emph{IEEE
+ Transactions on Visualization and Computer Graphics} 24(1):478--488, 2018.
+\bibitem{deepdrawing19} Y.~Wang, Z.~Jin, Q.~Wang, W.~Cui, T.~Ma, H.~Qu. DeepDrawing: A Deep
+ Learning Approach to Graph Drawing. \emph{IEEE Transactions on Visualization and Computer
+ Graphics} 26(1):676--686, 2020.
+\bibitem{haleem19} H.~Haleem, Y.~Wang, A.~Puri, S.~Wadhwa, H.~Qu. Evaluating the Readability
+ of Force Directed Graph Layouts: A Deep Learning Approach. \emph{IEEE Computer Graphics
+ and Applications} 39(4):40--53, 2019.
+\bibitem{huang16} W.~Huang, M.~L. Huang, C.-C. Lin. Evaluating Overall Quality of Graph
+ Visualizations Based on Aesthetics Aggregation. \emph{Information Sciences} 330:444--454,
+ 2016.
+\bibitem{rosete99} A.~Rosete-Su\'arez, A.~Ochoa-Rodr\'{\i}guez, M.~Sebag. Automatic Graph
+ Drawing and Stochastic Hill Climbing. In \emph{Proc.\ Genetic and Evolutionary
+ Computation Conference} (GECCO 1999), vol.\ 2, 1699--1706, 1999.
+\bibitem{barbosa01} H.~J.~C. Barbosa, A.~M.~S. Barreto. An Interactive Genetic Algorithm
+ with Co-evolution of Weights for Multiobjective Problems. In \emph{Proc.\ Genetic and
+ Evolutionary Computation Conference} (GECCO 2001), 203--210, 2001.
 \bibitem{pvw85} T.~Pavlidis, C.~J. Van Wyk. An Automatic Beautifier for Drawings and
  Illustrations. \emph{SIGGRAPH '85}, 225--234, 1985.
 \bibitem{igarashi97} T.~Igarashi, S.~Matsuoka, S.~Kawachiya, H.~Tanaka. Interactive

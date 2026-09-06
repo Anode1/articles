@@ -5,7 +5,7 @@ a diagram a person laid out is a local minimum of no weighting of the standard l
 energy with positive weight on a distance term, and the criterion that does hold its
 boxes, alignment into rows and columns, is one neither base energy prices.**
 
-`stationary.tex`, *Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies*.
+`stationary.tex`, *Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies, and Their Boxes Align Instead*.
 Fitting a layout energy to human drawings by inverse optimisation assumes the drawings
 sit at a minimum of some weighted sum of the standard criteria. Tested one criterion at a
 time on 853 working diagrams of 15 to 40 boxes, 136 laboratory drawings and 1,072
@@ -33,8 +33,7 @@ audience of what it corrects. Its verdict tables remain in
 | --- | --- |
 | stationary_supplement.tex | the sensitivities, controls and secondary estimands, one section each, cited from the paper as Supplement S1 to S8 |
 | PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan the study was run to; its hypotheses were fixed after a pilot the same morning, and they and their outcomes are Supplement S8 |
-| stationary_gd.tex | the first edition in GD's `gd-lipics` class, not rebuilt from the current text |
 | figures/ | the TikZ figures the paper includes |
 | verified.bib | every citation checked: DOI resolved, PDF read, or the note says what was not |
 | corpora/ | the three raw archives and a clone of the WikiPathways database repository, not in git |
-| gd-lipics-v3.cls, lipics-v2021.cls | the GD submission class and the LIPIcs class it wraps |
+| gd-lipics-v3.cls, lipics-v2021.cls | the GD submission class and the LIPIcs class it wraps, kept for a conference edition |
