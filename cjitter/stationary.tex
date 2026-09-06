@@ -15,7 +15,7 @@
 \renewcommand{\topfraction}{0.9}\renewcommand{\bottomfraction}{0.9}
 \renewcommand{\textfraction}{0.05}\renewcommand{\floatpagefraction}{0.85}
 
-\title{\textbf{Hand-Drawn Diagrams Are Not Minima of Edge-Length or Stress Energies}}
+\title{\textbf{Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
 table's script: \url{https://github.com/Anode1/cjitter}, directory
 \texttt{example/diagrams}.}}
@@ -34,8 +34,9 @@ no move lowers the criterion; $q$ is the fraction of boxes held. A converged lay
 read near 1 or the test lacks power for that criterion, and a random layout says what
 held costs by chance.
 
-On 853 working diagrams of 15 to 40 boxes from three communities, overlap holds every box
-of the median drawing at value zero. Uniform edge length and stress hold 0.00 of the
+On 853 working diagrams of 15 to 40 boxes from three communities, laid out in their
+editors by the people who made them (hand layouts below), overlap holds every box of the
+median drawing at value zero. Uniform edge length and stress hold 0.00 of the
 median drawing there, in 136 laboratory drawings and in 1,072 figures from this field's
 proceedings, while a stress minimiser's own layouts are held at 1.00, and the hand
 layouts' stress is five to twelve times the minimiser's; a weight of 0.001 on either term
@@ -58,36 +59,73 @@ boxes it holds under the terms no layout satisfies exactly.
 \section{Introduction}\label{sec:intro}
 
 A layout program places the boxes of a diagram by minimising an \emph{energy}, a weighted
-sum of quantities the field has agreed are bad: edges that cross, boxes that overlap, edges
-of very unequal length, boxes that sit on edges they do not belong to \cite{tdb88, dh96,
-purchase02, kobourov}. The weights are asserted by the tool's author. Since 1994 the
-proposal has been to learn them from layouts people made or preferred \cite{masui94,
-spoenemann14, klammler19, flud22, zhang26}, and the methods differ in what they need of
-their examples. Learning from preferences or selections needs only that an accepted layout
-rank well under the learned energy. Fitting to the coordinates, which is what inverse
-optimisation does \cite{ahuja01, keshavarz11, chan19} and what O'Donovan, Agarwala and
-Hertzmann did for single-page designs \cite{odonovan14}, needs the stronger property: that
-the coordinates themselves sit at a local minimum. Flud \cite{flud22} rests on the same
-property in practice, continuing a descent from crowd layouts and reading a rising score
-as success. In graph drawing the property has not been tested, and 4,890 figures were
-just collected from this field's proceedings into one corpus \cite{gdcoll25}, so the first
-coordinate fit is one download away. This paper is the check to run before it.
+sum of quantities the field has agreed are bad \cite{tdb88, dh96, purchase02, kobourov},
+and since 1994 the proposal has been to learn the weights from layouts people made or
+preferred \cite{masui94, spoenemann14, klammler19, flud22, zhang26}. Learning from
+preferences needs only that an accepted layout rank well under the learned energy;
+fitting to the coordinates, which is what inverse optimisation does \cite{ahuja01,
+keshavarz11, chan19}, what O'Donovan, Agarwala and Hertzmann did for single-page designs
+\cite{odonovan14}, and what Flud \cite{flud22} rests on when it continues a descent from
+crowd layouts, needs the coordinates themselves to sit at a local minimum. In graph
+drawing that property has not been tested, 4,890 figures were just collected from this
+field's proceedings into one corpus \cite{gdcoll25}, and this paper is the check to run
+before the first fit: move each box of a drawing a small distance in sixteen directions,
+call it \emph{held} if no move lowers a criterion, and report the fraction of boxes held,
+$q$, per criterion, against a converged layout (which must read near 1) and a random one
+(chance). Table~\ref{tab:profile} is the result: no distance term holds a hand-placed
+box, no reweighting repairs it, and what the coordinates hold is an alignment into rows
+and columns that the base energies omit and that the coordinates cannot attribute to the
+hand rather than the editor's guide. Section~\ref{sec:test} is the test and what it
+rests on, Section~\ref{sec:corpora} the corpora, Section~\ref{sec:results} the
+measurements, Section~\ref{sec:alternatives} what else could produce them,
+Section~\ref{sec:related} what was known and Section~\ref{sec:discussion} what follows
+for a tool that learns its weights; the sensitivities are in a supplement and every
+table's script in the repository.
 
-The check is one criterion at a time: move each box of a drawing a small distance in
-sixteen directions and ask whether any move lowers the criterion. A box no move improves
-is \emph{held}; the fraction of boxes held, $q$, is the number every table of this paper
-reports, beside the criterion's value, which says how well it is met.
-
-We ran the test on 853 working diagrams of 15 to 40 boxes from three unrelated
-communities, on the same graphs laid out by four tools, and on two further collections of
-drawings (Section~\ref{sec:corpora}); Section~\ref{sec:results} carries the numbers. The
-distance terms hold no hand-placed box and no reweighting repairs it; a capped descent
-removes a quarter of the base energy from a hand layout. Alignment into rows and columns
-holds hand-placed boxes at three to fourteen times the chance rate, and the base energies
-omit it; whether the hand or the editor's guide aligned the boxes the coordinates cannot
-say (Section~\ref{sec:alternatives}). Section~\ref{sec:related} says what was known and
-Section~\ref{sec:discussion} what follows for a tool that learns its weights. The
-sensitivities are in a supplement, and every table's script is in the repository.
+\begin{table}[!t]\centering\scriptsize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llrrrrr}
+\toprule
+corpus & term & hand & \texttt{neato} & \texttt{dot} & ELK & random \\
+\midrule
+WikiPathways & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.029) & 1.00 (0.036) & 0.67 \\
+& overlap & 1.00 [1.00, 1.00] (0.000) & 0.60 (0.030) & 1.00 (0.000) & 1.00 (0.000) & 0.67 \\
+& length & 0.00 [0.00, 0.00] (0.219) & 0.24 (0.011) & 0.00 (0.241) & 0.00 (0.127) & 0.00 (0.193) \\
+& stress & 0.00 [0.00, 0.00] (0.217) & 1.00 (0.042) & 0.00 (0.201) & 0.00 (0.241) & 0.00 (0.435) \\
+& orthogonality & 0.19 [0.18, 0.21] (0.157) & 0.00 (0.280) & 0.19 (0.244) & 0.19 (0.158) & 0.00 \\
+& alignment A1 & 0.52 [0.48, 0.54] (0.003) & 0.06 (0.011) & 1.00 (0.000) & 0.57 (0.001) & 0.07 \\
+& gridiness & 0.87 [0.84, 0.89] (0.424) & 0.78 (1.000) & 1.00 (0.125) & 0.76 (0.200) & \\
+& node--edge & 0.88 [0.86, 0.90] (0.004) & 0.89 (0.000) & 0.78 (0.011) & 0.74 (0.016) & 0.12 \\
+& flow & 0.59 [0.56, 0.62] (0.131) & 0.50 (0.211) & 1.00 (0.000) & 1.00 (0.000) & 0.41 \\
+\midrule
+Reactome & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.056) & 1.00 (0.066) & 0.61 \\
+& overlap & 1.00 [1.00, 1.00] (0.000) & 0.76 (0.022) & 1.00 (0.000) & 1.00 (0.000) & 0.67 \\
+& length & 0.00 [0.00, 0.00] (0.234) & 0.35 (0.005) & 0.00 (0.232) & 0.00 (0.205) & 0.00 (0.188) \\
+& stress & 0.00 [0.00, 0.00] (0.212) & 1.00 (0.034) & 0.00 (0.177) & 0.00 (0.197) & 0.00 (0.469) \\
+& orthogonality & 0.17 [0.15, 0.18] (0.193) & 0.00 (0.277) & 0.15 (0.256) & 0.12 (0.203) & 0.00 \\
+& alignment A1 & 0.21 [0.19, 0.24] (0.004) & 0.06 (0.009) & 1.00 (0.000) & 0.42 (0.002) & 0.06 \\
+& gridiness & 0.65 [0.62, 0.68] (0.640) & 0.77 (1.000) & 0.95 (0.176) & 0.74 (0.306) & \\
+& node--edge & 1.00 [0.94, 1.00] (0.000) & 0.93 (0.000) & 0.80 (0.007) & 0.75 (0.021) & 0.11 \\
+& flow & 0.62 [0.60, 0.67] (0.096) & 0.45 (0.217) & 1.00 (0.000) & 1.00 (0.000) & 0.36 \\
+\midrule
+BPMN & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) & 0.62 \\
+& overlap & 1.00 [1.00, 1.00] (0.000) & 0.41 (0.071) & 1.00 (0.000) & 1.00 (0.000) & 0.60 \\
+& length & 0.00 [0.00, 0.00] (0.284) & 0.40 (0.005) & 0.00 (0.222) & 0.00 (0.250) & 0.00 (0.215) \\
+& stress & 0.00 [0.00, 0.00] (0.197) & 1.00 (0.016) & 0.00 (0.152) & 0.00 (0.175) & 0.00 (0.507) \\
+& orthogonality & 0.73 [0.71, 0.75] (0.011) & 0.00 (0.277) & 0.27 (0.169) & 0.25 (0.145) & 0.00 \\
+& alignment A1 & 0.85 [0.82, 0.89] (0.001) & 0.06 (0.011) & 1.00 (0.000) & 0.59 (0.001) & 0.06 \\
+& gridiness & 0.95 [0.94, 0.96] (0.188) & 0.79 (1.000) & 0.81 (0.238) & 0.67 (0.279) & \\
+& node--edge & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 0.86 (0.001) & 0.79 (0.011) & 0.11 \\
+& flow & 0.86 [0.83, 0.88] (0.041) & 0.62 (0.120) & 1.00 (0.000) & 1.00 (0.000) & 0.28 \\
+\bottomrule
+\end{tabular}
+\caption{$q_{0.02}$, the median over diagrams of the fraction of boxes no move of 0.02 of
+the width in sixteen directions improves, per criterion alone, on the hand layout with
+its 95\% bootstrap interval, on \texttt{neato}, \texttt{dot} and ELK layouts of the same
+graphs, and on a uniform random layout; in parentheses the median value of the term at
+the layout, 0 when satisfied. Terms and controls are defined in Section~\ref{sec:test},
+the corpora in Section~\ref{sec:corpora}.}
+\label{tab:profile}
+\end{table}
 
 \section{The test}\label{sec:test}
 
@@ -238,7 +276,7 @@ bootstrap interval over diagrams (1,000 resamples); an interval of [0.00, 0.00] 
 given where it matters. Hand against tool on one criterion is a Hodges--Lehmann shift
 with its distribution-free interval (Supplement~S5); equivalence claims are read off the
 sweep, never off a failure to reject. The tests are exploratory: the plan's hypotheses
-were fixed after a pilot (Supplement~S9). The test and the terms are C in the repository; the
+were fixed after a pilot (Supplement~S8). The test and the terms are C in the repository; the
 descents run through \texttt{cjitter}, a library of seeded searches with uniform sampling
 at the same budget as its built-in control.
 
@@ -309,49 +347,10 @@ from one deterministic pass over the corpora (\texttt{results/run\_all.sh}; comm
 \texttt{results/manifest.txt}); the BPMN sample runs by the same scripts with
 \texttt{--corpora BPMN:bpmnr}.
 
-\paragraph{Each criterion alone.} $q_{0.02}$ on the hand layout with its 95\% interval,
-on \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs, and on a uniform
-random layout; in parentheses the median value of the term at the layout, 0 when
-satisfied. \texttt{prism}, the A3 kernel and the summed energies are in
-Supplement~S1.
+\paragraph{Each criterion alone.} Table~\ref{tab:profile}; \texttt{prism}, the A3 kernel
+and the summed energies are in Supplement~S1.
 
-\begin{table}[!htbp]\centering\scriptsize\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{llrrrrr}
-\toprule
-corpus & term & hand & \texttt{neato} & \texttt{dot} & ELK & random \\
-\midrule
-WikiPathways & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.029) & 1.00 (0.036) & 0.67 \\
-& overlap & 1.00 [1.00, 1.00] (0.000) & 0.60 (0.030) & 1.00 (0.000) & 1.00 (0.000) & 0.67 \\
-& length & 0.00 [0.00, 0.00] (0.219) & 0.24 (0.011) & 0.00 (0.241) & 0.00 (0.127) & 0.00 (0.193) \\
-& stress & 0.00 [0.00, 0.00] (0.217) & 1.00 (0.042) & 0.00 (0.201) & 0.00 (0.241) & 0.00 (0.435) \\
-& orthogonality & 0.19 [0.18, 0.21] (0.157) & 0.00 (0.280) & 0.19 (0.244) & 0.19 (0.158) & 0.00 \\
-& alignment A1 & 0.52 [0.48, 0.54] (0.003) & 0.06 (0.011) & 1.00 (0.000) & 0.57 (0.001) & 0.07 \\
-& gridiness & 0.87 [0.84, 0.89] (0.424) & 0.78 (1.000) & 1.00 (0.125) & 0.76 (0.200) & \\
-& node--edge & 0.88 [0.86, 0.90] (0.004) & 0.89 (0.000) & 0.78 (0.011) & 0.74 (0.016) & 0.12 \\
-& flow & 0.59 [0.56, 0.62] (0.131) & 0.50 (0.211) & 1.00 (0.000) & 1.00 (0.000) & 0.41 \\
-\midrule
-Reactome & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.056) & 1.00 (0.066) & 0.61 \\
-& overlap & 1.00 [1.00, 1.00] (0.000) & 0.76 (0.022) & 1.00 (0.000) & 1.00 (0.000) & 0.67 \\
-& length & 0.00 [0.00, 0.00] (0.234) & 0.35 (0.005) & 0.00 (0.232) & 0.00 (0.205) & 0.00 (0.188) \\
-& stress & 0.00 [0.00, 0.00] (0.212) & 1.00 (0.034) & 0.00 (0.177) & 0.00 (0.197) & 0.00 (0.469) \\
-& orthogonality & 0.17 [0.15, 0.18] (0.193) & 0.00 (0.277) & 0.15 (0.256) & 0.12 (0.203) & 0.00 \\
-& alignment A1 & 0.21 [0.19, 0.24] (0.004) & 0.06 (0.009) & 1.00 (0.000) & 0.42 (0.002) & 0.06 \\
-& gridiness & 0.65 [0.62, 0.68] (0.640) & 0.77 (1.000) & 0.95 (0.176) & 0.74 (0.306) & \\
-& node--edge & 1.00 [0.94, 1.00] (0.000) & 0.93 (0.000) & 0.80 (0.007) & 0.75 (0.021) & 0.11 \\
-& flow & 0.62 [0.60, 0.67] (0.096) & 0.45 (0.217) & 1.00 (0.000) & 1.00 (0.000) & 0.36 \\
-\midrule
-BPMN & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.00 (0.000) & 0.62 \\
-& overlap & 1.00 [1.00, 1.00] (0.000) & 0.41 (0.071) & 1.00 (0.000) & 1.00 (0.000) & 0.60 \\
-& length & 0.00 [0.00, 0.00] (0.284) & 0.40 (0.005) & 0.00 (0.222) & 0.00 (0.250) & 0.00 (0.215) \\
-& stress & 0.00 [0.00, 0.00] (0.197) & 1.00 (0.016) & 0.00 (0.152) & 0.00 (0.175) & 0.00 (0.507) \\
-& orthogonality & 0.73 [0.71, 0.75] (0.011) & 0.00 (0.277) & 0.27 (0.169) & 0.25 (0.145) & 0.00 \\
-& alignment A1 & 0.85 [0.82, 0.89] (0.001) & 0.06 (0.011) & 1.00 (0.000) & 0.59 (0.001) & 0.06 \\
-& gridiness & 0.95 [0.94, 0.96] (0.188) & 0.79 (1.000) & 0.81 (0.238) & 0.67 (0.279) & \\
-& node--edge & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 0.86 (0.001) & 0.79 (0.011) & 0.11 \\
-& flow & 0.86 [0.83, 0.88] (0.041) & 0.62 (0.120) & 1.00 (0.000) & 1.00 (0.000) & 0.28 \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 Read down a hand column. Overlap holds every box of the median diagram at value zero, as
 it does in every tool layout that removes overlaps; in 5 to 18 per cent of hand diagrams
@@ -492,11 +491,9 @@ pitch of 0.5. Displacing past that takes the hand layouts to the snapped random 
 separable on these corpora, and conceded: a grid control cannot see snap-to-object
 guides, and the hold orders as the editors' guides of Section~\ref{sec:corpora} do,
 highest where guides meet every drag and lowest where they are absent. Two pieces of
-evidence say no single editor's aid produces it. HOLA's drawings come from a study tool
-and hold 0.50. The GD Collection by era holds 0.81 in 1998 to 2005, when its figures came
-from xfig, Ipe and hand-coded PostScript with no shared guide, 0.60 in 2006 to 2014 and
-0.95 in the TikZ years, and WikiPathways is flat at 0.47 to 0.53 across four generations of pathway numbers
-(\texttt{results/era.md}). Separating hand from guide needs a guide-free editor or an
+evidence say no single editor's aid produces it: HOLA's drawings come from a study tool
+and hold 0.50, and WikiPathways is flat at 0.47 to 0.53 across four generations of
+pathway numbers, so no gradient follows PathVisio's releases (\texttt{results/era.md}). Separating hand from guide needs a guide-free editor or an
 interaction log, and these corpora carry neither. Marriott et al.\ \cite{marriott12}
 bound the other side: in a recall task node alignment was the one feature participants
 did not preserve, so the alignment these coordinates hold is a property of how the
@@ -596,11 +593,10 @@ without a guide gains what the guide gives. The number to report for a fitted en
 the fraction of a held-out drawing's boxes it holds under the terms no layout satisfies
 exactly, $q_{0.02}$ at sixteen directions with the fitted $L$, with the decrease and
 active columns beside it, since a bare held fraction is bought by weighting a term
-everyone satisfies: the degenerate fit reads 0.99. The gain is measured
-(Supplement~S8): deleting each box in turn and letting the energy replace it against the
-frozen rest, alignment does not move the median distance to the drawing's position, the
-distance terms choosing the neighbourhood, and raises the share of boxes landing on the
-drawing's row or column by a fifth to a half, chance 0.02.
+everyone satisfies: the degenerate fit reads 0.99. The gain is small and measured: replacing each box in turn against the frozen rest,
+alignment does not move the median distance to the drawing's position and raises the
+share of boxes landing on the drawing's row or column by a fifth to a half
+(\texttt{results/reinsert.md}).
 
 \paragraph{Where the test applies.} Before any decomposable objective is fitted to
 artefacts taken as optimal, wherever the analyst can move one variable at a time, the
@@ -634,7 +630,7 @@ each analysis beside its committed output, and \texttt{results/manifest.txt} rec
 commit, the tool versions, the seeds and the SHA-256 of the raw archives and the corpus
 files. The directional test is deterministic and the descents are deterministic from
 their seed. The plan the study was run to is beside the paper with its outcomes in
-Supplement~S9, and the supplement is \texttt{stationary\_supplement.pdf} beside this file.
+Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside this file.
 
 {\footnotesize
 \begin{thebibliography}{99}
