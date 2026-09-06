@@ -25,13 +25,15 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 \noindent The sensitivities, controls and secondary estimands of the paper, one section
 each, with the script that produced every table named beside it. Section numbers cited
 as ``Section $n$'' are the paper's. The corpora, the terms and the test are as the paper
-defines them; every BPMN number is on the seeded random 300.
+defines them. Every BPMN number is on the seeded random 300 except where a line says
+first 300: the border-to-border run of S3, the pitch, pitch-5 and specification-grid
+lines of S2 and S7, and the 41 to 100 band, which predate the sample and were not rerun.
 
 
 \section*{S1\quad The summed energies, \texttt{prism} and the smooth kernel}
 
-$q_{0.02}$ under the summed energies at equal weights, and the two columns the main
-table omits. \texttt{prism} differs from \texttt{neato} under overlap alone, which it
+$q_{0.02}$ under the summed energies at equal weights, with the \texttt{prism} column and
+the A3 row the main table omits. \texttt{prism} differs from \texttt{neato} under overlap alone, which it
 removes (1.00 at value 0.000 in every corpus), and under stress, where the removal costs
 it 0.06 to 0.15 of the hold.
 
@@ -107,27 +109,27 @@ that is nearly a minimum is held at a large radius and free at a small one, and
 uniform at $d = 0.05$ and not at $d = 0.005$. A hand layout at 0.00 across the range is
 far from the minimum at every scale the test resolves. At $d$ equal to one grid pitch,
 0.0008 to 0.0017 of the width, hand length and stress still hold 0.00
-(\texttt{results/pitch.md}).
+(\texttt{results/pitch.md}, first 300).
 
 Each doubling of $V$ contains the previous set, so $q$ can only fall as directions are
 added and the sixteen-direction figures are upper bounds on the continuum value. At 8, 16,
 32 and 64 directions hand length and stress read 0.00 and \texttt{neato}'s stress 1.00 in
 every corpus. The A1 level falls: 0.58, 0.52, 0.47, 0.39 on WikiPathways, 0.31, 0.21,
 0.14, 0.07 on Reactome and 0.88, 0.85, 0.82, 0.82 on BPMN, while \texttt{neato}'s 0.06
-falls to 0.00. This is the corner's release bound of Section~5
+falls to 0.00 and the random layouts' 0.06 to 0.07 falls to 0.03, 0.03 and 0.00
+(\texttt{results/null64.md}). This is the corner's release bound of Section~5
 narrowing, and the limit lies below the exact-tie fraction, not at it: A1 sums over
 nodes, so a move that lowers an untied neighbour's distance releases a tied box, and only
 a layout where every box is tied, \texttt{dot}'s, keeps 1.00 at every count. The gap to
 the control survives at 64; levels are stated at sixteen. The full grid of radius,
 direction count, reference-length rule and route treatment, 1,008 cells, flips no verdict
-(\texttt{results/specgrid.md}); the tie tolerance moves nothing between 0.001 and 0.01
-(\texttt{results/tolsweep.md}).
+(\texttt{results/specgrid.md}, first 300).
 
 \section*{S3\quad Reference length and box extent}
 
 Under the median edge length instead of the fitted $L$, \texttt{neato}'s stress layouts
 score 0.07, 0.08 and 0.12 under stress and the hand layouts 0.00; under length the hand
-layouts score 0.03, 0.04 and 0.05 and \texttt{neato}'s 0.26, 0.41 and 0.45. Under
+layouts score 0.03, 0.04 and 0.05 and \texttt{neato}'s 0.26, 0.41 and 0.43. Under
 $L = 1/\sqrt{N}$ no box of any layout is held under either term. The fitted $L$ is the
 only rule under which a true minimum of the term is a fixed point of the test, and the
 hand verdicts are 0.00 to 0.05 under every rule.
@@ -135,8 +137,8 @@ hand verdicts are 0.00 to 0.05 under every rule.
 Measured border to border, each box's offset to its border along the joining direction
 subtracted and $L$ refitted on those distances, length and stress hold 0.00 of the hand
 layouts in every corpus, 0.86 to 0.92 of diagrams at exactly zero
-(\texttt{results/border.py}); \texttt{neato}, which minimised the centre form, is not held
-under the border form (0.00 to 0.09).
+(\texttt{results/border.py}, first 300); \texttt{neato}, which minimised the centre form,
+is not held under the border form (0.00 to 0.09).
 
 \section*{S4\quad Descent, chance and calibration}
 
@@ -176,20 +178,30 @@ every energy and corpus; the fraction of diagrams whose reference stops below 0.
 most 0.04 for the energies of the table and 0.05 to 0.13 under $C{+}O{+}F$, the flow
 term's plateaus (\texttt{results/desc.md}).
 
-Calibration (\texttt{results/calib.py}): the median fraction of the stress energy the
-same capped climber removes from \texttt{neato}'s converged layouts after every box is
-displaced by $\epsilon$ of the width in a seeded direction. Beyond $\epsilon = 0.05$ the
-fraction falls again, the cap seeing a shrinking share of a growing energy, so the
-yardstick reads on its rising part, where the hand layouts sit.
+Uniform sampling at the same budget is the control the descents are read against, the
+matched-budget control of hyperparameter search \cite{bergstra12} prescribed for genetic
+algorithms in 1995 \cite{jw95}.
+
+Calibration (\texttt{results/calib.py}, \texttt{results/calib\_values.py}): the median
+fraction $\rho$ of the stress energy the same capped climber removes from \texttt{neato}'s
+converged layouts after every box is displaced by $\epsilon$ of the width in a seeded
+direction, and the median stress value of the same layouts. $\rho$ is not monotone in
+$\epsilon$, the cap seeing a shrinking share of a growing energy beyond 0.05, so the hand
+layouts' $\rho$ of 0.12 to 0.15 has two preimages and is not a distance; the value is. On
+the value the hand layouts sit beyond the 0.10 displacement and under half the random
+layouts.
 
 \begin{center}\footnotesize
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{llrrrrrrrr}
 \toprule
-$\epsilon$ & 0 & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 & hand layouts \\
+ & & $\epsilon = 0$ & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 & hand & random \\
 \midrule
-WikiPathways & 0.001 & 0.007 & 0.024 & 0.087 & 0.245 & 0.213 & 0.116 \\
-Reactome & 0.001 & 0.009 & 0.033 & 0.116 & 0.289 & 0.234 & 0.128 \\
-BPMN & 0.001 & 0.025 & 0.089 & 0.276 & 0.436 & 0.263 & 0.151 \\
+WikiPathways & $\rho$ & 0.001 & 0.007 & 0.024 & 0.087 & 0.245 & 0.213 & 0.116 & \\
+ & stress & 0.042 & 0.042 & 0.043 & 0.046 & 0.069 & 0.121 & 0.217 & 0.435 \\
+Reactome & $\rho$ & 0.001 & 0.009 & 0.033 & 0.116 & 0.289 & 0.234 & 0.128 & \\
+ & stress & 0.034 & 0.034 & 0.035 & 0.039 & 0.065 & 0.118 & 0.212 & 0.469 \\
+BPMN & $\rho$ & 0.001 & 0.025 & 0.089 & 0.276 & 0.436 & 0.263 & 0.151 & \\
+ & stress & 0.016 & 0.017 & 0.018 & 0.024 & 0.060 & 0.129 & 0.197 & 0.507 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -239,6 +251,8 @@ jitter of 0.0025 of the extent, 2 to 3 units, the alignment hold keeps 0.44, 0.1
 0.74 (\texttt{results/nulls.py}) while orthogonality falls from 0.16 to 0.06 and 0.43 to
 0.19: orthogonality, not alignment, is the tie artefact.
 
+Figure~\ref{fig:sweep} is the displacement sweep.
+
 \input{figures/sweep}
 
 \section*{S8\quad Reinsertion}
@@ -246,7 +260,7 @@ jitter of 0.0025 of the extent, 2 to 3 units, the alignment hold keeps 0.44, 0.1
 A constructive check of the recommendation (\texttt{reinsert.c},
 \texttt{results/reinsert.md}): delete each box in turn and let an energy place it against
 the frozen rest, the distance to the drawing's position the score. Every energy beats
-chance, 0.17 to 0.28 of the drawing width against 0.52 to 0.55, and adding A1 to
+chance, 0.17 to 0.33 of the drawing width against 0.52 to 0.55, and adding A1 to
 $C{+}O{+}L$ moves the median distance not at all: the neighbourhood is the distance
 terms' choice. The rail is alignment's: with A1 offered, the box lands within 0.005 of
 the drawing's row or column in 0.127, 0.101 and 0.227 of placements against 0.085, 0.083 and 0.166
@@ -284,5 +298,15 @@ rather than \texttt{neato} and the test two-sided rather than one-sided; the mul
 family is the terms within one corpus against one control; the BPMN sample is the random
 300 of Section~S6; the radius in box widths, the A2 alignment definition
 and containment as a hard constraint, all declared, were not run.
+
+
+{\footnotesize
+\begin{thebibliography}{9}
+\bibitem{bergstra12} J.~Bergstra, Y.~Bengio. Random Search for Hyper-Parameter
+ Optimization. \emph{Journal of Machine Learning Research} 13:281--305, 2012.
+\bibitem{jw95} A.~Juels, M.~Wattenberg. Stochastic Hillclimbing as a Baseline Method for
+ Evaluating Genetic Algorithms. \emph{Advances in Neural Information Processing Systems 8}
+ (NIPS 1995), MIT Press, 430--436, 1996.
+\end{thebibliography}}
 
 \end{document}

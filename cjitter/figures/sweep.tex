@@ -18,16 +18,18 @@
 \addplot[thick,mark=triangle*,mark size=2pt,dotted] coordinates
   {(0.5,0.206)(5,0.147)(15,0.095)(30,0.080)(60,0.065)(120,0.061)};
 \addlegendentry{Reactome (hand 0.207)}
-\addplot[gray,thick,dash dot,forget plot] coordinates {(3,0)(3,1)};
-\addplot[gray,thick,dash dot,forget plot] coordinates {(5,0)(5,1)};
-\node[anchor=west,font=\scriptsize,gray!55!black] at (axis cs:5.4,0.47) {$0.19\,d$};
+\addplot[gray,thick,dash dot,forget plot] coordinates {(1.5,0)(1.5,1)};
+\addplot[gray,thick,dash dot,forget plot] coordinates {(2.5,0)(2.5,1)};
+\node[anchor=west,font=\scriptsize,gray!55!black] at (axis cs:2.7,0.47) {release};
 \end{axis}
 \end{tikzpicture}
 \caption{The displacement sweep, every box of every hand layout displaced by up to the
-half-width, the alignment hold read at $d = 0.02$ and sixteen directions. The declared
-half-pitch test sits at the left edge, 0.5 units, where nothing has changed: the corner of
-$T_A$ releases a box only past $0.19\,d$, 3 units in the biological corpora and 5 in
-BPMN. Past the bound the hold falls, BPMN 0.84 to 0.59 by a half-width of 5, and by 120
-units every corpus is at the grid-snapped level of 0.06 to 0.09.}
+half-width, the alignment hold read at $d = 0.02$ and sixteen directions. Two boxes
+displaced independently can be offset by twice the half-width, so the corner of $T_A$
+releases a box once the half-width passes about $0.1\,d$, 1.5 units in the biological
+corpora and 2.5 in BPMN (the two lines). The declared half-pitch test sits at the left
+edge, 0.5 units, where nothing has changed; past the lines the hold falls, BPMN 0.84 to
+0.59 by a half-width of 5, and by 120 units every corpus is at the grid-snapped level of
+0.06 to 0.09.}
 \label{fig:sweep}
 \end{figure}

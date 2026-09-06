@@ -32,7 +32,7 @@ audience of what it corrects. Its verdict tables remain in
 | file | what it is |
 | --- | --- |
 | stationary_supplement.tex | the sensitivities, controls and secondary estimands, one section each, cited from the paper as Supplement S1 to S9 |
-| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan the study was run to; its hypotheses and outcomes are the paper's last appendix |
+| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan the study was run to; its hypotheses were fixed after a pilot the same morning, and they and their outcomes are Supplement S9 |
 | stationary_gd.tex | the first edition in GD's `gd-lipics` class, not rebuilt from the current text |
 | figures/ | the TikZ figures the paper includes |
 | verified.bib | every citation checked: DOI resolved, PDF read, or the note says what was not |
