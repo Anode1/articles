@@ -46,9 +46,8 @@
 \draw[fill=black!12,draw=black!55] (2.297,0.238) rectangle (2.623,0.499);
 \draw[fill=black!12,draw=black!55] (1.498,0.124) rectangle (1.628,0.254);
 \draw[fill=black!12,draw=black!55] (3.165,0.000) rectangle (3.256,0.091);
-\node[anchor=north,font=\scriptsize] at (1.88,-0.12) {hand};
 \end{tikzpicture} &
-\begin{tikzpicture}[x=1cm,y=1cm,line width=0.3pt]
+\begin{tikzpicture}[x=1cm,y=1cm,line width=0.3pt,rotate=-90]
 \draw[gray!70] (0.401,0.643) -- (0.460,0.939);
 \draw[gray!70] (0.274,0.346) -- (0.401,0.643);
 \draw[gray!70] (0.356,3.375) -- (0.356,3.781);
@@ -94,7 +93,6 @@
 \draw[fill=black!12,draw=black!55] (0.000,2.838) rectangle (0.326,3.099);
 \draw[fill=black!12,draw=black!55] (0.140,1.997) rectangle (0.271,2.127);
 \draw[fill=black!12,draw=black!55] (0.124,5.090) rectangle (0.215,5.181);
-\node[anchor=north,font=\scriptsize] at (0.39,-0.12) {\texttt{dot}};
 \end{tikzpicture} &
 \begin{tikzpicture}[x=1cm,y=1cm,line width=0.3pt]
 \draw[gray!70] (0.604,0.277) -- (0.881,0.277);
@@ -142,7 +140,6 @@
 \draw[fill=black!12,draw=black!55] (1.860,0.718) rectangle (2.186,0.979);
 \draw[fill=black!12,draw=black!55] (1.664,0.022) rectangle (1.794,0.152);
 \draw[fill=black!12,draw=black!55] (4.150,0.409) rectangle (4.241,0.500);
-\node[anchor=north,font=\scriptsize] at (2.12,-0.12) {ELK layered};
 \end{tikzpicture} &
 \begin{tikzpicture}[x=1cm,y=1cm,line width=0.3pt]
 \draw[gray!70] (0.789,0.346) -- (0.758,0.600);
@@ -190,11 +187,12 @@
 \draw[fill=black!12,draw=black!55] (0.412,1.406) rectangle (0.739,1.667);
 \draw[fill=black!12,draw=black!55] (0.279,0.943) rectangle (0.410,1.073);
 \draw[fill=black!12,draw=black!55] (0.253,1.545) rectangle (0.345,1.636);
-\node[anchor=north,font=\scriptsize] at (0.51,-0.12) {\texttt{neato}};
-\end{tikzpicture}
+\end{tikzpicture}\\[2pt]
+\scriptsize hand & \scriptsize\texttt{dot}, rotated & \scriptsize ELK layered & \scriptsize\texttt{neato}
 \end{tabular}
-\caption{The same graph, the same box sizes, four layouts, one scale: the hand
-drawing as stored, and the tool controls of Section~\ref{sec:test}. The hand drawing
+\caption{The same graph, the same box sizes, four layouts, one scale, the \texttt{dot}
+panel turned a quarter turn so its layering runs left to right: the hand drawing as
+stored, and the tool controls of Section~\ref{sec:test}. The hand drawing
 and the two layered tools share the profile the test reads: held under overlap, free
 under length and stress. \texttt{neato} minimises stress and is the control that gives
 the test its power, held at 1.00 under stress where every hand layout reads 0.00; it is

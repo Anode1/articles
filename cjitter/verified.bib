@@ -73,7 +73,7 @@
   author={van Wageningen, Simon and Mchedlidze, Tamara and Telea, Alexandru C.},
   title={Same Quality Metrics, Different Graph Drawings},
   booktitle={Graph Drawing and Network Visualization (GD 2025), short paper}, year={2025},
-  note={VERIFIED: arXiv 2508.15557 abstract fetched; LIPIcs DOI not checked}}
+  doi={10.4230/LIPIcs.GD.2025.7}, note={VERIFIED 2026-09-07: LIPIcs abstract read (drops.dagstuhl.de, paper 7, pp.7:1-7:13); drawings are transformed into different target shapes while quality-metric values stay nearly identical, supporting "drawings with identical metric values that differ in quality"}}
 @article{bharadwaj2022flud,
   author={Bharadwaj, Aditya and Gwizdala, David and Kim, Yoonjin and Luther, Kurt and Murali, T. M.},
   title={Flud: A Hybrid Crowd--Algorithm Approach for Visualizing Biological Networks},
@@ -151,7 +151,7 @@
   author={Fabregat, Antonio and Sidiropoulos, Konstantinos and Viteri, Guilherme and Marin-Garcia, Pablo and Ping, Peipei and Stein, Lincoln and D'Eustachio, Peter and Hermjakob, Henning},
   title={Reactome Diagram Viewer: Data Structures and Strategies to Boost Performance},
   journal={Bioinformatics}, volume={34}, number={7}, pages={1208--1214}, year={2018},
-  doi={10.1093/bioinformatics/btx752}, note={VERIFIED: DOI resolved; content not read}}
+  doi={10.1093/bioinformatics/btx752}, note={VERIFIED 2026-09-07: abstract read (academic.oup.com); record matches Bioinformatics 34(7):1208-1214, 2018; describes the Reactome Diagram Viewer whose SBGN-ML diagrams the paper cites as the corpus source}}
 @inproceedings{kunze2011bpmai,
   author={Kunze, Matthias and Luebbe, Alexander and Weidlich, Matthias and Weske, Mathias},
   title={Towards Understanding Process Modeling -- The Case of the {BPM} Academic Initiative},
@@ -191,7 +191,7 @@
   author={Kwon, Oh-Hyun and Crnovrsanin, Tarik and Ma, Kwan-Liu},
   title={What Would a Graph Look Like in This Layout? A Machine Learning Approach to Large Graph Visualization},
   journal={IEEE Transactions on Visualization and Computer Graphics}, volume={24}, number={1}, pages={478--488}, year={2018},
-  doi={10.1109/TVCG.2017.2743858}, note={VERIFIED 2026-09-05: DOI resolved via Crossref; abstract not read}}
+  doi={10.1109/TVCG.2017.2743858}, note={VERIFIED 2026-09-07: abstract read (Semantic Scholar record, DOI-matched); a machine-learning method estimates a graph's aesthetic metrics from graph-kernel topological features without laying it out, supporting the "learned quality scores" description}}
 @article{haleem2019readability,
   author={Haleem, Hammad and Wang, Yong and Puri, Abishek and Wadhwa, Sahil and Qu, Huamin},
   title={Evaluating the Readability of Force Directed Graph Layouts: A Deep Learning Approach},
@@ -201,14 +201,63 @@
   author={Huang, Weidong and Huang, Mao Lin and Lin, Chun-Cheng},
   title={Evaluating Overall Quality of Graph Visualizations Based on Aesthetics Aggregation},
   journal={Information Sciences}, volume={330}, pages={444--454}, year={2016},
-  doi={10.1016/j.ins.2015.05.028}, note={VERIFIED 2026-09-05: DOI resolved via Crossref; content not read; the pilot notes record Klammler et al. fitting its linear combination}}
+  doi={10.1016/j.ins.2015.05.028}, note={VERIFIED 2026-09-07: abstract read (Semantic Scholar record, DOI-matched); proposes a single numerical score aggregating individual aesthetic criteria into overall quality, supporting the "aggregated aesthetics metric" description}}
 @inproceedings{rosete1999hillclimbing,
   author={Rosete-Su{\'a}rez, Alejandro and Ochoa-Rodr{\'\i}guez, Alberto and Sebag, Mich{\`e}le},
   title={Automatic Graph Drawing and Stochastic Hill Climbing},
   booktitle={Proc. Genetic and Evolutionary Computation Conference (GECCO 1999)}, volume={2}, pages={1699--1706}, year={1999},
-  note={UNVERIFIED: no DOI; ACM DL 10.5555/2934046.2934177 and Semantic Scholar list it; content not read; the pilot notes cite the LRI report 1228 of the same year for weights from user input}}
+  note={CHECK 2026-09-07: full text read (open-access PDF, HAL hal-00116568, matches GECCO'99 vol.2 pp.1699-1706); the paper only compares search algorithms (hill climbing, GA, ES, UMDA) on minimizing line crossings and sets no criterion weights from user rankings; that behaviour (Klammler et al. JGAA 2019, ref [42]) belongs to the companion LRI report 1228 "A study of evolutionary graph drawing," not to this paper; dropped from the paper 2026-09-07, no longer cited: the claim it carried, a criterion's relative weight from user rankings, is Barbosa and Barreto's, and for these authors it belongs to the LRI technical report 1228, not to this GECCO paper}}
+
 @inproceedings{barbosa2001coevolution,
   author={Barbosa, Helio J. C. and Barreto, Andr{\'e} M. S.},
   title={An Interactive Genetic Algorithm with Co-evolution of Weights for Multiobjective Problems},
   booktitle={Proc. Genetic and Evolutionary Computation Conference (GECCO 2001)}, pages={203--210}, year={2001},
-  note={UNVERIFIED: no DOI; academia.edu copy listed; content not read; the pilot notes record co-evolution of weights to match user ranking}}
+  note={VERIFIED 2026-09-07: record confirmed (GECCO'01 pp.203-210); primary abstract unreachable, but two secondary sources (Klammler et al. JGAA 2019; a Sheffield PhD thesis on preference-inspired co-evolution) independently describe two co-evolved populations, drawings and weight vectors, tuned so the weights match a ranking given by users, supporting the "relative weight from user rankings" description}}
+
+% Added 2026-09-06 for the introduction's named holders of the stationarity assumption,
+% the coordinate-imitation and constraint-inference lines, and the process-model features.
+@article{englert2017inversekkt,
+  author={Englert, Peter and Vien, Ngo Anh and Toussaint, Marc},
+  title={Inverse {KKT}: Learning cost functions of manipulation tasks from demonstrations},
+  journal={International Journal of Robotics Research}, volume={36}, number={13-14}, pages={1474--1488}, year={2017},
+  doi={10.1177/0278364917745980}, note={VERIFIED: full text read (author-accepted manuscript); "assumes that the demonstrations fulfill the Karush-Kuhn-Tucker conditions"}}
+@inproceedings{levine2012cioc,
+  author={Levine, Sergey and Koltun, Vladlen},
+  title={Continuous inverse optimal control with locally optimal examples},
+  booktitle={Proceedings of the 29th International Conference on Machine Learning (ICML 2012)}, publisher={Omnipress}, pages={41--48}, year={2012},
+  eprint={1206.4617}, note={VERIFIED: full text read (graphics.stanford.edu/projects/cioc/cioc.pdf); pages from the ACM DL record, not printed on the PDF}}
+@article{berret2011composite,
+  author={Berret, Bastien and Chiovetto, Enrico and Nori, Francesco and Pozzo, Thierry},
+  title={Evidence for composite cost functions in arm movement planning: An inverse optimal control approach},
+  journal={PLoS Computational Biology}, volume={7}, number={10}, pages={e1002183}, year={2011},
+  doi={10.1371/journal.pcbi.1002183}, note={VERIFIED: full text read; "experimental data, which are assumed to be optimal"}}
+@inproceedings{chen2026expert,
+  author={Chen, Ruo-Tong and Xue, Ke and Gao, Chengrui and Shi, Yunqi and Xu, Tian and Xie, Peng and Xu, Siyuan and Yuan, Mingxuan and Qian, Chao and Zhou, Zhi-Hua},
+  title={How can reinforcement learning achieve expert-level placement?},
+  booktitle={Proceedings of the 63rd ACM/IEEE Design Automation Conference (DAC 2026)}, publisher={ACM}, year={2026},
+  doi={10.1145/3770743.3804357}, eprint={2604.25191}, note={VERIFIED: full text read (arXiv v2); expert action "more preferred than any other action"; Top-1 reward accuracy over sampled actions}}
+@article{wang2024smartgd,
+  author={Wang, Xiaoqi and Yen, Kevin and Hu, Yifan and Shen, Han-Wei},
+  title={{SmartGD}: A {GAN}-based graph drawing framework for diverse aesthetic goals},
+  journal={IEEE Transactions on Visualization and Computer Graphics}, volume={30}, number={8}, pages={5666--5678}, year={2024},
+  doi={10.1109/TVCG.2023.3306356}, eprint={2206.06434}, note={VERIFIED: full text read (arXiv v3); examples are algorithm layouts, neato 68 to 81 per cent in four of seven collections; self-challenging step because examples are sub-optimal}}
+@inproceedings{bernstein2015identifying,
+  author={Bernstein, Vered and Soffer, Pnina},
+  title={Identifying and quantifying visual layout features of business process models},
+  booktitle={Enterprise, Business-Process and Information Systems Modeling (BPMDS 2015, EMMSAD 2015)}, series={LNBIP}, volume={214}, pages={200--213}, publisher={Springer}, year={2015},
+  doi={10.1007/978-3-319-19237-6_13}, note={RECORD ONLY: Crossref and dblp; no open copy. Content (general direction, consistency of flow, alignment as measured features) attested by the authors' follow-up arXiv:1602.02992, Table 2 and Section 4, read in full}}
+@article{chou2020constraints,
+  author={Chou, Glen and Ozay, Necmiye and Berenson, Dmitry},
+  title={Learning constraints from locally-optimal demonstrations under cost function uncertainty},
+  journal={IEEE Robotics and Automation Letters}, volume={5}, number={2}, pages={3682--3690}, year={2020},
+  doi={10.1109/LRA.2020.2974427}, eprint={2001.09336}, note={VERIFIED: full text read (arXiv v1); constraints are the target, cost parameters recovered jointly in the same MILP}}
+@inproceedings{scobee2020mlci,
+  author={Scobee, Dexter R. R. and Sastry, S. Shankar},
+  title={Maximum likelihood constraint inference for inverse reinforcement learning},
+  booktitle={8th International Conference on Learning Representations (ICLR 2020)}, publisher={OpenReview.net}, year={2020},
+  eprint={1909.05477}, note={VERIFIED: full text read (arXiv v2); reward given, constraints estimated}}
+@article{yuan2012intelligent,
+  author={Yuan, Xiaoru and Che, Limei and Hu, Yifan and Zhang, Xin},
+  title={Intelligent graph layout using many users' input},
+  journal={IEEE Transactions on Visualization and Computer Graphics}, volume={18}, number={12}, pages={2699--2708}, year={2012},
+  doi={10.1109/TVCG.2012.236}, note={VERIFIED: full text read (author copy); user sub-layouts enter as target pairwise distances in a stress system, weights fixed, learning named as future work}}

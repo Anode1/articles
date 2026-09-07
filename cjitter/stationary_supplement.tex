@@ -13,11 +13,12 @@
 \usetikzlibrary{arrows.meta}
 \usepackage[hidelinks]{hyperref}
 
-\title{\textbf{Supplement to: Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies, and Their Boxes Align Instead}}
+\title{\textbf{Supplement to: Layouts Made in Diagram Editors Are Held by Alignment and Flow,
+Not by Edge Length or Stress}}
 \author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
 table's script: \url{https://github.com/Anode1/cjitter}, directory
 \texttt{example/diagrams}.}}
-\date{5 September 2026}
+\date{7 September 2026}
 
 \begin{document}
 \maketitle
@@ -26,9 +27,9 @@ table's script: \url{https://github.com/Anode1/cjitter}, directory
 each (S1 to S8), with the script that produced every table named beside it. Section numbers cited
 as ``Section $n$'' are the paper's. The corpora, the terms and the test are as the paper
 defines them. Every BPMN number is on the seeded random 300 except where a line says
-first 300: the border-to-border run of S3, the pitch, pitch-5 and specification-grid
-lines of S2 and S7, the constrained-model probe, and the 41 to 100 band, which predate
-the sample and were not rerun.
+first 300: the border-to-border run of S3, the pitch and specification-grid lines of S2,
+the pitch-5 line and the constrained-model probe of the paper's Sections~5 and~4, and the
+41 to 100 band, which predate the sample and were not rerun.
 
 
 \section*{S1\quad The summed energies, \texttt{prism} and the smooth kernel}
@@ -36,7 +37,7 @@ the sample and were not rerun.
 $q_{0.02}$ under the summed energies at equal weights, with the \texttt{prism} column and
 the A3 row the main table omits. \texttt{prism} differs from \texttt{neato} under overlap alone, which it
 removes (1.00 at value 0.000 in every corpus), and under stress, where the removal costs
-it 0.06 to 0.15 of the hold.
+it 0.06 to 0.11 of the hold.
 
 \begin{center}\scriptsize\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{llrrrrr}
@@ -79,6 +80,27 @@ BPMN & alignment A3 alone & 0.33 [0.28, 0.35] (0.213) & 0.00 (0.454) & 0.00 (0.4
 At the hand layout the three base terms share the energy as length 0.99, crossings 0.01,
 overlap 0.00, and $C{+}O{+}L$ inherits the length term's zero.
 
+The four-term fit of Section~4 under the smooth kernel (\texttt{results/a3\_fit.md},
+\texttt{fit.py} over the A3 differences regenerated 5 September 2026), beside the corner
+kernel's:
+
+\begin{center}\footnotesize
+\begin{tabular}{llrrrrrl}
+\toprule
+corpus & kernel & orthogonality & alignment & node--edge & flow & residual & held out \\
+\midrule
+WikiPathways & A1 & 0.031 & 0.950 & 0.002 & 0.017 & 0.0010 & 0.248 [0.236, 0.260] \\
+ & A3 & 0.315 & 0.082 & 0.028 & 0.575 & 0.0046 & 0.221 [0.210, 0.232] \\
+Reactome & A1 & 0.017 & 0.923 & 0.036 & 0.024 & 0.0014 & 0.149 [0.142, 0.157] \\
+ & A3 & 0.000 & 0.000 & 1.000 & 0.000 & 0.0033 & 0.350 [0.097, 0.901] \\
+BPMN & A1 & 0.066 & 0.881 & 0.008 & 0.045 & 0.0003 & 0.651 [0.617, 0.689] \\
+ & A3 & 0.250 & 0.043 & 0.142 & 0.565 & 0.0010 & 0.633 [0.530, 0.984] \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+
 \section*{S2\quad Radius and directions}
 
 $q_d$ at $d \in \{0.005, 0.01, 0.02, 0.05\}$, hand layouts and \texttt{neato}'s
@@ -104,7 +126,7 @@ alignment A1, \texttt{neato} & 0.04 & 0.05 & 0.06 & 0.06 & 0.03 & 0.05 & 0.06 & 
 \end{tabular}
 \end{center}
 
-The hand verdicts do not move with the radius. \texttt{neato}'s under length do: a layout
+The hand verdicts under overlap, length and stress do not move with the radius. \texttt{neato}'s under length do: a layout
 that is nearly a minimum is held at a large radius and free at a small one, and
 \texttt{neato}'s layouts, which minimise stress and not length uniformity, read as nearly
 uniform at $d = 0.05$ and not at $d = 0.005$. A hand layout at 0.00 across the range is
@@ -118,28 +140,38 @@ added and the sixteen-direction figures are upper bounds on the continuum value.
 every corpus. The A1 level falls: 0.58, 0.52, 0.47, 0.39 on WikiPathways, 0.31, 0.21,
 0.14, 0.07 on Reactome and 0.88, 0.85, 0.82, 0.82 on BPMN, while \texttt{neato}'s 0.06
 falls to 0.00 and the random layouts' 0.06 to 0.07 falls to 0.03, 0.03 and 0.00
-(\texttt{results/null64.md}). This is the corner's release bound of Section~5
-narrowing, and the limit lies below the exact-tie fraction, not at it: A1 sums over
+(\texttt{results/null64.md}). This is the corner's release bound narrowing. The bound: a box offset by $\epsilon$
+from its nearest agreement is released only by a move whose component toward the
+agreement, $a$, is less than $2\epsilon$, since the move lands at $|\epsilon - a|$; the
+smallest such component among sixteen directions is $\sin 22.5^\circ = 0.38$ of $d$, so
+release begins at $\epsilon > 0.19\,d$, 3 to 5 corpus units at $d = 0.02$. Each added
+direction lowers the smallest component and with it the bound, and the limit lies below the exact-tie fraction, not at it: A1 sums over
 nodes, so a move that lowers an untied neighbour's distance releases a tied box, and only
 a layout where every box is tied, \texttt{dot}'s, keeps 1.00 at every count. The gap to
 the control survives at 64; levels are stated at sixteen. The full grid of radius,
 direction count, reference-length rule and route treatment, 1,008 cells, flips no verdict
 (\texttt{results/specgrid.md}, first 300).
 
-\section*{S3\quad Reference length and box extent}
+\section*{S3\quad Reference length, box extent and routes}
 
 Under the median edge length instead of the fitted $L$, \texttt{neato}'s stress layouts
 score 0.07, 0.08 and 0.12 under stress and the hand layouts 0.00; under length the hand
 layouts score 0.03, 0.04 and 0.05 and \texttt{neato}'s 0.26, 0.41 and 0.43. Under
-$L = 1/\sqrt{N}$ no box of any layout is held under either term. The fitted $L$ is the
-only rule under which a true minimum of the term is a fixed point of the test, and the
-hand verdicts are 0.00 to 0.05 under every rule.
+$L = 1/\sqrt{N}$ no box of any layout is held under either term.
 
-Measured border to border, each box's offset to its border along the joining direction
-subtracted and $L$ refitted on those distances, length and stress hold 0.00 of the hand
-layouts in every corpus, 0.86 to 0.92 of diagrams at exactly zero
+With distances measured border to border, each box's offset to its border along the
+joining direction subtracted and $L$ refitted on those distances, length and stress hold
+0.00 of the hand layouts in every corpus, 0.86 to 0.92 of diagrams at exactly zero
 (\texttt{results/border.py}, first 300); \texttt{neato}, which minimised the centre form,
 is not held under the border form (0.00 to 0.09).
+
+Routes (\texttt{results/routes.md}): an edge is the polyline the file stores, attachment
+points and interior waypoints, or the chord between the centres where the file stores
+nothing; when a node moves its attachment points move with it and the waypoints stay. A
+waypoint is stored on 0.30, 0.07 and 0.34 of the edges by corpus, and only the BPMN
+routes are orthogonal, 0.87 axis-aligned at every segment against 0.01 and 0.00 in the
+biological formats. On chords (\texttt{data/*\_chords.txt}) no verdict moves
+(\texttt{results/chords.md}).
 
 \section*{S4\quad Descent, chance and calibration}
 
@@ -174,9 +206,8 @@ BPMN & C$+$O$+$L & 1.00 & 0.77 & 0.28 & 0.14 & 0.99 & 1.00 \\
 
 Under the distance energies the climber walks every box to the cap circle and is still
 removing energy when the budget ends; under C$+$O$+$A1 it moves a fraction of the cap,
-the misalignments being nearer than $d$. The converged reference's median $q$ is 1.00 for
-every energy and corpus; the fraction of diagrams whose reference stops below 0.9 is at
-most 0.04 for the energies of the table, and below the plan's 0.95 at most 0.07, with
+the misalignments being nearer than $d$. The fraction of diagrams whose converged
+reference stops below 0.9 is at most 0.04 for the energies of the table, and below the plan's 0.95 at most 0.07, with
 0.05 to 0.13 below 0.9 under $C{+}O{+}F$, the flow term's plateaus
 (\texttt{results/desc.md}).
 
@@ -184,17 +215,15 @@ Uniform sampling at the same budget is the control the descents are read against
 matched-budget control of hyperparameter search \cite{bergstra12} prescribed for genetic
 algorithms in 1995 \cite{jw95}.
 
-Calibration (\texttt{results/calib.py}, \texttt{results/calib\_values.py}): the median
-fraction $\rho$ of the stress energy the same capped climber removes from \texttt{neato}'s
-converged layouts after every box is displaced by $\epsilon$ of the width in a seeded
-direction, the median stress value of the same layouts, and $q_{0.02}$ under stress on them, which says
-how far a converged layout can be displaced before the test stops holding it. $\rho$ is
-not monotone in
-$\epsilon$, the cap seeing a shrinking share of a growing energy beyond 0.05, so the hand
-layouts' $\rho$ of 0.12 to 0.15 has two preimages and is not a distance; the value is. By
-$q$ the test stops holding a converged layout between 0.02 and 0.05 of the width; by the
-value the hand layouts sit beyond the 0.10 displacement and under half the random
-layouts.
+Calibration (\texttt{results/calib.py}, \texttt{results/calib\_values.py}) reports three
+quantities on \texttt{neato}'s converged layouts after every box is displaced by
+$\epsilon$ of the width in a seeded direction: the median fraction $\rho$ of the stress
+energy the same capped climber removes, the median stress value, and $q_{0.02}$ under
+stress. The last says how far a converged layout can be displaced before the test stops
+holding it. $\rho$ is not monotone in $\epsilon$, the cap seeing a shrinking share of a
+growing energy beyond 0.05, so the hand layouts' $\rho$ of 0.12 to 0.15 has two preimages
+and is not a distance; the value is, and by it the hand layouts sit beyond the 0.10
+displacement and under half the random layouts.
 
 \begin{center}\footnotesize
 \begin{tabular}{llrrrrrrrr}
@@ -227,13 +256,18 @@ confined to the minority of diagrams where the pair differs at all. The shifts t
 matter are the profile's gaps: the hand layout sits below \texttt{dot} on alignment
 ($-0.46$ [$-0.49$, $-0.43$], $-0.70$ [$-0.73$, $-0.67$] and $-0.05$ [$-0.10$, $-0.00$])
 and on flow ($-0.40$, $-0.33$ and $-0.17$), and above it on node--edge separation
-($+0.13$, $+0.18$ and $+0.25$) and, in BPMN, on orthogonality ($+0.41$), the criteria
-\texttt{dot} trades away.
+($+0.13$, $+0.18$ and $+0.25$) and, in BPMN, on orthogonality ($+0.41$); the last two
+read \texttt{dot} on chords and the hand on its routes, so they compare the measurement
+as much as the tool.
 
 \section*{S6\quad The BPMN samples}
 
-The study was planned on the first 300 models by id. On all 6,723 models in the band
-the alignment hold is 0.87 (mean 0.81; \texttt{data/bpmn\_population\_a1.csv},
+Of the archive's 29,810 files, 21,784 parse as models with ten or more nodes, 13,435 of
+those have every edge a BPMN flow or association and the rest are EPC, Petri net and UML
+models, and 6,723 of the 13,435 have a largest component of 15 to 40 nodes
+(\texttt{results/bpmn\_selection.md}). The study was planned on the first 300 models by
+id. On all 6,723 models in the band
+the alignment hold is 0.87 (\texttt{data/bpmn\_population\_a1.csv},
 regenerated from the archive by the commands in its header), against 0.91 on the first
 300, which resampling 300 of the population 2,000 times puts at the 99th percentile,
 outside the interval [0.83, 0.90] a random 300 gives. Every other term is where it was
@@ -246,8 +280,8 @@ hand against \texttt{dot} on alignment, parity on the first 300 and below on the
 
 \section*{S7\quad Corpus checks}
 
-\paragraph{The 41 to 100 band} (\texttt{results/band41.md}; 108, 265 and 300 diagrams,
-the BPMN file the first of its band by id, against \texttt{neato}): length and stress
+\paragraph{The 41 to 100 band} (108, 265 and 300 diagrams, the BPMN 300 being the first
+of the band by id; against \texttt{neato}; \texttt{results/band41.md}): length and stress
 hold 0.00 by hand in every corpus and \texttt{neato}'s stress 1.00; overlap 1.00;
 alignment 0.39, 0.16 and 0.74 against \texttt{neato}'s 0.07 to 0.08. Larger diagrams
 carry less alignment, and crossings stop holding every biological box (0.97 and 0.98).
@@ -258,12 +292,11 @@ carry less alignment, and crossings stop holding every biological box (0.97 and 
 half a pitch hold 0.500, 0.206 and 0.838 against 0.520, 0.207 and 0.846; displaced by up
 to 15 units, 0.097, 0.095 and 0.188; by up to 120, 0.065, 0.061 and 0.062. Under a
 jitter of 0.0025 of the extent, 2 to 3 units, on chords, the alignment hold keeps 0.44,
-0.19 and 0.74 (\texttt{results/nulls.py}) while orthogonality falls from 0.16 to 0.06 and
-0.43 to 0.19: orthogonality, not alignment, is the tie artefact.
+0.19 and 0.74 (\texttt{results/nulls.py}) while orthogonality falls from 0.16 to 0.06 in WikiPathways and from 0.43 to 0.19 in
+BPMN: orthogonality, not alignment, is the tie artefact.
 
 \paragraph{Eras} (\texttt{results/era.md}): the GD Collection holds A1 at 0.81 in
-1998 to 2005, when its figures came from xfig, Ipe and hand-coded PostScript, 0.60 in
-2006 to 2014 and 0.95 in 2015 to 2024; WikiPathways holds 0.47, 0.52, 0.53 and 0.53
+1998 to 2005, 0.60 in 2006 to 2014 and 0.95 in 2015 to 2024; WikiPathways holds 0.47, 0.52, 0.53 and 0.53
 across four generations of pathway numbers, so no gradient follows PathVisio's releases.
 
 Figure~\ref{fig:sweep} is the displacement sweep.
@@ -272,9 +305,9 @@ Figure~\ref{fig:sweep} is the displacement sweep.
 
 \section*{S8\quad The plan and its outcomes}
 
-The signed plan of 22 August 2026 fixed its hypotheses after a 60-diagram pilot the same
-morning, so they carried no risk once the pilot had run, and the paper does not claim a
-registration. Its hypotheses and what the run found:
+The plan of 22 August 2026 (\texttt{PLAN-STATIONARITY.md}, signed that day) fixed its
+hypotheses after a 60-diagram pilot the same morning, so they carried no risk once the
+pilot had run, and the paper does not claim a registration. Its hypotheses and what the run found:
 
 \begin{center}\small
 \begin{tabular}{@{}p{1cm}>{\raggedright\arraybackslash}p{7.6cm}>{\raggedright\arraybackslash}p{5.6cm}@{}}
@@ -292,10 +325,10 @@ H5 & under stress alone the hand layout is held less than \texttt{neato}'s & hel
 
 Departures from the plan, all recorded after the analyses they concern: the plan's
 primary alignment definition is gridiness, and the paper reports the gridiness value with
-the A1 hold beside it because a step term's $q$ reads flatness; the flow term, declared
+the A1 hold beside it; the flow term, declared
 as an alternative, is measured as a criterion; the reading direction is fitted like $L$;
 ELK, logged as unavailable, was obtained and run; the paired control is \texttt{dot}
-rather than \texttt{neato} and the test two-sided rather than one-sided; the multiplicity
+rather than \texttt{neato} and the test two-sided rather than one-sided (S5); the multiplicity
 family is the terms within one corpus against one control; the BPMN sample is the random
 300 of Section~S6; the radius in box widths, the A2 alignment definition
 and containment as a hard constraint, all declared, were not run.

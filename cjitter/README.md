@@ -1,29 +1,21 @@
 # One paper on one library
 
-**It reads [cjitter](https://github.com/Anode1/cjitter), and it is a negative result:
-a diagram a person laid out is a local minimum of no weighting of the standard layout
-energy with positive weight on a distance term, and the criterion that does hold its
-boxes, alignment into rows and columns, is one neither base energy prices.**
+**It is built on [cjitter](https://github.com/Anode1/cjitter), and it is a check to run before
+fitting a layout energy to human coordinates: per criterion, whether a diagram a person
+laid out in an editor is a local minimum, against a converged layout and a random one.
+Edge length and stress hold under 0.015 of the boxes at any weight; alignment and flow,
+which neither base energy prices, hold the boxes.**
 
-`stationary.tex`, *Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies, and Their Boxes Align Instead*.
-Fitting a layout energy to human drawings by inverse optimisation assumes the drawings
-sit at a minimum of some weighted sum of the standard criteria. Tested one criterion at a
-time on 853 working diagrams of 15 to 40 boxes, 136 laboratory drawings and 1,072
-drawings from the graph-drawing proceedings, that assumption fails. Overlap holds every
-box at zero. Uniform edge length and stress hold 0.00 of the median drawing in every
-corpus while a stress minimiser's own layouts are held at 1.00, and a weight of 0.001 on
-either term holds under 0.015 of the boxes. Alignment puts 58, 36 and 81 per cent of
-hand-placed boxes in a row or column of three or more against 4 to 7 by chance and none
-of the stress minimiser's, and a pairwise alignment term holds 0.52, 0.21 and 0.85 of them
-at sixteen directions against 0.06 to 0.07 by chance; the flow term holds 0.59 to 0.86,
-the criterion the layered engines price.
-Whether the hand or the editor's guide aligned them the coordinates cannot say, and for a
-fit it does not matter. Measurements are in `example/diagrams` in the
-[cjitter repository](https://github.com/Anode1/cjitter).
+`stationary.tex`, *Layouts Made in Diagram Editors Are Held by Alignment and Flow, Not by
+Edge Length or Stress: A Per-Term Stationarity Test Before Fitting a Layout Energy*.
+Inverse optimisation and inverse optimal control fit an objective to demonstrations taken
+as stationary points; graph drawing has not made that fit and now has a corpus to make it
+on. The paper's abstract carries the numbers. Measurements are in `example/diagrams` in
+the [cjitter repository](https://github.com/Anode1/cjitter).
 
 [stationary.pdf](stationary.pdf), [stationary_supplement.pdf](stationary_supplement.pdf),
-[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827) (the first
-edition; the version here is not yet deposited).
+[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827) (all versions;
+the version here is not yet deposited).
 
 The metaphor-benchmark audit that stood beside it is withdrawn: a correction inherits the
 audience of what it corrects. Its verdict tables remain in
@@ -32,8 +24,8 @@ audience of what it corrects. Its verdict tables remain in
 | file | what it is |
 | --- | --- |
 | stationary_supplement.tex | the sensitivities, controls and secondary estimands, one section each, cited from the paper as Supplement S1 to S8 |
-| PREREGISTRATION-STATIONARITY.md | signed 2026-08-22, the plan the study was run to; its hypotheses were fixed after a pilot the same morning, and they and their outcomes are Supplement S8 |
+| PLAN-STATIONARITY.md | the analysis plan the study started from, signed 2026-08-22; outcomes and departures in Supplement S8 |
 | figures/ | the TikZ figures the paper includes |
 | verified.bib | every citation checked: DOI resolved, PDF read, or the note says what was not |
-| corpora/ | the three raw archives and a clone of the WikiPathways database repository, not in git |
+| corpora/ | the three raw archives and a clone of the WikiPathways database repository, not in git and not in any deposit |
 | gd-lipics-v3.cls, lipics-v2021.cls | the GD submission class and the LIPIcs class it wraps, kept for a conference edition |

@@ -1,8 +1,13 @@
-# Pre-registration: which aesthetic criteria hold a human-authored diagram layout?
+# Analysis plan, 22 August 2026: which aesthetic criteria hold a human-authored diagram layout?
 
 Signed Vasili Gavrilov, 2026-08-22. Amended from the unsigned draft of the same morning
-after three independent reviews (review/) and the checks of review/checks-2026-08-22.md.
+after three independent reviews and a checklist, both internal files not deposited.
 Everything measured before this date is exploratory and is declared in section 9.
+
+Note added 2026-09-06, the body below unchanged: the hypotheses were fixed after the pilot
+of section 9, so this file is an analysis plan and not a registration; the departures of
+section 10 were recorded after the analyses they concern, and the full register is
+Supplement S8 of the paper; no commit hash was named in the freeze of section 8.
 
 ## 1. The question
 

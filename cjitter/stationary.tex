@@ -15,70 +15,72 @@
 \renewcommand{\topfraction}{0.9}\renewcommand{\bottomfraction}{0.9}
 \renewcommand{\textfraction}{0.05}\renewcommand{\floatpagefraction}{0.85}
 
-\title{\textbf{Human-Made Diagram Layouts Are Not Minima of Edge-Length or Stress Energies, and Their Boxes Align Instead}}
-\author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora and every
-table's script: \url{https://github.com/Anode1/cjitter}, directory
-\texttt{example/diagrams}.}}
-\date{5 September 2026}
+\title{\textbf{Layouts Made in Diagram Editors Are Held by Alignment and Flow, Not by Edge
+Length or Stress: A Per-Term Stationarity Test Before Fitting a Layout Energy}}
+\author{Vasili Gavrilov\thanks{Independent researcher. Code, parsed corpora, every table's
+script and its committed output: \url{https://github.com/Anode1/cjitter}, directory
+\texttt{example/diagrams} at commit \texttt{8ab9a4f};
+\texttt{results/manifest.txt} records the platform, tool versions, seeds and archive
+hashes of the 23 August 2026 battery, and the later runs (the BPMN random 300, the routes,
+the flow term, the A3 refit) sit each beside its script with the date in its header.
+\texttt{data/PROVENANCE.md} gives each corpus's source, version, hash and licence. The directional test is deterministic; the descents are deterministic from
+their seed.}}
+\date{7 September 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Fitting the weights of a layout energy to the coordinates of diagrams people made, as a
-first-order inverse-optimisation fit does, assumes each drawing is a local minimum of
-some weighting of the criteria. We test that one criterion at a time: move each box 0.02
-of the drawing width in sixteen directions, the rest fixed, and call the box held if no
-move lowers the criterion; the fraction held, $q$, is read against a converged layout,
-which must read near 1, and a random one, which gives chance.
-
-On 853 working diagrams of 15 to 40 boxes from three communities, laid out in their
-editors by the people who made them (hand layouts below), overlap holds every box of the
-median drawing at value zero. Uniform edge length and stress hold 0.00 of the median
-drawing there, in 136 laboratory drawings and in 1,072 figures from this field's
-proceedings, while a stress minimiser's own layouts are held at 1.00 and stay held until
-every box has moved about the test radius; the hand layouts' stress is five to twelve
-times the minimiser's. A weight of 0.001 on either distance term beside crossings and
-overlap holds under 0.015 of a corpus's boxes, so no weighting of the base terms with
-positive weight on a distance term holds a hand layout, and offered the base energy the
-fit returns all weight on the term every layout satisfies. The coordinates hold two
-criteria the base energies omit. Alignment into rows and columns: 58, 36 and 81 per cent
-of the median drawing's boxes lie in an alignment of three or more, against 4 to 7 per
-cent by chance, and a pairwise alignment term holds 0.52, 0.21 and 0.85 of them at
-sixteen directions, 0.39, 0.07 and 0.82 at sixty-four, against 0.06 to 0.07 and 0.03 by
-chance. And a reading direction: the flow term holds 0.59 to 0.86 of hand-placed boxes,
-the criterion layered engines price exactly. Whether the person aligned the boxes or the
-editor's guide did, the coordinates cannot say, and for fitting it does not matter. Offer
-alignment and flow among the terms before any fit, and judge a fitted energy by the
-fraction of a held-out drawing's boxes it holds under the terms no layout satisfies
-exactly.
+Fitting the weights of a layout energy to the coordinates of layouts people made assumes
+each layout is a local minimum of some weighting of the criteria. Per criterion, move
+each box 0.02 of the drawing width in sixteen directions and count the boxes no move
+improves, against a converged layout and a random one. On 853 working diagrams of 15 to 40
+boxes from three editors, overlap holds every box. Uniform edge length and stress hold
+none, there and in 136 laboratory drawings and 1,072 figures from the Graph Drawing
+proceedings. A stress minimiser's own layouts are held at 1.00, and the hand layouts carry
+five to twelve times the minimiser's stress. A weight of 0.001 on either term beside
+crossings and overlap holds under 0.015 of the boxes. Two criteria the base energies omit
+do hold the working diagrams. Alignment: 58, 36 and 81 per cent of boxes sit in a row or
+column of three or more, against 4 to 7 by chance. Flow: 0.59 to 0.86 of boxes are held,
+against 0.28 to 0.41. Person or editor, the coordinates cannot say which aligned them.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
 A layout program places the boxes of a diagram by minimising an \emph{energy}, a weighted
-sum of quantities the field has agreed are bad \cite{tdb88, dh96, purchase02, kobourov},
-and since 1994 the proposal has been to learn the weights from layouts people made or
-preferred \cite{masui94, spoenemann14, klammler19, flud22, zhang26}. Learning from
-preferences needs only that an accepted layout rank well under the learned energy;
-fitting to the coordinates, which is what inverse optimisation does \cite{ahuja01,
-keshavarz11, chan19}, what O'Donovan, Agarwala and Hertzmann did for single-page designs
-\cite{odonovan14}, and what Flud \cite{flud22} rests on when it continues a descent from
-crowd layouts, needs the coordinates themselves to sit at a local minimum. In graph
-drawing that property has not been tested, 4,890 figures were just collected from this
-field's proceedings into one corpus \cite{gdcoll25}, and this paper is the check to run
-before the first fit: move each box of a drawing a small distance in sixteen directions,
-call it \emph{held} if no move lowers a criterion, and report the fraction of boxes held,
-$q$, per criterion, against a converged layout (which must read near 1) and a random one
-(chance). Table~\ref{tab:profile} is the result. The new part is the per-term held
-count at human coordinates with those two controls, the step in the weight under the
-distance terms, and the profile shared by hand layouts and layered engines.
-Section~\ref{sec:test} is the test and what it
-rests on, Section~\ref{sec:corpora} the corpora, Section~\ref{sec:results} the
-measurements, Section~\ref{sec:alternatives} what else could produce them,
-Section~\ref{sec:related} what was known and Section~\ref{sec:discussion} what follows
-for a tool that learns its weights; the sensitivities are in a supplement and every
-table's script in the repository.
+sum of quantities the field has agreed are bad~\cite{tdb88, dh96, purchase02, kobourov};
+a term that carries a criterion in the energy is said below to \emph{price} it. Where an
+objective is fitted to what people did, the standard estimator takes the demonstration as
+a stationary point of the unknown objective~\cite{ahuja01}: inverse optimisation
+minimises the residual of the optimality conditions at the observed decision
+\cite{keshavarz11, chan19},
+inverse optimal control of manipulation~\cite{englert17} and of arm movement
+\cite{berret11} assumes the demonstrations satisfy those conditions, and inverse
+reinforcement learning assumes the demonstrated policy optimal~\cite{ng00} or locally so
+\cite{levine12}. In layout the published fit of this kind is O'Donovan, Agarwala and
+Hertzmann's energy for single-page designs, each example taken as optimal
+\cite{odonovan14}, and a reward fitted to expert chip placements rests on the same premise
+\cite{chen26}. Graph drawing has learned weights from preferences, selections and labels
+since 1994~\cite{masui94, spoenemann14, klammler19, zhang26}, which needs only that an
+accepted layout rank well, and has imitated the coordinates of algorithm output
+\cite{smartgd24, deepdrawing19}; no published graph-drawing method fits an energy to
+human coordinates. The corpus to do it on now exists, 4,890 figures from this field's
+proceedings~\cite{gdcoll25}, and Flud~\cite{flud22} already continues a descent from crowd
+layouts of pathway diagrams. This paper is the check to run before that fit.
+
+Move each box of a drawing a small distance in sixteen directions with the rest fixed;
+call the box \emph{held} if no move lowers a criterion; report the fraction of boxes held,
+$q$, per criterion. Two controls: a converged layout, which checks the test's power, and a
+random layout, which gives the chance line. Run before any weight is fitted, the count
+sorts the terms into satisfied, inert and violated at the demonstrations, and a term that
+holds the demonstrations while the fitted energy holds none is a missing feature found
+without fitting. The fitting literature, when it measures the demonstrations' distance
+from optimality, does so inside the fit and in aggregate~\cite{chan19}.
+Table~\ref{tab:profile} is the result on three working corpora, the layouts people made in
+their editors (hand layouts below), against three tool controls and a random null. The new
+part is the per-term held count at human coordinates with those controls, the drop to
+under 0.015 held at any weight on a distance term, and the profile, the vector of $q$ per
+term, shared by hand layouts and layered engines.
 
 \begin{table}[!t]\centering\scriptsize\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{llrrrrr}
@@ -91,7 +93,7 @@ WikiPathways & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.02
 & stress & 0.00 [0.00, 0.00] (0.217) & 1.00 (0.042) & 0.00 (0.201) & 0.00 (0.241) & 0.00 (0.435) \\
 & orthogonality & 0.19 [0.18, 0.21] (0.157) & 0.00 (0.280) & 0.19 (0.244) & 0.19 (0.158) & 0.00 \\
 & alignment A1 & 0.52 [0.48, 0.54] (0.003) & 0.06 (0.011) & 1.00 (0.000) & 0.57 (0.001) & 0.07 \\
-& gridiness & 0.87 [0.84, 0.89] (0.424) & 0.78 (1.000) & 1.00 (0.125) & 0.76 (0.200) & \\
+& gridiness & 0.87 [0.84, 0.89] (0.424) & 0.78 (1.000) & 1.00 (0.125) & 0.76 (0.200) & (0.96) \\
 & node--edge & 0.88 [0.86, 0.90] (0.004) & 0.89 (0.000) & 0.78 (0.011) & 0.74 (0.016) & 0.12 \\
 & flow & 0.59 [0.56, 0.62] (0.131) & 0.50 (0.211) & 1.00 (0.000) & 1.00 (0.000) & 0.41 \\
 \midrule
@@ -101,7 +103,7 @@ Reactome & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.056) &
 & stress & 0.00 [0.00, 0.00] (0.212) & 1.00 (0.034) & 0.00 (0.177) & 0.00 (0.197) & 0.00 (0.469) \\
 & orthogonality & 0.17 [0.15, 0.18] (0.193) & 0.00 (0.277) & 0.15 (0.256) & 0.12 (0.203) & 0.00 \\
 & alignment A1 & 0.21 [0.19, 0.24] (0.004) & 0.06 (0.009) & 1.00 (0.000) & 0.42 (0.002) & 0.06 \\
-& gridiness & 0.65 [0.62, 0.68] (0.640) & 0.77 (1.000) & 0.95 (0.176) & 0.74 (0.306) & \\
+& gridiness & 0.65 [0.62, 0.68] (0.640) & 0.77 (1.000) & 0.95 (0.176) & 0.74 (0.306) & (0.93) \\
 & node--edge & 1.00 [0.94, 1.00] (0.000) & 0.93 (0.000) & 0.80 (0.007) & 0.75 (0.021) & 0.11 \\
 & flow & 0.62 [0.60, 0.67] (0.096) & 0.45 (0.217) & 1.00 (0.000) & 1.00 (0.000) & 0.36 \\
 \midrule
@@ -111,17 +113,18 @@ BPMN & crossings & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 1.00 (0.000) & 1.0
 & stress & 0.00 [0.00, 0.00] (0.197) & 1.00 (0.016) & 0.00 (0.152) & 0.00 (0.175) & 0.00 (0.507) \\
 & orthogonality & 0.73 [0.71, 0.75] (0.011) & 0.00 (0.277) & 0.27 (0.169) & 0.25 (0.145) & 0.00 \\
 & alignment A1 & 0.85 [0.82, 0.89] (0.001) & 0.06 (0.011) & 1.00 (0.000) & 0.59 (0.001) & 0.06 \\
-& gridiness & 0.95 [0.94, 0.96] (0.188) & 0.79 (1.000) & 0.81 (0.238) & 0.67 (0.279) & \\
+& gridiness & 0.95 [0.94, 0.96] (0.188) & 0.79 (1.000) & 0.81 (0.238) & 0.67 (0.279) & (0.95) \\
 & node--edge & 1.00 [1.00, 1.00] (0.000) & 1.00 (0.000) & 0.86 (0.001) & 0.79 (0.011) & 0.11 \\
 & flow & 0.86 [0.83, 0.88] (0.041) & 0.62 (0.120) & 1.00 (0.000) & 1.00 (0.000) & 0.28 \\
 \bottomrule
 \end{tabular}
-\caption{$q_{0.02}$, the median over diagrams of the fraction of boxes no move of 0.02 of
-the width in sixteen directions improves, per criterion alone, on the hand layout with
-its 95\% bootstrap interval, on \texttt{neato}, \texttt{dot} and ELK layouts of the same
-graphs, and on a uniform random layout; in parentheses the median value of the term at
-the layout, 0 when satisfied. Terms and controls are defined in Section~\ref{sec:test},
-the corpora in Section~\ref{sec:corpora}.}
+\caption{Median $q_{0.02}$ over diagrams, the fraction of a diagram's boxes no move of 0.02
+of the width in sixteen directions improves, per criterion alone: the hand layout with its
+95\% bootstrap interval, \texttt{neato}, \texttt{dot} and ELK layouts of the same graphs,
+and a uniform random layout, one per diagram, on chord edges. In parentheses the median
+value of the term at the layout, 0 when satisfied; for gridiness, a step whose $q$ reads flatness, the value is the quantity
+compared, and the random column gives its value. Terms and controls are defined in
+Section~\ref{sec:test}, the corpora in Section~\ref{sec:corpora}.}
 \label{tab:profile}
 \end{table}
 
@@ -130,7 +133,7 @@ the corpora in Section~\ref{sec:corpora}.}
 \input{figures/test}
 
 \paragraph{The energy.} A layout of a graph with $N$ nodes is a point
-$x \in \mathbb{R}^{2N}$, two coordinates per node, the boxes' sizes held fixed. An
+$x \in \mathbb{R}^{2N}$, two coordinates per node, the boxes' sizes kept fixed. An
 aesthetic energy is
 \begin{equation}
 E_w(x) = \sum_{k=1}^{K} w_k\, T_k(x), \qquad w_k \ge 0,
@@ -154,76 +157,86 @@ and the estimand is
 q_d(x) = \frac{1}{N}\,\#\{\,i : \text{node } i \text{ is held at radius } d\,\}.
 \label{eq:q}
 \end{equation}
-$q_d = 1$ says the layout is a local minimum of $E$ over single-node moves of length $d$;
-for smooth $E$ and small $d$ it says $\nabla E(x) = 0$ to within the resolution of $V$. A
-person in a diagram editor moves one box at a time, so single-node moves are the editor's
-own move set, and equation~\eqref{eq:held} compares two energies, so it is defined for
-every term. Evaluated per term it separates the criteria a layout satisfies from those it
-does not. The primary radius is $d = 0.02$ of the drawing width; a move that lowers the energy by less than
-$10^{-12}$ of its value is a tie. The test is deterministic: no seed, no budget. The
-tables report the median of $q$ over diagrams; the fit and the weight sweep report the
-fraction of all boxes in a corpus held, which is lower wherever diagrams pile up at 1.
+$q_d = 1$ says the layout is a local minimum of $E$ over single-node moves of length $d$,
+a weaker property than a minimum over joint moves at every small radius, and the one
+meant wherever this paper says minimum; for smooth $E$ and small $d$ it says
+$\nabla E(x) = 0$ to within the resolution of $V$. A person in a diagram editor moves one
+box at a time, so single-node moves are the editor's own move set, and
+equation~\eqref{eq:held} compares two energies, so it is defined for every term. The
+primary radius is $d = 0.02$ of the drawing width, the larger extent of its bounding box
+(width below); a move that lowers the energy by less than $10^{-12}$ of its value counts
+as no change. The test is deterministic: no seed, no budget.
 
-\paragraph{What $q$ counts.} A held fraction means different things for terms of
-different shape. For a smooth term near a minimum with gradient $g$ and curvature
-$\lambda$ along it, a node is held when $|g| < d\lambda/2$: $q$ reads how near the minimum
-is. For a count (crossings) or a step function of position (gridiness, below), a node is
-held wherever no move of length $d$ changes the term: $q$ reads how much of the layout the
-term has stopped acting on, so the term's value is reported beside it. For a term with a
-corner at exact coincidence (the alignment term A1 below), a node is held when it sits
-within $0.19\,d$ of sharing a coordinate with another node
-(Section~\ref{sec:alternatives}) and is free to slide along that row or column: $q$
-counts boxes pinned in one coordinate, at a resolution the direction set fixes. 
+\paragraph{Three quantities.} The tables report the \emph{median $q$} over diagrams,
+called the \emph{hold} of a term below. The fit and the weight sweep report the
+\emph{pooled $q$}, the fraction of all boxes in a corpus held. Pooled $q$ is below the
+median wherever diagrams pile up at 1: in the sweep's alignment row WikiPathways reads
+0.52 by the median and 0.506 pooled. The third quantity is the \emph{value} of a term at
+the layout, 0 when satisfied. A held fraction means different
+things for terms of different shape. For a smooth term near a minimum with gradient $g$
+and curvature $\lambda$ along it, a node is held when $|g| < d\lambda/2$: $q$ reads how
+near the minimum is. For a count (crossings) or a step function of position (gridiness),
+a node is held wherever no move of length $d$ changes the term: $q$ reads how much of the
+layout the term has stopped acting on, so the value is compared instead. For a term with
+a corner at exact coincidence (the alignment term A1), a node is held when it sits within
+$0.19\,d$ of sharing a coordinate with another node (Supplement~S2) and is free to slide
+along that row or column: $q$ counts boxes pinned in one coordinate, at a resolution the
+direction set fixes.
 
 \paragraph{The inverse problem.} Given layouts $x^{(1)}, \dots, x^{(G)}$ that people
-accepted, inverse optimisation asks for the weights $w$ under which they are nearest to
-stationary \cite{keshavarz11, chan19}. With the directional differences
+accepted, the first-order fit asks for the weights $w$ under which they are nearest to
+stationary, minimising the residual of the optimality conditions at the demonstrations
+\cite{keshavarz11, englert17}. With the directional differences
 $D_{iv} T_k = T_k(x + d\,v^{(i)}) - T_k(x)$ in hand, node $i$ is held under $w$ exactly
 when $\sum_k w_k D_{iv} T_k \ge 0$ for all $v$, a set of linear inequalities in $w$. The
-residual is the smallest total violation over $w$ on the simplex, the normalisation that
-keeps the trivial vertex in the feasible set, a linear program, and it is zero only if
-some weighting makes the layout a local minimum. Two properties of that
-program decide what a fit can return. A term with $D_{iv} T_k < 0$ for some $v$ at almost
-every node can take positive weight only where another term rises in that direction;
-under the base energy nothing else moves there, and the sweep of
-Section~\ref{sec:results} measures how much weight such a term can carry. And a term
-every layout satisfies exactly, its value zero so that $D_{iv} T_k \ge 0$ everywhere, is
-a zero-residual vertex on its own: the program returns all weight on it and learns nothing. The second is
-the degeneracy Ng and Russell \cite{ng00} state for inverse reinforcement learning, where a
-zero reward makes every policy optimal; the repairs add a margin \cite{ratliff06} or model
-the demonstrations as noise about an optimum \cite{ziebart08, keshavarz11, aswani18}.
-Neither rescues a term of the first kind: it carries no weight under any margin, and the
-deviation is not noise, since every diagram has a move that lowers the term
-(Section~\ref{sec:results}). A contrastive fit, which reads a weight off the gap between
-a demonstration and its alternatives, is a different estimator
-(Section~\ref{sec:discussion}).
+residual is the smallest total violation over $w$ on the simplex (the normalisation that
+keeps the trivial vertex feasible). Finding it is a linear program, and it is zero only if
+some weighting holds every box. Two properties of that program decide what the fit can
+return. A term with $D_{iv} T_k < 0$ for some $v$ at almost every node can take positive
+weight only where another term rises in that direction; under the base energy nothing
+else rises there, and the sweep of Section~\ref{sec:results} measures how much weight
+such a term can carry. And a term every layout satisfies exactly, its value zero so that
+$D_{iv} T_k \ge 0$ everywhere, is a zero-residual vertex on its own: the program returns
+all weight on it and learns nothing, the degeneracy Ng and Russell~\cite{ng00} state for
+inverse reinforcement learning, where a zero reward makes every policy optimal. Aswani,
+Shen and Siddiq~\cite{aswani18} prove the residual estimators inconsistent under noisy
+demonstrations; the margin~\cite{ratliff06} and maximum-entropy~\cite{ziebart08} repairs
+read a gap between the demonstration and its alternatives, a different quantity, and
+Section~\ref{sec:discussion} says what they would return here.
 
 \paragraph{The reference length.} The length and stress terms compare distances with a
 reference $L$. Fixed at the layout's median edge length, $L$ is not the scale at which
-the term is least, so at a true minimum every node still has a scaling direction that
-lowers the term: \texttt{neato}'s converged stress layouts read $q = 0.07$ to $0.12$ under
-their own criterion. $L$ is therefore the value at which the term is least for the layout
-as loaded, $\sum \ell^2 / \sum \ell$ over edges for length and the same over
-$\|x_i - x_j\| / \delta_{ij}$ for stress, fixed before any move; the converged layouts are
-then held at $1.00$. This is the scale-normalised stress of Smelser, Miller and Kobourov
-\cite{smelser24} and of Ahmed et al.\ \cite{ahmed24}, and fitting $L$ is their repair for
-the pathology they report. The median and $1/\sqrt{N}$ are sensitivities
-(Supplement~S3).
+the term is least, so a true minimum still has a scaling move that lowers it:
+\texttt{neato}'s converged stress layouts read $q = 0.07$ to $0.12$ under their own
+criterion, and that observation fixed the rule. $L$ is fixed before any move at the length
+that makes the term least for the layout as loaded: $\sum \ell^2 / \sum \ell$ over edges
+for length, and the same over $\|x_i - x_j\| / \delta_{ij}$ for stress. This is the
+scale-normalised stress of Smelser, Miller and Kobourov~\cite{smelser24} and of Ahmed et
+al.~\cite{ahmed24}. The converged layouts are then held at 1.00; the hand verdicts are
+0.00 to 0.05 under every rule tried (Supplement~S3).
 
-\paragraph{The controls.} A test that can only succeed is not a test. The
-\emph{converged reference}: $q_d$ on a layout a descent has converged on must be near
-one, or the test lacks power for that energy. \texttt{neato}'s layouts are the reference
-for stress, and the end point of an uncapped descent from each hand layout is the
-reference for every summed energy (median $q$ 1.00 in every corpus,
-Supplement~S4). The \emph{tool controls}: the same graphs with the same box
-sizes and edge directions laid out by \texttt{neato} (stress, \texttt{-Gstart=1}, boxes
-left where they overlap), \texttt{prism} (\texttt{neato} followed by its overlap removal),
-\texttt{dot} (layered) and ELK layered 0.12.0 \cite{schulze14}, the engine the BPMN
-editors run; a check in the binary confirms each control is the same graphs. The
-\emph{null}: a uniform random layout of the same graph in the same bounding box, and for
-the alignment term a random layout snapped to the same grid as the drawing.
-
-\paragraph{Terms.} Table~\ref{tab:terms}.
+\paragraph{The controls.} The \emph{converged reference}: $q_d$ on a layout a descent
+has converged on must be near one, or the test lacks power for that energy.
+\texttt{neato}, an independent minimiser of stress, is the power control: its layouts are
+held at 1.00 under stress and the length term is of the same family. The end point of an
+uncapped descent from each hand layout is the reference for every summed energy (median
+$q$ 1.00 in every corpus, Supplement~S4), and since that climber proposes the test's own
+single-box moves, this reference certifies the code and not the power. The \emph{tool controls}: the same graphs with the
+same box sizes and edge directions laid out by \texttt{neato} (stress,
+\texttt{-Gstart=1}, boxes left where they overlap), \texttt{prism} (\texttt{neato}
+followed by its overlap removal), \texttt{dot} (layered) and ELK layered 0.12.0
+\cite{schulze14}, run as \texttt{elkjs} at the library's defaults (node placement
+Brandes--K\"opf with edge straightening, direction right, seed 1), not as any of the
+editors that offer it configure it. Graphviz is the Ubuntu 24.04 package 2.42.2, which
+reports itself as 2.43.0, built with GTS so that \texttt{-Goverlap=false} is
+\texttt{prism}. The tools receive the graph without its containers and with undirected
+edges in stored order; their routes are discarded, so crossings, orthogonality and
+node--edge separation are read on chords in the tool columns and on the stored routes in
+the hand column, and Supplement~S3 gives the hand column on chords. A check in the binary
+confirms that each control lays out the same graphs; the command lines are
+\texttt{data/make\_corpus.py} and \texttt{data/elk\_layout.py}. The \emph{null}: a uniform random layout of
+the same graph in the same bounding box, whose $q$ is the chance line, and for the
+alignment term a random layout snapped to the same grid as the drawing.
 
 \begin{table}[!htbp]\centering\footnotesize
 \begin{tabular}{lp{7.6cm}p{2.6cm}}
@@ -235,153 +248,168 @@ $T_O$ overlap & overlap area of boxes $/$ total box area & no overlap \\
 $T_L$ length uniformity & mean over edges of $((\ell - L)/L)^2$ & all edges of length $L$ \\
 $T_S$ stress & mean over node pairs of $((\|x_i - x_j\| - L\,\delta_{ij})/(L\,\delta_{ij}))^2$, $\delta_{ij}$ the graph distance & distances proportional \\
 $T_R$ orthogonality & mean over edges of the length-weighted mean over its segments of $\min(|\Delta x|,|\Delta y|)/(|\Delta x|+|\Delta y|)$ & routes axis-aligned \\
-$T_A$ alignment & A1: mean over nodes of the distance to the nearest other node along whichever axis is nearer & every node in a row or column \\
-gridiness & $1 -$ fraction of nodes in an alignment of $\ge 3$ (tolerance 0.005), HOLA's definition \cite{hola16}, a step & every node aligned \\
-$T_N$ node--edge & squared shortfall of node to foreign route distance below $(w+h)/4$ & none within \\
+$T_A$ alignment & A1: mean over nodes of the distance to the nearest other node along whichever axis is nearer; A3: mean over nodes of $1/(1 + \sum_{j \ne i} e^{-(\Delta x_{ij}/s)^2} + e^{-(\Delta y_{ij}/s)^2})$, $s = 0.02$, smooth & every node in a row or column \\
+gridiness & $1 -$ fraction of nodes in an alignment of $\ge 3$ (tolerance 0.005), HOLA's definition~\cite{hola16}, a step & every node aligned \\
+$T_N$ node--edge & squared shortfall of the node-to-foreign-route distance below $(w+h)/4$ & none within \\
 $T_F$ flow & mean over directed edges of the backward component along the reading direction $u$, over length & no edge runs back \\
 \bottomrule
 \end{tabular}
-\caption{The terms. $n$ nodes, $m$ edges, box $i$ of width $w_i$ and height $h_i$, $L$ fitted to the layout under test.}
+\caption{The terms. $n$ nodes, $m$ edges, box $i$ of width $w_i$ and height $h_i$, $L$
+fitted to the layout under test. An edge is the polyline the file stores, or the chord
+between centres where it stores nothing; crossings, orthogonality and node--edge
+separation are evaluated on the route, length and stress on the centres, and when a node
+moves its attachment points move with it (Supplement~S3; no verdict moves on chords).}
 \label{tab:terms}
 \end{table}
 
-The base energy is $T_C + T_O + T_L$ at weights $(1,1,1)$, three terms of the family that
-runs from Davidson and Harel's simulated annealing \cite{dh96} to the gradient-descent
-layouts of Ahmed et al.\ \cite{ahmed20}; stress \cite{kamada89, gansner05}, which force-directed tools and
-\texttt{neato} minimise, is the second base energy. $T_R$, $T_A$ and $T_N$ are the
-candidates for what the base energies miss. A1 has a corner at exact alignment; a smooth
-Gaussian form, A3 with width 0.02, is the sensitivity. The reading direction $u$ is the
-axis direction under which $T_F$ is least for the layout as loaded, fixed before any move,
-the same rule as for $L$.
+\paragraph{Terms.} Table~\ref{tab:terms}. The base energy is $T_C + T_O + T_L$ at weights
+$(1,1,1)$, three terms of the family that runs from Davidson and Harel's simulated
+annealing~\cite{dh96} to the gradient-descent layouts of Ahmed et al.\ \cite{ahmed20};
+stress~\cite{kamada89, gansner05}, which force-directed tools and \texttt{neato}
+minimise, is the second base energy. $T_R$, $T_A$ and $T_N$ are the candidates for what
+the base energies miss. A1 has a corner at exact alignment and A3 has none; A1 is the primary
+term, A3 the sensitivity check (the binary defaults to A3, so every run here passes
+\texttt{--align a1}). The reading direction $u$ is the axis direction
+under which $T_F$ is least for the layout as loaded, fixed before any move, the same rule
+as for $L$.
 
-\paragraph{Routes.} An edge is the polyline the file stores, attachment points and
-interior waypoints, or the chord between the centres where the file stores nothing.
-Crossings, orthogonality and node--edge separation are evaluated on the route, length and
-stress on the centres; when a node moves its attachment points move with it and the
-waypoints stay. A waypoint is stored on 0.30, 0.07 and 0.34 of the edges by corpus, and
-only the BPMN routes are orthogonal, 0.87 axis-aligned at every segment against 0.01 and 0.00 in
-the biological formats (\texttt{results/routes.md}). The chords are the sensitivity, and no verdict moves under them.
-
-\paragraph{Fitting.} Weights on the simplex, the linear program above over every node and
-direction of a corpus (about 110,000 inequalities, HiGHS), the residual its value per
-node. Because the residual depends on the terms' scales and $q$ does not, $q$ under the
-fitted weights is reported beside it, on the fitting diagrams and held out under
-$5 \times 2$ cross-validation (five seeded halvings, each half fitted and scored on the
-other). The sweep, $q$ as the weight on one term grows from 0 with the rest on crossings
-and overlap, is the test of whether any positive weight on that term can be carried.
+\paragraph{Fitting.} The weights lie on the simplex; the linear program above runs over
+every node and direction of a corpus (100,000 to 120,000 inequalities per corpus, solved
+with HiGHS), and the residual is its optimum per node. Because the residual depends on the
+terms' scales and $q$ does not, the pooled $q$ under the fitted weights is reported beside
+it, on the fitting diagrams and on held-out diagrams under $5 \times 2$ cross-validation
+(five seeded halvings, each half fitted and scored on the other). The sweep, pooled $q$ as the weight on one term grows from 0 with
+the rest on crossings and overlap, is the test of whether any positive weight on that
+term can be carried.
 
 \paragraph{Statistics.} The unit of inference is the diagram. Every median carries a 95\%
 bootstrap interval over diagrams (1,000 resamples); an interval of [0.00, 0.00] or [1.00,
-1.00] is a pileup at the boundary, and the share of diagrams at exactly that value is
-given where it matters. Hand against tool on one criterion is a Hodges--Lehmann shift
-with its distribution-free interval (Supplement~S5); equivalence claims are read off the
-sweep, never off a failure to reject. The tests are exploratory: the plan's hypotheses
-were fixed after a pilot (Supplement~S8). The test and the terms are C in the repository; the
-descents run through \texttt{cjitter}, a library of seeded searches with uniform sampling
-at the same budget as its built-in control.
+1.00] is a pileup at the boundary, and the share of diagrams at exactly that $q$ is given
+where it matters. Hand against tool on one criterion is a Hodges--Lehmann shift with its
+large-sample interval, pairs that agree dropped (Supplement~S5);
+equivalence claims are read off the sweep, never off a failure to reject. The tests are
+exploratory: the plan's hypotheses were fixed after a pilot (Supplement~S8).
 
 \section{The corpora}\label{sec:corpora}
 
 Three collections of diagrams whose node coordinates a person chose, from three
-communities with different authoring tools, all redistributable, and two collections of
-drawings made for their own sake.
+communities with different authoring tools, and two collections of drawings made for
+their own sake (Table~\ref{tab:corpora}); sources, versions and licences are in the
+repository's \texttt{data/PROVENANCE.md}.
 
 \begin{table}[!htbp]\centering\scriptsize\setlength{\tabcolsep}{4pt}
 \begin{tabular}{llrrrl}
 \toprule
-corpus & made in & in the archive & 15--40 nodes & used & median $m/n$ \\
+corpus & made in & in the archive & in the band & used & median $m/n$ \\
 \midrule
-WikiPathways GPML, \emph{Homo sapiens} \cite{agrawal24} & PathVisio & 1,016 & 305 & 305 & 1.06 \\
-Reactome SBGN-ML \cite{fabregat18} & curation tool & 1,382 & 248 & 248 & 1.04 \\
-BPMN Academic Initiative \cite{kunze11, sola23} & Signavio & 29,810 & 6,723 (BPMN-only) & 300 & 1.11 \\
-HOLA formative drawings \cite{hola16} & study tool & 136 & (4--13) & 136 & \\
-GD Collection \cite{gdcoll25} & mixed & 4,890 & 1,072 & 1,072 & \\
+WikiPathways GPML, \emph{H.\ sapiens}~\cite{agrawal24} & PathVisio, web editor & 1,016 & 305 & 305 & 1.06 \\
+Reactome SBGN-ML~\cite{fabregat18} & curation tool & 1,382 & 248 & 248 & 1.04 \\
+BPMN Academic Initiative~\cite{kunze11, bpmai20} & Signavio & 29,810 & 6,723 & 300 & 1.11 \\
+HOLA formative drawings~\cite{hola16} & study tool & 136 & (4--13) & 136 & \\
+GD Collection~\cite{gdcoll25} & mixed & 4,890 & 1,072 & 1,072 & \\
 \bottomrule
 \end{tabular}
-\caption{The corpora.}
+\caption{The corpora. \emph{In the band}: largest component of 15 to 40 nodes, and for
+BPMN also every edge a flow or association.}
+\label{tab:corpora}
 \end{table}
 
-The first three are working documents: Reactome diagrams are laid out by curators,
-WikiPathways pathways are drawn in PathVisio, and the BPMN models are students' work in
-Signavio. Nobody was asked to draw nicely, and the three tools share no layout code. A
+The first three are working documents, the \emph{hand layouts} of this paper: Reactome
+diagrams are laid out by curators, WikiPathways pathways are drawn in PathVisio or, from
+the WP5000 series on (116 of the 305), in the WikiPathways web editor, and the BPMN models
+are students' work of 2009 to 2019 in the Academic Initiative's Signavio editor. Nobody was asked to draw nicely, and the three
+tools share no layout code. A
 diagram enters as its largest connected component of 15 to 40 nodes, container glyphs
 (SBGN compartments, BPMN pools and lanes) not being nodes and SBGN process glyphs being
-nodes; each layout is rescaled uniformly so that its bounding box fits the unit square, box
-sizes with it. Of the BPMN archive's 29,810 files, 21,784 parse as models with ten or more nodes, and
-13,435 of those have every edge a BPMN flow or association and the rest are EPC, Petri net and UML models; 6,723 of the 13,435
-are in the band, and the corpus is a seeded random 300 of them. The first 300 by model
-id, the sample the study was planned on, sits at the 99th percentile of random samples on
-alignment and is retired to Supplement~S6. Two WikiPathways files carry
-coordinates converted from Reactome \cite{bohler16} and are dropped. Deduplication by
-coordinates and by structure finds three pairs in the biological corpora and none in
-BPMN, and removing them moves no median; the 305 WikiPathways pathways carry 153 first
-authors, and the alignment median's interval clustered by author, [0.48, 0.55], is within 0.01
-of the interval over diagrams (\texttt{results/dedup.py}, \texttt{results/drawers.py}).
+nodes; each layout is rescaled uniformly so that its bounding box fits the unit square,
+box sizes with it. The BPMN corpus is a seeded random 300 of the 6,723 models in the band
+whose every edge is a BPMN flow or association (the archive's filtering is
+Supplement~S6); the first 300 by model id, the sample the study was planned on, is
+retired to that section. Two
+WikiPathways files carry coordinates converted from Reactome~\cite{bohler16} and are
+dropped. Deduplication by coordinates and by structure finds three pairs in the
+biological corpora and none in BPMN, and removing them moves no median; the 305
+WikiPathways pathways carry 153 first authors, the alignment median's interval clustered
+by author, [0.48, 0.55], is within 0.01 of the interval over diagrams, and the per-author
+medians run 0.19 to 0.85 across the 20 authors with three or more diagrams.
 
-The two further collections are drawings, not working diagrams. HOLA's formative
-corpus is 17 participants each laying out the same 8 abstract graphs in the study's own
-orthogonal editor, 136 drawings of 4 to 13 nodes, scraped from the study's published SVGs and redistributed
-as research data without an explicit licence;
-the corpus does not record whether that editor drew alignment aids, and at 4 to 13 boxes
-the test radius is a smaller fraction of a box than in the band (its distance-term zeros
-stand at radii 0.01 and 0.05 too, \texttt{results/hola\_radius.md}). The GD Collection is
-4,890 figures harvested from 27 editions of this field's proceedings, 1,072 of them with
-a largest component in the band; who or what made each figure is not recorded, and many
-are the output of the algorithms the papers present. Its authors' audit reproduces 69\%
-of figures exactly, edge directions and box sizes are absent, so only the terms needing
-neither are run on it.
+The two further collections are drawings, not working diagrams. HOLA's formative corpus
+is 17 participants each laying out the same 8 abstract graphs in the study's own
+orthogonal editor Orthowontist, 136 drawings of 4 to 13 nodes, taken from the study's
+published SVGs and redistributed as research data without an explicit licence; the editor
+snapped bend points to a dragged node, and HOLA's paper mentions no node alignment aid
+and no grid; the participants started from a supplied layout. At 4 to 13 boxes the test radius is a smaller fraction of a box than in the band,
+and the distance-term zeros stand at radii 0.01 and 0.05 too. The GD Collection is harvested from 27 editions of the Graph Drawing proceedings, 1,072
+of its figures with a largest component in the band. Its authors describe it as seeming to
+contain mostly manually drawn graphs and record no provenance per figure. Their audit of a
+random 101 papers extracted 426 graphs from 1,016 graph drawings; 69 per cent of the
+extracted graphs passed, 40 per cent of the vector drawings, and a pass tolerates a few
+missing edges. Edge directions and box sizes are absent, so only the terms needing neither
+are run on it.
 
-How the coordinates were made matters for the alignment criterion. Of the raw
-coordinates, 17\% are integers in WikiPathways, 67\% in Reactome and 61\% in BPMN; the
-fraction of boxes sharing an exact $x$ with another box is 0.37, 0.06 and 0.41, an exact
-$y$ 0.29, 0.12 and 0.77, and either 0.54, 0.17 and 0.87 (\texttt{results/ties.py}), the
-figures the alignment row of Section~\ref{sec:results} should be read against. In
-WikiPathways exact alignment is twice as common as integer coordinates, so it is not a
-rounding grid's act. PathVisio and the BPMN editors draw a snap-to-object guide on every
-drag; Reactome's curation tool does not. Section~\ref{sec:alternatives} takes this up.
+How the coordinates were made matters for the alignment criterion.
+Table~\ref{tab:ties} gives the share of integer coordinates and of boxes sharing an exact
+coordinate with another, the figures the alignment row of Section~\ref{sec:results} is
+read against. The editors' aids (a snap guide, an align command, a grid), read from their
+code and manuals: Signavio draws orientation lines, a guide, and snaps to them on every
+drag, and offers align and distribute commands (SAP Signavio Process Manager user guide,
+the successor of the initiative's editor); PathVisio 3 (release 3.3.0, its source) draws
+no guide and has no grid, and offers align-centre and stack commands on a selection;
+Reactome's Curator Tool (github.com/reactome/CuratorTool, 2026) draws no guide and has no
+grid, and offers two align commands to the first selected node; the WikiPathways web
+editor's aids were not read. Section~\ref{sec:alternatives} takes this up.
+
+\begin{table}[!htbp]\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+corpus & integer coordinates & boxes sharing an $x$ & sharing a $y$ & sharing either \\
+\midrule
+WikiPathways & 17 per cent & 0.37 & 0.29 & 0.54 \\
+Reactome & 67 per cent & 0.06 & 0.12 & 0.17 \\
+BPMN & 61 per cent & 0.41 & 0.77 & 0.87 \\
+\bottomrule
+\end{tabular}
+\caption{Raw coordinates: the share that are integers, and the fraction of boxes sharing
+an exact coordinate with another box (\texttt{results/ties.md}).}
+\label{tab:ties}
+\end{table}
 
 \section{What the coordinates hold}\label{sec:results}
 
 \input{figures/tools}
 
-Figure~\ref{fig:tools} shows one graph under the hand and three tools. The tables are
-from one deterministic pass over the corpora (\texttt{results/run\_all.sh}; commit, versions, seeds and corpus hashes in
-\texttt{results/manifest.txt}); the BPMN sample runs by the same scripts with
-\texttt{--corpora BPMN:bpmnr}.
+Figure~\ref{fig:tools} shows one graph under the hand and three tools. Every table is
+from one deterministic pass over the corpora (\texttt{results/run\_all.sh}); the
+\texttt{prism} column, the A3 kernel and the summed energies are in Supplement~S1.
 
-\paragraph{Each criterion alone.} Table~\ref{tab:profile}; \texttt{prism}, the A3 kernel
-and the summed energies are in Supplement~S1.
+\paragraph{Length and stress.} The median hand diagram holds no box under either term in
+any corpus, and 0.85 to 0.92 of diagrams sit at exactly 0.00, the [0.00, 0.00] intervals
+of Table~\ref{tab:profile} (\texttt{results/pileups.md}).
+By itself the zero says little: a smooth term is stationary at almost no point a descent
+did not choose, and at this radius every layout that is not a minimiser's converged
+output reads 0.00, the random layouts, \texttt{dot} and ELK included. Three measurements
+fix what the zero is worth. \texttt{neato}'s stress layouts are held at 1.00 under the
+same test and stay held until every box has moved about the test radius: displaced by
+0.005, 0.01, 0.02 and 0.05 of the width they read 0.94 to 0.96, 0.35 to 0.39, 0.05 to
+0.06 and 0.00 (Supplement~S4), so a layout at 0.00 sits more than 0.02 of the width from a
+minimum by the test. The hand layouts' stress value, 0.20 to 0.22, is five to
+twelve times the converged value (0.016 to 0.042) and under half a random layout's (0.44
+to 0.51). And every diagram has improving moves (Table~\ref{tab:dec}), the mean best one
+worth 1.3 to 1.4 per cent of the length term and 0.5 to 0.7 per cent of stress, and none
+was taken; one such move is below perception, the departure is cumulative, and a climber
+capped at the test radius removes 0.28 to 0.31 of $C{+}O{+}L$ and 0.12 to 0.15 of stress
+(Supplement~S4). The hand layouts stand with the layered engines, which price neither length uniformity
+nor stress.
 
-
-
-Read down a hand column. Overlap holds every box of the median diagram at value zero, as
-it does in every tool layout that removes overlaps; in 5 to 18 per cent of hand diagrams
-some box has an overlap-lowering move, the overlap being positive but too small to print.
-Length and stress hold no box of the median hand diagram, and 0.85 to 0.92 of diagrams
-sit at exactly 0.00; \texttt{neato}'s stress layouts are held at 1.00 under the same
-test, so the zero is the layout's and not the test's. The random layouts read 0.00 too,
-as do \texttt{dot} and ELK, which are layered and price no distance: at this radius no
-layout is stationary under a distance term except a minimiser's converged output, and
-the hand layouts stand with the layered engines. Alignment is where the hand layout is held and \texttt{neato}'s is not. The gridiness value puts 58, 36 and 81 per cent of hand-placed boxes in an
-alignment of three or more, none of \texttt{neato}'s, 4 to 7 per cent of a random layout's and 3 to 9 of a
-grid-snapped random layout's (\texttt{results/gridnull.md}), and 88, 82 and 76 per cent
-of \texttt{dot}'s, since a layer is a row; the gridiness $q$ on \texttt{neato}'s layouts is
-the step's flatness, so alignment is compared on the value, with the A1 hold beside it as
-the count a fit needs. The A1 hold tracks the exact-tie fractions of
-Section~\ref{sec:corpora} to within a few points, as a corner term should, and it is an
-upper bound that falls with the direction count, to 0.39, 0.07 and 0.82 at sixty-four
-against a chance line of 0.03, 0.03 and 0.00 (Supplement~S2); the gridiness value does
-not move with it. Alignment does
-not hold the most boxes: node--edge separation holds 0.88 to 1.00 and crossings and
-overlap hold every box. What separates alignment from those three is that the base
-energies price them and do not price it. Flow is the second criterion they omit: it holds
-0.59, 0.62 and 0.86 of hand-placed boxes against 0.26 to 0.41 by chance, and
-\texttt{dot} and ELK hold it at 1.00 with the term at zero, so it is the criterion the
-layered engines price and the person partly satisfies, tolerating a backward edge.
-
-\paragraph{What the zeros mean.} Beside each $q$ the table gives \emph{dec}, the median
-over diagrams of the mean best decrease a single move finds as a fraction of the term's
-value, and \emph{active}, the share of diagrams in which any box has an improving move.
+\paragraph{Overlap and crossings.} Overlap holds every box of the median diagram at value
+zero, as it does in every tool layout that removes overlaps; in 5 to 18 per cent of hand
+diagrams some box has an overlap-lowering move, the overlap positive and rounding to
+0.000 of the box area. Crossings hold every box in every layout, and on BPMN only 3 per
+cent of diagrams offer a crossing-reducing move at all, so ``crossings hold every box'' is
+a statement about the radius and these near-trees ($m/n$ 1.04 to 1.11), not about the
+author. Orthogonality reads the stored routes:
+its 0.73 in BPMN is Signavio's router, which draws 0.87 of edges axis-aligned at every
+segment, and a jitter of two units halves it (Supplement~S7).
 
 \begin{table}[!htbp]\centering\small
 \begin{tabular}{@{}lccc@{\hspace{14pt}}ccc@{\hspace{14pt}}ccc@{}}
@@ -401,40 +429,58 @@ alignment A1   & 0.52 & 0.066 & 92\%  & 0.21 & 0.069 & 100\% & 0.85 & 0.059 & 63
 flow           & 0.59 & 0.010 & 90\%  & 0.62 & 0.012 & 96\%  & 0.86 & 0.004 & 71\% \\
 \bottomrule
 \end{tabular}
-\caption{Beside $q$: \emph{dec}, the median over diagrams of the mean best decrease a single move finds as a fraction of the term's value, and \emph{active}, the share of diagrams in which any box has an improving move.}
+\caption{Beside the median $q$ of the hand layouts: \emph{dec}, the median over diagrams
+of the mean best decrease a single move finds as a fraction of the term's value, and
+\emph{active}, the share of diagrams in which any box has an improving move. The three
+terms above the rule are flat at this radius; the five below are live in almost every
+diagram.}
+\label{tab:dec}
 \end{table}
 
-The three terms above the rule are flat at this radius: on BPMN only 3\% of diagrams
-offer a crossing-reducing move, so ``crossings hold every box'' is a statement about the
-radius and these near-trees ($m/n$ 1.04 to 1.11, against 1.30 in the Rome benchmark
-\cite{rome}), not about the author. The five below are live everywhere, and there the
-0.00 of length and stress is a real reading: every diagram has improving moves, the mean
-best one worth 1.3 to 1.4 per cent of the length term and 0.5 to 0.7 per cent of stress,
-and none was taken. One such move is below perception; the departure is cumulative. The test holds a
-converged layout until its boxes have moved about the test radius: \texttt{neato}'s stress
-layouts with every box displaced by 0.005, 0.01, 0.02 and 0.05 of the width read 0.94,
-0.35 to 0.39, 0.05 to 0.06 and 0.00 (Supplement~S4), so a hand layout's 0.00 puts it at
-least 0.05 from a minimum by the test; a climber capped at the test radius removes 0.28
-to 0.31 of $C{+}O{+}L$ and 0.12 to 0.15 of stress from it; and its stress value, 0.20 to
-0.22, is five to twelve times the converged value (0.016 to 0.042) and under half a
-random layout's (0.44 to 0.51).
+\paragraph{Alignment.} Alignment is where the hand layout is held and \texttt{neato}'s
+is not. The gridiness value puts 58, 36 and 81 per cent of hand-placed boxes in an
+alignment of three or more, none of \texttt{neato}'s, 4 to 7 per cent of a random
+layout's and 3 to 9 per cent of a grid-snapped random layout's, and 88, 82 and 76 per cent of
+\texttt{dot}'s, since a layer is a row. That value is the alignment number of this paper:
+it is kernel-free and does not move with the direction count. The A1 hold, 0.52, 0.21 and
+0.85 against 0.06 to 0.07 by chance, is the count a first-order fit sees, and it is a
+tie counter at the instrument's resolution: it tracks the exact-tie fractions of
+Section~\ref{sec:corpora} to within 0.04, as a corner term should, and it is an upper
+bound that falls with the direction count, to 0.39, 0.07 and 0.82 at sixty-four against
+a chance line of 0.03, 0.03 and 0.00 (Supplement~S2). Alignment does not hold the most
+boxes: node--edge separation holds 0.88 to 1.00 and crossings and overlap hold every
+box. The base energies price those three and not alignment.
+
+\paragraph{Flow.} Flow is the second criterion the base energies omit. It holds 0.59,
+0.62 and 0.86 of hand-placed boxes against 0.28 to 0.41 by chance, and \texttt{dot} and
+ELK hold it at 1.00 with the term at zero: the criterion the layered engines price
+exactly, the person partly satisfies, tolerating a backward edge. In WikiPathways and
+Reactome flow holds more boxes than A1 does.
 
 \paragraph{Reweighting.} Table~\ref{tab:fit} is the linear program of
-Section~\ref{sec:test} on four sets of terms. It is degenerate as that section says it
-must be: offered the base energy it puts all weight on the term every layout satisfies
-and holds 0.99 of held-out boxes, and offered all eight terms it does the same in the
-biological corpora, the held-out hold swinging across splits as zero-residual vertices
-tie differently, while in BPMN a vertex with 0.81 on alignment wins by the terms' scales
-alone and loses to crossings when that column is halved (\texttt{results/bpmnr\_fit.md}).
-Confined to length and stress it holds 0.003 to 0.011 of the boxes. Confined to the four
-terms no layout satisfies exactly it is identified in every corpus, 0.88 to 0.95 on
-alignment with a stable held-out hold; under the smooth A3 kernel the same four-term fit
-puts 0.57 to 0.58 on flow and 0.00 to 0.08 on alignment, at a held-out hold within 0.03
-of the corner kernel's in WikiPathways and BPMN and all weight on node--edge with an
-unstable hold in Reactome (\texttt{results/a3\_fit.md}): the hold does not identify
-alignment over flow and orthogonality, the corner does. The sweep,
-Table~\ref{tab:sweep}, is the fraction of a corpus's boxes held as a weight $w$ on one
-term joins crossings and overlap at equal weight.
+Section~\ref{sec:test} on four sets of terms, and Table~\ref{tab:sweep} the sweep. The
+program is degenerate as that section says it must be: offered the base energy it puts
+all weight on the term every layout satisfies and holds 0.99 of held-out boxes, and
+offered all eight terms it does the same in the biological corpora, the hold on held-out
+diagrams swinging across WikiPathways splits as zero-residual vertices tie differently; in
+BPMN a vertex with 0.81 on alignment wins by the terms' scales alone and loses to
+crossings when the crossings column of the differences is halved. Confined to length and
+stress it holds 0.003 to 0.011 of the boxes. Confined to the four terms the base energies
+do not price it is identified in every corpus, 0.88 to 0.95 on alignment. No energy
+offered here makes the hand layouts minima: the best hold on held-out diagrams under
+those four terms is 0.65 in BPMN, 0.25 in WikiPathways and 0.15 in Reactome. The fitted
+four-term energy holds fewer WikiPathways boxes (0.248) than A1 alone beside crossings and
+overlap (0.516): the residual depends on the terms' scales, and the 0.05 of weight the fit
+spreads on the other three terms releases half the boxes the corner held. The
+identification is the corner's, not the criterion's: under the smooth A3 kernel the same
+four-term fit puts 0.57 to 0.58 on flow and 0.04 to 0.08 on alignment in WikiPathways and
+BPMN, at a hold on held-out diagrams within 0.03 of the corner's, and all weight on
+node--edge with an unstable hold in Reactome (Supplement~S1). A term satisfied exactly by
+a fraction of the boxes, and possibly by the editor's aid, is a constraint the
+environment imposes rather than a criterion the drawer trades off. The
+learning-from-demonstration literature infers such constraints as their own object, the
+cost weights given or recovered beside them~\cite{chou20, scobee20}; the tied boxes are
+for A1 what every box is for overlap, a zero-residual set the program is drawn to.
 
 \begin{table}[!htbp]\centering\small
 \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{3.6cm}@{}}
@@ -443,11 +489,13 @@ terms offered & WikiPathways & Reactome & BPMN \\
 \midrule
 C, O, L & overlap 1.00; residual 0.0001; held out 0.987 [0.982, 0.993] & overlap 1.00; 0.0000; 0.994 [0.990, 0.998] & crossings 1.00; 0.0005; 0.992 [0.982, 0.998] \\[2pt]
 all eight & overlap 1.00; 0.0001; 0.773 [0.235, 0.991] & overlap 1.00; 0.0000; 0.994 [0.990, 0.998] & alignment 0.81; 0.0003; 0.552 [0.479, 0.983] \\[2pt]
-L, S & stress 1.00; held out 0.003 to 0.011 & & \\[2pt]
-R, A, N, F & alignment 0.95; 0.248 [0.236, 0.260] & alignment 0.92; 0.149 [0.142, 0.157] & alignment 0.88; 0.651 [0.617, 0.689] \\
+L, S & stress 1.00; 0.0053; 0.003 [0.001, 0.005] & stress 1.00; 0.0055; 0.006 [0.004, 0.007] & stress 1.00; 0.0063; 0.011 [0.008, 0.014] \\[2pt]
+R, A, N, F & alignment 0.95; 0.0010; 0.248 [0.236, 0.260] & alignment 0.92; 0.0014; 0.149 [0.142, 0.157] & alignment 0.88; 0.0003; 0.651 [0.617, 0.689] \\
 \bottomrule
 \end{tabular}
-\caption{The linear program on the simplex: the term that takes the weight (and its share where below 1), the residual per node, and the held-out fraction of boxes under $5 \times 2$ cross-validation with its range over the ten splits.}
+\caption{The linear program on the simplex: the term that takes the weight (and its share
+where below 1), the residual per node, and the pooled $q$ held out under $5 \times 2$
+cross-validation with its range over the ten splits.}
 \label{tab:fit}
 \end{table}
 
@@ -464,35 +512,38 @@ alignment A1 & 0.506 & 0.516 & 0.243 & 0.238 & 0.790 & 0.794 \\
 flow & 0.576 & 0.606 & 0.613 & 0.625 & 0.811 & 0.819 \\
 \bottomrule
 \end{tabular}
-\caption{The sweep: the fraction of a corpus's boxes held as a weight $w$ on one term joins crossings and overlap at equal weight.}
+\caption{The sweep: pooled $q$, the fraction of a corpus's boxes held, as a weight $w$ on
+one term joins crossings and overlap at equal weight.}
 \label{tab:sweep}
 \end{table}
 
 The fall is a step, not a slope: whatever weight length or stress carries, the sum holds
 under 0.015 of the boxes, because at almost every box some direction lowers the distance
-term and nothing else moves; at crossings-to-overlap ratios of 10:1 and 1:10 the same
-weight holds 0.005 to 0.014 (\texttt{results/ratio\_sweep.md}). Alignment and flow carry weight at the fraction they are
-satisfied. Under A3 the alignment row reads 0.29, 0.13 and 0.39 at $w = 0.001$, a third
-to half of the corner's figure, the number a gradient-trained consumer should expect.
-Axis-only moves, which preserve every perpendicular alignment tie, still improve length
-and stress on the median diagram of every corpus, and a weight of 0.001 on length beside
-alignment collapses the median $C{+}O{+}A_1$ hold from 0.51, 0.22 and 0.85 to 0.11, 0.07
-and 0.13; and under the constrained model of the layout literature, stress subject to
-alignment constraints \cite{ipsepcola06, dunnart08, setcola18}, 0.88 to 0.90 of the
-median diagram's boxes still have a stress-lowering move among the directions that do
-not raise A1 (\texttt{results/constrained.py}, first 300).
+term and no other term rises there; at crossings-to-overlap ratios of 10:1 and 1:10 the
+same weight holds 0.005 to 0.014. Under alignment or flow the pooled hold at $w = 0.001$ equals the fraction of boxes the
+term holds alone, since crossings and overlap are flat at almost every box, and for the
+corner term that is the tie count again;
+under A3 the alignment row reads 0.29, 0.13 and 0.39 at $w = 0.001$, about half the
+corner's figure, the number a learner that takes gradients of the fitted energy should
+expect. Axis-only
+moves, which preserve every perpendicular alignment tie, still improve length and stress
+on the median diagram of every corpus, and a weight of 0.001 on length beside alignment
+collapses the median $C{+}O{+}A_1$ hold from 0.51, 0.22 and 0.85 to 0.11, 0.07 and 0.13.
+Under the constrained model of the layout literature, stress subject to alignment
+constraints~\cite{ipsepcola06, dunnart08, setcola18}, 0.88 to 0.90 of the median
+diagram's boxes still have a stress-lowering move among the directions that do not raise
+A1 (\texttt{results/constrained.md}, first-300 BPMN sample).
 
-\paragraph{The two further collections.} The same test on the drawings of
-Section~\ref{sec:corpora} that are not working diagrams gives the same profile. HOLA's 136
-drawings: crossings, overlap and node--edge 1.00, length and stress 0.00, alignment A1
-0.50 with a participant-clustered interval of [0.31, 0.57] (2,000 resamples) and
-per-participant medians from 0.14 to 0.96. The GD Collection's 1,072 figures: crossings
-1.00, length and stress 0.00 and at exactly zero in 82 and 84 per cent of figures,
-alignment A1 0.87. The collection's profile is also the layered tools' profile, so it
-cannot say whether hands or algorithms made its figures; what it says is that the corpus
-the standing proposal would fit first is held by the term the base energies omit and by
-no distance term. In the 41 to 100 node band the verdicts stand and the alignment hold
-falls to 0.39, 0.16 and 0.74 (Supplement~S7).
+\paragraph{The two further collections.} The same test on HOLA's 136 drawings gives
+crossings, overlap and node--edge 1.00, length and stress 0.00, alignment A1 0.50 with a
+participant-clustered interval of [0.31, 0.57] and per-participant medians from 0.14 to
+0.96. On the GD Collection's 1,072 figures: crossings 1.00, length and stress 0.00 and at
+exactly zero in 82 and 84 per cent of figures, alignment A1 0.87. The collection's
+profile is the layered tools' profile, so the test cannot say whether hands or algorithms
+made its figures. It does say that the corpus a coordinate fit would run on first is held
+by the term the base energies omit and by no distance term. In the 41 to 100 node
+band the verdicts stand and the alignment hold falls to 0.39, 0.16 and 0.74
+(Supplement~S7).
 
 \section{What else could produce this}\label{sec:alternatives}
 
@@ -500,40 +551,40 @@ falls to 0.39, 0.16 and 0.74 (Supplement~S7).
 
 \paragraph{The editor snapped to a grid,} so alignment is the tool's. Excluded. The
 detected pitch is one unit in Reactome and BPMN and none in WikiPathways, where exact
-alignment is twice as common as integer coordinates. A layout snapped to the same unit grid,
-with the same boxes and the same bounding box and no author, holds 0.06 to 0.09 over
-three seeds in every corpus (Figure~\ref{fig:controls}); snapped to the plausible working
-pitch of five units, 0.076 (first 300). The grid is available to the random layout and does not
-produce the effect. Displacing every hand-placed box by up to half a pitch leaves the
-hold within 0.03 of where it was, and that test cannot fail, for a reason in the
-instrument: a box offset by $\epsilon$ from its nearest agreement is released only by a
-move whose component toward the agreement, $a$, is less than $2\epsilon$, since the move
-lands at $|\epsilon - a|$; the smallest such component among sixteen directions is
-$0.38\,d$, so release begins at $\epsilon > 0.19\,d$, which is 3 to 5 units against a half
-pitch of 0.5. Displacing past that takes the hand layouts to the snapped random level
-(0.06 at a half-width of 120 units; Supplement~S7).
+alignment is twice as common as integer coordinates. A random layout snapped to the
+drawing's unit grid (pitch one where none is detected), with the same boxes and the same
+bounding box and no author, holds 0.06 to 0.09 over three seeds in every corpus
+(Figure~\ref{fig:controls}); snapped to the plausible working pitch of five units, 0.076
+(first-300 BPMN). The grid is available to the random layout and does not produce the
+effect. Displacing every hand-placed box by up to half a pitch leaves the hold within
+0.03 of where it was, and that test cannot fail: the corner releases a box only once its
+offset from its nearest agreement exceeds $0.19\,d$ (Supplement~S2), 3 to 5 units
+against a half pitch of 0.5. Displacing past that takes the hand layouts to the snapped
+random level (0.06 at a half-width of 120 units; Supplement~S7).
 
-\paragraph{The editor snapped to the neighbours,} so alignment is the guide's. Not
-separable on these corpora, and conceded: a grid control cannot see snap-to-object
-guides, and the hold orders as the editors' guides of Section~\ref{sec:corpora} do,
-highest where guides meet every drag and lowest where they are absent. Two pieces of
-evidence say no single editor's aid produces it: HOLA's drawings come from a study tool
-and hold 0.50, and WikiPathways is flat across four generations of pathway numbers
-(Supplement~S7). Separating hand from guide needs a guide-free editor or an
-interaction log, and these corpora carry neither. Marriott et al.\ \cite{marriott12}
-bound the other side: in a recall task node alignment was the one feature participants
-did not preserve, so the alignment these coordinates hold is a property of how the
-layouts were made, not evidence that anyone perceived it. Every claim here is about the
-coordinates as data for a fit, and for a fit the attribution changes nothing: the
-coordinates hold a term the energy lacks either way.
+\paragraph{The editor aligned the boxes,} by a snap guide or an align command. Not
+separable on these corpora, and conceded: a grid control cannot see either. The hold is
+highest, 0.85, in the one editor with a drag guide, Signavio. The other two editors draw
+no guide, and there the exact ties came from the hand or from an align command applied to
+a selection: WikiPathways holds 0.52 and Reactome 0.21 under align commands of the same
+kind, so the aid does not fix the level. The hold appears under four editors that share
+no code, HOLA's Orthowontist included at 0.50, and is flat across four generations of
+WikiPathways pathway numbers (0.47 to 0.53, Supplement~S7), so it is not one editor's
+artefact. Separating the hand from the align command needs an interaction log, and these
+corpora carry none. Marriott et al.\ \cite{marriott12} bound the other side: in a
+recall task node alignment was among the features participants did not preserve, so the
+alignment these coordinates hold is a property of how the layouts were
+made, not evidence that anyone perceived it. Every claim here is about the coordinates as data for
+a fit, and for a fit the attribution changes nothing: the coordinates hold a term the
+energy lacks either way.
 
-\paragraph{The lanes hold the boxes.} 82\% of BPMN boxes sit in a lane or pool, and a
-horizontal lane constrains $y$. Of the held boxes, 28\% are held by a column, which no
-horizontal lane imposes, 14\% by a row shared across lanes, and 58\% by a row within one
-lane, and those lanes are a median 6.3 box heights tall, so the row inside them was
-chosen (\texttt{results/lanes.py}).
+\paragraph{The lanes place the boxes.} Of BPMN boxes, 82 per cent sit in a lane or pool,
+and a horizontal lane constrains $y$. Of the held boxes, 28 per cent are held by a column,
+which no horizontal lane imposes, 14 per cent by a row shared across lanes, and 58 per cent
+by a row within one lane, and those lanes are a median 6.3 box heights tall, so the row
+inside them was chosen.
 
-The rest, each with the test that excluded it:
+The rest, each with the test that excluded it, are Table~\ref{tab:alternatives}.
 
 \begin{table}[!htbp]\centering\small
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{7.5cm}@{}}
@@ -542,23 +593,22 @@ alternative & test & result \\
 \midrule
 Centre distances on box diagrams & border-to-border distances, $L$ refitted & hand 0.00 in every corpus; \texttt{neato}, which minimised the centre form, not held under the border form (Supplement~S3) \\[2pt]
 The radius and the directions & $d \in \{0.005, 0.01, 0.02, 0.05\}$; 8 to 64 directions & hand verdicts the same at every $d$ and count; the A1 level falls with the direction count and the gap to the control does not (Supplement~S2) \\[2pt]
-Near-trees make overlap and crossings easy & $q$ against $m/n$ over diagrams (\texttt{results/sparsity.md}) & crossings track density by hand (Spearman $-0.05$ to $-0.37$) and under \texttt{dot} ($-0.30$ to $-0.48$) alike; length and stress are 0.00 in the sparse and the dense half both \\[2pt]
-Reading direction is the missing constraint & the flow term & flow holds 0.59 to 0.86 of hand-placed boxes where \texttt{dot} and ELK hold 1.00: a criterion partly satisfied, the person tolerating a backward edge \\[2pt]
-The tools are the wrong tools & ELK layered, the engine the BPMN editors run & its profile is \texttt{dot}'s: distance terms 0.00, flow 1.00, alignment 0.42 to 0.59 \\
+Near-trees make overlap and crossings easy & $q$ against $m/n$ over diagrams & crossings track density by hand and under \texttt{dot} alike; length and stress are 0.00 in the sparse and the dense half both (\texttt{results/sparsity.md}) \\[2pt]
 \bottomrule
 \end{tabular}
 \caption{The remaining alternatives, each with the test that excluded it.}
+\label{tab:alternatives}
 \end{table}
 
 \section{Related work}\label{sec:related}
 
 Aesthetic criteria and their weighting go back to Tamassia, Di Battista and Batini
-\cite{tdb88} and were made an explicit energy by Davidson and Harel \cite{dh96}. Purchase
+\cite{tdb88} and were made an explicit energy by Davidson and Harel~\cite{dh96}. Purchase
 \cite{purchase02} gave the criteria their metrics, among them node orthogonality, the fit
-of node positions to an imaginary grid; Bennett et al.'s survey \cite{bennett07} lists it
+of node positions to an imaginary grid; Bennett et al.'s survey~\cite{bennett07} lists it
 and uniform edge length side by side, each with a Gestalt rationale and, as of 2007,
 neither evaluated. The test here is such an evaluation, at the coordinates, and it
-separates the two.
+separates the two. Table~\ref{tab:related} is what was known, by how it was asked.
 
 \begin{table}[!htbp]\centering\small
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{10.2cm}@{}}
@@ -566,100 +616,100 @@ separates the two.
 work & what it gives, and what it leaves \\
 \midrule
 \multicolumn{2}{@{}l}{\emph{By having people draw}}\\[2pt]
-van Ham, Rogowitz \cite{vanham08} & 71 of 73 hand layouts raise edge-length variance above the force-directed optimum half of them started from \\[2pt]
-Dwyer et al.\ \cite{dwyer09} & 194 judges' choices among 32 user layouts and three automatic ones track stress; the user layouts carry 3 to 9 times the force-directed stress in that paper's Table 2 \\[2pt]
-Purchase, Pilcher, Plimmer \cite{purchase12} & drawing from adjacency lists: crossing removal the strongest aesthetic, alignment to a grid important \\[2pt]
+van Ham, Rogowitz~\cite{vanham08} & 71 of 73 hand layouts raise edge-length variance above the force-directed optimum half of them started from \\[2pt]
+Dwyer et al.\ \cite{dwyer09} & 32 participants drew 48 layouts of one graph; 188 online judges chose among 9 of them and 3 automatic layouts, and their choices track stress; the user layouts carry 3 to 9 times the force-directed stress in that paper's Table 2 \\[2pt]
+Purchase, Pilcher, Plimmer~\cite{purchase12} & drawing from adjacency lists: crossing removal the strongest aesthetic, alignment to a grid important \\[2pt]
 Kieffer et al.\ \cite{hola16} & 17 participants' layouts of 8 graphs ranked by 66 judges: gridiness correlates with rank on all 8, the source of HOLA's alignment step \\[2pt]
 Marriott et al.\ \cite{marriott12} & 25 participants redrawing small diagrams from memory preserve symmetry, collinearity and orthogonality, and not node alignment \\[2pt]
+Bernstein, Soffer~\cite{bernstein15, burattin16} & layout features of human-made process models named and measured, reading direction and alignment among them; no fit \\[2pt]
 Mooney et al.\ \cite{mooney25} & people prefer low stress and find shortest paths better as it falls, graphs to 50 nodes \\[2pt]
-Mooney, Hegemann, Wolff, Wybrow, Purchase \cite{gdcoll25} & 4,890 figures harvested from these proceedings, provenance not per figure; measured in Section~\ref{sec:results} \\[4pt]
+Mooney, Hegemann, Wolff, Wybrow, Purchase~\cite{gdcoll25} & 4,890 figures harvested from these proceedings, provenance not per figure; measured in Section~\ref{sec:results} \\[4pt]
 \multicolumn{2}{@{}l}{\emph{By learning from examples}}\\[2pt]
-Masui \cite{masui94}; Sp\"onemann et al.\ \cite{spoenemann14}; Klammler et al.\ \cite{klammler19}; Zhang et al.\ \cite{zhang26} & weights from good and bad layouts, from selections, from good-against-worsened pairs, from 64,222 preference labels; none tests whether an example is a minimum of the learned energy, none fits coordinates \\[2pt]
-Flud \cite{flud22} & annealing continued from crowd layouts of pathway diagrams, the closest prior descent from a hand layout, without a cap, a reference or a per-term reading \\[2pt]
-O'Donovan, Agarwala, Hertzmann \cite{odonovan14} & a 122-parameter energy over single-page designs fitted by inverse optimisation, each example taken as optimal: the assumption examined here; their term set contains alignment \\
+Masui~\cite{masui94}; Sp\"onemann et al.\ \cite{spoenemann14}; Klammler et al.\ \cite{klammler19}; Zhang et al.\ \cite{zhang26} & constraint functions from good and bad layouts; weights from selections, from good-against-worsened pairs, from 64,222 preference labels; none tests whether an example is a minimum of the learned energy, and none fits human coordinates \\[2pt]
+SmartGD~\cite{smartgd24}; DeepDrawing~\cite{deepdrawing19}; Kwon et al.\ \cite{kwon18} & coordinates imitated, of algorithm layouts selected by metric, 68 to 81 per cent of them \texttt{neato}'s in four of SmartGD's seven collections; SmartGD replaces its examples as it finds better ones, so it does not take them as optimal \\[2pt]
+Yuan et al.\ \cite{yuan12} & users' sub-layouts merged into one drawing as target distances of a Laplacian-constrained embedding, weights fixed; coordinates as constraints, nothing learned \\[2pt]
+Flud~\cite{flud22} & annealing continued from crowd layouts of pathway diagrams, the closest prior descent from a hand layout, without a cap, a reference or a per-term reading \\[2pt]
+O'Donovan, Agarwala, Hertzmann~\cite{odonovan14} & a 122-parameter energy over single-page designs fitted by nonlinear inverse optimisation, each example taken as optimal: the assumption examined here; their term set contains alignment \\
 \bottomrule
 \end{tabular}
 \caption{What is known, by how it was asked.}
+\label{tab:related}
 \end{table}
 
-The learned quality scores, from graph features \cite{kwon18, deepdrawing19} or from
-the drawn image \cite{haleem19}, the aggregated aesthetics metric of Huang, Huang and
-Lin \cite{huang16}, and the evolutionary searches that took a criterion's relative
-weight from user rankings \cite{rosete99, barbosa01}, sit with Masui and Klammler: none
-tests whether an example is a minimum of the learned score. Alignment as a human
-criterion is known since 2012 in graph drawing \cite{purchase12} and since 1985 in
-drawing editors: Pavlidis and Van Wyk's beautifier inferred alignment constraints from the
-near-alignments of a rough drawing \cite{pvw85}, Igarashi et al.\ made the inference
-interactive \cite{igarashi97}, and the guides of Section~\ref{sec:alternatives} are their
-descendants. Energies and constraint systems that price it exist: HOLA's gridiness step
-\cite{hola16}, O'Donovan's alignment terms \cite{odonovan14}, and stress under alignment
-constraints \cite{ipsepcola06, dunnart08, setcola18}. The new part is the count of how
-many hand-placed boxes it holds beside the counts for the criteria the base energies
-weight, and the step under the distance terms. Van Wageningen, Mchedlidze and Telea
-\cite{wageningen25} show drawings with identical metric values that differ in quality, so
-a fitted energy with no residual would still not be the energy people use; the claims
-here stay on the negative side. The inverse problem and its degeneracy are
-Section~\ref{sec:test}'s, and Marriott et al.'s test of feature preservation against
-random redrawings \cite{marriott12} is the nearest precedent in layout to the nulls used
-here.
+The learned quality scores~\cite{kwon18, haleem19, huang16} and Barbosa and Barreto's
+genetic algorithm, which co-evolved a weight vector against a ranking users
+supplied~\cite{barbosa01}, sit with Masui and Klammler: none tests whether an example is a minimum of the
+learned score. Alignment as a human criterion has been known since 2012 in graph
+drawing~\cite{purchase12} and since 1985 in drawing editors, where Pavlidis and Van Wyk's
+beautifier inferred alignment constraints from the near-alignments of a rough
+drawing~\cite{pvw85}, Igarashi et al.\ made the inference interactive~\cite{igarashi97},
+and the guides and align commands of Section~\ref{sec:alternatives} are their
+descendants. Energies and constraint systems that price it exist: HOLA's gridiness
+step~\cite{hola16}, O'Donovan's alignment terms~\cite{odonovan14}, and stress under
+alignment constraints~\cite{ipsepcola06, dunnart08, setcola18}. Van Wageningen,
+Mchedlidze and Telea~\cite{wageningen25} show drawings with identical metric values that
+differ in quality, so a fitted energy with no residual would still not be the energy
+people use; the claims here stay on the negative side. Marriott et al.'s test of feature
+preservation against random redrawings~\cite{marriott12} is the nearest precedent in
+layout to the nulls used here.
 
 \section{What follows}\label{sec:discussion}
 
-Coordinates a person accepted are not minima of the energy in use. The failure is
-specific: overlap is met exactly, uniform edge length and stress are nowhere near met and
-carry no weight from 0.001 up, and what holds the boxes instead is an alignment into rows and columns that neither base
-energy prices. The charge is bounded twice: \texttt{dot} and ELK hold alignment at 0.42
-to 1.00 without pricing it, since layering aligns as a side effect, so the missing term
-convicts the energies and not the layered engines; and the energies that do price
+The charge against the energies is bounded twice: \texttt{dot} and ELK hold alignment at
+0.42 to 1.00 without a term for it, since a layer puts its nodes on one line and
+Brandes--K\"opf straightens edges across layers, so the missing term convicts the
+energies and not the layered engines; and the energies that do price
 alignment, HOLA's, O'Donovan's and the constraint systems, are not the ones a coordinate
 fit to a graph-drawing corpus would be offered.
 
 \paragraph{For a tool that learns its weights.} Offer alignment among the terms, and flow
-where the graph is directed, or the fit returns nothing the drawing did. That is an addition, not a subtraction: edge length
-and stress keep their weight, since a term inert at human coordinates is not thereby
-unwanted, and the preference evidence runs the other way \cite{mooney25, dwyer09}. People
-prefer the layouts a stress minimiser makes, do not draw that way, and do not preserve in
-recall the alignment they do draw \cite{marriott12}; no study yet takes production and perception
-from one corpus. An energy fitted to coordinates a snap guide produced learns the guide:
-an editor that already snaps gains a term it enforces on every drag, and a layout engine
-without a guide gains what the guide gives. The number to report for a fitted energy is
-the fraction of a held-out drawing's boxes it holds under the terms no layout satisfies
-exactly, $q_{0.02}$ at sixteen directions with the fitted $L$, with the decrease and
-active columns beside it, since a bare held fraction is bought by weighting a term
-everyone satisfies: the degenerate fit reads 0.99. The gain is small and measured: replacing each box in turn against the frozen rest,
-alignment does not move the median distance to the drawing's position and raises the
-share of boxes landing on the drawing's row or column by a fifth to a half
-(\texttt{results/reinsert.md}).
-
-\paragraph{Where the test applies.} Before any decomposable objective is fitted to
-artefacts taken as optimal, wherever one variable can be moved at a time, the per-term
-held fraction with a converged reference and a random null sorts the terms into
-satisfied, inert and violated, and a candidate term that holds the demonstrations while
-the fitted energy holds none is a missing feature found without fitting. A contrastive
-fit reads a different quantity: hand layouts carry half the stress of random layouts of
-the same graphs and more length non-uniformity (0.22 to 0.28 against 0.19 to 0.22,
-\texttt{results/nulls.md}), so a preference or likelihood fit would weight stress and not
-length uniformity, where the coordinate fit weights neither.
+where the graph is directed, or the fit learns nothing of what the drawer did. That is an
+addition: edge length and stress keep their weight, since a term inert at human
+coordinates is not thereby unwanted, and the preference evidence runs the other way
+\cite{mooney25, dwyer09}. People prefer the layouts a stress minimiser makes, do not draw
+that way, and in recall do not preserve the alignment they do draw~\cite{marriott12}; no
+study yet takes production and perception from one corpus. An energy fitted to
+coordinates a snap guide or an align command produced learns the aid: an editor that
+already snaps gains a term it enforces on every drag, and a layout engine without a guide
+gains what the aid gives. The number to report for a fitted energy is the fraction of a held-out drawing's
+boxes the energy holds under the terms whose median value at the demonstrations is above
+zero: $q_{0.02}$ at sixteen directions with the fitted $L$, and the decrease and active
+columns beside it. A bare held fraction is bought by weighting a term everyone satisfies,
+as the degenerate fit of Section~\ref{sec:results} shows. For the corner term the
+exact-tie share of Table~\ref{tab:ties} is the ceiling. Any tool that emits
+\texttt{dot} with positions can report the number:
+\texttt{data/dot2corpus.py drawing.gv my.txt}, then \texttt{station direct --corpus
+my.txt --weights 0,0,0,0,0,1,0,0 --align a1}. The gain is small and measured: when each box is replaced in turn against the frozen
+rest, alignment does not move the median distance to the drawing's position and raises
+the share of boxes landing on the drawing's row or column by a fifth to a half
+(\texttt{results/reinsert.md}). A preference or likelihood fit reads a different
+quantity: hand layouts carry half the stress of random layouts of the same graphs and
+more length non-uniformity (0.22 to 0.28 against 0.19 to 0.22), so such a fit would
+weight stress and not length uniformity, where the coordinate fit weights neither. For a
+layered engine, whose parameters are spacings and placement strategies rather than
+weights, the result is a target level: on BPMN 81 per cent of hand-placed boxes sit in an
+alignment of three or more and 72 per cent of ELK's, on Reactome 36 against 69, and the
+levers are the node placement strategy and the straight-edge preference, none of which
+targets an alignment fraction.
 
 \paragraph{Limits.} The alignment count is specific to box-and-arrow diagrams of 4 to 100
-boxes drawn in editors with guides, it falls with size, and its level is stated at
-sixteen directions, where the corner's resolution is $0.19\,d$. The hand is not separated
-from the guide. The GD Collection is measured on chord edges with no box sizes and does
-not record who made its figures. The distance terms read 0.00 on every layout that is
-not a minimiser's output, so the negative result separates hand layouts from converged
-ones and from nothing else. The BPMN corpus is a sample of 300 from 6,723, and its authors' courses are not
-recorded, so diagrams from one assignment may not be independent. The
-first-order residual is a scale-dependent number and is reported only beside $q$.
+boxes drawn in editors; it falls with size; its level is stated at sixteen directions.
+Which unpriced criterion the four-term fit names depends on the kernel offered. The
+negative result separates hand layouts from converged ones and from nothing else; its
+content is the distance and the step. The term set is the force-directed family's.
+Untested: a minimum node gap (which every layered engine prices, and which is live where
+overlap is degenerate), total edge length, compactness, bends, symmetry and the edge
+alignment of unequal boxes. Whether a layout started from an automatic one the person then
+edited, the production case for a shipped editor, is not recorded; Reactome's Curator Tool
+has a hierarchical layout command, so its diagrams may have, and HOLA's participants
+started from a supplied layout. The tool controls are laid out without the containers the
+person worked inside, and three of their eight terms are read on chords. The per-drawer spread of Sections~\ref{sec:corpora} and~\ref{sec:results} says a
+population weight may be the wrong object. The BPMN authors' courses are not recorded, so
+diagrams from one assignment may not be independent. The plan the study started from is
+beside the paper, its outcomes in Supplement~S8.
 
-\section{Reproducibility}\label{sec:repro}
-
-Parsers, the energy, the directional test, the descent, the fitting scripts, the parsed
-corpora and every table's script are in the repository under \texttt{example/diagrams},
-each analysis beside its committed output, and \texttt{results/manifest.txt} records the
-commit, the tool versions, the seeds and the SHA-256 of the raw archives and the corpus
-files. The directional test is deterministic and the descents are deterministic from
-their seed. The plan the study started from is beside the paper with its outcomes in
-Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside this file.
+\paragraph{Declaration.} The author has no funding and no competing interest to declare;
+every human-made layout here is secondary use of published data.
 
 {\footnotesize
 \begin{thebibliography}{99}
@@ -672,18 +722,6 @@ Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside 
  of Visual Languages and Computing} 13(5):501--516, 2002.
 \bibitem{kobourov} S.~G. Kobourov. Force-Directed Drawing Algorithms. In \emph{Handbook
  of Graph Drawing and Visualization}, CRC Press, 2013.
-\bibitem{masui94} T.~Masui. Evolutionary Learning of Graph Layout Constraints from
- Examples. \emph{Proc.\ UIST '94}, 103--108, 1994.
-\bibitem{spoenemann14} M.~Sp\"onemann, B.~Duderstadt, R.~von Hanxleden. Evolutionary Meta
- Layout of Graphs. \emph{Diagrams 2014}, LNCS, 16--30, 2014.
-\bibitem{klammler19} M.~Klammler, T.~Mchedlidze, A.~Pak. Aesthetic Discrimination of Graph
- Layouts. \emph{Journal of Graph Algorithms and Applications} 23(3):525--552, 2019.
-\bibitem{flud22} A.~Bharadwaj, D.~Gwizdala, Y.~Kim, K.~Luther, T.~M. Murali. Flud: A Hybrid
- Crowd--Algorithm Approach for Visualizing Biological Networks. \emph{ACM Transactions on
- Computer--Human Interaction} 29(1), 2022.
-\bibitem{zhang26} P.~Zhang, X.~Li, X.~Wang, H.-W. Shen, Y.~Hu. Beauty in the Eye of AI:
- Aligning LLMs and Vision Models with Human Aesthetics in Network Visualization.
- arXiv:2604.03417, 2026.
 \bibitem{ahuja01} R.~K. Ahuja, J.~B. Orlin. Inverse Optimization. \emph{Operations
  Research} 49(5):771--783, 2001.
 \bibitem{keshavarz11} A.~Keshavarz, Y.~Wang, S.~Boyd. Imputing a Convex Objective Function.
@@ -691,16 +729,51 @@ Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside 
 \bibitem{chan19} T.~C.~Y. Chan, T.~Lee, D.~Terekhov. Inverse Optimization: Closed-Form
  Solutions, Geometry, and Goodness of Fit. \emph{Management Science} 65(3):1115--1135,
  2019.
-\bibitem{odonovan14} P.~O'Donovan, A.~Agarwala, A.~Hertzmann. Learning Layouts for
- Single-Page Graphic Designs. \emph{IEEE Transactions on Visualization and Computer
- Graphics} 20(8):1200--1213, 2014.
-\bibitem{gdcoll25} G.~J. Mooney, T.~Hegemann, A.~Wolff, M.~Wybrow, H.~C. Purchase.
- Universal Quality Metrics for Graph Drawings: Which Graphs Excite Us Most? In \emph{33rd
- International Symposium on Graph Drawing and Network Visualization} (GD 2025), LIPIcs 357,
- 30:1--30:20, 2025.
+\bibitem{englert17} P.~Englert, N.~A. Vien, M.~Toussaint. Inverse KKT: Learning Cost
+ Functions of Manipulation Tasks from Demonstrations. \emph{International Journal of
+ Robotics Research} 36(13--14):1474--1488, 2017.
+\bibitem{berret11} B.~Berret, E.~Chiovetto, F.~Nori, T.~Pozzo. Evidence for Composite Cost
+ Functions in Arm Movement Planning: An Inverse Optimal Control Approach. \emph{PLoS
+ Computational Biology} 7(10):e1002183, 2011.
 \bibitem{ng00} A.~Y. Ng, S.~Russell. Algorithms for Inverse Reinforcement Learning. In
  \emph{Proc.\ 17th International Conference on Machine Learning} (ICML 2000), Morgan
  Kaufmann, 663--670, 2000.
+\bibitem{levine12} S.~Levine, V.~Koltun. Continuous Inverse Optimal Control with Locally
+ Optimal Examples. In \emph{Proc.\ 29th International Conference on Machine Learning}
+ (ICML 2012), Omnipress, 41--48, 2012.
+\bibitem{odonovan14} P.~O'Donovan, A.~Agarwala, A.~Hertzmann. Learning Layouts for
+ Single-Page Graphic Designs. \emph{IEEE Transactions on Visualization and Computer
+ Graphics} 20(8):1200--1213, 2014.
+\bibitem{chen26} R.-T. Chen, K.~Xue, C.~Gao, Y.~Shi, T.~Xu, P.~Xie, S.~Xu, M.~Yuan,
+ C.~Qian, Z.-H. Zhou. How Can Reinforcement Learning Achieve Expert-level Placement? In
+ \emph{Proc.\ 63rd ACM/IEEE Design Automation Conference} (DAC 2026), arXiv:2604.25191,
+ 2026.
+\bibitem{masui94} T.~Masui. Evolutionary Learning of Graph Layout Constraints from
+ Examples. \emph{Proc.\ UIST '94}, 103--108, 1994.
+\bibitem{spoenemann14} M.~Sp\"onemann, B.~Duderstadt, R.~von Hanxleden. Evolutionary Meta
+ Layout of Graphs. \emph{Diagrams 2014}, LNCS, 16--30, 2014.
+\bibitem{klammler19} M.~Klammler, T.~Mchedlidze, A.~Pak. Aesthetic Discrimination of Graph
+ Layouts. \emph{Journal of Graph Algorithms and Applications} 23(3):525--552, 2019.
+\bibitem{zhang26} P.~Zhang, X.~Li, X.~Wang, H.-W. Shen, Y.~Hu. Beauty in the Eye of AI:
+ Aligning LLMs and Vision Models with Human Aesthetics in Network Visualization.
+ arXiv:2604.03417, 2026.
+\bibitem{smartgd24} X.~Wang, K.~Yen, Y.~Hu, H.-W. Shen. SmartGD: A GAN-Based Graph Drawing
+ Framework for Diverse Aesthetic Goals. \emph{IEEE Transactions on Visualization and
+ Computer Graphics} 30(8):5666--5678, 2024.
+\bibitem{deepdrawing19} Y.~Wang, Z.~Jin, Q.~Wang, W.~Cui, T.~Ma, H.~Qu. DeepDrawing: A Deep
+ Learning Approach to Graph Drawing. \emph{IEEE Transactions on Visualization and Computer
+ Graphics} 26(1):676--686, 2020.
+\bibitem{kwon18} O.-H. Kwon, T.~Crnovrsanin, K.-L. Ma. What Would a Graph Look Like in
+ This Layout? A Machine Learning Approach to Large Graph Visualization. \emph{IEEE
+ Transactions on Visualization and Computer Graphics} 24(1):478--488, 2018.
+\bibitem{gdcoll25} G.~J. Mooney, T.~Hegemann, A.~Wolff, M.~Wybrow, H.~C. Purchase.
+ Universal Quality Metrics for Graph Drawings: Which Graphs Excite Us Most? In \emph{33rd
+ International Symposium on Graph Drawing and Network Visualization} (GD 2025), LIPIcs 357,
+ 30:1--30:20, 2025. Collection at \texttt{doi:10.4230/artifacts.25065}, commit
+ \texttt{d113537}, CC BY-SA 4.0.
+\bibitem{flud22} A.~Bharadwaj, D.~Gwizdala, Y.~Kim, K.~Luther, T.~M. Murali. Flud: A Hybrid
+ Crowd-Algorithm Approach for Visualizing Biological Networks. \emph{ACM Transactions on
+ Computer-Human Interaction} 29(1), 2022.
 \bibitem{ratliff06} N.~D. Ratliff, J.~A. Bagnell, M.~A. Zinkevich. Maximum Margin
  Planning. In \emph{Proc.\ 23rd International Conference on Machine Learning} (ICML 2006),
  729--736, 2006.
@@ -722,25 +795,33 @@ Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside 
  22(1):349--358, 2016.
 \bibitem{ahmed20} R.~Ahmed, F.~De Luca, S.~Devkota, S.~Kobourov, M.~Li. Graph Drawing via
  Gradient Descent, (GD)$^2$. \emph{Graph Drawing (GD 2020)}, LNCS, 3--17, 2020.
-\bibitem{kamada89} T.~Kamada, T.~Kawai. An Algorithm for Drawing General Undirected Graphs.
+\bibitem{kamada89} T.~Kamada, S.~Kawai. An Algorithm for Drawing General Undirected Graphs.
  \emph{Information Processing Letters} 31:7--15, 1989.
 \bibitem{gansner05} E.~R. Gansner, Y.~Koren, S.~C. North. Graph Drawing by Stress
  Majorization. \emph{Graph Drawing (GD 2004)}, LNCS, 239--250, 2005.
 \bibitem{agrawal24} A.~Agrawal, H.~Balc\i, H.~Hanspers et al. WikiPathways 2024: Next
- Generation Pathway Database. \emph{Nucleic Acids Research} 52(D1):D679--D689, 2024.
+ Generation Pathway Database. \emph{Nucleic Acids Research} 52(D1):D679--D689, 2024. GPML
+ release 20260810, \emph{Homo sapiens}, CC0.
 \bibitem{fabregat18} A.~Fabregat et al. Reactome Diagram Viewer: Data Structures and
- Strategies to Boost Performance. \emph{Bioinformatics} 34(7):1208--1214, 2018.
+ Strategies to Boost Performance. \emph{Bioinformatics} 34(7):1208--1214, 2018. Human
+ SBGN-ML diagrams of release 97, CC0 (\url{https://reactome.org/license}).
 \bibitem{kunze11} M.~Kunze, A.~Luebbe, M.~Weidlich, M.~Weske. Towards Understanding
  Process Modeling: The Case of the BPM Academic Initiative. \emph{BPMN 2011}, LNBIP,
  44--58, 2011.
-\bibitem{sola23} D.~Sola, C.~Warmuth, B.~Sch\"afer, P.~Badakhshan, J.-R. Rehse, T.~Kampik.
- SAP Signavio Academic Models: A Large Process Model Dataset. \emph{Process Mining
- Workshops (ICPM 2022)}, LNBIP, 453--465, 2023.
+\bibitem{bpmai20} M.~Weske, G.~Decker, M.~Dumas, M.~La~Rosa, J.~Mendling, H.~A. Reijers.
+ Model Collection of the Business Process Management Academic Initiative, version
+ BPMAI-29-10-2019. Zenodo, 2020, \texttt{doi:10.5281/zenodo.3758705}, CC BY 3.0.
 \bibitem{bohler16} A.~Bohler et al. Reactome from a WikiPathways Perspective. \emph{PLOS
  Computational Biology} 12(5):e1004941, 2016.
 \bibitem{rome} G.~Di Battista, A.~Garg, G.~Liotta, R.~Tamassia, E.~Tassinari, F.~Vargiu.
  An Experimental Comparison of Four Graph Drawing Algorithms. \emph{Computational
  Geometry} 7(5--6):303--325, 1997.
+\bibitem{chou20} G.~Chou, N.~Ozay, D.~Berenson. Learning Constraints From Locally-Optimal
+ Demonstrations Under Cost Function Uncertainty. \emph{IEEE Robotics and Automation
+ Letters} 5(2):3682--3690, 2020.
+\bibitem{scobee20} D.~R.~R. Scobee, S.~S. Sastry. Maximum Likelihood Constraint Inference
+ for Inverse Reinforcement Learning. In \emph{International Conference on Learning
+ Representations} (ICLR 2020), OpenReview.net, 2020.
 \bibitem{ipsepcola06} T.~Dwyer, Y.~Koren, K.~Marriott. IPSep-CoLa: An Incremental
  Procedure for Separation Constraint Layout of Graphs. \emph{IEEE Transactions on
  Visualization and Computer Graphics} 12(5):821--828, 2006.
@@ -763,25 +844,25 @@ Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside 
 \bibitem{purchase12} H.~C. Purchase, C.~Pilcher, B.~Plimmer. Graph Drawing Aesthetics:
  Created by Users, Not Algorithms. \emph{IEEE Transactions on Visualization and Computer
  Graphics} 18(1):81--92, 2012.
+\bibitem{bernstein15} V.~Bernstein, P.~Soffer. Identifying and Quantifying Visual Layout
+ Features of Business Process Models. In \emph{Enterprise, Business-Process and
+ Information Systems Modeling} (BPMDS/EMMSAD 2015), LNBIP 214, 200--213, 2015.
+\bibitem{burattin16} A.~Burattin, V.~Bernstein, M.~Neurauter, P.~Soffer, B.~Weber.
+ Detection and Quantification of Flow Consistency in Business Process Models.
+ arXiv:1602.02992, 2016.
 \bibitem{mooney25} G.~J. Mooney, J.~Miller, M.~Wybrow, S.~Kobourov, H.~C. Purchase.
  Stress in Graph Drawings: Perception, Preference, and Performance. In \emph{33rd
  International Symposium on Graph Drawing and Network Visualization} (GD 2025), LIPIcs 357,
  38:1--38:23, 2025.
-\bibitem{kwon18} O.-H. Kwon, T.~Crnovrsanin, K.-L. Ma. What Would a Graph Look Like in
- This Layout? A Machine Learning Approach to Large Graph Visualization. \emph{IEEE
- Transactions on Visualization and Computer Graphics} 24(1):478--488, 2018.
-\bibitem{deepdrawing19} Y.~Wang, Z.~Jin, Q.~Wang, W.~Cui, T.~Ma, H.~Qu. DeepDrawing: A Deep
- Learning Approach to Graph Drawing. \emph{IEEE Transactions on Visualization and Computer
- Graphics} 26(1):676--686, 2020.
+\bibitem{yuan12} X.~Yuan, L.~Che, Y.~Hu, X.~Zhang. Intelligent Graph Layout Using Many
+ Users' Input. \emph{IEEE Transactions on Visualization and Computer Graphics}
+ 18(12):2699--2708, 2012.
 \bibitem{haleem19} H.~Haleem, Y.~Wang, A.~Puri, S.~Wadhwa, H.~Qu. Evaluating the Readability
  of Force Directed Graph Layouts: A Deep Learning Approach. \emph{IEEE Computer Graphics
  and Applications} 39(4):40--53, 2019.
 \bibitem{huang16} W.~Huang, M.~L. Huang, C.-C. Lin. Evaluating Overall Quality of Graph
  Visualizations Based on Aesthetics Aggregation. \emph{Information Sciences} 330:444--454,
  2016.
-\bibitem{rosete99} A.~Rosete-Su\'arez, A.~Ochoa-Rodr\'{\i}guez, M.~Sebag. Automatic Graph
- Drawing and Stochastic Hill Climbing. In \emph{Proc.\ Genetic and Evolutionary
- Computation Conference} (GECCO 1999), vol.\ 2, 1699--1706, 1999.
 \bibitem{barbosa01} H.~J.~C. Barbosa, A.~M.~S. Barreto. An Interactive Genetic Algorithm
  with Co-evolution of Weights for Multiobjective Problems. In \emph{Proc.\ Genetic and
  Evolutionary Computation Conference} (GECCO 2001), 203--210, 2001.
@@ -790,7 +871,8 @@ Supplement~S8, and the supplement is \texttt{stationary\_supplement.pdf} beside 
 \bibitem{igarashi97} T.~Igarashi, S.~Matsuoka, S.~Kawachiya, H.~Tanaka. Interactive
  Beautification: A Technique for Rapid Geometric Design. \emph{UIST '97}, 105--114, 1997.
 \bibitem{wageningen25} S.~van Wageningen, T.~Mchedlidze, A.~Telea. Same Quality Metrics,
- Different Graph Drawings. \emph{Graph Drawing (GD 2025)}, arXiv:2508.15557, 2025.
+ Different Graph Drawings. In \emph{33rd International Symposium on Graph Drawing and
+ Network Visualization} (GD 2025), LIPIcs 357, 7:1--7:13, 2025.
 \end{thebibliography}}
 
 \end{document}
