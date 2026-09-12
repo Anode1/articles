@@ -14,8 +14,7 @@ on. The paper's abstract carries the numbers. Measurements are in `example/diagr
 the [cjitter repository](https://github.com/Anode1/cjitter).
 
 [stationary.pdf](stationary.pdf), [stationary_supplement.pdf](stationary_supplement.pdf),
-[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827) (all versions;
-the version here is not yet deposited).
+[doi:10.5281/zenodo.22313827](https://doi.org/10.5281/zenodo.22313827) (all versions).
 
 The metaphor-benchmark audit that stood beside it is withdrawn: a correction inherits the
 audience of what it corrects. Its verdict tables remain in
