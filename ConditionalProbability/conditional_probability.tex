@@ -3,43 +3,56 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
+\usepackage[table]{xcolor}
 \usepackage{tikz}
+\colorlet{tpcol}{blue!18}
+\colorlet{fncol}{orange!35}
+\colorlet{fpcol}{red!25}
+\colorlet{tncol}{green!22}
+\colorlet{rowsel}{gray!18}
 \usetikzlibrary{trees,arrows.meta}
 \usepackage[hidelinks]{hyperref}
 \usepackage{booktabs}
 \usepackage{enumitem}
 \usepackage{array}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage[font=small,labelfont=bf]{caption}
 
 \title{Conditional Probability in Diagnostic Testing:\\
-  An Isomorphism Between Tree Diagrams, Bayes' Theorem,\\
-  Contingency Tables, and Likelihood Ratios,\\
+  One Calculation in Four Notations, Tree, Bayes' Theorem,\\
+  Contingency Table, and Likelihood Ratios,\\
   \large with the Clinical Risk Measures Read from the Same Table}
 \author{Vasili Gavrilov\thanks{Independent researcher. ORCID 0009-0007-9371-5994. The author worked eleven years at a national Ministry of Health in a role unrelated to the topics of this paper. No funding; no competing interests.}}
-\date{First version 29 May 2026; revised 6 September 2026}
+\date{27 September 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-\noindent Diagnostic test results are misread by patients and by clinicians, and the probability behind them is elementary. The same calculation circulates in four notations, each native to one profession: the tree diagram of statistics and decision analysis, Bayes' theorem of probability theory, the $2\times 2$ contingency table of epidemiology, and the odds and likelihood-ratio form of evidence-based medicine. The natural-frequency literature since Gigerenzer and Hoffrage (1995) has shown that the tree with counts on its leaves is the form people get right. It has not written the correspondence between the notations out. This paper does, on one worked example ($1\%$ prevalence, $80\%$ sensitivity, $9.6\%$ false-positive rate, positive predictive value $7.8\%$), row by row. It adds four things. First, the mapping itself, with the absolute and relative risk reduction (ARR, RRR) of trial reporting placed in the same table: they condition on the row, as sensitivity does, while the predictive value conditions on the column, and the paper says where that boundary lies. Second, a five-step Diagnostic Interpretation Procedure, whose first four steps are the natural-frequency method and whose fifth runs three checks, one for each documented failure mode: arithmetic error, base-rate neglect, and a relative figure taken for an absolute one. Third, a spreadsheet form of the procedure for sequences of tests, with a sum-to-one check after every step; on the running example, two conditionally independent positive results raise the posterior from $7.8\%$ to $41.2\%$, and a second test that repeats half of the first test's false positives raises it only to $13.2\%$. Fourth, the argument that medical and epidemiology curricula should teach every one of the notations, not the contingency table alone. The mathematics is classical; the contribution is the mapping, the procedure, and the curriculum argument.
+\noindent This paper is for the clinician, epidemiologist, or patient who meets one calculation in four notations and reads only one of them. The four are the probability tree, Bayes' theorem of probability theory, the $2\times 2$ contingency table of epidemiology, and the odds and likelihood-ratio form of evidence-based medicine. The mathematics is Bayes' theorem on one worked example ($1\%$ prevalence, $80\%$ sensitivity, $9.6\%$ false-positive rate, positive predictive value $7.8\%$). The natural-frequency literature since Gigerenzer and Hoffrage (1995) has shown that counts are the form people get right, and evidence-based medicine derives its diagnostic statistics from one $2\times 2$ table. This paper writes the correspondence between all four notations out row by row, and adds four things of its own. First, the mapping table, with the odds form as an invertible change of coordinates and with the absolute and relative risk reduction (ARR, RRR) of trial reporting placed in it. ARR and RRR are computed within a trial arm, as sensitivity is computed within the sick; the predictive value is computed within those who tested positive. Second, a five-step Diagnostic Interpretation Procedure, whose first four steps are the natural-frequency method and whose fifth runs three checks, one per documented failure mode: arithmetic error, base-rate neglect, and a relative figure taken for an absolute one. Third, a spreadsheet form of the procedure for sequences of tests, with a sum check after every step. On the running example, two conditionally independent positive results raise the posterior from $7.8\%$ to $41.2\%$, and a second test that repeats half of the first test's false positives raises it only to $13.2\%$. Fourth, the argument that medical and epidemiology curricula should teach all four notations through the mapping, not the contingency table alone. The fifth step of the procedure has not been tested on students or clinicians.
 \end{abstract}
 
 \section{Introduction}
 
-With the test of Section~\ref{sec:problem}, a positive result on a screening test at $1\%$ prevalence is a false alarm in 92 cases of 100. This follows from Bayes' theorem. Base-rate neglect goes back at least to Tversky and Kahneman (1974) \cite{tversky1974}. Casscells, Schoenberger, and Graboys (1978) \cite{casscells1978} gave 60 physicians and students a problem with a prevalence of 1 in 1{,}000 and a $5\%$ false-positive rate, sensitivity taken as perfect; the answer is under $2\%$, 11 gave it, and 27 answered $95\%$. Eddy (1982) \cite{eddy1982} catalogued the same errors, among them the confusion of $\Pr(D \mid T^+)$ with $\Pr(T^+ \mid D)$, later named the inverse fallacy \cite{villejoubert2002}. An informal Russian version of the present treatment appeared online in 2012 \cite{lj2012}.
+On the running example of Section~\ref{sec:problem}, a positive result on a screening test at $1\%$ prevalence is a false alarm in 92 cases of 100. This follows from Bayes' theorem, and it has been misread since it was first measured. Casscells, Schoenberger, and Graboys (1978) \cite{casscells1978} gave 60 physicians and students a problem with a prevalence of 1 in 1{,}000 and a $5\%$ false-positive rate, sensitivity taken as perfect. The answer is under $2\%$; 11 gave it, and 27 answered $95\%$. Base-rate neglect, the name for that error, was stated for clinical diagnosis by Meehl and Rosen (1955) \cite{meehl1955} and studied by Kahneman and Tversky (1973, 1974) \cite{kahneman1973, tversky1974}. Eddy (1982) \cite{eddy1982} catalogued the same errors, among them the confusion of the probability of disease given a positive test, $\Pr(D^+ \mid T^+)$, with the probability of a positive test given disease, $\Pr(T^+ \mid D^+)$, later named the inverse fallacy \cite{koehler1996, villejoubert2002}. An informal Russian version of the present treatment appeared online in 2012 \cite{lj2012}.
 
-Part of the persistence is notational. Each of the four notations of the abstract is read by one profession and by few others, and the calculation is one. Gigerenzer and Hoffrage (1995) \cite{gigerenzer1995} restated Bayesian problems in natural frequencies, the tree with absolute counts on its leaves, and correct answers among students rose from $16\%$ to $46\%$; Hoffrage and Gigerenzer (1998) \cite{hoffrage1998} found the same in physicians, and later work confirmed the effect for trees and $2\times 2$ tables \cite{binder2015, binder2018, binder2021, kunzelmann2022}. Gigerenzer et al.\ (2007) \cite{gigerenzer2007} treat ARR, RRR, and the number needed to treat beside natural frequencies. None of that literature writes the correspondence between the notations out. Section~\ref{sec:iso} gives the mapping, Section~\ref{sec:proc} the procedure and its spreadsheet form, Section~\ref{sec:disc} the curriculum argument.
+Part of the persistence is notational. Each of the four notations of the abstract is read by one profession and by few others, and the calculation is one. Gigerenzer and Hoffrage (1995) \cite{gigerenzer1995} restated Bayesian problems in natural frequencies, absolute counts in place of probabilities, and correct answers among students rose from $16\%$ to $46\%$. Hoffrage and Gigerenzer (1998) \cite{hoffrage1998} found the same in physicians; later work drew the counts as trees and $2\times 2$ tables and measured both \cite{binder2015, binder2018, binder2021, kunzelmann2022}, and a meta-analysis puts the pooled gain at about 20 percentage points \cite{mcdowell2017}. Gigerenzer et al.\ (2007) \cite{gigerenzer2007} treat absolute and relative risk reduction (ARR, RRR) and the number needed to treat beside natural frequencies. Evidence-based medicine derives sensitivity, specificity, the predictive values, the likelihood ratios, and the nomogram from one $2\times 2$ table \cite{jaeschke1994}, and Binder et al.\ \cite{binder2015} set the tree and the table with the same counts side by side. None of them tabulates the correspondence across all four notations, or places ARR and RRR in the same table. Section~\ref{sec:iso} gives the mapping, Section~\ref{sec:proc} the procedure, Section~\ref{sec:sheet} its spreadsheet form, Section~\ref{sec:disc} the curriculum argument.
 
 \section{The Problem}
 \label{sec:problem}
 
 One worked example runs through the paper. It is the mammography problem of Eddy \cite{eddy1982} in the form used by Gigerenzer and Hoffrage \cite{gigerenzer1995}, kept so that the results below can be compared with that literature. Let
 \begin{align*}
-  \Pr(D) &= 0.01 && \text{prevalence in the screened population,}\\
-  \Pr(T^+ \mid D) &= 0.80 && \text{sensitivity,}\\
-  \Pr(T^+ \mid \neg D) &= 0.096 && \text{false-positive rate, } 1 - \text{specificity; specificity } 0.904.
+  \Pr(D^+) &= 0.01 && \text{prevalence in the screened population,}\\
+  \Pr(T^+ \mid D^+) &= 0.80 && \text{sensitivity,}\\
+  \Pr(T^+ \mid D^-) &= 0.096 && \text{false-positive rate,}\\
+  \Pr(T^- \mid D^-) &= 0.904 && \text{specificity, } 1 - 0.096.
 \end{align*}
-The clinic also uses ``false-positive rate'' for $1 - \mathrm{PPV}$, the share of positive results that are wrong; here it always means $1 - \text{specificity}$. The question is the positive predictive value $\mathrm{PPV} = \Pr(D \mid T^+)$, the probability that a person with a positive result has the disease. Intuition puts it near the sensitivity, $80\%$. It is $7.8\%$. We derive that value once per notation, then exhibit the correspondence.
+Here $D^+$ is the event that the person has the disease and $D^-$ that they do not, written like the two test results $T^+$ and $T^-$. $\Pr(A \mid B)$ is the probability of $A$ given that $B$ has happened, and $\Pr(A \text{ and } B)$ the probability that both happen; the two are linked by $\Pr(A \text{ and } B) = \Pr(A \mid B)\,\Pr(B)$. A probability of the form $\Pr(A \text{ and } B)$ is called joint. A marginal probability is a sum of joint probabilities over one of the two events, such as $\Pr(T^+) = \Pr(T^+ \text{ and } D^+) + \Pr(T^+ \text{ and } D^-)$. Conditioning is dividing a joint probability by a marginal one. With more events, $\Pr(A \mid B, C)$ is the probability of $A$ given both $B$ and $C$, and $\Pr(A, B, C)$ the probability that all three happen. The odds of an event are its probability over the probability of its complement, $\Pr(A) / (1 - \Pr(A))$, and a probability is recovered from its odds as $\text{odds} / (1 + \text{odds})$.
+
+The question is the positive predictive value $\mathrm{PPV} = \Pr(D^+ \mid T^+)$, the probability that a person with a positive result has the disease. The clinic also uses ``false-positive rate'' for $1 - \mathrm{PPV}$, the share of positive results that are wrong; here it always means $1 - \text{specificity}$. Intuition puts it near the sensitivity, $80\%$. It is $7.8\%$. We derive that value once per notation, then exhibit the correspondence.
 
 \section{Four Notations}
 \label{sec:four}
@@ -47,174 +60,337 @@ The clinic also uses ``false-positive rate'' for $1 - \mathrm{PPV}$, the share o
 \subsection{Tree diagram}
 \label{sec:tree}
 
-Branch first on disease status, then on test result. Each edge carries a conditional probability; each leaf carries the product along its path.
+Branch first on disease status, then on test result (Figure~\ref{fig:tree}). Each edge carries a conditional probability; each leaf carries the product along its path.
 
-\begin{center}
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
   level distance=1.8cm,
-  level 1/.style={sibling distance=7cm},
-  level 2/.style={sibling distance=3.4cm},
+  level 1/.style={sibling distance=8cm},
+  level 2/.style={sibling distance=4cm},
   every node/.style={font=\small},
   edge from parent/.style={draw, -{Latex}},
-  leaf/.style={draw, rounded corners, inner sep=4pt, font=\scriptsize}
+  leaf/.style={draw, rounded corners, inner sep=4pt, font=\scriptsize, align=center}
 ]
 \node {Population}
   child {
-    node {$D$ ($1\%$)}
-      child { node[leaf, fill=red!10]    {$\Pr(T^+ \cap D) = 0.008$}     edge from parent node[above left,  font=\scriptsize] {$0.80$} }
-      child { node[leaf, fill=yellow!20] {$\Pr(T^- \cap D) = 0.002$}     edge from parent node[above right, font=\scriptsize] {$0.20$} }
+    node {$D^+$ ($1\%$)}
+      child { node[leaf, fill=tpcol]    {$\Pr(T^+ \text{ and } D^+) = 0.008$\\ $800$}     edge from parent node[above left,  font=\scriptsize] {$0.80$} }
+      child { node[leaf, fill=fncol] {$\Pr(T^- \text{ and } D^+) = 0.002$\\ $200$}     edge from parent node[above right, font=\scriptsize] {$0.20$} }
     edge from parent node[above left, font=\scriptsize] {$0.01$}
   }
   child {
-    node {$\neg D$ ($99\%$)}
-      child { node[leaf, fill=green!15] {$\Pr(T^+ \cap \neg D) = 0.09504$} edge from parent node[above left,  font=\scriptsize] {$0.096$} }
-      child { node[leaf, fill=blue!10]  {$\Pr(T^- \cap \neg D) = 0.89496$} edge from parent node[above right, font=\scriptsize] {$0.904$} }
+    node {$D^-$ ($99\%$)}
+      child { node[leaf, fill=fpcol] {$\Pr(T^+ \text{ and } D^-) = 0.09504$\\ $9{,}504$} edge from parent node[above left,  font=\scriptsize] {$0.096$} }
+      child { node[leaf, fill=tncol]  {$\Pr(T^- \text{ and } D^-) = 0.89496$\\ $89{,}496$} edge from parent node[above right, font=\scriptsize] {$0.904$} }
     edge from parent node[above right, font=\scriptsize] {$0.99$}
   };
-\end{tikzpicture}
-\end{center}
+\end{tikzpicture}}
+\caption{The tree diagram on the running example. Each edge carries a conditional probability, each leaf the product along its path and, below it, the count out of $100{,}000$.}
+\label{fig:tree}
+\end{figure}
 
-Two leaves carry a positive result: the true positive $T^+ \cap D$ (red) and the false positive $T^+ \cap \neg D$ (green). The other two are excluded by the conditioning event. The PPV is the true-positive leaf over the sum of the positive leaves:
-\begin{equation}
-  \Pr(D \mid T^+) = \frac{0.008}{0.008 + 0.09504} = \frac{0.008}{0.10304} \approx 0.0776 \approx 7.8\%.
-\end{equation}
+Two leaves carry a positive result: the true positive $T^+ \text{ and } D^+$ (blue) and the false positive $T^+ \text{ and } D^-$ (red). The two correct cells are in cool colours throughout the paper and the two errors in warm ones. The other two are excluded by the conditioning event. The PPV is the true-positive leaf over the sum of the positive leaves:
+\begin{equation*}
+  \Pr(D^+ \mid T^+) = \frac{0.008}{0.008 + 0.09504} = \frac{0.008}{0.10304} \approx 0.0776 \approx 7.8\%.
+\end{equation*}
 
-The same four joint probabilities are the regions of a Venn diagram. The tree is read in sequence (first this, then that), the Venn by area (this region overlaps that one). The circle sizes below are not to scale, since a $1\%$ region is invisible at any readable size; the values are exact.
+The same four joint probabilities are the regions of a Venn diagram (Figure~\ref{fig:venn}). The tree is read in sequence (first this, then that), the Venn by area (this region overlaps that one). The regions below are not to scale, since a $1\%$ region is invisible at any readable size (Figure~\ref{fig:icons} is to scale), but their order is: the true-positive lens is drawn larger than the false-negative remainder, as $0.8\%$ is larger than $0.2\%$. The values are exact.
 
-\begin{center}
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[every node/.style={font=\small}]
-  \fill[blue!10] (0,0) rectangle (12,7);
-  \fill[green!25] (7,3) ellipse (4 and 2);
-  \fill[yellow!40] (3.5,4) circle (1.8);
+  \fill[tncol] (0,0) rectangle (12,7);
+  \fill[fpcol] (6.7,3.2) ellipse (4.2 and 2.2);
+  \fill[fncol] (3.8,3.8) circle (1.9);
   \begin{scope}
-    \clip (3.5,4) circle (1.8);
-    \fill[red!40] (7,3) ellipse (4 and 2);
+    \clip (3.8,3.8) circle (1.9);
+    \fill[tpcol] (6.7,3.2) ellipse (4.2 and 2.2);
   \end{scope}
   \draw[thick] (0,0) rectangle (12,7);
-  \draw[thick] (7,3) ellipse (4 and 2);
-  \draw[thick] (3.5,4) circle (1.8);
-  \node[align=center] at (2.4,4.5) {\textbf{FN}\\$0.002$\\$(0.2\%)$};
-  \node[align=center] at (4.7,3.5) {\textbf{TP}\\$0.008$\\$(0.8\%)$};
-  \node[align=center] at (9.4,3.0) {\textbf{FP}\\$0.09504$\\$(9.5\%)$};
-  \node[align=center] at (10.5,6.0) {\textbf{TN}\\$0.89496$\\$(89.5\%)$};
-  \node at (3.5,6.5) {\textbf{Disease, $D$\,(1\%)}};
-  \node at (7.0,0.55) {\textbf{Test positive, $T^+$\,(10.3\%)}};
+  \draw[thick] (6.7,3.2) ellipse (4.2 and 2.2);
+  \draw[thick] (3.8,3.8) circle (1.9);
+  \node[align=center,font=\footnotesize] at (3.0,4.65) {\textbf{False}\\\textbf{negative}\\$0.002$\\$(0.2\%)$};
+  \node[align=center,font=\footnotesize] at (4.2,3.0) {\textbf{True}\\\textbf{positive}\\$0.008$\\$(0.8\%)$};
+  \node[align=center] at (8.9,2.8) {\textbf{False positive}\\$0.09504$\\$(9.5\%)$};
+  \node[align=center] at (10.5,6.1) {\textbf{True negative}\\$0.89496$\\$(89.5\%)$};
+  \node at (3.8,6.3) {\textbf{Disease, $D^+$\,(1\%)}};
+  \node at (6.7,0.5) {\textbf{Test positive, $T^+$\,(10.3\%)}};
 \end{tikzpicture}
-\end{center}
+\caption{The same four joint probabilities as regions. Areas are not to scale.}
+\label{fig:venn}
+\end{figure}
 
-The PPV is the red region over the whole ellipse: $0.8\% / 10.3\% \approx 7.8\%$.
+The PPV is the blue region over the whole ellipse: $0.8\% / 10.3\% \approx 7.8\%$. Figure~\ref{fig:icons} draws the same four groups to scale, one dot per person in $1{,}000$; there the disease is ten dots, and the eye finds the PPV by counting the blue dots among the blue and red ones.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \foreach \pt in {(0.00,0.00),(0.20,0.00),(0.40,0.00),(0.60,0.00),(0.80,0.00),(1.00,0.00),(1.20,0.00),(1.40,0.00)} \fill[blue!65] \pt circle (0.08cm);
+  \foreach \pt in {(1.60,0.00),(1.80,0.00)} \fill[orange!95!black] \pt circle (0.08cm);
+  \foreach \pt in {(2.00,0.00),(2.20,0.00),(2.40,0.00),(2.60,0.00),(2.80,0.00),(3.00,0.00),(3.20,0.00),(3.40,0.00),(3.60,0.00),(3.80,0.00),(4.00,0.00),(4.20,0.00),(4.40,0.00),(4.60,0.00),(4.80,0.00),(5.00,0.00),(5.20,0.00),(5.40,0.00),(5.60,0.00),(5.80,0.00),(6.00,0.00),(6.20,0.00),(6.40,0.00),(6.60,0.00),(6.80,0.00),(7.00,0.00),(7.20,0.00),(7.40,0.00),(7.60,0.00),(7.80,0.00),(0.00,-0.20),(0.20,-0.20),(0.40,-0.20),(0.60,-0.20),(0.80,-0.20),(1.00,-0.20),(1.20,-0.20),(1.40,-0.20),(1.60,-0.20),(1.80,-0.20),(2.00,-0.20),(2.20,-0.20),(2.40,-0.20),(2.60,-0.20),(2.80,-0.20),(3.00,-0.20),(3.20,-0.20),(3.40,-0.20),(3.60,-0.20),(3.80,-0.20),(4.00,-0.20),(4.20,-0.20),(4.40,-0.20),(4.60,-0.20),(4.80,-0.20),(5.00,-0.20),(5.20,-0.20),(5.40,-0.20),(5.60,-0.20),(5.80,-0.20),(6.00,-0.20),(6.20,-0.20),(6.40,-0.20),(6.60,-0.20),(6.80,-0.20),(7.00,-0.20),(7.20,-0.20),(7.40,-0.20),(7.60,-0.20),(7.80,-0.20),(0.00,-0.40),(0.20,-0.40),(0.40,-0.40),(0.60,-0.40),(0.80,-0.40),(1.00,-0.40),(1.20,-0.40),(1.40,-0.40),(1.60,-0.40),(1.80,-0.40),(2.00,-0.40),(2.20,-0.40),(2.40,-0.40),(2.60,-0.40),(2.80,-0.40),(3.00,-0.40),(3.20,-0.40),(3.40,-0.40),(3.60,-0.40),(3.80,-0.40),(4.00,-0.40),(4.20,-0.40),(4.40,-0.40),(4.60,-0.40),(4.80,-0.40)} \fill[red!70] \pt circle (0.08cm);
+  \foreach \pt in {(5.00,-0.40),(5.20,-0.40),(5.40,-0.40),(5.60,-0.40),(5.80,-0.40),(6.00,-0.40),(6.20,-0.40),(6.40,-0.40),(6.60,-0.40),(6.80,-0.40),(7.00,-0.40),(7.20,-0.40),(7.40,-0.40),(7.60,-0.40),(7.80,-0.40),(0.00,-0.60),(0.20,-0.60),(0.40,-0.60),(0.60,-0.60),(0.80,-0.60),(1.00,-0.60),(1.20,-0.60),(1.40,-0.60),(1.60,-0.60),(1.80,-0.60),(2.00,-0.60),(2.20,-0.60),(2.40,-0.60),(2.60,-0.60),(2.80,-0.60),(3.00,-0.60),(3.20,-0.60),(3.40,-0.60),(3.60,-0.60),(3.80,-0.60),(4.00,-0.60),(4.20,-0.60),(4.40,-0.60),(4.60,-0.60),(4.80,-0.60),(5.00,-0.60),(5.20,-0.60),(5.40,-0.60),(5.60,-0.60),(5.80,-0.60),(6.00,-0.60),(6.20,-0.60),(6.40,-0.60),(6.60,-0.60),(6.80,-0.60),(7.00,-0.60),(7.20,-0.60),(7.40,-0.60),(7.60,-0.60),(7.80,-0.60),(0.00,-0.80),(0.20,-0.80),(0.40,-0.80),(0.60,-0.80),(0.80,-0.80),(1.00,-0.80),(1.20,-0.80),(1.40,-0.80),(1.60,-0.80),(1.80,-0.80),(2.00,-0.80),(2.20,-0.80),(2.40,-0.80),(2.60,-0.80),(2.80,-0.80),(3.00,-0.80),(3.20,-0.80),(3.40,-0.80),(3.60,-0.80),(3.80,-0.80),(4.00,-0.80),(4.20,-0.80),(4.40,-0.80),(4.60,-0.80),(4.80,-0.80),(5.00,-0.80),(5.20,-0.80),(5.40,-0.80),(5.60,-0.80),(5.80,-0.80),(6.00,-0.80),(6.20,-0.80),(6.40,-0.80),(6.60,-0.80),(6.80,-0.80),(7.00,-0.80),(7.20,-0.80),(7.40,-0.80),(7.60,-0.80),(7.80,-0.80),(0.00,-1.00),(0.20,-1.00),(0.40,-1.00),(0.60,-1.00),(0.80,-1.00),(1.00,-1.00),(1.20,-1.00),(1.40,-1.00),(1.60,-1.00),(1.80,-1.00),(2.00,-1.00),(2.20,-1.00),(2.40,-1.00),(2.60,-1.00),(2.80,-1.00),(3.00,-1.00),(3.20,-1.00),(3.40,-1.00),(3.60,-1.00),(3.80,-1.00),(4.00,-1.00),(4.20,-1.00),(4.40,-1.00),(4.60,-1.00),(4.80,-1.00),(5.00,-1.00),(5.20,-1.00),(5.40,-1.00),(5.60,-1.00),(5.80,-1.00),(6.00,-1.00),(6.20,-1.00),(6.40,-1.00),(6.60,-1.00),(6.80,-1.00),(7.00,-1.00),(7.20,-1.00),(7.40,-1.00),(7.60,-1.00),(7.80,-1.00),(0.00,-1.20),(0.20,-1.20),(0.40,-1.20),(0.60,-1.20),(0.80,-1.20),(1.00,-1.20),(1.20,-1.20),(1.40,-1.20),(1.60,-1.20),(1.80,-1.20),(2.00,-1.20),(2.20,-1.20),(2.40,-1.20),(2.60,-1.20),(2.80,-1.20),(3.00,-1.20),(3.20,-1.20),(3.40,-1.20),(3.60,-1.20),(3.80,-1.20),(4.00,-1.20),(4.20,-1.20),(4.40,-1.20),(4.60,-1.20),(4.80,-1.20),(5.00,-1.20),(5.20,-1.20),(5.40,-1.20),(5.60,-1.20),(5.80,-1.20),(6.00,-1.20),(6.20,-1.20),(6.40,-1.20),(6.60,-1.20),(6.80,-1.20),(7.00,-1.20),(7.20,-1.20),(7.40,-1.20),(7.60,-1.20),(7.80,-1.20),(0.00,-1.40),(0.20,-1.40),(0.40,-1.40),(0.60,-1.40),(0.80,-1.40),(1.00,-1.40),(1.20,-1.40),(1.40,-1.40),(1.60,-1.40),(1.80,-1.40),(2.00,-1.40),(2.20,-1.40),(2.40,-1.40),(2.60,-1.40),(2.80,-1.40),(3.00,-1.40),(3.20,-1.40),(3.40,-1.40),(3.60,-1.40),(3.80,-1.40),(4.00,-1.40),(4.20,-1.40),(4.40,-1.40),(4.60,-1.40),(4.80,-1.40),(5.00,-1.40),(5.20,-1.40),(5.40,-1.40),(5.60,-1.40),(5.80,-1.40),(6.00,-1.40),(6.20,-1.40),(6.40,-1.40),(6.60,-1.40),(6.80,-1.40),(7.00,-1.40),(7.20,-1.40),(7.40,-1.40),(7.60,-1.40),(7.80,-1.40),(0.00,-1.60),(0.20,-1.60),(0.40,-1.60),(0.60,-1.60),(0.80,-1.60),(1.00,-1.60),(1.20,-1.60),(1.40,-1.60),(1.60,-1.60),(1.80,-1.60),(2.00,-1.60),(2.20,-1.60),(2.40,-1.60),(2.60,-1.60),(2.80,-1.60),(3.00,-1.60),(3.20,-1.60),(3.40,-1.60),(3.60,-1.60),(3.80,-1.60),(4.00,-1.60),(4.20,-1.60),(4.40,-1.60),(4.60,-1.60),(4.80,-1.60),(5.00,-1.60),(5.20,-1.60),(5.40,-1.60),(5.60,-1.60),(5.80,-1.60),(6.00,-1.60),(6.20,-1.60),(6.40,-1.60),(6.60,-1.60),(6.80,-1.60),(7.00,-1.60),(7.20,-1.60),(7.40,-1.60),(7.60,-1.60),(7.80,-1.60),(0.00,-1.80),(0.20,-1.80),(0.40,-1.80),(0.60,-1.80),(0.80,-1.80),(1.00,-1.80),(1.20,-1.80),(1.40,-1.80),(1.60,-1.80),(1.80,-1.80),(2.00,-1.80),(2.20,-1.80),(2.40,-1.80),(2.60,-1.80),(2.80,-1.80),(3.00,-1.80),(3.20,-1.80),(3.40,-1.80),(3.60,-1.80),(3.80,-1.80),(4.00,-1.80),(4.20,-1.80),(4.40,-1.80),(4.60,-1.80),(4.80,-1.80),(5.00,-1.80),(5.20,-1.80),(5.40,-1.80),(5.60,-1.80),(5.80,-1.80),(6.00,-1.80),(6.20,-1.80),(6.40,-1.80),(6.60,-1.80),(6.80,-1.80),(7.00,-1.80),(7.20,-1.80),(7.40,-1.80),(7.60,-1.80),(7.80,-1.80),(0.00,-2.00),(0.20,-2.00),(0.40,-2.00),(0.60,-2.00),(0.80,-2.00),(1.00,-2.00),(1.20,-2.00),(1.40,-2.00),(1.60,-2.00),(1.80,-2.00),(2.00,-2.00),(2.20,-2.00),(2.40,-2.00),(2.60,-2.00),(2.80,-2.00),(3.00,-2.00),(3.20,-2.00),(3.40,-2.00),(3.60,-2.00),(3.80,-2.00),(4.00,-2.00),(4.20,-2.00),(4.40,-2.00),(4.60,-2.00),(4.80,-2.00),(5.00,-2.00),(5.20,-2.00),(5.40,-2.00),(5.60,-2.00),(5.80,-2.00),(6.00,-2.00),(6.20,-2.00),(6.40,-2.00),(6.60,-2.00),(6.80,-2.00),(7.00,-2.00),(7.20,-2.00),(7.40,-2.00),(7.60,-2.00),(7.80,-2.00),(0.00,-2.20),(0.20,-2.20),(0.40,-2.20),(0.60,-2.20),(0.80,-2.20),(1.00,-2.20),(1.20,-2.20),(1.40,-2.20),(1.60,-2.20),(1.80,-2.20),(2.00,-2.20),(2.20,-2.20),(2.40,-2.20),(2.60,-2.20),(2.80,-2.20),(3.00,-2.20),(3.20,-2.20),(3.40,-2.20),(3.60,-2.20),(3.80,-2.20),(4.00,-2.20),(4.20,-2.20),(4.40,-2.20),(4.60,-2.20),(4.80,-2.20),(5.00,-2.20),(5.20,-2.20),(5.40,-2.20),(5.60,-2.20),(5.80,-2.20),(6.00,-2.20),(6.20,-2.20),(6.40,-2.20),(6.60,-2.20),(6.80,-2.20),(7.00,-2.20),(7.20,-2.20),(7.40,-2.20),(7.60,-2.20),(7.80,-2.20),(0.00,-2.40),(0.20,-2.40),(0.40,-2.40),(0.60,-2.40),(0.80,-2.40),(1.00,-2.40),(1.20,-2.40),(1.40,-2.40),(1.60,-2.40),(1.80,-2.40),(2.00,-2.40),(2.20,-2.40),(2.40,-2.40),(2.60,-2.40),(2.80,-2.40),(3.00,-2.40),(3.20,-2.40),(3.40,-2.40),(3.60,-2.40),(3.80,-2.40),(4.00,-2.40),(4.20,-2.40),(4.40,-2.40),(4.60,-2.40),(4.80,-2.40),(5.00,-2.40),(5.20,-2.40),(5.40,-2.40),(5.60,-2.40),(5.80,-2.40),(6.00,-2.40),(6.20,-2.40),(6.40,-2.40),(6.60,-2.40),(6.80,-2.40),(7.00,-2.40),(7.20,-2.40),(7.40,-2.40),(7.60,-2.40),(7.80,-2.40),(0.00,-2.60),(0.20,-2.60),(0.40,-2.60),(0.60,-2.60),(0.80,-2.60),(1.00,-2.60),(1.20,-2.60),(1.40,-2.60),(1.60,-2.60),(1.80,-2.60),(2.00,-2.60),(2.20,-2.60),(2.40,-2.60),(2.60,-2.60),(2.80,-2.60),(3.00,-2.60),(3.20,-2.60),(3.40,-2.60),(3.60,-2.60),(3.80,-2.60),(4.00,-2.60),(4.20,-2.60),(4.40,-2.60),(4.60,-2.60),(4.80,-2.60),(5.00,-2.60),(5.20,-2.60),(5.40,-2.60),(5.60,-2.60),(5.80,-2.60),(6.00,-2.60),(6.20,-2.60),(6.40,-2.60),(6.60,-2.60),(6.80,-2.60),(7.00,-2.60),(7.20,-2.60),(7.40,-2.60),(7.60,-2.60),(7.80,-2.60),(0.00,-2.80),(0.20,-2.80),(0.40,-2.80),(0.60,-2.80),(0.80,-2.80),(1.00,-2.80),(1.20,-2.80),(1.40,-2.80),(1.60,-2.80),(1.80,-2.80),(2.00,-2.80),(2.20,-2.80),(2.40,-2.80),(2.60,-2.80),(2.80,-2.80),(3.00,-2.80),(3.20,-2.80),(3.40,-2.80),(3.60,-2.80),(3.80,-2.80),(4.00,-2.80),(4.20,-2.80),(4.40,-2.80),(4.60,-2.80),(4.80,-2.80),(5.00,-2.80),(5.20,-2.80),(5.40,-2.80),(5.60,-2.80),(5.80,-2.80),(6.00,-2.80),(6.20,-2.80),(6.40,-2.80),(6.60,-2.80),(6.80,-2.80),(7.00,-2.80),(7.20,-2.80),(7.40,-2.80),(7.60,-2.80),(7.80,-2.80),(0.00,-3.00),(0.20,-3.00),(0.40,-3.00),(0.60,-3.00),(0.80,-3.00),(1.00,-3.00),(1.20,-3.00),(1.40,-3.00),(1.60,-3.00),(1.80,-3.00),(2.00,-3.00),(2.20,-3.00),(2.40,-3.00),(2.60,-3.00),(2.80,-3.00),(3.00,-3.00),(3.20,-3.00),(3.40,-3.00),(3.60,-3.00),(3.80,-3.00),(4.00,-3.00),(4.20,-3.00),(4.40,-3.00),(4.60,-3.00),(4.80,-3.00),(5.00,-3.00),(5.20,-3.00),(5.40,-3.00),(5.60,-3.00),(5.80,-3.00),(6.00,-3.00),(6.20,-3.00),(6.40,-3.00),(6.60,-3.00),(6.80,-3.00),(7.00,-3.00),(7.20,-3.00),(7.40,-3.00),(7.60,-3.00),(7.80,-3.00),(0.00,-3.20),(0.20,-3.20),(0.40,-3.20),(0.60,-3.20),(0.80,-3.20),(1.00,-3.20),(1.20,-3.20),(1.40,-3.20),(1.60,-3.20),(1.80,-3.20),(2.00,-3.20),(2.20,-3.20),(2.40,-3.20),(2.60,-3.20),(2.80,-3.20),(3.00,-3.20),(3.20,-3.20),(3.40,-3.20),(3.60,-3.20),(3.80,-3.20),(4.00,-3.20),(4.20,-3.20),(4.40,-3.20),(4.60,-3.20),(4.80,-3.20),(5.00,-3.20),(5.20,-3.20),(5.40,-3.20),(5.60,-3.20),(5.80,-3.20),(6.00,-3.20),(6.20,-3.20),(6.40,-3.20),(6.60,-3.20),(6.80,-3.20),(7.00,-3.20),(7.20,-3.20),(7.40,-3.20),(7.60,-3.20),(7.80,-3.20),(0.00,-3.40),(0.20,-3.40),(0.40,-3.40),(0.60,-3.40),(0.80,-3.40),(1.00,-3.40),(1.20,-3.40),(1.40,-3.40),(1.60,-3.40),(1.80,-3.40),(2.00,-3.40),(2.20,-3.40),(2.40,-3.40),(2.60,-3.40),(2.80,-3.40),(3.00,-3.40),(3.20,-3.40),(3.40,-3.40),(3.60,-3.40),(3.80,-3.40),(4.00,-3.40),(4.20,-3.40),(4.40,-3.40),(4.60,-3.40),(4.80,-3.40),(5.00,-3.40),(5.20,-3.40),(5.40,-3.40),(5.60,-3.40),(5.80,-3.40),(6.00,-3.40),(6.20,-3.40),(6.40,-3.40),(6.60,-3.40),(6.80,-3.40),(7.00,-3.40),(7.20,-3.40),(7.40,-3.40),(7.60,-3.40),(7.80,-3.40),(0.00,-3.60),(0.20,-3.60),(0.40,-3.60),(0.60,-3.60),(0.80,-3.60),(1.00,-3.60),(1.20,-3.60),(1.40,-3.60),(1.60,-3.60),(1.80,-3.60),(2.00,-3.60),(2.20,-3.60),(2.40,-3.60),(2.60,-3.60),(2.80,-3.60),(3.00,-3.60),(3.20,-3.60),(3.40,-3.60),(3.60,-3.60),(3.80,-3.60),(4.00,-3.60),(4.20,-3.60),(4.40,-3.60),(4.60,-3.60),(4.80,-3.60),(5.00,-3.60),(5.20,-3.60),(5.40,-3.60),(5.60,-3.60),(5.80,-3.60),(6.00,-3.60),(6.20,-3.60),(6.40,-3.60),(6.60,-3.60),(6.80,-3.60),(7.00,-3.60),(7.20,-3.60),(7.40,-3.60),(7.60,-3.60),(7.80,-3.60),(0.00,-3.80),(0.20,-3.80),(0.40,-3.80),(0.60,-3.80),(0.80,-3.80),(1.00,-3.80),(1.20,-3.80),(1.40,-3.80),(1.60,-3.80),(1.80,-3.80),(2.00,-3.80),(2.20,-3.80),(2.40,-3.80),(2.60,-3.80),(2.80,-3.80),(3.00,-3.80),(3.20,-3.80),(3.40,-3.80),(3.60,-3.80),(3.80,-3.80),(4.00,-3.80),(4.20,-3.80),(4.40,-3.80),(4.60,-3.80),(4.80,-3.80),(5.00,-3.80),(5.20,-3.80),(5.40,-3.80),(5.60,-3.80),(5.80,-3.80),(6.00,-3.80),(6.20,-3.80),(6.40,-3.80),(6.60,-3.80),(6.80,-3.80),(7.00,-3.80),(7.20,-3.80),(7.40,-3.80),(7.60,-3.80),(7.80,-3.80),(0.00,-4.00),(0.20,-4.00),(0.40,-4.00),(0.60,-4.00),(0.80,-4.00),(1.00,-4.00),(1.20,-4.00),(1.40,-4.00),(1.60,-4.00),(1.80,-4.00),(2.00,-4.00),(2.20,-4.00),(2.40,-4.00),(2.60,-4.00),(2.80,-4.00),(3.00,-4.00),(3.20,-4.00),(3.40,-4.00),(3.60,-4.00),(3.80,-4.00),(4.00,-4.00),(4.20,-4.00),(4.40,-4.00),(4.60,-4.00),(4.80,-4.00),(5.00,-4.00),(5.20,-4.00),(5.40,-4.00),(5.60,-4.00),(5.80,-4.00),(6.00,-4.00),(6.20,-4.00),(6.40,-4.00),(6.60,-4.00),(6.80,-4.00),(7.00,-4.00),(7.20,-4.00),(7.40,-4.00),(7.60,-4.00),(7.80,-4.00),(0.00,-4.20),(0.20,-4.20),(0.40,-4.20),(0.60,-4.20),(0.80,-4.20),(1.00,-4.20),(1.20,-4.20),(1.40,-4.20),(1.60,-4.20),(1.80,-4.20),(2.00,-4.20),(2.20,-4.20),(2.40,-4.20),(2.60,-4.20),(2.80,-4.20),(3.00,-4.20),(3.20,-4.20),(3.40,-4.20),(3.60,-4.20),(3.80,-4.20),(4.00,-4.20),(4.20,-4.20),(4.40,-4.20),(4.60,-4.20),(4.80,-4.20),(5.00,-4.20),(5.20,-4.20),(5.40,-4.20),(5.60,-4.20),(5.80,-4.20),(6.00,-4.20),(6.20,-4.20),(6.40,-4.20),(6.60,-4.20),(6.80,-4.20),(7.00,-4.20),(7.20,-4.20),(7.40,-4.20),(7.60,-4.20),(7.80,-4.20),(0.00,-4.40),(0.20,-4.40),(0.40,-4.40),(0.60,-4.40),(0.80,-4.40),(1.00,-4.40),(1.20,-4.40),(1.40,-4.40),(1.60,-4.40),(1.80,-4.40),(2.00,-4.40),(2.20,-4.40),(2.40,-4.40),(2.60,-4.40),(2.80,-4.40),(3.00,-4.40),(3.20,-4.40),(3.40,-4.40),(3.60,-4.40),(3.80,-4.40),(4.00,-4.40),(4.20,-4.40),(4.40,-4.40),(4.60,-4.40),(4.80,-4.40),(5.00,-4.40),(5.20,-4.40),(5.40,-4.40),(5.60,-4.40),(5.80,-4.40),(6.00,-4.40),(6.20,-4.40),(6.40,-4.40),(6.60,-4.40),(6.80,-4.40),(7.00,-4.40),(7.20,-4.40),(7.40,-4.40),(7.60,-4.40),(7.80,-4.40),(0.00,-4.60),(0.20,-4.60),(0.40,-4.60),(0.60,-4.60),(0.80,-4.60),(1.00,-4.60),(1.20,-4.60),(1.40,-4.60),(1.60,-4.60),(1.80,-4.60),(2.00,-4.60),(2.20,-4.60),(2.40,-4.60),(2.60,-4.60),(2.80,-4.60),(3.00,-4.60),(3.20,-4.60),(3.40,-4.60),(3.60,-4.60),(3.80,-4.60),(4.00,-4.60),(4.20,-4.60),(4.40,-4.60),(4.60,-4.60),(4.80,-4.60),(5.00,-4.60),(5.20,-4.60),(5.40,-4.60),(5.60,-4.60),(5.80,-4.60),(6.00,-4.60),(6.20,-4.60),(6.40,-4.60),(6.60,-4.60),(6.80,-4.60),(7.00,-4.60),(7.20,-4.60),(7.40,-4.60),(7.60,-4.60),(7.80,-4.60),(0.00,-4.80),(0.20,-4.80),(0.40,-4.80),(0.60,-4.80),(0.80,-4.80),(1.00,-4.80),(1.20,-4.80),(1.40,-4.80),(1.60,-4.80),(1.80,-4.80),(2.00,-4.80),(2.20,-4.80),(2.40,-4.80),(2.60,-4.80),(2.80,-4.80),(3.00,-4.80),(3.20,-4.80),(3.40,-4.80),(3.60,-4.80),(3.80,-4.80),(4.00,-4.80),(4.20,-4.80),(4.40,-4.80),(4.60,-4.80),(4.80,-4.80),(5.00,-4.80),(5.20,-4.80),(5.40,-4.80),(5.60,-4.80),(5.80,-4.80),(6.00,-4.80),(6.20,-4.80),(6.40,-4.80),(6.60,-4.80),(6.80,-4.80),(7.00,-4.80),(7.20,-4.80),(7.40,-4.80),(7.60,-4.80),(7.80,-4.80)} \fill[green!55!black] \pt circle (0.08cm);
+  \fill[blue!65] (0.00,-5.40) circle (0.08cm); \node[right,font=\footnotesize] at (0.12,-5.40) {true positive, 8};
+  \fill[orange!95!black] (3.30,-5.40) circle (0.08cm); \node[right,font=\footnotesize] at (3.42,-5.40) {false negative, 2};
+  \fill[red!70] (6.60,-5.40) circle (0.08cm); \node[right,font=\footnotesize] at (6.72,-5.40) {false positive, 95};
+  \fill[green!55!black] (9.90,-5.40) circle (0.08cm); \node[right,font=\footnotesize] at (10.02,-5.40) {true negative, 895};
+\end{tikzpicture}
+\caption{The same four groups to scale, as $1{,}000$ people: 8 true positives, 2 false negatives, 95 false positives, 895 true negatives. The positive results are the 103 blue and red dots, and 8 of them are true: PPV $7.8\%$.}
+\label{fig:icons}
+\end{figure}
 
 \subsection{Bayes' theorem}
+\label{sec:bayes}
 
 The same calculation, algebraically:\footnote{For the general theory rather than the diagnostic special case: Jaynes \cite{jaynes2003}, Sivia and Skilling \cite{sivia2006}, MacKay \cite{mackay2003}; Cox \cite{cox1946} for probability as an extension of logic; Gnedenko \cite{gnedenko1976} and Ventsel \cite{ventsel1965} for the Russian university and engineering traditions, both in English translation.}
-\begin{align}
-  \Pr(D \mid T^+) &= \frac{\Pr(T^+ \mid D)\,\Pr(D)}{\Pr(T^+ \mid D)\,\Pr(D) + \Pr(T^+ \mid \neg D)\,\Pr(\neg D)} \notag \\
+\begin{align*}
+  \Pr(D^+ \mid T^+) &= \frac{\Pr(T^+ \mid D^+)\,\Pr(D^+)}{\Pr(T^+ \mid D^+)\,\Pr(D^+) + \Pr(T^+ \mid D^-)\,\Pr(D^-)} \notag \\
   &= \frac{0.80 \times 0.01}{0.80 \times 0.01 + 0.096 \times 0.99} = \frac{0.008}{0.10304} \approx 7.8\%.
-\end{align}
+\end{align*}
 The numerator is the true-positive leaf. The denominator is the marginal probability of a positive test, the sum of the two positive leaves.
 
 \subsection{Contingency table}
 \label{sec:table}
 
-Cross-classify a hypothetical population of $100{,}000$ against disease status and test result.
+Cross-classify a hypothetical population of $N = 100{,}000$ against disease status and test result (Table~\ref{tab:counts}).
 
-\begin{center}
+\begin{table}[H]
+\centering
 \begin{tabular}{l|cc|c}
 \toprule
                   & $T^+$    & $T^-$    & Row total \\
 \midrule
-$D$               & 800      & 200      & 1{,}000  \\
-$\neg D$          & 9{,}504  & 89{,}496 & 99{,}000 \\
+$D^+$          & \cellcolor{tpcol}800      & \cellcolor{fncol}200      & 1{,}000  \\
+$D^-$          & \cellcolor{fpcol}9{,}504  & \cellcolor{tncol}89{,}496 & 99{,}000 \\
 \midrule
 Column total      & 10{,}304 & 89{,}696 & 100{,}000 \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{The contingency table on the running example, $N = 100{,}000$. The cells carry the colours of Figure~\ref{fig:tree}.}
+\label{tab:counts}
+\end{table}
 
 Each interior cell is a leaf of the tree times the population size; the row totals are the first branching; the column totals are the marginals over the test result. The PPV is a cell over its column total:
-\begin{equation}
-  \Pr(D \mid T^+) = \frac{800}{10{,}304} \approx 7.8\%.
-\end{equation}
+\begin{equation*}
+  \Pr(D^+ \mid T^+) = \frac{800}{10{,}304} \approx 7.8\%.
+\end{equation*}
 
-The same four cells, drawn as quadrants, carry the vocabulary of hypothesis testing (Type I and II error) and of signal detection (hit, miss, false alarm, correct rejection). Readers from machine learning know the layout as the confusion matrix; programmers know it as two nested \texttt{if}/\texttt{else} conditions with four leaf states.
+The same four cells, drawn as quadrants (Figure~\ref{fig:quad}), carry the vocabulary of hypothesis testing (Type I and II error) and of signal detection (hit, miss, false alarm, correct rejection). Readers from machine learning know the layout as the confusion matrix; programmers know it as two nested \texttt{if}/\texttt{else} conditions with four leaf states.
 
-\begin{center}
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[every node/.style={font=\small}]
-  \fill[red!20]    (0,3) rectangle (3,6);
-  \fill[yellow!30] (3,3) rectangle (6,6);
-  \fill[green!20]  (0,0) rectangle (3,3);
-  \fill[blue!20]   (3,0) rectangle (6,3);
+  \fill[tpcol] (0,3) rectangle (3,6);
+  \fill[fncol] (3,3) rectangle (6,6);
+  \fill[fpcol] (0,0) rectangle (3,3);
+  \fill[tncol] (3,0) rectangle (6,3);
   \draw[thick] (0,0) rectangle (6,6);
   \draw[thick] (3,0) -- (3,6);
   \draw[thick] (0,3) -- (6,3);
   \node[align=center] at (1.5, 4.5) {\textbf{True positive}\\[2pt]\footnotesize hit};
-  \node[align=center] at (4.5, 4.5) {\textbf{False negative}\\[2pt]\footnotesize Type II error \,/\, miss};
-  \node[align=center] at (1.5, 1.5) {\textbf{False positive}\\[2pt]\footnotesize Type I error \,/\, false alarm};
+  \node[align=center] at (4.5, 4.5) {\textbf{False negative}\\[2pt]\scriptsize Type II error\\[-1pt]\scriptsize miss};
+  \node[align=center] at (1.5, 1.5) {\textbf{False positive}\\[2pt]\scriptsize Type I error\\[-1pt]\scriptsize false alarm};
   \node[align=center] at (4.5, 1.5) {\textbf{True negative}\\[2pt]\footnotesize correct rejection};
   \node[font=\small] at (1.5, 6.4) {Test: \textbf{positive}};
   \node[font=\small] at (4.5, 6.4) {Test: \textbf{negative}};
   \node[font=\small, rotate=90] at (-0.6, 4.5) {Disease: \textbf{present}};
   \node[font=\small, rotate=90] at (-0.6, 1.5) {Disease: \textbf{absent}};
 \end{tikzpicture}
-\end{center}
-
-The colours match the tree leaves. The diagonal holds the correct decisions, the off-diagonal the two error modes.
+\caption{The four cells as quadrants, with the vocabulary of hypothesis testing and of signal detection. The colours match the tree leaves; the diagonal holds the correct decisions, the off-diagonal the two error modes.}
+\label{fig:quad}
+\end{figure}
 
 \subsection{Odds and likelihood ratios}
 \label{sec:odds}
 
-Evidence-based medicine writes the same calculation in odds. The likelihood ratio of a positive result is the ratio of the two positive edges of the tree, and it multiplies the prior odds:
-\begin{align}
-  \mathrm{LR}^+ &= \frac{\Pr(T^+ \mid D)}{\Pr(T^+ \mid \neg D)} = \frac{0.80}{0.096} \approx 8.33, &
-  \mathrm{LR}^- &= \frac{\Pr(T^- \mid D)}{\Pr(T^- \mid \neg D)} = \frac{0.20}{0.904} \approx 0.221, \\
-  \text{posterior odds} &= \frac{0.01}{0.99} \times 8.33 \approx 0.0842, &
-  \mathrm{PPV} &= \frac{0.0842}{1 + 0.0842} \approx 7.8\%.
-\end{align}
-The Fagan nomogram of the bedside is this multiplication drawn on a ruler. The posterior odds are the ratio of the two positive leaves, $0.008 / 0.09504$, and of the two cells in the $T^+$ column, $800 / 9{,}504$.
+Evidence-based medicine writes the same calculation in odds, defined in Section~\ref{sec:problem}. The prior odds are the odds of disease before the test, $0.01/0.99$. The likelihood ratio of a positive result, $\mathrm{LR}^+$, is the ratio of the two positive edges of the tree, and it multiplies the prior odds; $\mathrm{LR}^-$ is the same ratio for a negative result:
+\begin{align*}
+  \mathrm{LR}^+ &= \frac{\Pr(T^+ \mid D^+)}{\Pr(T^+ \mid D^-)} = \frac{0.80}{0.096} \approx 8.33, \\
+  \mathrm{LR}^- &= \frac{\Pr(T^- \mid D^+)}{\Pr(T^- \mid D^-)} = \frac{0.20}{0.904} \approx 0.221, \\
+  \text{posterior odds} &= \text{prior odds} \times \mathrm{LR}^+ = \frac{0.01}{0.99} \times 8.33 \approx 0.0842, \\
+  \mathrm{PPV} &= \frac{\text{posterior odds}}{1 + \text{posterior odds}} = \frac{0.0842}{1 + 0.0842} \approx 7.8\%.
+\end{align*}
+The Fagan nomogram \cite{fagan1975}, a chart carried at the bedside, is this multiplication drawn on a ruler (Figure~\ref{fig:fagan}): a straight line from the prior probability through the likelihood ratio meets the posterior. The posterior odds are the ratio of the two positive leaves, $0.008 / 0.09504$, and of the two cells in the $T^+$ column, $800 / 9{,}504$.
+
+\begin{figure}[tbp]
+\centering
+\begin{tikzpicture}[x=1cm,y=1.55cm,font=\scriptsize]
+  \draw[thick] (0,-3.05) -- (0,3.05);
+  \draw (0,3.000) -- ++(-0.12,0) node[left] {0.1\%};
+  \draw (0,2.698) -- ++(-0.12,0) node[left] {0.2\%};
+  \draw (0,2.299) -- ++(-0.12,0) node[left] {0.5\%};
+  \draw (0,1.996) -- ++(-0.12,0) node[left] {1\%};
+  \draw (0,1.690) -- ++(-0.12,0) node[left] {2\%};
+  \draw (0,1.279) -- ++(-0.12,0) node[left] {5\%};
+  \draw (0,0.954) -- ++(-0.12,0) node[left] {10\%};
+  \draw (0,0.602) -- ++(-0.12,0) node[left] {20\%};
+  \draw (0,0.368) -- ++(-0.12,0) node[left] {30\%};
+  \draw (0,-0.000) -- ++(-0.12,0) node[left] {50\%};
+  \draw (0,-0.368) -- ++(-0.12,0) node[left] {70\%};
+  \draw (0,-0.602) -- ++(-0.12,0) node[left] {80\%};
+  \draw (0,-0.954) -- ++(-0.12,0) node[left] {90\%};
+  \draw (0,-1.279) -- ++(-0.12,0) node[left] {95\%};
+  \draw (0,-1.690) -- ++(-0.12,0) node[left] {98\%};
+  \draw (0,-1.996) -- ++(-0.12,0) node[left] {99\%};
+  \draw (0,-2.299) -- ++(-0.12,0) node[left] {99.5\%};
+  \draw (0,-3.000) -- ++(-0.12,0) node[left] {99.9\%};
+  \node[above=4pt,font=\small] at (0,3.05) {Prior probability};
+  \draw[thick] (6,-3.05) -- (6,3.05);
+  \draw (6,-3.000) -- ++(0.12,0) node[right] {0.1\%};
+  \draw (6,-2.698) -- ++(0.12,0) node[right] {0.2\%};
+  \draw (6,-2.299) -- ++(0.12,0) node[right] {0.5\%};
+  \draw (6,-1.996) -- ++(0.12,0) node[right] {1\%};
+  \draw (6,-1.690) -- ++(0.12,0) node[right] {2\%};
+  \draw (6,-1.279) -- ++(0.12,0) node[right] {5\%};
+  \draw (6,-0.954) -- ++(0.12,0) node[right] {10\%};
+  \draw (6,-0.602) -- ++(0.12,0) node[right] {20\%};
+  \draw (6,-0.368) -- ++(0.12,0) node[right] {30\%};
+  \draw (6,0.000) -- ++(0.12,0) node[right] {50\%};
+  \draw (6,0.368) -- ++(0.12,0) node[right] {70\%};
+  \draw (6,0.602) -- ++(0.12,0) node[right] {80\%};
+  \draw (6,0.954) -- ++(0.12,0) node[right] {90\%};
+  \draw (6,1.279) -- ++(0.12,0) node[right] {95\%};
+  \draw (6,1.690) -- ++(0.12,0) node[right] {98\%};
+  \draw (6,1.996) -- ++(0.12,0) node[right] {99\%};
+  \draw (6,2.299) -- ++(0.12,0) node[right] {99.5\%};
+  \draw (6,3.000) -- ++(0.12,0) node[right] {99.9\%};
+  \node[above=4pt,font=\small] at (6,3.05) {Posterior probability};
+  \draw[thick] (3,-1.55) -- (3,1.55);
+  \draw (3,-1.500) -- ++(0.12,0) node[right] {0.001};
+  \draw (3,-1.349) -- ++(-0.12,0) node[left] {0.002};
+  \draw (3,-1.151) -- ++(0.12,0) node[right] {0.005};
+  \draw (3,-1.000) -- ++(-0.12,0) node[left] {0.01};
+  \draw (3,-0.849) -- ++(0.12,0) node[right] {0.02};
+  \draw (3,-0.651) -- ++(-0.12,0) node[left] {0.05};
+  \draw (3,-0.500) -- ++(0.12,0) node[right] {0.1};
+  \draw (3,-0.349) -- ++(-0.12,0) node[left] {0.2};
+  \draw (3,-0.151) -- ++(0.12,0) node[right] {0.5};
+  \draw (3,0.000) -- ++(-0.12,0) node[left] {1};
+  \draw (3,0.151) -- ++(0.12,0) node[right] {2};
+  \draw (3,0.349) -- ++(-0.12,0) node[left] {5};
+  \draw (3,0.500) -- ++(0.12,0) node[right] {10};
+  \draw (3,0.651) -- ++(-0.12,0) node[left] {20};
+  \draw (3,0.849) -- ++(0.12,0) node[right] {50};
+  \draw (3,1.000) -- ++(-0.12,0) node[left] {100};
+  \draw (3,1.151) -- ++(0.12,0) node[right] {200};
+  \draw (3,1.349) -- ++(-0.12,0) node[left] {500};
+  \draw (3,1.500) -- ++(0.12,0) node[right] {1000};
+  \node[above=4pt,font=\small] at (3,1.55) {Likelihood ratio};
+  \draw[red,thick] (0,1.996) -- (6,-1.075);
+  \fill[red] (0,1.996) circle (1.8pt) (3,0.460) circle (1.8pt) (6,-1.075) circle (1.8pt);
+  \node[red,above right=1pt,font=\small] at (0,1.996) {$1\%$};
+  \node[red,above=2pt,font=\small,rotate=-38] at (1.7,1.126) {$\mathrm{LR}^+ = 8.33$};
+  \node[red,above left=1pt,font=\small] at (6,-1.075) {$7.8\%$};
+  \draw[blue,thick,dashed] (0,1.996) -- (6,-2.651);
+  \fill[blue] (3,-0.328) circle (1.8pt) (6,-2.651) circle (1.8pt);
+  \node[blue,below=2pt,font=\small,rotate=-50] at (5.0,-1.876) {$\mathrm{LR}^- = 0.221$};
+  \node[blue,below left=1pt,font=\small] at (6,-2.651) {$0.22\%$};
+\end{tikzpicture}
+\caption{The Fagan nomogram on the running example. Solid red: a positive result, $1\%$ through $\mathrm{LR}^+ = 8.33$ to $7.8\%$. Dashed blue: a negative result, $1\%$ through $\mathrm{LR}^- = 0.221$ to $0.22\%$. The outer scales are the logarithm of the odds, the middle scale half the logarithm of the ratio.}
+\label{fig:fagan}
+\end{figure}
+
+The chart is a drawing of the odds form. Taking logarithms of $\text{posterior odds} = \text{prior odds} \times \mathrm{LR}$ turns the product into a sum, $\log(\text{posterior odds}) = \log(\text{prior odds}) + \log \mathrm{LR}$, and a sum is what a straight edge can do. The left axis places each probability at the height $-\log(\text{odds})$, the right axis at $+\log(\text{odds})$, and the middle axis places each likelihood ratio at $\tfrac{1}{2}\log \mathrm{LR}$. A straight line between the two outer points crosses the middle axis at the average of their heights, which is $\tfrac{1}{2}(\log(\text{posterior odds}) - \log(\text{prior odds})) = \tfrac{1}{2}\log \mathrm{LR}$, exactly where the middle scale puts the ratio. That is the whole construction: the three points of one multiplication lie on one line. The sign convention is why the prior scale runs upward from $99.9\%$ to $0.1\%$ and the posterior scale the other way, and the logarithm is why $1\%$ and $99\%$ sit at equal distances from $50\%$ on both.
+
+To use it, lay a ruler from the pretest probability through the test's likelihood ratio and read the posterior on the right, $1\%$ through $8.33$ to $7.8\%$ for a positive result, $1\%$ through $0.221$ to $0.22\%$ for a negative one. The chart works in any direction: from a pretest probability and the posterior one would need to act, it reads off the likelihood ratio a test would have to have. It carries no counts, so it does the multiplication of step 4 and none of the checks of step 5 in Section~\ref{sec:proc}.
 
 \subsection{ARR and RRR}
 \label{sec:arr}
 
-Absolute and relative risk reduction compare two populations, a treatment arm and a control arm, rather than two states of one population, so they need a second example. Take a five-year primary-prevention trial with $10{,}000$ people per arm, $200$ events $E$ in the control arm and $50$ in the treatment arm:
-\begin{align}
+Absolute and relative risk reduction compare two groups of a trial, called its arms: the treatment arm, which received the treatment, and the control arm, which did not. That is two populations rather than two states of one population, so they need a second example. Take a five-year primary-prevention trial with $10{,}000$ people per arm, $200$ events $E$ in the control arm and $50$ in the treatment arm; the number needed to treat, NNT, is the reciprocal of ARR:
+\begin{align*}
   \mathrm{ARR} &= \Pr(E \mid \text{control}) - \Pr(E \mid \text{treatment}) = 0.020 - 0.005 = 0.015 = 1.5\% \text{ over five years}, \\
   \mathrm{RRR} &= \frac{\Pr(E \mid \text{control}) - \Pr(E \mid \text{treatment})}{\Pr(E \mid \text{control})} = \frac{0.015}{0.020} = 75\%, \qquad
   \mathrm{NNT} = \frac{1}{\mathrm{ARR}} \approx 67.
-\end{align}
-The $2\times 2$ table is arm against outcome, both axes relabelled from the diagnostic table, and each risk is a cell over its row total. The same data give a $75\%$ RRR and a $1.5\%$ ARR; the gap is the lever of selective reporting. An ARR carries its time horizon or it means nothing, and the number needed to treat, NNT, is its reciprocal over the same horizon.
+\end{align*}
+ARR and RRR are two readings of one $2\times 2$ table, arm against outcome, both axes relabelled from the diagnostic table; each risk is a cell over its row total. The same data give a $75\%$ RRR and a $1.5\%$ ARR; the two answer different questions, and a report that carries only the relative one leaves the reader no way back to the absolute scale. An ARR carries its time horizon or it means nothing, and NNT is its reciprocal over the same horizon.
 
-\section{The Isomorphism}
+\section{One Calculation in Four Notations}
 \label{sec:iso}
 
-Each notation of Section~\ref{sec:four} presents the same object, the joint distribution on $\{D, \neg D\} \times \{T^+, T^-\}$, and marginalization and conditioning act identically in each; that is the sense of the word. The correspondence, row by row:
+The four notations of Section~\ref{sec:four} are one object written four ways (Figure~\ref{fig:one}).
 
-\begin{center}
-\small
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  view/.style={draw, rounded corners, align=center, font=\small, inner sep=5pt, text width=5cm},
+  arr/.style={-{Latex}, thick}
+]
+\node[draw, thick, inner sep=6pt] (tab) at (0,0) {%
+  \begin{tabular}{l|cc|c}
+    & $T^+$ & $T^-$ & \\
+  \hline
+  $D^+$ & \cellcolor{tpcol}800 & \cellcolor{fncol}200 & 1{,}000 \\
+  $D^-$ & \cellcolor{fpcol}9{,}504 & \cellcolor{tncol}89{,}496 & 99{,}000 \\
+  \hline
+    & 10{,}304 & 89{,}696 & 100{,}000
+  \end{tabular}};
+\node[view] (tree) at (-5.1,2.8) {\textbf{Tree}\\ a leaf is a cell over $N$: $800 / 100{,}000$;\\ an edge below the first branching is a cell over its row total: $800 / 1{,}000$};
+\node[view] (bayes) at (5.1,2.8) {\textbf{Bayes' theorem}\\ the numerator is one cell,\\ the denominator a column total:\\ $0.008 / 0.10304$};
+\node[view] (odds) at (-5.1,-2.8) {\textbf{Odds and likelihood ratios}\\ $\mathrm{LR}^+$ is the ratio of the two\\ row-conditionals in the $T^+$ column:\\ $(800/1{,}000) / (9{,}504/99{,}000)$};
+\node[view] (trial) at (5.1,-2.8) {\textbf{Trial table}\\ the same shape, arms in the rows;\\ ARR is a difference of two\\ row-conditionals, RRR that\\ difference over one of them};
+\draw[arr] (tree) -- (tab);
+\draw[arr] (bayes) -- (tab);
+\draw[arr] (odds) -- (tab);
+\draw[arr] (trial) -- (tab);
+\end{tikzpicture}
+\caption{One object, four views. Every notation of the paper is a way of reading the table of counts in the centre.}
+\label{fig:one}
+\end{figure}
+ The object is the joint distribution of disease status and test result: the four probabilities $\Pr(D^+ \text{ and } T^+)$, $\Pr(D^+ \text{ and } T^-)$, $\Pr(D^- \text{ and } T^+)$, and $\Pr(D^- \text{ and } T^-)$, which sum to one. Every quantity in this paper is obtained from those four by the two operations of Section~\ref{sec:problem}, marginalization, which adds cells to get a row or column total, and conditioning, which divides a cell by a total, followed at most by a ratio or a difference of two such results. The tree, the formula, the table, and the odds form each hold the four cells and each performs the operations in its own way; that is the sense in which the paper calls them one calculation. Table~\ref{tab:map} lists the correspondence row by row: a concept, its name in the tree, in Bayes' theorem, and in the $2\times 2$ table, and its value on the running example.
+
+\begin{table}[tbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{p{0.16\textwidth}|p{0.15\textwidth}|p{0.24\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}}
+\begin{tabular}{P{0.12\textwidth}|P{0.15\textwidth}|P{0.215\textwidth}|P{0.125\textwidth}|P{0.16\textwidth}|P{0.11\textwidth}}
 \toprule
-\textbf{Concept}      & \textbf{Tree} & \textbf{Bayes term} & \textbf{Table} & \textbf{Value} & \textbf{Percent} \\
+\textbf{Concept} & \textbf{Tree} & \textbf{Bayes term} & \textbf{Table} & \textbf{Counts} & \textbf{Value} \\
 \midrule
-True positive   & leaf $D \to T^+$    & $\Pr(T^+ \mid D)\,\Pr(D)$ & cell $D, T^+$ & 0.008 & 0.8\% \\
-False negative  & leaf $D \to T^-$    & $\Pr(T^- \mid D)\,\Pr(D)$ & cell $D, T^-$ & 0.002 & 0.2\% \\
-False positive  & leaf $\neg D \to T^+$ & $\Pr(T^+ \mid \neg D)\,\Pr(\neg D)$ & cell $\neg D, T^+$ & 0.09504 & 9.504\% \\
-True negative   & leaf $\neg D \to T^-$ & $\Pr(T^- \mid \neg D)\,\Pr(\neg D)$ & cell $\neg D, T^-$ & 0.89496 & 89.496\% \\
+\rowcolor{tpcol} True positive   & leaf $D^+ \to T^+$ & $\Pr(T^+ \mid D^+)\,\Pr(D^+)$ & cell $D^+, T^+$ & $800$ & 0.008 (0.8\%) \\
+\rowcolor{fncol} False negative  & leaf $D^+ \to T^-$ & $\Pr(T^- \mid D^+)\,\Pr(D^+)$ & cell $D^+, T^-$ & $200$ & 0.002 (0.2\%) \\
+\rowcolor{fpcol} False positive  & leaf $D^- \to T^+$ & $\Pr(T^+ \mid D^-)\,\Pr(D^-)$ & cell $D^-, T^+$ & $9{,}504$ & 0.09504 (9.504\%) \\
+\rowcolor{tncol} True negative   & leaf $D^- \to T^-$ & $\Pr(T^- \mid D^-)\,\Pr(D^-)$ & cell $D^-, T^-$ & $89{,}496$ & 0.89496 (89.496\%) \\
 \midrule
-Marginal of $T^+$ & sum of the positive leaves & denominator & $T^+$ column total / $N$ & 0.10304 & 10.304\% \\
-PPV, $\Pr(D \mid T^+)$ & true positive / positives & posterior & cell / column total & 0.0776 & 7.8\% \\
-$\mathrm{LR}^+$ & ratio of the positive edges & $\Pr(T^+ \mid D)/\Pr(T^+ \mid \neg D)$ & row-conditional ratio & 8.33 & \\
-Posterior odds & ratio of the positive leaves & numerator / second term & ratio within the $T^+$ column & 0.0842 & \\
+Sensitivity, $\Pr(T^+ \mid D^+)$ & edge $D^+ \to T^+$ & $\Pr(T^+ \mid D^+)$ & cell / row total & $800 / 1{,}000$ & 0.80 (80\%) \\
+False-positive rate, $\Pr(T^+ \mid D^-)$ & edge $D^- \to T^+$ & $\Pr(T^+ \mid D^-)$ & cell / row total & $9{,}504 / 99{,}000$ & 0.096 (9.6\%) \\
+Specificity, $\Pr(T^- \mid D^-)$ & edge $D^- \to T^-$ & $\Pr(T^- \mid D^-)$ & cell / row total & $89{,}496 / 99{,}000$ & 0.904 (90.4\%) \\
+Marginal of $T^+$ & sum of the positive leaves & denominator of the formula & column total / $N$ & $10{,}304 / 100{,}000$ & 0.10304 (10.304\%) \\
+Marginal of $T^-$ & sum of the negative leaves & $1 - {}$denominator & column total / $N$ & $89{,}696 / 100{,}000$ & 0.89696 (89.696\%) \\
+PPV, $\Pr(D^+ \mid T^+)$ & true positive / positives & posterior & cell / column total & $800 / 10{,}304$ & 0.0776 (7.8\%) \\
+NPV, negative predictive value, $\Pr(D^- \mid T^-)$ & true negative / negatives & posterior of a negative & cell / column total & $89{,}496 / 89{,}696$ & 0.99777 (99.78\%) \\
+$\Pr(D^+ \mid T^-)$ & false negative / negatives & $1 - \mathrm{NPV}$ & cell / column total & $200 / 89{,}696$ & 0.00223 (0.22\%) \\
+\midrule
+Prior odds & ratio of the first branching & $\Pr(D^+) / \Pr(D^-)$ & ratio of the row totals & $1{,}000 / 99{,}000$ & 0.0101 \\
+$\mathrm{LR}^+$ & ratio of the positive edges & $\Pr(T^+ \mid D^+) / \Pr(T^+ \mid D^-)$ & ratio of two row-conditionals & $\dfrac{800 / 1{,}000}{9{,}504 / 99{,}000}$ & 8.33 \\
+$\mathrm{LR}^-$ & ratio of the negative edges & $\Pr(T^- \mid D^+) / \Pr(T^- \mid D^-)$ & the same in the $T^-$ column & $\dfrac{200 / 1{,}000}{89{,}496 / 99{,}000}$ & 0.221 \\
+Posterior odds & ratio of the positive leaves & numerator over the second term of the denominator & ratio within the $T^+$ column & $800 / 9{,}504$ & 0.0842 \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{The correspondence between the four notations, row by row, on the running example. The Bayes column names the parts of the formula of Section~\ref{sec:bayes}.}
+\label{tab:map}
+\end{table}
 
-A practitioner who holds this table can read a paper written in any of the four.
+The last four rows of the table, the odds rows, are a change of coordinates. Write $p$ for the prevalence, $s$ for the sensitivity, and $f$ for the false-positive rate; these three numbers fix the whole table. The odds form describes the same table by three other numbers: the prior odds, $\mathrm{LR}^+$, and $\mathrm{LR}^-$. Each triple is computed from the other:
+\begin{align*}
+  \text{prior odds} &= \frac{p}{1-p}, & \mathrm{LR}^+ &= \frac{s}{f}, & \mathrm{LR}^- &= \frac{1-s}{1-f}; \\
+  p &= \frac{\text{odds}}{1 + \text{odds}}, & s &= \frac{\mathrm{LR}^+ (1 - \mathrm{LR}^-)}{\mathrm{LR}^+ - \mathrm{LR}^-}, & f &= \frac{1 - \mathrm{LR}^-}{\mathrm{LR}^+ - \mathrm{LR}^-}.
+\end{align*}
+The first line is defined for $s \neq f$; equality would be a test whose positive rate is the same with and without the disease, which carries no information. Its image is the set of triples with positive prior odds and $(\mathrm{LR}^+ - 1)(\mathrm{LR}^- - 1) < 0$, one ratio above $1$ and the other below, and on that set the second line returns $s$ and $f$ between $0$ and $1$. A triple outside it, $\mathrm{LR}^+ = 2$ with $\mathrm{LR}^- = 3$ say, comes from no test: it would give $f = 2$. On the running example the inverse recovers the inputs:
+\begin{align*}
+  1 - \mathrm{LR}^- &= 0.7788, & \mathrm{LR}^+ - \mathrm{LR}^- &= 8.1121, \\
+  s &= \frac{8.3333 \times 0.7788}{8.1121} = 0.80, & f &= \frac{0.7788}{8.1121} = 0.096.
+\end{align*}
+Between those two sets the map is a bijection, so nothing in the table is available in one notation and missing in another; that is the sense in which the four notations carry one object. A practitioner who holds Table~\ref{tab:map} can read a paper written in any of the four.
 
-The risk measures of Section~\ref{sec:arr} live in the same table with the axes relabelled, and they condition on the row:
+The risk measures of Section~\ref{sec:arr} live in the same table with the axes relabelled, and they condition on the same margin as sensitivity does (Table~\ref{tab:trial}; c and t abbreviate the control and treatment arms):
 
-\begin{center}
+\begin{table}[H]
+\centering
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{p{0.17\textwidth}|p{0.17\textwidth}|p{0.22\textwidth}|p{0.17\textwidth}|p{0.08\textwidth}}
+\begin{tabular}{P{0.17\textwidth}|P{0.17\textwidth}|P{0.22\textwidth}|P{0.17\textwidth}|P{0.08\textwidth}}
 \toprule
 \textbf{Concept} & \textbf{Tree} & \textbf{Bayes term} & \textbf{Table} & \textbf{Value} \\
 \midrule
@@ -224,124 +400,224 @@ ARR & difference of the two edges & $\Pr(E \mid \text{c}) - \Pr(E \mid \text{t})
 RRR & that difference over the control edge & $\mathrm{ARR} / \Pr(E \mid \text{c})$ & same, over the control row & 75\% \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{The trial measures in the same table, axes relabelled.}
+\label{tab:trial}
+\end{table}
 
-Row conditioning is the direction of sensitivity and the false-positive rate, not of PPV. The counterpart of ARR in the diagnostic table is Youden's index, $\text{sensitivity} - \text{false-positive rate} = 0.80 - 0.096 = 0.704$, and the counterpart of RRR is that index over the sensitivity, $0.88$; PPV, the column-conditional quantity, has no counterpart in a trial table. A reader who is told that PPV and ARR are one calculation will conflate them; they are two conditionings of one table.
+Sensitivity and the false-positive rate divide a cell by its disease row, $1{,}000$ or $99{,}000$. ARR is a difference of two cells each divided by its arm row, $10{,}000$ in each arm, and RRR is that difference over the control-arm figure. PPV divides by the test column, $10{,}304$. In the layout of this paper disease and arm are the rows and the test result is the column. Textbooks of evidence-based medicine often print the diagnostic table the other way, with the test result in rows; the statement concerns which total is the denominator and holds whichever way the table is printed. In the words of the abstract, ARR and RRR are computed within a trial arm as sensitivity is computed within the sick, and PPV within those who tested positive.
+
+Lay the trial table over the diagnostic table: control arm over $D^+$, treatment arm over $D^-$, event $E$ over $T^+$. This is the mapping under which $\Pr(E \mid \text{control})$ and $\Pr(T^+ \mid D^+)$ are both a cell over its row total. Each trial statistic then has a diagnostic twin, made by the same arithmetic on the diagnostic rows (Table~\ref{tab:twins}).
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{P{0.2\textwidth}|P{0.3\textwidth}|P{0.34\textwidth}}
+\toprule
+\textbf{Trial statistic} & \textbf{Value} & \textbf{Diagnostic twin} \\
+\midrule
+ARR & $0.020 - 0.005 = 1.5\%$ & Youden's index \cite{youden1950}, $s - f = 0.80 - 0.096 = 0.704$; its reciprocal, $1.4$, is the number needed to diagnose \cite{linn2006} \\
+risk ratio & $\Pr(E \mid \text{t}) / \Pr(E \mid \text{c}) = 0.005 / 0.020 = 0.25$ & $f / s = 0.096 / 0.80 = 0.12$, which is $1 / \mathrm{LR}^+$ \\
+RRR, $1 -$ risk ratio & $1 - 0.25 = 75\%$ & $1 - f/s = 1 - 1/\mathrm{LR}^+ = 0.88$, which is Youden's index over the sensitivity, $0.704 / 0.80$ \\
+$\Pr(\text{control} \mid E)$, a column reading, which no trial reports & $200 / 250 = 80\%$ & PPV, $800 / 10{,}304 = 7.8\%$ \\
+\bottomrule
+\end{tabular}
+\caption{Each trial statistic and its twin in the diagnostic table, under the mapping control to $D^+$, treatment to $D^-$, event to $T^+$.}
+\label{tab:twins}
+\end{table}
+
+PPV and ARR sit in tables of the same shape, and a reader told so may take them for one calculation. PPV divides by a column total and ARR by row totals; they are two conditionings of one table.
 
 \section{A Diagnostic Interpretation Procedure}
 \label{sec:proc}
 
-The failure is procedural. The procedure below is for a clinician, epidemiologist, journalist, or patient facing a test result or a trial finding. Steps 1--4 are the natural-frequency method \cite{gigerenzer1995, hoffrage1998}; step 5 is this paper's addition.
+The errors of Sections~\ref{sec:problem} and~\ref{sec:arr} are errors of procedure: a number taken from the wrong row, or a relative figure taken for an absolute one. The procedure below is for a clinician, epidemiologist, journalist, or patient facing a test result or a trial finding. It takes three numbers and a population size $N$: the pretest probability $p$, the sensitivity $s$, and the false-positive rate $f$ of the test. The false-positive rate is $1 - \text{specificity}$, not the share of positive results that are wrong. On the running example $p = 0.01$, $s = 0.80$, $f = 0.096$. Checks (a) and (b) apply to a test result; check (c) applies to a trial figure. Steps 1--4 are the natural-frequency method \cite{gigerenzer1995, hoffrage1998}; step 5 is this paper's addition.
 
 \begin{enumerate}[leftmargin=2em,itemsep=0.4em]
-  \item \textbf{Find the pretest probability.} For a screening programme, the detection rate per round in the invited age band, from the programme's own report. For a patient with a presentation, the pretest probability for that presentation from a validated prediction rule or a local audit, not the population prevalence. For a trial, the control-arm event rate from the primary outcome table of the primary publication. If the source gives only a relative measure and no base rate, stop: the figure cannot be interpreted.
-  \item \textbf{Convert every rate to counts in a fixed population.} Choose $N$ so that the smallest cell holds at least 10 people: $10{,}000$ for a $1\%$ condition, $100{,}000$ for $0.1\%$. Multiply each rate by $N$.
-  \item \textbf{Fill the $2\times 2$ table of counts.} Four cells: disease and positive, disease and negative, no disease and positive, no disease and negative.
-  \item \textbf{Compute the answer from the counts, not from a relative summary.} PPV is the disease-and-positive cell over the positive column total, or post-test odds $=$ pretest odds $\times \mathrm{LR}^+$; the two agree. ARR is the control-arm event count over the control-arm size minus the treatment-arm event count over the treatment-arm size. RRR is ARR over the control-arm rate; NNT is $1/\mathrm{ARR}$.
+  \item \textbf{Find the pretest probability.} For a screening programme, take the prevalence of screen-detectable disease in the invited age band. Programme reports print a detection rate per round, which is that prevalence times the programme's sensitivity, so divide the detection rate by the sensitivity to recover the prevalence. For a patient with a presentation, take the pretest probability for that presentation from a validated prediction rule or a local audit, not the population prevalence. For a trial, take the control-arm event rate from the primary outcome table of the primary publication. If the source gives only a relative measure and no base rate, stop: the figure cannot be interpreted.
+  \item \textbf{Convert every rate to counts in a fixed population.} Multiply $N$ by $p$ for the number with the disease; the rest do not have it. Multiply the number with the disease by $s$ for the sick who test positive; the rest of them test negative. Multiply the number without the disease by $f$ for the well who test positive; the rest of them test negative. Round each count. Choose $N$ so that the smallest of the four counts is at least 10; on the running example it is the sick who test negative, $10{,}000 \times 0.01 \times 0.20 = 20$.
+  \item \textbf{Fill the $2\times 2$ table of counts.} The four counts of step 2 are the four cells: disease and positive, disease and negative, no disease and positive, no disease and negative. Add the row totals and the column totals.
+  \item \textbf{Compute the answer from the counts, not from a relative summary.} For a positive result, PPV is the disease-and-positive cell over the positive column total. For a negative result, the probability of disease is the disease-and-negative cell over the negative column total. The same two numbers come by the odds route, posterior odds $=$ prior odds $\times \mathrm{LR}$, with prior odds $= p / (1 - p)$, $\mathrm{LR}^+ = s / f$ for a positive result, $\mathrm{LR}^- = (1 - s) / (1 - f)$ for a negative one, and the probability $= \text{odds} / (1 + \text{odds})$. The two routes agree. ARR is the control-arm event count over the control-arm size minus the treatment-arm event count over the treatment-arm size. RRR is ARR over the control-arm rate; NNT is $1/\mathrm{ARR}$.
   \item \textbf{Run three checks before accepting the answer.}
   \begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=0.2em]
-    \item \emph{Sum check.} The four cells sum to $N$; otherwise there is an arithmetic error.
-    \item \emph{Base-rate check.} Compute $\mathrm{LR}^+ = \text{sensitivity} / \text{false-positive rate}$. For any test with $\mathrm{LR}^+ \geq 1$ the PPV cannot exceed $\text{prevalence} \times \mathrm{LR}^+$. When that bound is small, a PPV near the sensitivity is base-rate neglect; when the bound is near or above $1$, a high PPV is legitimate, as it is for a confirmatory test with a $0.1\%$ false-positive rate.
-    \item \emph{Absolute-against-relative check.} Never accept an RRR without the ARR and NNT beside it, over a stated horizon. The ratio $\mathrm{RRR}/\mathrm{ARR}$ equals $1 / \Pr(E \mid \text{control})$: a large ratio is a low baseline risk, which is when the relative figure misleads on its own.
+    \item \emph{Sum check.} The four cells sum to $N$, within one unit per rounded cell; a larger gap is an arithmetic error.
+    \item \emph{Bracket check.} For any test with $\mathrm{LR}^+ \geq 1$, the probability after a result lies in a bracket whose ends need only the pretest probability and the likelihood ratio:\footnote{With $p$, $s$, and $f$ as in Section~\ref{sec:iso}: $\Pr(T^+) = p\,s + (1-p)\,f$ lies between $f$ and $s$ when $s \geq f$, so $\mathrm{PPV} = p\,s / \Pr(T^+)$ lies between $p\,s / s = p$ and $p\,s / f = p \cdot \mathrm{LR}^+$. The same argument on $\Pr(T^-)$ gives the negative bracket. Dividing numerator and denominator of $\mathrm{PPV} = p\,s / (p\,s + (1-p)\,f)$ by $f$ gives the exact form in the text.}
+    \begin{gather*}
+      \text{prevalence} \;\leq\; \mathrm{PPV} \;\leq\; \text{prevalence} \times \mathrm{LR}^+, \\
+      \text{prevalence} \times \mathrm{LR}^- \;\leq\; \Pr(D^+ \mid T^-) \;\leq\; \text{prevalence}.
+    \end{gather*}
+    A positive result cannot leave the probability of disease below the pretest probability, and cannot multiply it by more than $\mathrm{LR}^+$; a negative result cannot leave it above the pretest probability. A figure outside its bracket is wrong, at the stated pretest probability: a PPV quoted for a different population, a referral clinic against a screening programme, has a different bracket.
+
+    The lower end of the positive bracket catches a PPV computed over the wrong total: $800 / 100{,}000 = 0.8\%$ is below the prevalence of $1\%$. The upper end catches base-rate neglect, a PPV reported near the sensitivity, only when that end is itself below the sensitivity, which happens when the prevalence is below the false-positive rate (since $p \cdot s / f < s$ exactly when $p < f$). On the running example $1\% < 9.6\%$ and the upper end is $8.3\%$. At higher prevalence the upper end says nothing: at $p = 0.10$, $s = 0.90$, $f = 0.09$ it is $1.00$, and a reported $90\%$ passes although the PPV is $52.6\%$. Whenever the upper end reaches $1$, or whenever the bracket is wider than the question, compute the exact value, which costs one more operation: $\mathrm{PPV} = p \cdot \mathrm{LR}^+ / (p \cdot \mathrm{LR}^+ + 1 - p)$, and compare it with the count route of step 4.
+    \item \emph{Absolute-against-relative check.} Never accept an RRR without the ARR and NNT beside it, over a stated horizon. The ratio $\mathrm{RRR}/\mathrm{ARR}$ equals one over the control-arm event rate: a large ratio is a low baseline risk, which is when the relative figure misleads on its own.
   \end{enumerate}
 \end{enumerate}
 
 \paragraph{The running example.}
-Base rate $1\%$; $N = 10{,}000$. Then $100$ have the disease, of whom $80$ test positive and $20$ negative; $9{,}900$ do not, of whom $950$ test positive ($9{,}900 \times 0.096 = 950.4$, rounded) and $8{,}950$ negative. $\mathrm{PPV} = 80/(80+950) = 80/1{,}030 \approx 7.8\%$. Checks: (a) $80 + 20 + 950 + 8{,}950 = 10{,}000$; (b) $0.01 \times 8.33 = 0.083$, and $7.8\%$ is below it; (c) no relative measure was reported. Accepted. Section~\ref{sec:table} used $N = 100{,}000$ and got $9{,}504$ false positives; the rounding here changes no ratio at the precision shown. A reader can run the three checks without an external authority.
+Pretest probability, here the prevalence, $1\%$; $N = 10{,}000$. Then $100$ have the disease, of whom $80$ test positive and $20$ negative; $9{,}900$ do not, of whom $950$ test positive ($9{,}900 \times 0.096 = 950.4$, rounded) and $8{,}950$ negative. Step 3 fills Table~\ref{tab:run}.
 
-\subsection*{Spreadsheet form for sequences of tests}
+\begin{table}[H]
+\centering
+\begin{tabular}{l|cc|c}
+\toprule
+                  & $T^+$    & $T^-$    & Row total \\
+\midrule
+$D^+$          & \cellcolor{tpcol}80       & \cellcolor{fncol}20       & 100  \\
+$D^-$          & \cellcolor{fpcol}950      & \cellcolor{tncol}8{,}950  & 9{,}900 \\
+\midrule
+Column total      & 1{,}030  & 8{,}970  & 10{,}000 \\
+\bottomrule
+\end{tabular}
+\caption{Step 3 on the running example, $N = 10{,}000$.}
+\label{tab:run}
+\end{table}
 
-When there is more than one test (screen then confirmation, longitudinal monitoring, tests of different modality), the procedure takes a flat spreadsheet form. Each row is one path of outcomes; each column from left to right is one step; the rightmost column is the joint probability of the path, rounded to five places. After every step the rightmost column must sum to $1$. That is the renormalization check at that depth.
+Step 4:
+\begin{equation*}
+  \mathrm{PPV} = \frac{80}{80 + 950} = \frac{80}{1{,}030} \approx 7.8\%.
+\end{equation*}
+Checks: (a) $80 + 20 + 950 + 8{,}950 = 10{,}000$; (b) $1\% \leq 7.8\% \leq 0.01 \times 8.33 = 8.3\%$; (c) no relative measure was reported. Accepted. For a negative result, step 4 reads the disease-and-negative cell over the negative column total, $20 / 8{,}970 = 0.22\%$; by the odds route, $0.0101 \times 0.221 = 0.00223$, the same. Check (b): $0.01 \times 0.221 = 0.22\% \leq 0.22\% \leq 1\%$. Section~\ref{sec:table} used $N = 100{,}000$ and got $9{,}504$ false positives; the rounding here changes no ratio at the precision shown. A reader can run the three checks without an external authority.
 
-Suppose the test of Section~\ref{sec:problem} is applied to the same patient twice, and assume for the moment that the two outcomes are conditionally independent given disease status. The assumption is a teaching device: two runs of one test on one specimen or platform share error sources (specimen quality, calibration drift, operator, biological confounders) and are positively correlated. When it fails, the columns hold $\Pr(T_2 \mid T_1, D)$ and $\Pr(T_2 \mid T_1, \neg D)$ in place of $\Pr(T_2 \mid D)$ and $\Pr(T_2 \mid \neg D)$. The shape of the spreadsheet does not change. The assumption is most defensible when the tests differ in analyte or mechanism, a serological screen followed by a nucleic-acid confirmation, say, so that the error sources are distinct.
+\section{The Spreadsheet for Sequences of Tests}
+\label{sec:sheet}
 
-\paragraph{Step 0, the prior.} Two rows, one per disease status.
+When there is more than one test (screen then confirmation, longitudinal monitoring, tests of different modality), the procedure of Section~\ref{sec:proc} takes a flat spreadsheet form. It is the two-test tree of Binder et al.\ \cite{binder2018} flattened into rows, with a correlated case added. Each row is one path of outcomes; each column from left to right is one step; the rightmost column is the joint probability of the path, rounded to five places. After every step the rightmost column must sum to $1$. That is the sum check, step 5(a) of Section~\ref{sec:proc}, at that depth.
 
-\begin{center}
+Suppose the test of Section~\ref{sec:problem}, prevalence $1\%$, sensitivity $0.80$, false-positive rate $0.096$, single-test PPV $7.8\%$, is applied to the same patient twice, with results $T_1$ and $T_2$. Assume for the moment that the two outcomes are conditionally independent given disease status. That means: among the sick, the second result does not depend on the first, and the same among the well. The assumption is a teaching device: two runs of one test on one specimen or platform share error sources (specimen quality, calibration drift, operator, biological confounders) and are positively correlated. When it fails, the Test 2 column holds $\Pr(T_2 \mid T_1, D^+)$ and $\Pr(T_2 \mid T_1, D^-)$ in place of $\Pr(T_2 \mid D^+)$ and $\Pr(T_2 \mid D^-)$ (Table~\ref{tab:corr} below). Those are the probabilities of the second result given both the first result and the disease status. The multiplier applied in step 2 then depends on the row's Test 1 entry as well as on its disease status. The shape of the spreadsheet does not change. The assumption is most defensible when the tests differ in analyte or mechanism, a serological screen followed by a nucleic-acid confirmation, say, so that the error sources are distinct.
+
+\paragraph{Step 0, the prior.} Two rows, one per disease status (Table~\ref{tab:s0}).
+
+\begin{table}[H]
+\centering
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{c|c|l}
 \toprule
 \textbf{Row} & \textbf{Disease} & \textbf{Joint probability after step 0} \\
 \midrule
-1 & $D$      & $0.01$ \\
-2 & $\neg D$ & $0.99$ \\
+1 & $D^+$      & $0.01$ \\
+2 & $D^-$ & $0.99$ \\
 \midrule
   & \multicolumn{1}{r|}{\textbf{Sum}} & $\;\;\mathbf{1.00000}$ \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{Step 0, the prior.}
+\label{tab:s0}
+\end{table}
 
-\paragraph{Step 1, after test 1.} Each row splits in two, one per outcome; the new joint is the old joint times the conditional probability of the outcome.
+\paragraph{Step 1, after test 1.} Each row splits in two, one per outcome (Table~\ref{tab:s1}). The new joint is the old joint times the conditional probability of the outcome.
 
-\begin{center}
+\begin{table}[H]
+\centering
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{c|c|c|l}
 \toprule
 \textbf{Row} & \textbf{Disease} & \textbf{Test 1} & \textbf{Joint probability after step 1} \\
 \midrule
-1 & $D$      & $+$ & $0.01 \times 0.80 = 0.00800$ \\
-2 & $D$      & $-$ & $0.01 \times 0.20 = 0.00200$ \\
-3 & $\neg D$ & $+$ & $0.99 \times 0.096 = 0.09504$ \\
-4 & $\neg D$ & $-$ & $0.99 \times 0.904 = 0.89496$ \\
+\rowcolor{tpcol} 1 & $D^+$ & $+$ & $0.01 \times 0.80 = 0.00800$ \\
+\rowcolor{fncol} 2 & $D^+$ & $-$ & $0.01 \times 0.20 = 0.00200$ \\
+\rowcolor{fpcol} 3 & $D^-$ & $+$ & $0.99 \times 0.096 = 0.09504$ \\
+\rowcolor{tncol} 4 & $D^-$ & $-$ & $0.99 \times 0.904 = 0.89496$ \\
 \midrule
   & \multicolumn{2}{r|}{\textbf{Sum}} & $\;\;\mathbf{1.00000}$ \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{Step 1, after test 1. The four rows are the four cells, in the colours of Figures~\ref{fig:tree} to~\ref{fig:quad}.}
+\label{tab:s1}
+\end{table}
 
-\paragraph{Step 2, after test 2.} Each row splits again.
+\paragraph{Step 2, after test 2.} Each row splits again (Table~\ref{tab:s2}).
 
-\begin{center}
+\begin{table}[H]
+\centering
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{c|c|c|c|l}
 \toprule
 \textbf{Row} & \textbf{Disease} & \textbf{Test 1} & \textbf{Test 2} & \textbf{Joint probability after step 2} \\
 \midrule
-1 & $D$      & $+$ & $+$ & $0.00800 \times 0.80   \approx 0.00640$ \\
-2 & $D$      & $+$ & $-$ & $0.00800 \times 0.20   \approx 0.00160$ \\
-3 & $D$      & $-$ & $+$ & $0.00200 \times 0.80   \approx 0.00160$ \\
-4 & $D$      & $-$ & $-$ & $0.00200 \times 0.20   \approx 0.00040$ \\
-5 & $\neg D$ & $+$ & $+$ & $0.09504 \times 0.096  \approx 0.00912$ \\
-6 & $\neg D$ & $+$ & $-$ & $0.09504 \times 0.904  \approx 0.08592$ \\
-7 & $\neg D$ & $-$ & $+$ & $0.89496 \times 0.096  \approx 0.08592$ \\
-8 & $\neg D$ & $-$ & $-$ & $0.89496 \times 0.904  \approx 0.80904$ \\
+\rowcolor{rowsel} 1 & $D^+$ & $+$ & $+$ & $0.00800 \times 0.80 = 0.00640$ \\
+2 & $D^+$      & $+$ & $-$ & $0.00800 \times 0.20   = 0.00160$ \\
+3 & $D^+$      & $-$ & $+$ & $0.00200 \times 0.80   = 0.00160$ \\
+4 & $D^+$      & $-$ & $-$ & $0.00200 \times 0.20   = 0.00040$ \\
+\rowcolor{rowsel} 5 & $D^-$ & $+$ & $+$ & $0.09504 \times 0.096 \approx 0.00912$ \\
+6 & $D^-$ & $+$ & $-$ & $0.09504 \times 0.904  \approx 0.08592$ \\
+7 & $D^-$ & $-$ & $+$ & $0.89496 \times 0.096  \approx 0.08592$ \\
+8 & $D^-$ & $-$ & $-$ & $0.89496 \times 0.904  \approx 0.80904$ \\
 \midrule
   & \multicolumn{3}{r|}{\textbf{Sum}} & $\;\;\mathbf{1.00000}$ \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{Step 2, after test 2. Shaded: the two rows that hold two positive results, from which the posterior below is read.}
+\label{tab:s2}
+\end{table}
 
-After $n$ tests the table has $2^{n+1}$ rows.
+After $n$ tests the spreadsheet has $2^{n+1}$ rows, two disease states times $2^n$ outcome paths.
 
-\paragraph{Reading off a posterior.} Filter the rows on the observed outcomes; sum the matching joints for $D$; divide by the sum of all matching joints. After two positive results the matching rows are 1 and 5:
+\paragraph{Reading off a posterior.} Filter the rows on the observed outcomes; sum the matching joints for $D^+$; divide by the sum of all matching joints. After two positive results the matching rows are 1 and 5:
 \begin{equation*}
-  \Pr(D \mid T_1^+ \cap T_2^+) = \frac{0.00640}{0.00640 + 0.00912} = \frac{0.00640}{0.01552} \approx 41.2\%.
+  \Pr(D^+ \mid T_1^+ \text{ and } T_2^+) = \frac{0.00640}{0.00640 + 0.00912} = \frac{0.00640}{0.01552} \approx 41.2\%.
 \end{equation*}
-In this example the second result moves the posterior from $7.8\%$ into the range where the next, more invasive, diagnostic step is justified; the treatment threshold is set per disease from the costs of the two errors.
+In this example the second result moves the posterior from $7.8\%$ to $41.2\%$. Whether that justifies the next, more invasive, diagnostic step depends on a threshold set per disease from the costs of the two errors, a missed case and a needless intervention; this paper sets none.
 
-\paragraph{The pruned form.} The clinic observes one path, so at each step it needs only two rows: the posterior of the previous step as the prior of the next. After $T_1^+$ the rows are $D$: $0.0776$ and $\neg D$: $0.9224$. Multiplying by test 2 gives $0.0776 \times 0.80 = 0.0621$ and $0.9224 \times 0.096 = 0.0886$, and $0.0621 / (0.0621 + 0.0886) = 41.2\%$, as before. The full table is the audit version; the two-row table is the working version.
+\paragraph{The pruned form.} The clinic observes one path, so at each step it needs only two rows: the posterior of the previous step as the prior of the next. After $T_1^+$ the two rows are rows 1 and 3 of the step 1 spreadsheet, $0.00800$ and $0.09504$, each divided by their sum $0.10304$: $D^+$ at $0.0776$ and $D^-$ at $0.9224$. Multiplying each by its test 2 conditional gives
+\begin{equation*}
+  0.0776 \times 0.80 = 0.0621, \qquad 0.9224 \times 0.096 = 0.0886, \qquad \frac{0.0621}{0.0621 + 0.0886} = 41.2\%,
+\end{equation*}
+as before. The full spreadsheet is the audit version; the pruned spreadsheet is the working version.
 
 \paragraph{When the tests disagree.} Suppose $T_1$ positive and $T_2$ negative, still under independence. Rows 2 and 6:
 \begin{equation*}
-  \Pr(D \mid T_1^+ \cap T_2^-) = \frac{0.00160}{0.00160 + 0.08592} \approx 1.8\%.
+  \Pr(D^+ \mid T_1^+ \text{ and } T_2^-) = \frac{0.00160}{0.00160 + 0.08592} \approx 1.8\%.
 \end{equation*}
-The posterior is back near the prior of $1\%$. In odds: the positive multiplies the prior odds by $\mathrm{LR}^+ \approx 8.3$, the negative by $\mathrm{LR}^- \approx 0.22$, and the product is $1.8$, so the odds barely move. Any other combination of outcomes is one filter on the same table.
+The posterior is back near the prior of $1\%$. In odds: the positive multiplies the prior odds by $\mathrm{LR}^+ \approx 8.33$, the negative by $\mathrm{LR}^- \approx 0.221$, and the product $8.33 \times 0.221 = 1.84$ barely moves the odds: $0.0101 \times 1.84 = 0.0186$ in odds, which is $0.0186 / 1.0186 = 1.8\%$ as a probability. Any other combination of outcomes is one filter on the same table.
 
 \paragraph{When the tests are correlated.} Suppose the second test repeats half of the first test's false positives, and
 \begin{align*}
-  \Pr(T_2^+ \mid T_1^+, D)      &= 0.90, & \Pr(T_2^+ \mid T_1^-, D)      &= 0.40, \\
-  \Pr(T_2^+ \mid T_1^+, \neg D) &= 0.50, & \Pr(T_2^+ \mid T_1^-, \neg D) &= 0.053.
+  \Pr(T_2^+ \mid T_1^+, D^+)      &= 0.90, & \Pr(T_2^+ \mid T_1^-, D^+)      &= 0.40, \\
+  \Pr(T_2^+ \mid T_1^+, D^-) &= 0.50, & \Pr(T_2^+ \mid T_1^-, D^-) &= 0.053.
 \end{align*}
-These values keep the marginals of $T_2$ equal to those of $T_1$: $0.80 \times 0.90 + 0.20 \times 0.40 = 0.80$ and $0.096 \times 0.50 + 0.904 \times 0.053 \approx 0.096$, so what changes between this case and the last is the correlation alone. They are illustrative; such conditionals come only from latent-class estimates with conditional dependence, not from a test's package insert. The two rows that matter become
+The four values are illustrative, chosen so that the marginals of $T_2$ equal those of $T_1$ and only the correlation changes between this case and the last:
 \begin{align*}
-  \Pr(D, T_1^+, T_2^+)      &= 0.01 \times 0.80 \times 0.90 = 0.00720, \\
-  \Pr(\neg D, T_1^+, T_2^+) &= 0.99 \times 0.096 \times 0.50 = 0.04752,
+  0.80 \times 0.90 + 0.20 \times 0.40 &= 0.80 \text{ exactly}, \\
+  0.096 \times 0.50 + 0.904 \times 0.053 &= 0.0959.
+\end{align*}
+The second line gives $0.096$ at three places; the value that makes it exact is $(0.096 - 0.096 \times 0.50) / 0.904 = 0.048 / 0.904 = 0.0531$. Such conditionals come from a validation study that ran both tests on every patient and recorded all eight outcome combinations by disease status, judged against a reference standard, the best available determination of who has the disease. Without a reference standard they are statistical estimates (latent-class models with conditional dependence). A test's package insert does not carry them. Step 2 of the spreadsheet now reads as Table~\ref{tab:corr}; the Test 2 column holds the conditional for the row's Test 1 entry.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{c|c|c|c|l}
+\toprule
+\textbf{Row} & \textbf{Disease} & \textbf{Test 1} & \textbf{Test 2} & \textbf{Joint probability after step 2} \\
+\midrule
+\rowcolor{rowsel} 1 & $D^+$ & $+$ & $+$ & $0.00800 \times 0.90 = 0.00720$ \\
+2 & $D^+$      & $+$ & $-$ & $0.00800 \times 0.10  = 0.00080$ \\
+3 & $D^+$      & $-$ & $+$ & $0.00200 \times 0.40  = 0.00080$ \\
+4 & $D^+$      & $-$ & $-$ & $0.00200 \times 0.60  = 0.00120$ \\
+\rowcolor{rowsel} 5 & $D^-$ & $+$ & $+$ & $0.09504 \times 0.50 = 0.04752$ \\
+6 & $D^-$ & $+$ & $-$ & $0.09504 \times 0.50  = 0.04752$ \\
+7 & $D^-$ & $-$ & $+$ & $0.89496 \times 0.053 \approx 0.04743$ \\
+8 & $D^-$ & $-$ & $-$ & $0.89496 \times 0.947 \approx 0.84753$ \\
+\midrule
+  & \multicolumn{3}{r|}{\textbf{Sum}} & $\;\;\mathbf{1.00000}$ \\
+\bottomrule
+\end{tabular}
+\caption{Step 2 with correlated tests. Shaded: the two rows that hold two positive results.}
+\label{tab:corr}
+\end{table}
+
+The two rows that matter are 1 and 5:
+\begin{align*}
+  \Pr(D^+, T_1^+, T_2^+)      &= 0.01 \times 0.80 \times 0.90 = 0.00720, \\
+  \Pr(D^-, T_1^+, T_2^+) &= 0.99 \times 0.096 \times 0.50 = 0.04752,
 \end{align*}
 and
 \begin{equation*}
-  \Pr(D \mid T_1^+ \cap T_2^+) = \frac{0.00720}{0.00720 + 0.04752} \approx 13.2\%.
+  \Pr(D^+ \mid T_1^+ \text{ and } T_2^+) = \frac{0.00720}{0.00720 + 0.04752} \approx 13.2\%.
 \end{equation*}
-Confirmation should therefore use a test whose error sources are independent of the screen's and whose specificity is high; a different analyte or mechanism usually gives both. Repeating the same test is informative only where its error is random rather than intrinsic to the patient.
+In odds: the likelihood ratio of the second positive given the first is $0.90 / 0.50 = 1.8$ against the marginal $8.33$, so
+\begin{equation*}
+  0.0842 \times 1.8 = 0.152, \qquad \frac{0.152}{1 + 0.152} = 13.2\%.
+\end{equation*}
+Confirmation should therefore use a test whose error sources are independent of the screen's and whose specificity is high. A different analyte or mechanism gives the independence; the specificity is the second test's own. Repeating the same test is informative only where its error is random rather than intrinsic to the patient.
 
 Excel and Google Sheets hold this layout as it stands, and a reviewer can recompute every cell. The five steps apply to the spreadsheet row by row.
 
@@ -350,19 +626,23 @@ Excel and Google Sheets hold this layout as it stands, and a reviewer can recomp
 
 \subsection{Why the misreading persists}
 
-One cause is visible in the notations themselves. ARR and RRR reach the reader as summary statistics without the table that produced them, and a reader given ``$95\%$ relative risk reduction'' has no way back to the absolute scale. The RRR discards that scale; the table and the tree keep it in the counts; the formula shows it only after substitution. Kahwati et al.\ (2017) \cite{kahwati2017}, reviewing studies of prescribers, found that the same result presented as a relative rather than an absolute reduction raises the perceived effectiveness of a treatment and the willingness to prescribe it.
+One cause of the misreading, a relative figure taken for an absolute one, is visible in the notations themselves. ARR and RRR reach the reader as summary statistics without the table that produced them, and a reader given ``$95\%$ relative risk reduction'' has no way back to the absolute scale. The RRR discards that scale. The $2\times 2$ table and the tree keep it in the counts; Bayes' formula shows it only after substitution. Kahwati et al.\ (2017) \cite{kahwati2017}, reviewing studies of prescribers, found that the same result presented as a relative rather than an absolute reduction raises the perceived effectiveness of a treatment and the willingness to prescribe it.
 
-Brown (2021) \cite{brown2021} and Olliaro et al.\ (2021) \cite{olliaro2021} recompute the COVID-19 mRNA vaccine trials both ways. The trial publications reported the case counts; what reached the public were the relative reductions of $94$--$95\%$, while the absolute reductions over the trial follow-up of about two months were $0.7$--$1.2\%$, depending on the denominator, with a number needed to vaccinate near $100$. Both figures are correct and answer different questions: the relative figure transports to other attack rates, the absolute figure belongs to two months at the trial's incidence and grows with exposure.
+Brown (2021) \cite{brown2021} and Olliaro et al.\ (2021) \cite{olliaro2021} recompute the COVID-19 mRNA vaccine trials both ways. The trial publications reported the case counts; what reached the public were the relative reductions of $94$--$95\%$. The absolute reductions over the trial follow-up of about two months were $0.7$--$1.2\%$, depending on the denominator, with numbers needed to vaccinate from $81$ to $142$ as the two papers compute them from the unrounded rates. Both figures are correct and answer different questions: the relative figure transports to other attack rates, the absolute figure belongs to two months at the trial's incidence and grows with exposure.
 
 \subsection{Recommendations}
 
-For reporting: the counts. Primary reports are held to this by STARD 2015, item 23 \cite{bossuyt2015}, and CONSORT 2010, item 17b \cite{schulz2010}, and largely comply; the counts drop out in abstracts, press releases, advertising, and public statements. The recommendation is that the $2\times 2$ table of absolute counts travel with every derived statistic (PPV, ARR, RRR, sensitivity, specificity, likelihood ratio) into those channels. A tree of four leaves adds the conditional structure and takes a quarter of a page.
+For reporting, the recommendation is the counts. Primary reports are held to this by STARD 2015, item 23 \cite{bossuyt2015}, and CONSORT 2010, item 17b \cite{schulz2010}; the counts drop out in abstracts, press releases, advertising, and public statements. The recommendation is that the $2\times 2$ table of absolute counts travel with every derived statistic (PPV, ARR, RRR, sensitivity, specificity, likelihood ratio) into those channels. A tree of four leaves adds the conditional structure and takes a quarter of a page.
 
-For training: epidemiology and clinical curricula introduce conditional probability through the contingency table and its derived statistics. The table is complete and concise, and it makes one thing salient, the joint frequency of each cell. The conditional flow from prior to posterior is salient in the tree, the algebraic identity in the formula, the update as a multiplication in the odds form, and the absolute scale in the tree and the table. The natural-frequency studies \cite{gigerenzer1995, hoffrage1998, binder2015, binder2018, binder2021, kunzelmann2022} put the gain from the tree and the counts at about 30 percentage points of correct answers. Medical, epidemiology, and public-health curricula and prescribers' continuing education should cover every notation of Section~\ref{sec:four} through the mapping of Section~\ref{sec:iso} and the procedure of Section~\ref{sec:proc}. The cost is a few hours in the existing biostatistics block.
+For training, the recommendation is all four notations. Epidemiology and clinical curricula today introduce conditional probability through the contingency table and its derived statistics. The table is complete and concise, and it makes one thing salient, the joint frequency of each cell. Each of the other notations makes one other thing salient. The tree shows the flow from prior to posterior; the formula, the algebraic identity; the odds form, the update as a multiplication. The absolute scale is visible wherever the counts are, in the tree and in the table. The natural-frequency studies \cite{gigerenzer1995, hoffrage1998, binder2015, binder2018, binder2021, kunzelmann2022} put the gain from the counts at 30 percentage points in the first comparison and about 20 pooled across studies \cite{mcdowell2017}. Medical, epidemiology, and public-health curricula and prescribers' continuing education should cover every notation of Section~\ref{sec:four} through the mapping of Section~\ref{sec:iso} and the procedure of Section~\ref{sec:proc}. The cost is a few hours in the existing biostatistics block.
 
-\subsection{Iterated inference}
+\subsection{The protocol is a column}
 
-Under repeated observation the posterior of one step is the prior of the next, as in Bayesian networks \cite{pearl1988} and hidden Markov models. The notations of Section~\ref{sec:four} apply to each update, and the pruned spreadsheet of Section~\ref{sec:proc} is that iteration written out.
+Section~\ref{sec:sheet} ended with a two-row spreadsheet in which the posterior of one step is the prior of the next. That is Bayes' rule applied once per test; drawn as arrows from the disease to each test, it is the simplest Bayesian network \cite{pearl1988}, written out one row at a time. The protocol of this section's title is the process that produced an observation, and the claim is that it is a column of that spreadsheet.
+
+The same spreadsheet also settles a class of puzzles that look like disputes about probability. In the Monty Hall problem a contestant picks one of three doors, the host opens another that hides a goat, and the question is whether to switch. In the two-children problem of Gardner \cite{gardner1959}, analysed by Bar-Hillel and Falk \cite{barhillel1982}, a family with two children has at least one girl, and the question is the probability of two girls. In both, two careful readers see the same observation and reach two different numbers. They differ because the process that produced the observation is part of the evidence. A host who knows where the car is and opens an empty door has performed one event; a door that happens to swing open on an empty room is another event, with a different probability under each hypothesis. With the contestant at door 1 and door 3 opened, the column over the car behind door 1, 2, 3 reads $\tfrac{1}{2}, 1, 0$ under a host who knows and $\tfrac{1}{2}, \tfrac{1}{2}, 0$ under a door opened at random that happened to show a goat; the probability that switching wins is $\tfrac{2}{3}$ in the first case and $\tfrac{1}{2}$ in the second. In the spreadsheet that process occupies one column: the column that holds the probability of the observation under each state of the world. The two readers fill that column with different values, and the table then gives each of them a different posterior.
+
+The correlated case of Section~\ref{sec:sheet} is the diagnostic instance. Two positive results give $41.2\%$ when the tests are independent (Table~\ref{tab:s2}) and $13.2\%$ when the second test repeats half of the first test's false positives (Table~\ref{tab:corr}). Nothing in the two results decides between those figures; the column that decides is the one that says how the second result was produced. Once the columns are filled, the table fixes the number; with the rows fixed by the statement of the problem, a dispute about the number is a dispute about a column. When the source does not state a column, the number is undetermined, in the same way that a missing base rate leaves step 1 of the procedure undetermined.
 
 \subsection{Limitations}
 
@@ -372,11 +652,63 @@ Under repeated observation the posterior of one step is the prior of the next, a
   \item \emph{Scope of the cited evidence.} Casscells et al.\ and Kahwati et al.\ document misreading by individual clinicians; Brown and Olliaro et al.\ document reporting in specific trials. That these patterns carry into regulatory and public communication is consistent with the evidence and not established by it.
 \end{itemize}
 
+\section*{Glossary}
+
+{\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{P{0.19\textwidth}|P{0.2\textwidth}|P{0.42\textwidth}|P{0.07\textwidth}}
+\toprule
+\textbf{Term} & \textbf{Symbol} & \textbf{Meaning} & \textbf{Where} \\
+\midrule
+\endhead
+Disease present, absent & $D^+$, $D^-$ & the two states of the person & \S\ref{sec:problem} \\
+Test positive, negative & $T^+$, $T^-$ & the two results of the test & \S\ref{sec:problem} \\
+Population size & $N$ & the number of people the counts are spread over, $100{,}000$ or $10{,}000$ here & \S\ref{sec:table} \\
+Prevalence & $\Pr(D^+)$ & the share of a population that has the disease & \S\ref{sec:problem} \\
+Pretest probability, prior & $p$ & the probability of disease before the result is known: the prevalence for a screening programme, a per-presentation figure for a patient with symptoms & \S\ref{sec:proc} \\
+Posterior, post-test probability & $\Pr(D^+ \mid T^+)$, $\Pr(D^+ \mid T^-)$ & the probability of disease after the result is known & \S\ref{sec:problem} \\
+Sensitivity & $s$, $\Pr(T^+ \mid D^+)$ & the share of the sick who test positive & \S\ref{sec:problem} \\
+False-positive rate & $f$, $\Pr(T^+ \mid D^-)$ & the share of the well who test positive; $1 - {}$specificity. Clinics also use the phrase for the share of positive results that are wrong, $1 - {}$PPV, which is a different number & \S\ref{sec:problem} \\
+Specificity & $\Pr(T^- \mid D^-)$ & the share of the well who test negative & \S\ref{sec:problem} \\
+Positive predictive value & PPV, $\Pr(D^+ \mid T^+)$ & the probability of disease after a positive result & \S\ref{sec:problem} \\
+Negative predictive value & NPV, $\Pr(D^- \mid T^-)$ & the probability of no disease after a negative result & \S\ref{sec:iso} \\
+Joint probability & $\Pr(A \text{ and } B)$ & the probability that both events happen; one cell of the $2\times 2$ table over $N$ & \S\ref{sec:problem} \\
+Marginal probability & $\Pr(T^+)$, $\Pr(D^+)$ & a row or column total of the $2\times 2$ table over $N$ & \S\ref{sec:problem} \\
+Conditioning & $\Pr(A \mid B)$ & dividing a cell by a row or column total & \S\ref{sec:problem} \\
+Odds & $\Pr(A) / (1 - \Pr(A))$ & a probability over the probability of its complement; prior odds before the result, posterior odds after & \S\ref{sec:problem} \\
+Likelihood ratio & $\mathrm{LR}^+ = s / f$, $\mathrm{LR}^- = (1 - s) / (1 - f)$ & the factor by which a positive or a negative result multiplies the prior odds & \S\ref{sec:odds} \\
+Fagan nomogram & & a chart on which prior probability, likelihood ratio, and posterior probability lie on one straight line & \S\ref{sec:odds} \\
+Natural frequencies & & probabilities expressed as counts in a fixed population; the tree with counts on its leaves and the table of counts & \S\ref{sec:proc} \\
+Base-rate neglect & & taking the PPV to be near the sensitivity, ignoring the prevalence & \S\ref{sec:proc} \\
+Inverse fallacy & & confusing $\Pr(D^+ \mid T^+)$ with $\Pr(T^+ \mid D^+)$ & \S1 \\
+Arm & control, treatment & one of the two groups of a trial & \S\ref{sec:arr} \\
+Event & $E$ & the outcome a trial counts, in each arm & \S\ref{sec:arr} \\
+Absolute risk reduction & ARR & control-arm risk minus treatment-arm risk, over a stated time horizon & \S\ref{sec:arr} \\
+Relative risk reduction & RRR & ARR over the control-arm risk; $1 - {}$risk ratio & \S\ref{sec:arr} \\
+Risk ratio & & treatment-arm risk over control-arm risk & \S\ref{sec:iso} \\
+Number needed to treat & NNT & $1 / \mathrm{ARR}$ over the same horizon & \S\ref{sec:arr} \\
+Youden's index & $s - f$ & sensitivity $+$ specificity $- 1$; its reciprocal is the number needed to diagnose & \S\ref{sec:iso} \\
+Conditionally independent & & the second result does not depend on the first, among the sick and among the well & \S\ref{sec:sheet} \\
+Reference standard & & the best available determination of who has the disease & \S\ref{sec:sheet} \\
+\bottomrule
+\end{longtable}
+}
+
 \section*{Acknowledgements}
 
 The author thanks Anna Martirosyan for discussions of absolute and relative risk reduction, which started this work, and Elena Vasserman for discussions of the epidemiological context.
 
 \begin{thebibliography}{99}
+
+\bibitem{meehl1955}
+P.\ E.\ Meehl and A.\ Rosen,
+``Antecedent probability and the efficiency of psychometric signs, patterns, or cutting scores,''
+\emph{Psychological Bulletin}, vol.\ 52, no.\ 3, pp.\ 194--216, 1955.
+
+\bibitem{kahneman1973}
+D.\ Kahneman and A.\ Tversky,
+``On the psychology of prediction,''
+\emph{Psychological Review}, vol.\ 80, no.\ 4, pp.\ 237--251, 1973.
 
 \bibitem{tversky1974}
 A.\ Tversky and D.\ Kahneman,
@@ -431,8 +763,38 @@ W.\ Casscells, A.\ Schoenberger, and T.\ B.\ Graboys,
 D.\ M.\ Eddy,
 ``Probabilistic Reasoning in Clinical Medicine: Problems and Opportunities,''
 in D.\ Kahneman, P.\ Slovic, and A.\ Tversky (eds.),
-\emph{Judgment Under Uncertainty: Heuristics and Biases},
+\emph{Judgment under Uncertainty: Heuristics and Biases},
 Cambridge University Press, 1982, pp.\ 249--267.
+
+\bibitem{koehler1996}
+J.\ J.\ Koehler,
+``The base rate fallacy reconsidered: descriptive, normative, and methodological challenges,''
+\emph{Behavioral and Brain Sciences}, vol.\ 19, no.\ 1, pp.\ 1--17, 1996.
+
+\bibitem{mcdowell2017}
+M.\ McDowell and P.\ Jacobs,
+``Meta-analysis of the effect of natural frequencies on Bayesian reasoning,''
+\emph{Psychological Bulletin}, vol.\ 143, no.\ 12, pp.\ 1273--1312, 2017.
+
+\bibitem{jaeschke1994}
+R.\ Jaeschke, G.\ Guyatt, and D.\ L.\ Sackett,
+``Users' guides to the medical literature. III. How to use an article about a diagnostic test. B. What are the results and will they help me in caring for my patients?''
+\emph{JAMA}, vol.\ 271, no.\ 9, pp.\ 703--707, 1994.
+
+\bibitem{fagan1975}
+T.\ J.\ Fagan,
+``Nomogram for Bayes theorem,''
+\emph{New England Journal of Medicine}, vol.\ 293, no.\ 5, p.\ 257, 1975.
+
+\bibitem{youden1950}
+W.\ J.\ Youden,
+``Index for rating diagnostic tests,''
+\emph{Cancer}, vol.\ 3, no.\ 1, pp.\ 32--35, 1950.
+
+\bibitem{gardner1959}
+M.\ Gardner,
+``Problems involving questions of probability and ambiguity,''
+\emph{Scientific American}, vol.\ 200, no.\ 4, pp.\ 174--182, 1959.
 
 \bibitem{villejoubert2002}
 G.\ Villejoubert and D.\ R.\ Mandel,
@@ -442,7 +804,7 @@ G.\ Villejoubert and D.\ R.\ Mandel,
 \bibitem{pearl1988}
 J.\ Pearl,
 \emph{Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference},
-Morgan Kaufmann, San Mateo, CA, 1988.
+Morgan Kaufmann, 1988.
 
 \bibitem{jaynes2003}
 E.\ T.\ Jaynes,
@@ -496,12 +858,22 @@ K.\ F.\ Schulz, D.\ G.\ Altman, and D.\ Moher,
 \bibitem{gnedenko1976}
 B.\ V.\ Gnedenko,
 \emph{The Theory of Probability},
-trans.\ from Russian, Mir Publishers, Moscow, 1976.
+trans.\ from Russian, Mir Publishers, 1976.
 
 \bibitem{ventsel1965}
 E.\ S.\ Ventsel (Wentzel),
 \emph{Probability Theory},
-trans.\ from Russian, Mir Publishers, Moscow, 1965.
+trans.\ from Russian, Mir Publishers, 1965.
+
+\bibitem{linn2006}
+S.\ Linn and P.\ D.\ Grunau,
+``New patient-oriented summary measure of net total gain in certainty for dichotomous diagnostic tests,''
+\emph{Epidemiologic Perspectives \& Innovations}, vol.\ 3, article 11, 2006.
+
+\bibitem{barhillel1982}
+M.\ Bar-Hillel and R.\ Falk,
+``Some teasers concerning conditional probabilities,''
+\emph{Cognition}, vol.\ 11, no.\ 2, pp.\ 109--122, 1982.
 
 \bibitem{lj2012}
 V.\ Gavrilov,

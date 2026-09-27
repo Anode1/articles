@@ -1,14 +1,13 @@
 # Conditional Probability in Diagnostic Testing
 
-**One calculation in four notations, set out as an explicit isomorphism: the tree diagram of
-decision analysis, Bayes' theorem, the 2x2 contingency table of epidemiology, and the odds
+**One calculation in four notations, written out row by row: the probability tree, Bayes' theorem, the 2x2 contingency table of epidemiology, and the odds
 and likelihood-ratio form of evidence-based medicine. The ARR/RRR pair of trial reporting is
-read from the same table under row conditioning, the direction of sensitivity, not of PPV.**
+read from the same table, conditioned on the disease margin as sensitivity is, not on the test margin as PPV is; the odds form is an invertible change of coordinates.**
 
 Diagnostic results are systematically misread by patients and clinicians alike, though the
 probability behind them is elementary. Gigerenzer and Hoffrage (1995) documented the
 cognitive equivalence of natural-frequency representations such as the tree and the table.
-That literature does not set the correspondence out as an isomorphism.
+That literature does not tabulate the correspondence across the four.
 
 What the paper adds: a Diagnostic Interpretation Procedure, a short auditable algorithm
 whose final step runs three checks aimed at the documented failure modes (arithmetic error,
