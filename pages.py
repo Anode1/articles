@@ -140,7 +140,7 @@ def page(p):
 </dl>
 <h2>Abstract</h2>
 <p class="abstract">{html.escape(abstract)}</p>
-<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a></footer>
+<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a> · <a href="https://scholar.google.com/citations?user=7xlK2_gAAAAJ">Google Scholar</a></footer>
 </body>
 </html>
 """
@@ -177,7 +177,7 @@ The catalog with venue and status is the <a href="https://github.com/Anode1">pro
 <ul>
 {other}
 </ul>
-<footer><a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a></footer>
+<footer><a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a> · <a href="https://scholar.google.com/citations?user=7xlK2_gAAAAJ">Google Scholar</a></footer>
 </body>
 </html>
 """
