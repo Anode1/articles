@@ -150,8 +150,12 @@ def index():
         href = p["dir"] + "/" + ("" if p["page"] == "index.html" else p["page"])
         year = p["date"][:4]
         authors = ", ".join(p.get("authors", [AUTHOR]))
-        return (f'<li><a href="{href}">{html.escape(p["title"])}</a><br>{authors}, {year}. '
-                f'<a href="https://doi.org/{p["doi"]}">doi:{p["doi"]}</a> · <a href="{p["dir"]}/{p["pdf"]}">PDF</a></li>')
+        links = [f'<a href="https://doi.org/{p["doi"]}">doi:{p["doi"]}</a>', f'<a href="{p["dir"]}/{p["pdf"]}">PDF</a>']
+        if p.get("arxiv"):
+            links.append(f'<a href="https://arxiv.org/abs/{p["arxiv"]}">arXiv:{p["arxiv"]}</a>')
+        if p.get("preprint"):
+            links.append(f'<a href="https://doi.org/{p["preprint"]}">preprint doi:{p["preprint"]}</a>')
+        return f'<li><a href="{href}">{html.escape(p["title"])}</a><br>{authors}, {year}. {" · ".join(links)}</li>'
     papers = "\n".join(item(p) for p in PAPERS if p["group"] == "papers")
     other = "\n".join(item(p) for p in PAPERS if p["group"] == "other")
     return f"""<!DOCTYPE html>
