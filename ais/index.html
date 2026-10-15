@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compress the Access, Not the Store: A Measurement of Key-Lookup versus File-Search Retrieval Cost for AI Agents, on a Real Engineering Project</title>
+  <link rel="canonical" href="https://anode1.github.io/articles/ais/">
+  <meta name="citation_title" content="Compress the Access, Not the Store: A Measurement of Key-Lookup versus File-Search Retrieval Cost for AI Agents, on a Real Engineering Project">
+  <meta name="citation_author" content="Vasili Gavrilov">
+  <meta name="citation_publication_date" content="2026/06/19">
+  <meta name="citation_online_date" content="2026/06/19">
+  <meta name="citation_pdf_url" content="https://anode1.github.io/articles/ais/compress_the_access.pdf">
+  <meta name="citation_abstract_html_url" content="https://anode1.github.io/articles/ais/">
+  <meta name="citation_doi" content="10.5281/zenodo.20764255">
+  <meta name="citation_language" content="en">
+  <meta name="description" content="This paper measures, on a real codebase, a claim the field asserts but seldom tests: how many tokens an AI agent spends to find an answer by searching the files versus recalling it from a curated key index. Agents pay for context in tokens, and the bill grows with the store; file search and vector r">
+  <style>body{max-width:42em;margin:2em auto;padding:0 1em;font:16px/1.5 Georgia,serif;color:#111;background:#fff}h1{font-size:1.4em;line-height:1.3}a{color:#1a4d8f}dl dt{font-weight:bold;margin-top:.6em}dl dd{margin:0}p.abstract{text-align:justify}footer{margin-top:3em;font-size:.9em;color:#555}</style>
+</head>
+<body>
+<h1>Compress the Access, Not the Store: A Measurement of Key-Lookup versus File-Search Retrieval Cost for AI Agents, on a Real Engineering Project</h1>
+<dl>
+  <dt>Authors</dt><dd>Vasili Gavrilov</dd>
+  <dt>Date</dt><dd>2026-06-19</dd>
+  <dt>PDF</dt><dd><a href="compress_the_access.pdf">compress_the_access.pdf</a></dd>
+  <dt>Deposit</dt><dd><a href="https://doi.org/10.5281/zenodo.20764255">doi:10.5281/zenodo.20764255</a> (Zenodo, all versions)</dd>
+  <dt>Sources, figures and data</dt><dd><a href="https://github.com/Anode1/articles/tree/main/ais">github.com/Anode1/articles/ais</a></dd>
+  <dt>Code</dt><dd><a href="https://github.com/Anode1/ais">github.com/Anode1/ais</a></dd>
+</dl>
+<h2>Abstract</h2>
+<p class="abstract">This paper measures, on a real codebase, a claim the field asserts but seldom tests: how many tokens an AI agent spends to find an answer by searching the files versus recalling it from a curated key index. Agents pay for context in tokens, and the bill grows with the store; file search and vector retrieval scan the whole thing, sometimes badly. On a project of about 100k lines of code we run an agent loop over the same questions twice, once with grep and read, once with the index, and count. The result depends on how the index is used, which is a design choice: when it returns the answer or a reference a person consumes, retrieval is about 69×cheaper on the content pulled into context, more reliable (40 of 40 correct across repeats versus 31 of 40, on a substring grading that by construction favours the curated index), and flat in repository size, while search grows and occasionally explodes (one query reached 170,000 total tokens); run directly on the command line it costs zero model tokens. Making the model read the recalled document instead shrinks the gain to about 3×, an avoidable misuse. The idea is old, a user-owned plain-text index, exact and self-verifying (a wrong key returns the empty set, a checksum), a durable format predating RAG, that compresses the access (the keys), not the store. What is new is the measurement and the stance it serves: (1) it is cheaper and more reliable than the lexical file search measured here, and, by the same reasoning though not by measurement, than similarity search; (2) as a byproduct, the fixed per-turn overhead is itself reducible, by prompt caching, a minimal recall tool, and recall-first routing, which pushes even the agent path toward the zero-token floor; and (3), qualitatively, the index encodes this user&#x27;s prior rather than the population average, an argument we make but do not measure.</p>
+<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a></footer>
+</body>
+</html>

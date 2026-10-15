@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Imposed and Emergent Pieces of Convolution Under an Energy Budget</title>
+  <link rel="canonical" href="https://anode1.github.io/articles/smbpann/">
+  <meta name="citation_title" content="The Imposed and Emergent Pieces of Convolution Under an Energy Budget">
+  <meta name="citation_author" content="Vasili Gavrilov">
+  <meta name="citation_publication_date" content="2026/07/18">
+  <meta name="citation_online_date" content="2026/07/18">
+  <meta name="citation_pdf_url" content="https://anode1.github.io/articles/smbpann/emergence.pdf">
+  <meta name="citation_abstract_html_url" content="https://anode1.github.io/articles/smbpann/">
+  <meta name="citation_doi" content="10.5281/zenodo.21423177">
+  <meta name="citation_language" content="en">
+  <meta name="description" content="Which pieces of a convolution must be imposed as priors, and which emerge on their own? We grow a network&#x27;s topology from an exhaustive, fully-connected seed under an evolutionary energy budget that pays for every connection, using the search as a lens rather than an optimizer, and map the boundary.">
+  <style>body{max-width:42em;margin:2em auto;padding:0 1em;font:16px/1.5 Georgia,serif;color:#111;background:#fff}h1{font-size:1.4em;line-height:1.3}a{color:#1a4d8f}dl dt{font-weight:bold;margin-top:.6em}dl dd{margin:0}p.abstract{text-align:justify}footer{margin-top:3em;font-size:.9em;color:#555}</style>
+</head>
+<body>
+<h1>The Imposed and Emergent Pieces of Convolution Under an Energy Budget</h1>
+<dl>
+  <dt>Authors</dt><dd>Vasili Gavrilov</dd>
+  <dt>Date</dt><dd>2026-07-18</dd>
+  <dt>PDF</dt><dd><a href="emergence.pdf">emergence.pdf</a></dd>
+  <dt>Deposit</dt><dd><a href="https://doi.org/10.5281/zenodo.21423177">doi:10.5281/zenodo.21423177</a> (Zenodo, all versions)</dd>
+  <dt>Preprint</dt><dd><a href="https://doi.org/10.21203/rs.3.rs-10515959/v1">doi:10.21203/rs.3.rs-10515959/v1</a> (Research Square, In Review)</dd>
+  <dt>Status</dt><dd>Under review at Genetic Programming and Evolvable Machines.</dd>
+  <dt>Sources, figures and data</dt><dd><a href="https://github.com/Anode1/articles/tree/main/smbpann">github.com/Anode1/articles/smbpann</a></dd>
+  <dt>Code</dt><dd><a href="https://github.com/Anode1/SMBPANN">github.com/Anode1/SMBPANN</a></dd>
+</dl>
+<h2>Abstract</h2>
+<p class="abstract">Which pieces of a convolution must be imposed as priors, and which emerge on their own? We grow a network&#x27;s topology from an exhaustive, fully-connected seed under an evolutionary energy budget that pays for every connection, using the search as a lens rather than an optimizer, and map the boundary. Sparse task-relevant connectivity emerges cleanly, and weight sharing is adopted when translation invariance rewards it. The compact aligned local filter emerges only once mutation acts on the shared feature the way real genetics does, rather than on a single edge, and composition on the channel axis does not emerge from the task label alone; in two dimensions that axis meets a capacity wall at three operations which four interventions fail to move. On top of the priors a ConvNet hardwires (locality, translatability), the free dimensions organize to the task: compact fields, and a depth that grows with the receptive field while overshooting it. The contribution is the decomposition, and one mechanism it turns up. A connection cost as a lens on emergent structure has precedent; we turn it on convolution, and report a mechanism that does not follow from that precedent (a compact filter emerges only when mutation acts on the whole shared feature, not on a single edge), a map of which pieces are imposed and which emerge with the negatives kept, including the measured boundary where composition needs supervision, and a control showing that the directed search does real work: at a matched budget it finds a tidier, more energy-efficient solution than random search, and a modestly more accurate one. The rest reproduces textbook inductive-bias facts, verified against matched baselines. Every comparison is paired by seed and tested (Wilcoxon signed-rank or McNemar&#x27;s exact test, Holm-corrected); each experiment states its seed count and regenerates from a named probe in the reference implementation.</p>
+<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a></footer>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks</title>
+  <link rel="canonical" href="https://anode1.github.io/articles/MISRA_C_vs_CPP/">
+  <meta name="citation_title" content="When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks">
+  <meta name="citation_author" content="Vasili Gavrilov">
+  <meta name="citation_publication_date" content="2026/08/26">
+  <meta name="citation_online_date" content="2026/08/26">
+  <meta name="citation_pdf_url" content="https://anode1.github.io/articles/MISRA_C_vs_CPP/tokens_to_trace.pdf">
+  <meta name="citation_abstract_html_url" content="https://anode1.github.io/articles/MISRA_C_vs_CPP/">
+  <meta name="citation_doi" content="10.5281/zenodo.22113993">
+  <meta name="citation_language" content="en">
+  <meta name="description" content="Programs are full of layers made for human readers: frameworks, class hierarchies, syntactic sugar. We ask whether code written with AI agents still needs them. Before an agent can change code safely it must read everything that decides what the code does. We count that reading as tokens-to-trace: f">
+  <style>body{max-width:42em;margin:2em auto;padding:0 1em;font:16px/1.5 Georgia,serif;color:#111;background:#fff}h1{font-size:1.4em;line-height:1.3}a{color:#1a4d8f}dl dt{font-weight:bold;margin-top:.6em}dl dd{margin:0}p.abstract{text-align:justify}footer{margin-top:3em;font-size:.9em;color:#555}</style>
+</head>
+<body>
+<h1>When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks</h1>
+<dl>
+  <dt>Authors</dt><dd>Vasili Gavrilov</dd>
+  <dt>Date</dt><dd>2026-08-26</dd>
+  <dt>PDF</dt><dd><a href="tokens_to_trace.pdf">tokens_to_trace.pdf</a></dd>
+  <dt>Deposit</dt><dd><a href="https://doi.org/10.5281/zenodo.22113993">doi:10.5281/zenodo.22113993</a> (Zenodo, all versions)</dd>
+  <dt>Status</dt><dd>A shorter version is under review at IEEE Software.</dd>
+  <dt>Sources, figures and data</dt><dd><a href="https://github.com/Anode1/articles/tree/main/MISRA_C_vs_CPP">github.com/Anode1/articles/MISRA_C_vs_CPP</a></dd>
+</dl>
+<h2>Abstract</h2>
+<p class="abstract">Programs are full of layers made for human readers: frameworks, class hierarchies, syntactic sugar. We ask whether code written with AI agents still needs them. Before an agent can change code safely it must read everything that decides what the code does. We count that reading as tokens-to-trace: for one entry point, the tokens of the smallest set of source pieces that decide its behavior, and where each piece lives: in the project, in library source, or only in the version&#x27;s documentation. One path per stack, three pairs. Plain C against idiomatic C++, whole files: 90 against 257 thousand tokens, and held to the same behavior the C++ text is only 15% bigger, so the gap is scope and file scatter, not syntax. Plain Java with JDBC against Spring: 7.6 thousand, all in the project, against 8.2 thousand in the project plus 51 to 124 thousand inside the framework jars, and part of what Spring does is written in no file at all. Vanilla JS against React: the same 1.1 thousand to write, plus 283 thousand of React&#x27;s own machinery outside the project. Then 430 agent runs on the same pairs. C against C++: the C++ side cost about 20% more turns, and a control pair shows the agent pays for the walk across files, not for the dispatch. Java: one endpoint built on both stacks and run in two batches of 40; the turn cost reversed its sign between the batches, and the failure replicated: five silent wrong answers, all Spring&#x27;s, each a wire name derived from a Java identifier by a convention no source file states. The web: a change that crosses a component boundary cost React 100% more turns than vanilla. What a reader must know first is also not equal: K&amp;R is 272 pages, the Stroustrup 1,368, and a framework&#x27;s documentation is versioned: what it says and how much of it there is depend on the version. One line in the prompt, &quot;plain C&quot;, &quot;plain Java with JDBC&quot; or &quot;plain vanilla JavaScript&quot;, gives the agent the whole truth of a path for a few thousand tokens; the layered styles fill its memory, or their deciding text is not in the project at all.</p>
+<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a></footer>
+</body>
+</html>

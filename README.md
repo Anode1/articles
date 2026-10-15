@@ -30,6 +30,10 @@ Each paper builds with `pdflatex`, and those with a bibliography also need `bibe
 
 Build artifacts are not committed.
 
+Each paper directory also holds an `index.html`, a landing page with the citation meta tags
+that Google Scholar reads, served with the PDFs at <https://anode1.github.io/articles/>.
+`python3 pages.py` regenerates them from the sources.
+
 ## Licence
 
 Text and figures are the author's. Where a paper carries a licence on its Zenodo record, that

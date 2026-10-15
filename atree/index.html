@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Atree Format: A Scalable Binary-Path Notation for Ancestral Genealogies, with an Application to Lineage Matching</title>
+  <link rel="canonical" href="https://anode1.github.io/articles/atree/">
+  <meta name="citation_title" content="The Atree Format: A Scalable Binary-Path Notation for Ancestral Genealogies, with an Application to Lineage Matching">
+  <meta name="citation_author" content="Vasili Gavrilov">
+  <meta name="citation_publication_date" content="2026/06/08">
+  <meta name="citation_online_date" content="2026/06/08">
+  <meta name="citation_pdf_url" content="https://anode1.github.io/articles/atree/atree.pdf">
+  <meta name="citation_abstract_html_url" content="https://anode1.github.io/articles/atree/">
+  <meta name="citation_doi" content="10.5281/zenodo.20587715">
+  <meta name="citation_language" content="en">
+  <meta name="description" content="We describe Atree, a compact, human-readable, plain-text notation for ascending genealogies (a person&#x27;s direct ancestors). Each ancestor is named by the path of ancestral sexes from the subject, M for father, F for mother, so MF is the father&#x27;s mother. This path is exactly the classical Ahnentafel (">
+  <style>body{max-width:42em;margin:2em auto;padding:0 1em;font:16px/1.5 Georgia,serif;color:#111;background:#fff}h1{font-size:1.4em;line-height:1.3}a{color:#1a4d8f}dl dt{font-weight:bold;margin-top:.6em}dl dd{margin:0}p.abstract{text-align:justify}footer{margin-top:3em;font-size:.9em;color:#555}</style>
+</head>
+<body>
+<h1>The Atree Format: A Scalable Binary-Path Notation for Ancestral Genealogies, with an Application to Lineage Matching</h1>
+<dl>
+  <dt>Authors</dt><dd>Vasili Gavrilov</dd>
+  <dt>Date</dt><dd>2026-06-08</dd>
+  <dt>PDF</dt><dd><a href="atree.pdf">atree.pdf</a></dd>
+  <dt>Deposit</dt><dd><a href="https://doi.org/10.5281/zenodo.20587715">doi:10.5281/zenodo.20587715</a> (Zenodo, all versions)</dd>
+  <dt>Sources, figures and data</dt><dd><a href="https://github.com/Anode1/articles/tree/main/atree">github.com/Anode1/articles/atree</a></dd>
+</dl>
+<h2>Abstract</h2>
+<p class="abstract">We describe Atree, a compact, human-readable, plain-text notation for ascending genealogies (a person&#x27;s direct ancestors). Each ancestor is named by the path of ancestral sexes from the subject, M for father, F for mother, so MF is the father&#x27;s mother. This path is exactly the classical Ahnentafel (Sosa–Stradonitz) number written in binary, reading each 0 as father and each 1 as mother. A decimal Ahnentafel number doubles every generation and soon grows unwieldy; an Atree path instead has one letter per generation, so its length is simply how far back one is looking, and each line stands on its own, needing no surrounding file, so any subset can be shared freely. We give the grammar, exact and reversible conversions to and from Ahnentafel, tool support (GEDCOM import; an HIR/centimorgan calculator), and the limits (ascending trees only; when the same ancestor recurs through cousin marriage, “pedigree collapse”, the tree becomes a graph). The main application is cross-person lineage matching: when two people&#x27;s Atree paths share a tail, the names along it sound alike, and any Y/mtDNA haplogroups agree, that is a measurable, spelling-robust signal that the two trees meet at the same ancestor. About 37 yes/no choices (37 bits) suffice to single out any human who has ever lived, so identifying a person is itself a form of compression.</p>
+<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a></footer>
+</body>
+</html>
