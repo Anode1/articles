@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Agent as a Principal: What a Coding Agent Changes in the Chain from Commit to Production, and the Rule That Restores It</title>
+  <link rel="canonical" href="https://anode1.github.io/articles/agent_principal/">
+  <meta name="citation_title" content="The Agent as a Principal: What a Coding Agent Changes in the Chain from Commit to Production, and the Rule That Restores It">
+  <meta name="citation_author" content="Vasili Gavrilov">
+  <meta name="citation_publication_date" content="2026/10/15">
+  <meta name="citation_online_date" content="2026/10/15">
+  <meta name="citation_pdf_url" content="https://anode1.github.io/articles/agent_principal/agent_principal.pdf">
+  <meta name="citation_abstract_html_url" content="https://anode1.github.io/articles/agent_principal/">
+  <meta name="citation_doi" content="10.5281/zenodo.23402685">
+  <meta name="citation_language" content="en">
+  <meta name="description" content="In October 2026 an open letter from the scientific community, with more than four hundred signatories, asked that AI models able to attack computer systems be kept off outside networks by default. This paper is about a smaller case: the coding agent already running on many developers&#x27; machines. A co">
+  <style>body{max-width:42em;margin:2em auto;padding:0 1em;font:16px/1.5 Georgia,serif;color:#111;background:#fff}h1{font-size:1.4em;line-height:1.3}a{color:#1a4d8f}dl dt{font-weight:bold;margin-top:.6em}dl dd{margin:0}p.abstract{text-align:justify}footer{margin-top:3em;font-size:.9em;color:#555}</style>
+</head>
+<body>
+<h1>The Agent as a Principal: What a Coding Agent Changes in the Chain from Commit to Production, and the Rule That Restores It</h1>
+<dl>
+  <dt>Authors</dt><dd>Vasili Gavrilov</dd>
+  <dt>Date</dt><dd>2026-10-15</dd>
+  <dt>PDF</dt><dd><a href="agent_principal.pdf">agent_principal.pdf</a></dd>
+  <dt>Deposit</dt><dd><a href="https://doi.org/10.5281/zenodo.23402685">doi:10.5281/zenodo.23402685</a> (Zenodo, all versions)</dd>
+  <dt>Sources, figures and data</dt><dd><a href="https://github.com/Anode1/articles/tree/main/agent_principal">github.com/Anode1/articles/agent_principal</a></dd>
+</dl>
+<h2>Abstract</h2>
+<p class="abstract">In October 2026 an open letter from the scientific community, with more than four hundred signatories, asked that AI models able to attack computer systems be kept off outside networks by default. This paper is about a smaller case: the coding agent already running on many developers&#x27; machines. A coding agent is a program that writes code and runs commands under its developer&#x27;s account. Before agents, the chain from a commit to production had two gates held by people: a review of the commit, and a release act that needs a release permission. The agent weakens the chain at one point. It acts on text its developer did not write: in a 2024 benchmark it followed a planted instruction 24% of the time. On a machine whose owner can release, the agent holds the release permission too, so a planted instruction can reach production with no person&#x27;s act. This paper proposes one rule. If a developer can release, the agent on that developer&#x27;s machine runs under an account of its own, and that account cannot release; and the release act asks for something only a person can supply. With the rule in place the agent can do no more than a developer who may commit and may not release, a case every team was handling before agents. Three things here are new. The finding of where the chain breaks: only on the machines of releasers, and only when a program can pass the release act. The paper gives the test for that. The rule with its condition, which names the machines that need it. And the recipe that puts it in place, with a check for each clause. The tools are old: least privilege and separation of duty, from 1975 and 1987, applied until now to people and to pipelines and here to the agent. The rule leaves review as the weakest link, where it was before agents.</p>
+<footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a> · <a href="https://scholar.google.com/citations?user=7xlK2_gAAAAJ">Google Scholar</a></footer>
+</body>
+</html>
