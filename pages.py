@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Landing pages for the papers, one per paper beside its PDF, with the citation meta
 tags Google Scholar reads, and a root index. Served by GitHub Pages from main at
-https://anode1.github.io/articles/. Run from the repository root: python3 pages.py"""
+https://anode1.github.io/articles/. Run from the repository root: python3 pages.py; --files lists what the
+Pages workflow publishes."""
 import html, os, re
 
 BASE = "https://anode1.github.io/articles/"
@@ -181,7 +182,19 @@ The catalog with venue and status is the <a href="https://github.com/Anode1">pro
 </html>
 """
 
+def published_files():
+    files = ["index.html", ".nojekyll"]
+    for p in PAPERS:
+        files += [p["dir"] + "/" + p["page"], p["dir"] + "/" + p["pdf"]]
+        if p.get("extra_pdf"):
+            files.append(p["dir"] + "/" + p["extra_pdf"][0])
+    return files
+
 if __name__ == "__main__":
+    import sys
+    if sys.argv[1:] == ["--files"]:
+        print("\n".join(published_files()))
+        sys.exit(0)
     for p in PAPERS:
         assert os.path.exists(os.path.join(p["dir"], p["pdf"])), p["pdf"]
         open(os.path.join(p["dir"], p["page"]), "w").write(page(p))

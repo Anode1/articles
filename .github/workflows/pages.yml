@@ -1,0 +1,32 @@
+# Publishes the landing pages and the PDFs they link, nothing else, to GitHub Pages.
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect the published files
+        run: |
+          python3 pages.py --files | while read -r f; do
+            install -D -m 644 "$f" "_site/$f"
+          done
+          find _site -type f | wc -l
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4
