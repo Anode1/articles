@@ -232,7 +232,7 @@
       \field{year}{1997}
       \keyw{self}
     \endentry
-    \entry{gavrilov_conditional_2026}{misc}{}
+    \entry{gavrilov_ais_priority_2026}{misc}{}
       \name{author}{1}{}{%
         {{hash=1692b6c13ed433eebee1e823d653d18c}{%
            family={Gavrilov},
@@ -247,6 +247,33 @@
       \strng{authornamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authorfullhash}{1692b6c13ed433eebee1e823d653d18c}
       \field{extraname}{2}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Zenodo}
+      \field{title}{{AIS} Priority and Provenance Record}
+      \field{year}{2026}
+      \verb{doi}
+      \verb 10.5281/zenodo.20647047
+      \endverb
+      \keyw{self}
+    \endentry
+    \entry{gavrilov_conditional_2026}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=1692b6c13ed433eebee1e823d653d18c}{%
+           family={Gavrilov},
+           familyi={G\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{1692b6c13ed433eebee1e823d653d18c}
+      \strng{fullhash}{1692b6c13ed433eebee1e823d653d18c}
+      \strng{bibnamehash}{1692b6c13ed433eebee1e823d653d18c}
+      \strng{authorbibnamehash}{1692b6c13ed433eebee1e823d653d18c}
+      \strng{authornamehash}{1692b6c13ed433eebee1e823d653d18c}
+      \strng{authorfullhash}{1692b6c13ed433eebee1e823d653d18c}
+      \field{extraname}{3}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
@@ -270,7 +297,7 @@
       \strng{authorbibnamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authornamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authorfullhash}{1692b6c13ed433eebee1e823d653d18c}
-      \field{extraname}{3}
+      \field{extraname}{4}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
@@ -294,7 +321,7 @@
       \strng{authorbibnamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authornamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authorfullhash}{1692b6c13ed433eebee1e823d653d18c}
-      \field{extraname}{4}
+      \field{extraname}{5}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
@@ -323,7 +350,7 @@
       \strng{authorbibnamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authornamehash}{1692b6c13ed433eebee1e823d653d18c}
       \strng{authorfullhash}{1692b6c13ed433eebee1e823d653d18c}
-      \field{extraname}{5}
+      \field{extraname}{6}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
