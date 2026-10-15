@@ -89,9 +89,8 @@ including the case where the index does \emph{not} win by much.
 
 \textbf{Content search (lexical or embedding).} The alternative to a key
 index is to search the content itself, lexically (grep) or semantically (an
-embedding search over chunks, the dense-retrieval~[5] core of RAG~[4], which
-compresses content into a learned embedding space and retrieves by similarity). Either way the agent scans the corpus and
-pulls candidates into context. We measure the lexical baseline: the agent is given
+embedding search over chunks, the dense-retrieval~[5] core of RAG~[4]). Either way the
+agent scans the corpus and pulls candidates into context. We measure the lexical baseline: the agent is given
 \code{grep}, \code{read\_file}, and \code{list\_files}, greps for likely terms,
 reads candidates, and answers. Its cost is the content it pulls in, which grows
 with the repository and spikes when a common term matches widely. Beyond cost, a
@@ -113,8 +112,7 @@ a downstream step) consumes it directly and the model does not expand it.
 \caption{Compression in keys. Each item is filed under one or more keys; items
 sharing a key are recalled together, and a query is the \emph{intersection} of the
 lists of items filed under each key (their posting lists), a deterministic lookup
-on the user's machine, not a
-similarity search in a learned embedding space.}
+on the user's machine.}
 \label{fig:keys}
 \end{figure}
 
@@ -212,6 +210,7 @@ notes and references that are themselves the answer and has the index arm
 reports it.
 
 \section{Results}
+\label{sec:results}
 
 \textbf{The representative run (notes/references, no model reading), 8 questions
 $\times$ 5 repeats.} The index recalled about \textbf{68 tokens} of content per
@@ -272,8 +271,8 @@ runs are described in the text, not tabulated.}
 \textbf{The path-with-read contrast.} When the index returns a document path and
 the agent then reads it, both arms incur the same reading cost; the index saves
 only the \emph{finding}, so the retrieval-payload advantage shrinks to about
-3$\times$. This is the avoidable case, and naming it is the point: do not make the
-model expand a recalled reference.
+3$\times$. This is the avoidable case: do not make the model expand a recalled
+reference.
 
 \textbf{Direct invocation.} For a known, repeated key the user (or a script) runs
 the lookup on the command line and the model is never involved: zero model tokens.
@@ -282,8 +281,8 @@ model; it is the ceiling of the economy.
 
 \section{Analysis}
 
-\textbf{The regime is a design choice.} Same index, same questions, same project:
-the only thing that moved the retrieval advantage from 3$\times$ to 69$\times$ was
+\textbf{The regime is a design choice.} Same index, same questions, same project.
+What moved the retrieval advantage between the two regimes of Table~\ref{tab:regimes} was
 \emph{what the key returns and who consumes it}. Store a path and make the model
 expand it, and you pay for reading, which search pays too. Store the answer (a
 note) or a reference (a URL) and let the person open it, and retrieval is
@@ -292,32 +291,29 @@ close to free. Paths answer ``\emph{which} document''; notes answer
 
 \textbf{Cost versus repository size.} The index's retrieval cost is roughly
 constant in repository size (a key addresses an index entry), while file search
-grows with the corpus and spikes pathologically on common terms: across repeats,
-individual \code{monitoring} runs reached 170{,}000 \emph{total} tokens (the
-question averaged about 99{,}000). These totals are dominated by the transcript
+grows with the corpus and spikes on common terms: the \code{monitoring} question of
+Table~\ref{tab:notes} averaged about 99{,}000 total tokens across repeats. These totals
+are dominated by the transcript
 re-sent over 16 to 20 turns; the retrieval payload on those queries is about
 15{,}000 to 17{,}000 tokens. As a project grows the gap widens; the index does not
 notice the growth.
 
-\textbf{Reliability, not only cost.} The index was exact on every question and
-every repeat (40 of 40); file search was wrong on 9 of 40 runs (item-recall 0.78),
-and failed one question, \code{release\_packaging}, on all five repeats. This
-follows from the mechanics:
-exact-key lookup returns either the curated answer or the empty set (a detectable
-miss), whereas file search and generation always return \emph{something}
-plausible, so an error is never signalled. Exactness buys verifiability, which
-approximate retrieval structurally cannot.
+\textbf{Reliability.} The index was exact on every question and every repeat; file
+search was wrong on 9 of 40 runs and failed \code{release\_packaging} on all five
+(Section~\ref{sec:results}). This follows from the mechanics. Exact-key lookup returns
+either the curated answer or the empty set, a detectable miss. File search and
+generation always return \emph{something} plausible, so an error is never signalled.
 
 \section{Estimated savings}
 
-The measured per-query figures support a rough projection; \emph{rough} is the
-operative word. For a curated, repeated lookup the saving is about
+The measured per-query figures support a rough projection. For a curated, repeated
+lookup the saving is about
 $C_{\mathrm{search}} - C_{\mathrm{AIS}}$, where $C_{\mathrm{search}}$ is what the
 agent spends finding the answer by file search and $C_{\mathrm{AIS}}$ is what the
 index spends. From the representative run, $C_{\mathrm{AIS}}\approx 2{,}900$ tokens
 through the model, or $0$ used directly on the command line; $C_{\mathrm{search}}$
-had a median near $11{,}500$ and a mean near $24{,}500$ tokens (individual
-pathological greps reached $170{,}000$) and grows with repository size. So each
+had a median near $11{,}500$ and a mean near $24{,}500$ tokens and grows with
+repository size. So each
 curated query saves on the order of $8{,}500$ tokens through the model, and
 nearly all of $C_{\mathrm{search}}$ when the lookup is run directly.
 
@@ -348,9 +344,8 @@ Three qualifications. The saving applies only to \emph{curated, repeated} lookup
 the value regime; first-time or unknown-key questions fall back to search and save
 nothing (the empty result instead tells you what to add). $C_{\mathrm{search}}$ is
 noisy, so the claim is ``one to two orders of magnitude per curated
-query'', not a point estimate. And the largest lever is not the token ratio but
-avoiding the model entirely for recall: a direct lookup costs zero, which the agent
-comparison cannot represent.
+query'', not a point estimate. And the largest lever is direct use: a lookup run on
+the command line costs zero model tokens (Section~\ref{sec:results}).
 
 \section{Threats to validity}
 
@@ -381,9 +376,9 @@ so the printed numbers cannot drift from the data. The deposited CSV is stripped
 the free-text answer column (which embeds project-internal paths and names) and
 keeps, for every question and repeat, the per-arm total, retrieval, input and
 output tokens, tool calls, latency, correctness, and item-recall. The model is a
-commercial Claude Sonnet endpoint; absolute token counts move with model version,
-but the regime structure, search cost grows with the corpus and key lookup does
-not, does not.
+commercial Claude Sonnet endpoint. Absolute token counts move with model version, and
+the regime structure does not: search cost grows with the corpus and key lookup does
+not.
 
 \textbf{Author's note.} This paper was prepared with AI assistance (Claude), June
 2026. The author takes full responsibility for its content, and every reported
@@ -406,37 +401,30 @@ moving the same way, with ``expose your data over MCP'' displacing ``build a vec
 index''. The approach measured here descends from the author's own earlier, dated
 index work~[12] rather than from this 2026 convergence.
 
-This paper occupies a specific, and currently unfashionable, corner of that
-convergence. The systems above are predominantly \emph{auto-extracted} (parsed
-code graphs, embeddings) and \emph{similarity-based}; the index measured here is
-\emph{exact} and \emph{human-curated}: the keys are the user's own prior, recall is
-a deterministic lookup, and a miss returns the empty set, a detectable signal that
-similarity retrieval structurally cannot give. The store is plain text, local, and
-user-owned, where the memory frameworks are cloud services. And we isolate the
-regime the agentic-retrieval literature routes past, direct lookup with the model
-out of the loop, which costs nothing. The contribution is not the idea that an
-index beats search, which the field is independently rediscovering, but the
-measurement of \emph{which} index, used \emph{how}, wins and by how much: an exact,
-verifiable, user-controlled index whose recall returns the answer or a reference
-for a human to consume.
+The systems above are \emph{auto-extracted} (parsed code graphs, embeddings) and
+\emph{similarity-based}. The index measured here is \emph{exact} and
+\emph{human-curated}: the keys are the user's own prior, recall is a deterministic
+lookup, and a miss returns the empty set. The store is plain text, local and
+user-owned, where the memory frameworks are cloud services. And we isolate the regime
+the agentic-retrieval literature routes past, direct lookup with the model out of the
+loop. The field is rediscovering that an index beats search; the measurement here
+says \emph{which} index, used \emph{how}, wins and by how much.
 
 \section{Discussion}
 
 \subsection*{The floor is reducible}
 
-A byproduct of the measurement is that the fixed per-turn overhead, the system
-prompt and tool schemas re-sent each turn, which dilutes the total-token ratio and
-even let file search win the one easy, unique-key question (its lighter preamble
-cost less over two equally cheap calls), is not fundamental. It is reducible three
-ways that compound. \emph{Prompt caching} bills any re-sent prefix at a fraction after the first call
+The fixed per-turn overhead is not fundamental. It is the system prompt and tool
+schemas re-sent each turn; it dilutes the total-token ratio, and it let file search
+win the one easy, unique-key question, whose lighter preamble cost less over two
+equally cheap calls. It is reducible three ways that compound. \emph{Prompt caching} bills any re-sent prefix at a fraction after the first call
 (about a tenth of the input price on the Anthropic endpoint used here~[11]; OpenAI,
 Google, and others offer comparable discounts). That prefix is the system prompt,
 the tool schemas, the user's standing instructions, the prior itself, and the
 conversation re-sent each turn. Stripping it from \emph{both} arms leaves each
 query's cost at the \emph{fresh} content it pulls in, tens of tokens for the index
-against thousands for file search, so caching does not favour one arm by fiat; it
-collapses both totals toward the retrieval payload, the quantity this paper
-foregrounds. A
+against thousands for file search, so caching favours neither arm: it collapses
+both totals toward the retrieval payload. A
 \emph{minimal recall-only tool surface} (one \code{recall(keys)} tool) shrinks the
 preamble even uncached, and removes the case where the index carries a heavier
 preamble than search. And \emph{recall-first routing}, try the exact lookup first
@@ -472,20 +460,19 @@ implemented in our harness.}
 \label{tab:caching}
 \end{table}
 
-\subsection*{The index encodes the user's prior, not the average}
+\subsection*{The index encodes the user's prior}
 
 A property independent of token cost follows from who authors the keys. Embedding
 retrieval returns what is typical in the model's training distribution, an average
 over many corpora; the curated index returns what \emph{this} user filed, in
 \emph{this} user's vocabulary. The user is the client, and the structure of the
-problem lives in the user's own terms and priorities, not the population's. For a
+problem lives in the user's own terms and priorities. For a
 conventional query the average is adequate, but when the task is novel the user's
 framing is by construction off the average, and similarity regresses toward the
 conventional. The exact index has no such regression: it returns the user's own
-prior verbatim, never a smoothed consensus. We state this as an argument, not a
-result: nothing in the measurement reported above tests it, and it is offered as
-the question that precedes cost, namely where similarity retrieval is the right
-instrument at all.
+prior verbatim. Nothing in the measurement above tests this. It is an argument, and
+the question it raises, where similarity retrieval is the right instrument at all,
+precedes cost.
 
 \section{Conclusion}
 
@@ -495,9 +482,8 @@ reference and let the human consume it, and retrieval costs almost nothing
 (zero tokens directly, about two orders of magnitude cheaper than search even
 through the model), stays flat as the project grows, and is exact. Make the model
 expand a recalled document instead, and the advantage shrinks to a few times. The
-rule is short: compress the access, not the store; return the answer or a pointer,
-not a document to be re-read; and keep retrieval off the model wherever a lookup
-will do.
+rule is short: compress the access, not the store. Return the answer or a pointer,
+and keep retrieval off the model wherever a lookup will do.
 
 \section*{Acknowledgements}
 

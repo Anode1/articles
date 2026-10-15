@@ -1,15 +1,14 @@
-# One paper on one library
+# Layouts Made in Diagram Editors Are Held by Alignment and Flow
 
-**It is built on [cjitter](https://github.com/Anode1/cjitter), and it is a check to run before
-fitting a layout energy to human coordinates: per criterion, whether a diagram a person
-laid out in an editor is a local minimum, against a converged layout and a random one.
-On 853 diagrams from three editors, 136 laboratory drawings and 1,072 published figures,
-edge length and stress hold under 0.015 of the boxes at any weight; alignment and flow,
-which neither base energy prices, hold the boxes.**
+**A check to run before fitting a layout energy to human coordinates: per criterion, whether
+a diagram a person laid out in an editor is a local minimum, against a converged layout and
+a random one. On 853 diagrams from three editors, 136 laboratory drawings and 1,072 published
+figures, edge length and stress hold under 0.015 of the boxes at any weight; alignment and
+flow, which neither base energy prices, hold the boxes.**
 
 `stationary.tex`, *Layouts Made in Diagram Editors Are Held by Alignment and Flow, Not by
-Edge Length or Stress: A Per-Term Stationarity Test Before Fitting a Layout Energy*.
-Inverse optimisation and inverse optimal control fit an objective to demonstrations taken
+Edge Length or Stress: A Per-Term Stationarity Test Before Fitting a Layout Energy*, built on
+[cjitter](https://github.com/Anode1/cjitter). Inverse optimisation and inverse optimal control fit an objective to demonstrations taken
 as stationary points; graph drawing has not made that fit and now has a corpus to make it
 on. The paper's abstract carries the numbers. Measurements are in `example/diagrams` in
 the [cjitter repository](https://github.com/Anode1/cjitter).

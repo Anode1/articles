@@ -54,7 +54,7 @@ A better release question is:
 Which approved artifact is deployed?
 \end{quote}
 
-This shift is small but important. ``Latest code'' is a moving target. An approved artifact is a concrete release object: it has a version, checksum, source revision, build time, approval record, deployment history, and rollback path. Developers, project managers, testers, auditors, operations teams, and stakeholders can all reason about the same object.
+``Latest code'' is a moving target. An approved artifact is a concrete release object: it has a version, checksum, source revision, build time, approval record, deployment history, and rollback path. Developers, project managers, testers, auditors, operations teams, and stakeholders can all reason about the same object.
 
 The release is not an informal statement that production built something from the repository. The release is the artifact selected for deployment.
 
@@ -74,7 +74,7 @@ Approach B:
     source control -> controlled build -> artifact store -> deployment -> runtime config -> runtime
 \end{lstlisting}
 
-Approach A can work, especially for local development, prototypes, disposable test hosts, and small systems. The problem is not that it is logically impossible to control. The problem is that it puts too many responsibilities on each target machine. The target becomes a source checkout, dependency resolver, build host, deployment host, and runtime host at the same time.
+Approach A can work, especially for local development, prototypes, disposable test hosts, and small systems. Its problem is that it puts too many responsibilities on each target machine. The target becomes a source checkout, dependency resolver, build host, deployment host, and runtime host at the same time.
 
 Approach B makes the release boundary explicit. The production host receives a known deployable unit; it does not create the release by compiling source during deployment.
 
@@ -93,7 +93,7 @@ Production host     -> execution
 
 This is the central pattern: source control is where code evolves; artifact promotion is how production change is controlled.
 
-The build can run in Jenkins, GitHub Actions, GitLab CI, Azure Pipelines, AWS CodeBuild, a release workstation, or another controlled environment. The defining property is not the product. The defining property is that the deployable unit is built once, identified, and promoted.
+The build can run in Jenkins, GitHub Actions, GitLab CI, Azure Pipelines, AWS CodeBuild, a release workstation, or another controlled environment. The defining property is that the deployable unit is built once, identified, and promoted.
 
 \section{Environment-Scoped Runtime Configuration}
 
@@ -121,7 +121,7 @@ Artifact promotion makes the cleaner boundary natural. The artifact does not kno
 
 \section{Operational Effects}
 
-Artifact promotion is not only packaging. It changes the failure modes of deployment.
+Artifact promotion changes the failure modes of deployment.
 
 \begin{itemize}
 \item \textbf{Bit-identical promotion.} The same built bytes can be promoted through environments. Testers and business stakeholders approve the release that production later receives.
@@ -147,7 +147,7 @@ The difference is the control path. Under build-on-target-machine deployment, pr
 
 Under artifact promotion, production deploys a previously produced artifact whose identity can be hashed, signed, scanned, approved, and archived. A source-control compromise can still affect a future build, but it does not by itself reveal runtime secrets, rewrite the identity of an already approved artifact, or force production to compile from the current repository state. Environment-specific operational configuration remains outside the repository as well, reducing accidental exposure of internal topology and deployment coordinates.
 
-This is the main security property: not that source control can never be compromised, but that source control, artifact identity, deployment approval, and runtime secrets are separate control domains.
+The security property is that source control, artifact identity, deployment approval, and runtime secrets are separate control domains.
 
 \section{Regulated and High-Assurance Environments}
 
@@ -163,9 +163,9 @@ For project managers and technical leads, the practical guidance is simple: do n
 
 In Java, a controlled build may use Ant, Maven, or Gradle to produce a jar, war, zip, or container image. In .NET, it may use MSBuild or \texttt{dotnet publish} to produce a service package, published directory, installer, or container image. In Windows estates, the deployment unit may be an installer, service bundle, PowerShell-delivered package, or deployment archive. In container platforms, the artifact is often an image promoted through a registry.
 
-On AWS, artifacts may be stored in S3 or a container registry and deployed to EC2, ECS, EKS, Lambda, or another runtime through deployment agents, SSM Run Command, Auto Scaling Group instance refresh, CodeDeploy, or platform-specific rollout mechanisms. On Azure, pipeline artifacts, release stages, deployment jobs, environment checks, and approvals implement the same general separation. The tools differ; the pattern does not.
+On AWS, artifacts may be stored in S3 or a container registry and deployed to EC2, ECS, EKS, Lambda, or another runtime through deployment agents, SSM Run Command, Auto Scaling Group instance refresh, CodeDeploy, or platform-specific rollout mechanisms. On Azure, pipeline artifacts, release stages, deployment jobs, environment checks, and approvals implement the same separation.
 
-A deployment procedure is still useful in Approach B. Its job is not to compile the application. Its job is to install or activate an already-built artifact: stop a service, unpack files, move a symlink, update a service directory, run platform steps, restart a process, and report success or failure.
+A deployment procedure is still useful in Approach B. Its job is to install or activate an already-built artifact: stop a service, unpack files, move a symlink, update a service directory, run platform steps, restart a process, and report success or failure.
 
 Database migrations, one-time data loads, ETL jobs, and destructive operational steps should be controlled separately from automatic instance deployment. They should not re-run merely because a new application instance starts.
 
@@ -183,8 +183,6 @@ Database migrations, one-time data loads, ETL jobs, and destructive operational 
 
 Build-on-target-machine deployment treats deployment as a repeatable build event performed on each target. Artifact promotion treats deployment as controlled movement of a known release.
 
-Production systems need the second model. The mature release question is not ``Did production build the latest code?'' It is ``Which approved artifact is deployed, and which environment-scoped runtime configuration is it using?''
-
-That question is understandable to stakeholders, actionable for project managers, precise for engineers, and auditable for regulated environments. It is the difference between a deployment habit and a release-control model.
+Production systems need the second model. The mature release question is ``Which approved artifact is deployed, and which environment-scoped runtime configuration is it using?''
 
 \end{document}

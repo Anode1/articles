@@ -82,7 +82,7 @@ Act like a seller, not a gatekeeper.
 1. Post a price for firm service and a price for interruptible service,
    and connect anyone who pays. The interruptible offer is the whole
    thing: accept deep curtailment, connect in 2027 instead of 2031.
-   It's an offer, not a levy. It taxes nobody and subsidises nobody.
+   It taxes nobody and subsidises nobody.
 
 2. Put the behaviour in the contract, not in a rulebook written later.
    How the load rides through a fault, when it curtails: agree that
@@ -131,7 +131,7 @@ Not that the reliability concern is fake. AESO was right that connecting
 every large load *firm* would impair reliability. But an interruptible
 connection isn't a claim on the winter peak, which is precisely why
 there's room in grids that look full. The constraint is a reason to sell
-the interruptible kind, not to refuse it.
+the interruptible kind.
 
 Not that this is about climate policy. The federal rules don't bite
 until 2035, the carbon price was cut this year, and AESO explained its
@@ -143,14 +143,14 @@ ration instead of transacting.
 === IF THEY PUSH BACK IN ONE LINE ===
 
 "Isn't the queue proof of a crisis?"
-  A queue is an upper bound on interest, not demand. Positions are free
+  A queue is an upper bound on interest. Positions are free
   and non-binding; developers file in several provinces to shop terms.
   Generation queues convert at 13-20%.
 
 "Isn't Alberta short of power?"
   Not today: prices fell 30% in 2025 to an eight-year low and it
-  exported six times what it imported. It's short on winter evenings.
-  That's hours, not megawatts.
+  exported six times what it imported. It's short on winter evenings,
+  a few dozen hours a year.
 
 "What if these customers leave and ratepayers eat the cost?"
   Then charge for that in the contract: deposits, exit terms, minimum
