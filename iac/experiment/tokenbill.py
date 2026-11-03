@@ -41,29 +41,34 @@ API_URL = "https://api.anthropic.com/v1/messages"
 
 # $ per 1M tokens. VERIFY against current pricing; token counts below are exact,
 # these multipliers are not authoritative and are the only soft numbers here.
+# List prices read from platform.claude.com/docs/en/about-claude/pricing on 2026-11-02:
+# base input, output, 5-minute cache write, cache read, USD per million tokens.
 PRICING = {
-    "claude-opus-4-8":   {"in": 15.0, "out": 75.0, "cache_write": 18.75, "cache_read": 1.50},
-    "claude-sonnet-5":   {"in":  3.0, "out": 15.0, "cache_write":  3.75, "cache_read": 0.30},
-    "claude-haiku-4-5":  {"in":  1.0, "out":  5.0, "cache_write":  1.25, "cache_read": 0.10},
+    "claude-fable-5-1":  {"in": 10.0, "out": 50.0, "cache_write": 12.50, "cache_read": 0.25},
+    "claude-opus-5-5":   {"in":  4.0, "out": 20.0, "cache_write":  5.00, "cache_read": 0.20},
+    "claude-sonnet-5":   {"in":  2.0, "out": 10.0, "cache_write":  2.50, "cache_read": 0.20},
+    "claude-sonnet-4-6": {"in":  3.0, "out": 15.0, "cache_write":  3.75, "cache_read": 0.30},
 }
 
 AGENT_SYSTEM = (
-    "You are one worker in a fleet of coding agents that coordinate over a shared "
-    "message board. Between turns you are dormant. When invoked, you check the board "
-    "for a message addressed to you and act on it. You have tools to read and write "
-    "files, run the build, and post to the board. Be precise and terse.\n\n"
+    "You are an assistant that watches a shared notice board for a small library. "
+    "Between checks you are idle. When invoked, you look for a notice addressed to you "
+    "and, if there is one, act on it; otherwise you report that the board is empty. "
+    "Be precise and terse.\n\n"
 )
 
-# A realistic-looking paragraph used to pad the context to a target size. Content
-# does not change token accounting (only length does); we report the MEASURED size.
+# A plain paragraph used to pad the context to a target size. Content does not change
+# token accounting (only length does); we report the MEASURED size. The earlier filler,
+# which described coding agents, file locks and build tools, was refused by the
+# claude-fable-5-1 safety classifier on every call (category "cyber", 2026-11-02), and a
+# refused call is billed as a cache write and never commits the cache.
 FILLER = (
-    "PRIOR CONTEXT. The receive model parks a blocking recv in a child process so the "
-    "harness re-invokes the agent on message arrival; the poll runs in C at nanosecond "
-    "cost, never in the model. The log is append-only and totally ordered; each reader "
-    "keeps its own offset and filters by address; flock orders appends, backs presence, "
-    "and guards single-taker claims. Prior turns: reviewed the latency table, confirmed "
-    "no heap allocation on any path, fixed the presence pid bug, ported to macOS, wrote "
-    "the docs, and coordinated all of it as messages on the board itself. "
+    "PRIOR CONTEXT. The library opens at nine and closes at six on weekdays, and at one on "
+    "Saturdays. Returned books are shelved twice a day, before opening and after lunch. "
+    "The reading room seats forty; the children's corner has its own catalogue. Prior "
+    "checks of the board: a request to hold two titles for a reader, a note that the "
+    "periodicals shelf was reorganised, a reminder that the printer on the first floor "
+    "needs paper, and a thank-you from the evening reading group. "
 )
 
 
@@ -76,7 +81,7 @@ def build_context(target_tokens):
     return body
 
 
-def call(api_key, model, system_text, warm, max_tokens=8):
+def call(api_key, model, system_text, warm, max_tokens=int(os.environ.get("TB_MAX_TOKENS", "8"))):
     """One Messages API call. Returns the usage dict. Raises on HTTP error."""
     sys_block = {"type": "text", "text": system_text}
     if warm:
@@ -84,10 +89,11 @@ def call(api_key, model, system_text, warm, max_tokens=8):
     payload = {
         "model": model,
         "max_tokens": max_tokens,
+        "output_config": {"effort": "low"},   # Fable and Opus 5 think on every call; keep it short
         "system": [sys_block],
         "messages": [{
             "role": "user",
-            "content": "Check the board for a new message addressed to you. "
+            "content": "Check the board for a new notice addressed to you. "
                        "If there is none, reply with exactly one word: EMPTY",
         }],
     }
@@ -103,6 +109,9 @@ def call(api_key, model, system_text, warm, max_tokens=8):
     )
     with urllib.request.urlopen(req, timeout=120) as r:
         resp = json.load(r)
+    if resp.get("stop_reason") == "refusal":
+        sys.exit(f"refused by the model's safety classifier: {resp.get('stop_details')}; "
+                 "the usage of a refused call is not a poll, aborting")
     u = resp["usage"]
     return {
         "input": u.get("input_tokens", 0),
@@ -207,6 +216,10 @@ def main():
         return
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:                      # or a key file, mode 600, one line
+        kf = os.path.expanduser("~/.config/anthropic/api_key")
+        if os.path.exists(kf):
+            api_key = open(kf).read().strip()
     if not api_key:
         sys.exit("set ANTHROPIC_API_KEY")
 

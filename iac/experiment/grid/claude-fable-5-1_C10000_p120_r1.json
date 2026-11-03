@@ -1,0 +1,21 @@
+{
+  "model": "claude-fable-5-1",
+  "polls": 10,
+  "interval": 120.0,
+  "arms": [
+    {
+      "label": "warm",
+      "mode": "warm",
+      "polls_requested": 10,
+      "polls_done": 10,
+      "context_tokens": 12211,
+      "totals": {
+        "input": 400,
+        "output": 70,
+        "cache_read": 121710,
+        "cache_write": 0
+      },
+      "usd": 0.0379275
+    }
+  ]
+}

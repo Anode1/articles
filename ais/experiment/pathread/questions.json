@@ -1,0 +1,10 @@
+[
+  {"id": "all_deploy_docs",   "question": "Give me all the documents about deployment.",                  "expect": ["release_runbook", "env_install", "eb_monitoring"]},
+  {"id": "deploy_to_uat",     "question": "How do I deploy a release to UAT?",                            "expect": ["release.sh", "kul-releases-uat"]},
+  {"id": "release_runbook",   "question": "Where is the release runbook, and what single command does it describe?", "expect": ["release_runbook.txt", "release.sh"]},
+  {"id": "prod_docs",         "question": "Which document lists the production environment's names, IDs and addresses?", "expect": ["environments.txt"]},
+  {"id": "db_backup",         "question": "How is the database backed up?",                               "expect": ["snapshot", "retention"]},
+  {"id": "release_packaging", "question": "How is a release artifact built, and what is the artifact called?", "expect": ["ant release", "kul-0."]},
+  {"id": "uat_to_prod",       "question": "How do I promote a build that is already on UAT to prod?",    "expect": ["release.sh prod"]},
+  {"id": "monitoring",        "question": "How do I watch a deployment while it is running?",            "expect": ["codebuild", "describe-events"]}
+]

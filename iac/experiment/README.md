@@ -131,3 +131,16 @@ receipt rather than arithmetic.
   token accounting, only length does, and the script reports the **measured** size.
 - The cold arm models cache eviction / sparse polling by disabling caching; it is an
   true upper bound on the bill, not a worst-case fiction.
+
+## The grid, 2026-11-02
+
+`grid.sh` runs the harness over three context sizes and three poll intervals on one model,
+the three cells of one context back to back so the prefix is written once. Results are in
+`grid/`, one JSON and one log per cell, named `<model>_C<context>_p<interval>_r<repeat>`.
+The run of 2026-11-02 on `claude-fable-5-1` cost 15.22 USD at list and is Section 5's second
+table in the paper. Two facts from that run that the paper states: the model's safety
+classifier refused the original coding-agent persona on every call (a refused call is billed
+for its cache write and never commits the cache; the persona is now a library notice board and
+`tokenbill.py` aborts on any refusal), and a poll every 360 s still read the cache entry
+written six minutes earlier. The `p600` and `p900` cells are two probes that ran together
+on one 12k context: five- and six-minute gaps read the entry, ten-minute gaps rewrote it.
