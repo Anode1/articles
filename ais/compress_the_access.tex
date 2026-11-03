@@ -14,41 +14,34 @@
 
 \newcommand{\code}[1]{\texttt{#1}}
 
-\title{\textbf{Compress the Access, Not the Store}\\[2pt]
-\large A measurement of key-lookup versus file-search retrieval cost\\
-for AI agents, on a real engineering project}
+\title{\textbf{Key Lookup versus File Search for a Coding Agent}\\[2pt]
+\large Retrieval Cost and Reliability of a Curated Plain-Text Index}
 \author{Vasili Gavrilov\\\small ORCID 0009-0007-9371-5994}
-\date{June 2026}
+\date{November 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-\noindent
-This paper measures, on a real codebase, a claim the field asserts but seldom
-tests: how many tokens an AI agent spends to find an answer by searching the files
-versus recalling it from a curated key index. Agents pay for context in tokens, and
-the bill grows with the store; file search and vector retrieval scan the whole
-thing, sometimes badly. On a project of about 100k lines of code we run an agent
-loop over the same questions twice, once with \code{grep} and read, once with the
-index, and count. The result depends on how the index is used, which is a design
-choice: when it returns the answer or a reference a person consumes, retrieval is
-about $69\times$ cheaper on the content pulled into context, more reliable (40 of 40
-correct across repeats versus 31 of 40, on a substring grading that by construction
-favours the curated index), and flat in repository size, while search grows and
-occasionally explodes (one query reached 170{,}000 total tokens); run directly on
-the command line it costs zero model tokens. Making the model read the recalled
-document instead shrinks the gain to about $3\times$, an avoidable misuse. The idea
-is old, a user-owned plain-text index, exact and self-verifying (a wrong key returns
-the empty set, a checksum), a durable format predating RAG, that compresses the
-\emph{access} (the keys), not the store. What is new is the measurement and the
-stance it serves: (1)~it is cheaper and more reliable than the lexical file search
-measured here, and, by the same reasoning though not by measurement, than similarity
-search; (2)~as a byproduct, the fixed per-turn overhead is itself reducible, by
-prompt caching, a minimal recall tool, and recall-first routing, which pushes even
-the agent path toward the zero-token floor; and (3),~qualitatively, the index
-encodes \emph{this user's} prior rather than the population average, an argument we
-make but do not measure.
+\noindent How many tokens does a coding agent spend to find an answer by searching the
+files, against recalling it from a curated key index? The cost of search grows
+with the store and with the vagueness of the question, and the cost of a key
+lookup is the size of what the key returns: the mechanism says so, and one
+store is measured here. We measure both on one project of about
+100k lines of code: an agent loop answers the same questions twice in fresh
+conversations, once with grep and read, once with recall by exact keys over the
+author's own index, five repeats each. The ratio depends on what the key returns
+and who consumes it. When the index holds a note or a reference that the person
+then opens, the model reads nothing but the note: the retrieval payload is 69
+times smaller than search's at the mean and the total bill four times smaller at
+the median, the index answering every question and search three in four. When
+the index holds a path that the model is then made to read, both arms pay for
+the reading and the advantage shrinks to about three and a half times; where a
+file name already carries the question's words, grep finds it on the first call
+and the index saves nothing. Run on the command line, the same lookup costs zero
+model tokens. The limits are stated: the baseline is lexical search, similarity
+search is not measured, the index carries one user's vocabulary, and the grading
+favours a curated note by construction.
 \end{abstract}
 
 \noindent\textbf{Keywords:} large language model agents; retrieval cost; associative
@@ -64,11 +57,16 @@ combination, every photo of Mary with Mother, and not the videos. Two strategies
 answer it. \emph{Search} the content: scan the items and match by text or
 similarity, then filter. Or keep a curated \emph{index}: file each item under one
 or more keys and recall it by their intersection. The index is an old idea,
-traceable to Bush's memex~[1]; its non-hierarchical, combine-the-facets form is
-Ranganathan's faceted classification~[2]. Keys are facets, a query is their set
+traceable to Bush's memex~\cite{bush1945}; its non-hierarchical, combine-the-facets form is
+Ranganathan's faceted classification~\cite{ranganathan1933}, though with free keys
+combined by intersection it is nearer the tagging that Golder and Huberman
+describe~\cite{golder2006} than to Ranganathan's citation order. Keys are facets, a query is their set
 intersection (\code{mary} $\cap$ \code{mother} $\cap$ \code{photo}); the index is
 plain text on the user's own machine, and retrieval is a deterministic lookup, not
-a similarity search.
+a similarity search. The personal-information-management literature studied the
+same choice for a person's own files, re-finding by remembered attributes against
+searching content~\cite{dumais2003,jones2007}; the question here is the same choice
+priced in tokens for a model.
 
 The index measured in this paper, AIS, is a plain-text associative index the
 author built for exactly this purpose: personal, un-hierarchical material, photos,
@@ -78,8 +76,8 @@ answer, or recall it from such an index, and the cost is simply easier to count
 there. The two put context into the model but compress it differently. Embedding search
 compresses the content into a learned embedding space and retrieves by similarity;
 the key index retrieves by exact address, \emph{compression in keys}. That distinction, and the case for compressing the
-\emph{access} rather than the stored content, is argued in the conceptual
-foundation~[12]. The present paper is the \emph{measurement}: it takes that concept
+\emph{access} rather than the stored content, is argued in~\cite{gavrilov2026}.
+The present paper is the \emph{measurement}: it takes that distinction
 as given and asks the narrow, quantitative question, \emph{for the same question,
 how many tokens does each spend to find the answer, and how reliable is each?} We
 answer it on a real project, and report the regime-dependent outcome,
@@ -89,20 +87,21 @@ including the case where the index does \emph{not} win by much.
 
 \textbf{Content search (lexical or embedding).} The alternative to a key
 index is to search the content itself, lexically (grep) or semantically (an
-embedding search over chunks, the dense-retrieval~[5] core of RAG~[4]). Either way the
-agent scans the corpus and pulls candidates into context. We measure the lexical baseline: the agent is given
+embedding search over chunks, the dense-retrieval~\cite{karpukhin2020} core of RAG~\cite{lewis2020}). Either way the
+agent scans the corpus and pulls candidates into context. We measure the lexical baseline, the family of
+which BM25 is the standard form~\cite{robertson2009}: the agent is given
 \code{grep}, \code{read\_file}, and \code{list\_files}, greps for likely terms,
 reads candidates, and answers. Its cost is the content it pulls in, which grows
 with the repository and spikes when a common term matches widely. Beyond cost, a
 large, undifferentiated context also degrades answer accuracy, the ``lost in the
-middle'' effect, where a relevant fact buried in a long input is missed~[14]; a
+middle'' effect, where a relevant fact buried in a long input is missed~\cite{liu2024}; a
 smaller retrieval payload therefore helps on two axes at once.
 
 \textbf{Compression in keys (the index).} The agent is given the index tools
-(\code{recall}, \code{keys}). Keys are exact: a recall either hits the curated
-vocabulary or returns the empty set, which is an immediate, correctable signal
-(the empty set
-acts as a checksum, and the key list is the codebook). The recalled value is a
+(\code{recall}, \code{keys}). Keys are exact: an unknown key returns the empty
+set, an immediate signal to add or correct a key; a known key returns what was
+filed under it, and nothing verifies the value. The empty set checks the address,
+and the key list is the vocabulary. The recalled value is a
 short note, a URL, or a path; when it is the answer or a reference, the human (or
 a downstream step) consumes it directly and the model does not expand it.
 
@@ -116,44 +115,54 @@ on the user's machine.}
 \label{fig:keys}
 \end{figure}
 
-\section{What we built}
+\section{Apparatus}
 
-Two pieces of software, both thin wrappers over a single-binary ANSI C
+Both the plugin and the harness are the author's software, in the repository
+cited~\cite{ais}; both are thin wrappers over a single-binary ANSI C
 associative-index engine whose store is plain text:
 
-\textbf{The plugin.} A Model Context Protocol (MCP) server~[10]. MCP is the open
+\textbf{The plugin.} A Model Context Protocol (MCP) server~\cite{mcp}. MCP is an open
 standard for offering a language model a set of callable tools; this server exposes
 the index's operations, recall by keys, store, list keys, as typed tools to any
-MCP-capable chat client (terminal agent or desktop). It is stateless: the
+MCP-capable chat client (terminal agent or desktop), as a local process over
+standard input and output. It is stateless: the
 plain-text index remains the source of truth, and the server simply forwards
-calls to the engine. It optionally logs each call's payload size and latency,
-which is what made the measurement below possible. This is the production
-integration: it lets a model reach the user's curated index without the index
-ever leaving the machine.
+calls to the engine. It optionally logs each call's payload size, not its
+content, and latency, which is what made the measurement below possible. It is
+the integration used in practice. The store never leaves the machine; a recalled
+value does, inside the request to the model, as does every \code{grep} result in
+the search arm.
 
 \textbf{The harness.} A \emph{harness}, in software testing, is the small program
 that runs an experiment automatically: it poses each question to the model, gives
 it a fixed set of tools, executes whatever tool the model asks for, feeds the
 result back, and records what was spent. Ours is a minimal \emph{agent loop}, the
 pattern in which a model may call a tool, see the result, and call again until it
-is ready to answer, driving a commercial model (Claude
-Sonnet) through its messages API. For one question it runs:
+is ready to answer, driving a commercial model (Claude Sonnet, model id
+\code{claude-sonnet-4-6}, June 2026) through the Messages API. For one question it runs:
 \begin{enumerate}
 \item Send the question, a fixed system instruction, and \emph{one} of two tool
-schemas: the index set \,\code{recall(keys)}, \code{keys()}\, or the file-search
-set \,\code{grep(pattern)}, \code{read\_file(path)}, \code{list\_files(glob)}.
+schemas: the index set, \code{recall(keys)} and \code{keys()}, or the file-search
+set, \code{grep(pattern)}, \code{read\_file(path)} and \code{list\_files(glob)}.
 \item If the model returns a tool call, execute it locally (against the engine, or
 the file system), append the result to the conversation, and repeat from step~1.
 \item If the model returns text and no tool call, that is the final answer; stop.
 \end{enumerate}
-Execution is local and identical for both arms except the tool set. In the
-representative run the index arm has \emph{no} \code{read\_file}: recall returns
+Execution is local and identical for both arms except the tool set. The harness
+exposes \code{recall} and \code{keys} only; the plugin's \code{store} is omitted, so
+the measured index holds only what the user filed. In the
+main run the index arm has \emph{no} \code{read\_file}: recall returns
 the answer, and a recalled reference is opened by the human, not the model. Each
 question is answered in a \emph{fresh} conversation, so runs share no context.
+Parameters: at most 14 tool rounds per question; each tool result capped at
+6{,}000 characters, about 1{,}500 tokens; \code{grep} returns its first 200
+matching lines and \code{list\_files} its first 300 paths; \code{max\_tokens}
+1{,}024 per call.
 Because the harness drives the same recall tool the plugin exposes, what it
 measures is what production use would pay.
 
 \section{Method}
+\label{sec:method}
 
 \textbf{What we count.} For each question and arm, summed over all turns of the
 loop, we record:
@@ -161,11 +170,14 @@ loop, we record:
 \item \emph{total tokens}: the API's reported input plus output tokens across
 every turn. This carries a fixed per-turn overhead, the system instruction, the
 tool schemas (re-sent each turn), and the model's own output, of roughly 2{,}500
-to 3{,}000 tokens, paid identically by both arms; it therefore \emph{dilutes} the
-comparison.
-\item \emph{retrieval payload}: the total size, in tokens (bytes\,/\,4), of all
-\emph{tool results} returned to the model, the content actually pulled into the
-context window to find the answer. This is the quantity the index optimizes, and
+to 3{,}000 tokens per question for the index arm, whose two calls are its whole
+transcript; search pays the same preamble on every one of its turns, so its
+total grows with its turn count. Cost is reported beside correctness because an
+agent's token bill is part of its result~\cite{kapoor2024}.
+\item \emph{retrieval payload}: the total size of all \emph{tool results} returned
+to the model, the content pulled into the context window to find the answer,
+estimated at four bytes per token (total tokens are the API's counts; the payload
+is not). This is the quantity the index optimizes, and
 unlike total tokens it is not diluted by the fixed overhead. It is the headline
 metric.
 \item \emph{correctness}: whether the expected answer string appears in the final
@@ -178,13 +190,17 @@ fresh conversations. The index directory is excluded from the file-search arm, s
 it cannot grep the index itself and must find answers in the genuine project
 files. Tool outputs are capped (grep to its first matches, reads to a fixed size)
 so no single call can dump the whole repository; this bounds the search arm
-\emph{in its favour}, the uncapped gap would be larger. The representative run is 8
-questions over 5 repeats; the two preliminary runs were single passes, treated as
-illustrative.
+\emph{in its favour}, the uncapped gap would be larger. The main run and the
+path-with-read run are each 8 questions over 5 repeats; the single-value toy was
+one pass, treated as illustrative. The searched tree held source and
+documentation; the index content was not duplicated in it.
 
 \textbf{Project.} The search target is a real product repository. The search arm
 greps the working tree the agent actually sees: about $0.35$\,GB across roughly
-1{,}300 files and 100k lines of source. (The full checkout is 1.9\,GB on disk, but
+1{,}300 files and 100k lines of source in June 2026, and 3{,}323 files at
+$0.21$\,GB when the path-with-read run was made in November, the same repository
+four months on with its private notes excluded and its source lines not
+recounted. (The June checkout was 1.9\,GB on disk, but
 1.6\,GB of that is version-control history under \code{.git}, which is excluded and
 never searched.) An \emph{uncapped} grep for a single common term over this tree
 would return on the order of 17{,}000 to 110{,}000 tokens of raw matches; the
@@ -198,38 +214,43 @@ that \emph{is} the answer, recalled and returned, no reading). Questions are
 natural-language and varied (``how do I deploy a release to dev'', ``give me all
 the documents about deployment'').
 
-\textbf{Preliminary runs, and the representative one.} We iterated. Two early runs
-are reported only to explain the design and should not be read as the result. A
-single-fact toy (questions returning one short value) was trivial. A document-set
-run in which the index returned a path \emph{and the agent was made to read the
-document} understated the effect, because it charged the model for reading, which
-is not how the tool is used: a recalled URL or file is opened by the person, not
-expanded by the model. The \textbf{representative run}, and the most recent, stores
-notes and references that are themselves the answer and has the index arm
-\emph{recall only}, no reading. That is real usage, and the rest of this section
-reports it.
+\textbf{The runs.} We iterated. A single-fact toy (questions returning one
+short value) was trivial and is not tabulated. A June document-set run in which
+the index returned a path \emph{and the agent was made to read the document}
+charged the model for reading, which is not how the tool is used, since the
+person opens a recalled URL or file; it was one pass and is not reported. The
+\textbf{main run} stores notes and references that are themselves the answer and
+has the index arm \emph{recall only}, no reading. That configuration was fixed
+before its five repeats were run, and Section~\ref{sec:results} reports it. The
+\textbf{path-with-read run} of 2026-11-02 replaces the June pass: 8 questions, 5
+repeats, same model and harness, a nine-record index of paths to the project's
+deployment documents, its environment list and its release script, and the main
+run's questions with dev read as uat; it is the second row of
+Table~\ref{tab:regimes} and the paragraph after it.
 
 \section{Results}
 \label{sec:results}
 
-\textbf{The representative run (notes/references, no model reading), 8 questions
+\textbf{The main run (notes/references, no model reading), 8 questions
 $\times$ 5 repeats.} The index recalled about \textbf{68 tokens} of content per
 question; file search pulled in about \textbf{4{,}744}, a \textbf{69$\times$}
-retrieval-payload ratio. The index answered \textbf{40 of 40} (item-recall 1.0) with
+retrieval-payload ratio (ratio of the means over the 40 runs, 68.9). The index answered \textbf{40 of 40} with
 a tight spread (mean about 2{,}900 tokens, standard deviation 518); file search
-answered \textbf{31 of 40} (item-recall 0.78) with enormous variance (standard
-deviation about 36{,}000, larger than its own mean). Table~\ref{tab:notes} and
+answered \textbf{31 of 40} with enormous variance (standard
+deviation about 36{,}000, larger than its own mean). Item-recall, the fraction of
+expected items present on the set questions, coincides with the hit rate (1.0 and
+0.78): every search miss was a complete miss. Table~\ref{tab:notes} and
 Figure~\ref{fig:results} give the per-question means. The failures are not confined
 to the expensive runs: search missed \code{release\_packaging} on \emph{all five}
 repeats (at 6{,}400 to 72{,}000 tokens), yet usually \emph{found} \code{monitoring}
 despite spending 17{,}000 to 170{,}000 tokens to do so. Both documents exist in the
-project; search fails to surface \code{release\_packaging} within the turn budget,
+project; search fails to find \code{release\_packaging} within the turn budget,
 not for its absence. Cost and correctness fail independently.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.82\linewidth]{chart_notes.png}
-\caption{Per-question total tokens (log scale), representative run. The index
+\caption{Per-question total tokens (log scale), main run. The index
 (left bars) stays low and flat; file search (right bars) is higher and spikes on
 common-term greps (\emph{release packaging}, \emph{monitoring}).}
 \label{fig:results}
@@ -238,41 +259,63 @@ common-term greps (\emph{release packaging}, \emph{monitoring}).}
 \begin{table}[h]
 \centering
 \input{appendix_results}
-\caption{Per-question total tokens, representative run (note/reference index, no
-model reads). A common-term grep over the searched tree both explodes and
-misses.}
+\caption{Per-question total tokens, main run (note/reference index, no
+model reads). Common-term greps over the searched tree are where search explodes
+(\emph{monitoring}) and where it misses (\emph{release packaging}); the two
+failures are independent.}
 \label{tab:notes}
 \end{table}
 
-\textbf{Why the total-token ratio understates it.} Read on \emph{total} tokens per
-turn, the index beats search by a few times (mean 9$\times$, median 4$\times$ in
-this run). That total is diluted: both arms pay the same large, fixed model
-overhead every turn (system prompt, tool schemas re-sent each turn, the model's
-prose answer), about 2{,}500 to 3{,}000 tokens, identical whether the agent
-recalls or greps. The retrieval payload (Table~\ref{tab:regimes}) isolates the
-quantity the index actually optimizes.
+\textbf{Why the total-token ratio understates it.} Read on \emph{total} tokens,
+the index beats search by a few times: the ratio of the arms' medians is
+4.3$\times$ and of their means 8.3$\times$.
+That total is diluted: both arms pay the same preamble on every turn (system
+prompt, tool schemas re-sent each turn, the model's prose answer), and the index
+arm's whole transcript is two calls. The retrieval payload is 19 per cent of
+search's bill; the rest is that preamble and the growing transcript re-sent over
+search's 2 to 14 tool calls per question, against the index's 2 to 3. The payload
+(Table~\ref{tab:regimes}) isolates the quantity the index optimizes; the turn
+count is why search's total is larger still.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lcccc}
+\small\begin{tabular}{lccccc}
 \toprule
-\textbf{index returns} & \textbf{total ratio} & \textbf{retrieval ratio} & \textbf{index} & \textbf{search} \\
+\textbf{index returns} & \multicolumn{2}{c}{\textbf{total ratio}} & \textbf{retrieval ratio} & \multicolumn{2}{c}{\textbf{correct, of 40}} \\
+ & median & mean & & index & search \\
 \midrule
-\textbf{note / URL, no read (representative)} & \textbf{9$\times$} & \textbf{69$\times$} & \textbf{40/40} & 31/40 \\
-direct CLI, no model                          & \multicolumn{1}{c}{0 tokens} & n/a & exact & n/a \\
+\textbf{note / URL, no read (main run)} & \textbf{4.3$\times$} & \textbf{8.3$\times$} & \textbf{69$\times$} & \textbf{40} & 31 \\
+path, the model reads it (path-with-read run) & 3.4$\times$ & 6.6$\times$ & 3.5$\times$ & 40 & 35 \\
+direct CLI, no model                          & \multicolumn{2}{c}{0 tokens} & n/a & exact & n/a \\
 \bottomrule
 \end{tabular}
-\caption{Regimes. The representative run is the measured note/reference case;
-direct CLI is the zero-token path. The preliminary path-with-read and single-value
-runs are described in the text, not tabulated.}
+\caption{Regimes. Both measured rows are 8 questions over 5 repeats; the total
+ratios are of the arms' medians and means, the retrieval ratio of the arms' mean
+payloads, and the last two columns are correct answers out of 40 per arm. Direct
+CLI is the zero-token path. The single-value toy was one pass, not tabulated.}
 \label{tab:regimes}
 \end{table}
 
 \textbf{The path-with-read contrast.} When the index returns a document path and
-the agent then reads it, both arms incur the same reading cost; the index saves
-only the \emph{finding}, so the retrieval-payload advantage shrinks to about
-3$\times$. This is the avoidable case: do not make the model expand a recalled
-reference.
+the agent then reads it, both arms pay for the reading; the index saves only the
+\emph{finding}, and the advantage shrinks to $3.5\times$ on payload. The index
+arm took three calls on every question (six for the one whose answer is four
+documents), a median of 6{,}215 total tokens and a mean of 6{,}878; search took
+3 to 24 calls, a median of 21{,}020 and a mean of 45{,}175, one run reaching
+277{,}000. The per-question ratio of medians runs from $0.6\times$ to $31\times$.
+Where a file name carries the question's words (\code{release\_runbook},
+\code{db\_backup}) grep finds it on the first call, both arms take three, and the
+ratio is $1.1\times$ to $1.3\times$; for the four-document question the index
+arm reads four files and costs more than search's three to four calls from one
+directory listing. The tree differs from the main run's (Section~\ref{sec:method});
+it moved search's payload from 4{,}744 to 7{,}133 tokens and the index arm's from
+68 to 2{,}047, so the fall in the ratio is the reading. The literal grader failed
+five search answers. Read by the author (the answers are not deposited,
+Section~\ref{sec:repro}): two name the Ant target and the zip without either
+graded string, so search is 37 of 40 by hand and the index arm, read the same
+way, stays 40; two lists each omit one of the three graded documents; one run
+used its fourteen rounds (21 calls) without answering. This is the avoidable
+case: do not make the model expand a recalled reference.
 
 \textbf{Direct invocation.} For a known, repeated key the user (or a script) runs
 the lookup on the command line and the model is never involved: zero model tokens.
@@ -281,28 +324,32 @@ model; it is the ceiling of the economy.
 
 \section{Analysis}
 
-\textbf{The regime is a design choice.} Same index, same questions, same project.
-What moved the retrieval advantage between the two regimes of Table~\ref{tab:regimes} was
+\textbf{The regime is a design choice.} Same project, parallel questions, same
+harness and model; the index held notes in one run and paths in the other. What
+moved the retrieval advantage between the two regimes of Table~\ref{tab:regimes} was
 \emph{what the key returns and who consumes it}. Store a path and make the model
 expand it, and you pay for reading, which search pays too. Store the answer (a
 note) or a reference (a URL) and let the person open it, and retrieval is
 close to free. Paths answer ``\emph{which} document''; notes answer
 ``\emph{what} is the answer''.
 
-\textbf{Cost versus repository size.} The index's retrieval cost is roughly
-constant in repository size (a key addresses an index entry), while file search
+\textbf{Cost versus repository size.} One repository was measured, so this
+paragraph argues from the mechanism. The index's retrieval cost is
+constant in repository size by construction (a key addresses an index entry), while file search
 grows with the corpus and spikes on common terms: the \code{monitoring} question of
 Table~\ref{tab:notes} averaged about 99{,}000 total tokens across repeats. These totals
 are dominated by the transcript
 re-sent over 16 to 20 turns; the retrieval payload on those queries is about
-15{,}000 to 17{,}000 tokens. As a project grows the gap widens; the index does not
-notice the growth.
+15{,}000 to 17{,}000 tokens. As a project grows the gap should widen; measuring
+it needs a second repository or nested subsets of this one.
 
 \textbf{Reliability.} The index was exact on every question and every repeat; file
 search was wrong on 9 of 40 runs and failed \code{release\_packaging} on all five
 (Section~\ref{sec:results}). This follows from the mechanics. Exact-key lookup returns
-either the curated answer or the empty set, a detectable miss. File search and
-generation always return \emph{something} plausible, so an error is never signalled.
+either what was filed or the empty set, a detectable miss; a wrong or stale note
+under a known key returns as confidently as a right one. A \code{grep} miss is
+detectable too; a \code{grep} hit is a candidate the model must still judge, and
+the answer it generates from candidates is not guaranteed to signal an error.
 
 \section{Estimated savings}
 
@@ -310,10 +357,10 @@ The measured per-query figures support a rough projection. For a curated, repeat
 lookup the saving is about
 $C_{\mathrm{search}} - C_{\mathrm{AIS}}$, where $C_{\mathrm{search}}$ is what the
 agent spends finding the answer by file search and $C_{\mathrm{AIS}}$ is what the
-index spends. From the representative run, $C_{\mathrm{AIS}}\approx 2{,}900$ tokens
+index spends. From the main run, $C_{\mathrm{AIS}}\approx 2{,}900$ tokens
 through the model, or $0$ used directly on the command line; $C_{\mathrm{search}}$
-had a median near $11{,}500$ and a mean near $24{,}500$ tokens and grows with
-repository size. So each
+had a median of $11{,}500$ and a mean of $24{,}500$ tokens over the 40 runs,
+and grows with repository size by construction. So each
 curated query saves on the order of $8{,}500$ tokens through the model, and
 nearly all of $C_{\mathrm{search}}$ when the lookup is run directly.
 
@@ -328,15 +375,17 @@ nearly all of $C_{\mathrm{search}}$ when the lookup is run directly.
 \bottomrule
 \end{tabular}
 \caption{Projected daily token saving per developer for curated, repeated lookups.
-The 30 to 100 range is a conservative, human-scale floor: Sadowski et al.~[3] report
-a median near 12 code searches per weekday, and counting docs, configs, and
-references adds more. The \emph{agentic} regime this paper targets runs far higher,
+The 30 to 100 range is a conservative, human-scale floor: Sadowski et al.~\cite{sadowski2015} report
+a mean of 12 code-search queries per developer per weekday, median 6, and
+counting docs, configs, and references adds more. The \emph{agentic} regime this paper targets runs far higher,
 one task issues many retrievals and a developer may run several agents, so the
 saving grows rather than shrinks. We know of no published per-day agent-lookup rate
 yet, so this is a structural estimate, not a measured deployment; quantifying real
 lookup volume, human and agent, is a natural next step. Over about 20 working days
-the range is roughly 5 to 20 million tokens per developer per month, tens of dollars
-per heavy user at commercial rates (mostly input tokens).}
+the range is roughly 5 to 20 million tokens per developer per month, which at the
+Sonnet 5 list price of 2 USD per million input tokens~\cite{pricing} is 10 to
+40 USD per heavy user (mostly input tokens). The projection assumes every lookup
+is a curated hit; a miss costs the recall round and then the search.}
 \label{tab:savings}
 \end{table}
 
@@ -360,30 +409,44 @@ construction, so the correctness gap reflects curation as much as retrieval
 mechanics. The index is
 curated, so it answers only what was filed; un-curated or unknown-key questions
 fall back to search (itself informative: the empty result tells you what to add).
-The file-search agent is a basic grep-and-read loop, not a tuned embedding
-pipeline; a better one would change the constants but not the asymptotic shape
-(search cost grows with the corpus; key lookup does not). The numbers illustrate
+The file-search agent is a basic grep-and-read loop with capped tool output, the
+same shape as the agent-computer interface of SWE-agent~\cite{yang2024}, not a
+tuned embedding pipeline; a better one would change the constants but not the
+asymptotic shape (search cost grows with the corpus; key lookup does not). A note
+is data the model reads, with no more authority than a file: if the model may
+\code{store}, or the index is shared or synced, a note can carry instructions,
+and a recalled URL is a stored pointer trusted exactly as much as its author, so
+it should not be fetched automatically. The measurement assumes a single human
+author and a read-only agent. The numbers illustrate
 the regimes; they are not a benchmark.
 
 \section{Reproducibility}
+\label{sec:repro}
 
-The harness, fixtures, question sets, the table generator, and a sanitized results
-CSV are in the repository~[13]. The representative run is the note/reference, no-read
-configuration over 8 questions against a real $\sim$100k-line project; it is
-reproduced with \code{run.py -{}-ais-no-read -{}-repeats R} and summarized by
-\code{analyze.py}, which emits Table~\ref{tab:notes} \emph{directly from the CSV},
-so the printed numbers cannot drift from the data. The deposited CSV is stripped of
+The target project and its index are private and are not released. Deposited
+with this paper, in \code{ais/experiment/} of the articles repository
+(\url{https://github.com/Anode1/articles}): the harness, the table generator, the
+main run's sanitized results CSV, and a public stand-in corpus, index and question
+set (a small photo library) that reproduces the method on any machine with the
+engine~\cite{ais} built. The main run is
+the note/reference, no-read configuration, \code{run.py -{}-ais-no-read -{}-repeats
+5}, over 8 questions against the private project; re-running it needs a project
+and an index of one's own and yields different constants. \code{analyze.py} emits
+Table~\ref{tab:notes} \emph{directly from the deposited CSV}, with no API key, so
+the printed numbers cannot drift from the data. The path-with-read run is
+\code{ais/experiment/pathread/} there: its questions, the script
+that builds its nine-record path index, the invocation (\code{run.py -{}-exclude
+PRIVATE} keeps the project's private notes out of both arms) and its sanitized
+CSV; its questions are deposited, since their expected strings name only tool
+and file names, and its answers are not, since they carry the project's paths. The CSV is stripped of
 the free-text answer column (which embeds project-internal paths and names) and
 keeps, for every question and repeat, the per-arm total, retrieval, input and
-output tokens, tool calls, latency, correctness, and item-recall. The model is a
-commercial Claude Sonnet endpoint. Absolute token counts move with model version, and
-the regime structure does not: search cost grows with the corpus and key lookup does
-not.
-
-\textbf{Author's note.} This paper was prepared with AI assistance (Claude), June
-2026. The author takes full responsibility for its content, and every reported
-number comes from the runs described above against a real project repository of
-roughly 100k lines of code.
+output tokens, tool calls, latency, correctness, and item-recall. The model is
+\code{claude-sonnet-4-6} through the Messages API, the main run in June 2026 and the path-with-read run on 2026-11-02. Absolute token counts move with model version; the
+regime structure follows from the mechanism, search cost growing with the corpus
+and key lookup staying flat. The text was drafted by the author and edited with Claude; the author takes
+responsibility for its contents. The model appears in the measurement only as the
+system under test.
 
 \section{Related work}
 
@@ -391,24 +454,22 @@ The direction measured here is, as of 2026, an active convergence. Structured,
 tool-mediated retrieval is reported to beat vector search on token cost: a
 tree-sitter knowledge graph exposed over MCP shows about ten times lower token cost
 and roughly half the tool calls of iterative file exploration, at a modest quality
-cost (83\% versus 92\% answer quality)~[7], and agentic keyword search reaches
-RAG-level performance with no vector store at all~[6]. A unified review of
+cost (83\% versus 92\% answer quality)~\cite{vogel2026}, and agentic keyword search reaches
+RAG-level performance with no vector store at all~\cite{subramanian2026}. A unified review of
 \emph{externalization} in LLM agents, memory, skills, protocols, and harness
-engineering, maps the area~[9], while efficiency- and interpretability-oriented
-memory frameworks pursue the same end over latent graphs~[8]. Production
-agent-memory systems (graph, temporal, and vector stores reachable over MCP) are
-moving the same way, with ``expose your data over MCP'' displacing ``build a vector
-index''. The approach measured here descends from the author's own earlier, dated
-index work~[12] rather than from this 2026 convergence.
+engineering, maps the area~\cite{zhou2026}, while efficiency- and interpretability-oriented
+memory frameworks pursue the same end over latent graphs~\cite{zhang2026}. The index measured here descends from the author's own index work,
+begun as a by-hand filesystem index about 2001 and registered on SourceForge in
+November 2004~\cite{priority}, rather than from this 2026 convergence.
 
 The systems above are \emph{auto-extracted} (parsed code graphs, embeddings) and
 \emph{similarity-based}. The index measured here is \emph{exact} and
 \emph{human-curated}: the keys are the user's own prior, recall is a deterministic
-lookup, and a miss returns the empty set. The store is plain text, local and
-user-owned, where the memory frameworks are cloud services. And we isolate the regime
+lookup, and a miss returns the empty set. The store is plain text on the user's
+machine, and only a recalled value travels to the model. And we isolate the regime
 the agentic-retrieval literature routes past, direct lookup with the model out of the
-loop. The field is rediscovering that an index beats search; the measurement here
-says \emph{which} index, used \emph{how}, wins and by how much.
+loop. The measurement here gives the cost and the miss rate of one exact,
+curated index against one lexical search, on one project.
 
 \section{Discussion}
 
@@ -417,9 +478,10 @@ says \emph{which} index, used \emph{how}, wins and by how much.
 The fixed per-turn overhead is not fundamental. It is the system prompt and tool
 schemas re-sent each turn; it dilutes the total-token ratio, and it let file search
 win the one easy, unique-key question, whose lighter preamble cost less over two
-equally cheap calls. It is reducible three ways that compound. \emph{Prompt caching} bills any re-sent prefix at a fraction after the first call
-(about a tenth of the input price on the Anthropic endpoint used here~[11]; OpenAI,
-Google, and others offer comparable discounts). That prefix is the system prompt,
+equally cheap calls. It is reducible three ways that compound. \emph{Prompt caching} bills a marked, re-sent prefix above a minimum length at
+one tenth of the base input price for the model used, within the cache lifetime,
+after a first call charged at 1.25 times base~\cite{caching,pricing}; OpenAI
+discounts a cached prefix by up to 95 per cent~\cite{openaicaching}. That prefix is the system prompt,
 the tool schemas, the user's standing instructions, the prior itself, and the
 conversation re-sent each turn. Stripping it from \emph{both} arms leaves each
 query's cost at the \emph{fresh} content it pulls in, tens of tokens for the index
@@ -450,7 +512,9 @@ index, direct CLI (no model)                       & 0 \\
 \bottomrule
 \end{tabular}
 \caption{Per-query cost for a curated lookup, current and projected. Prompt caching
-bills any re-sent prefix at roughly a tenth on the endpoint used here, and a
+bills a re-sent prefix at one tenth of base on the endpoint used here, after a
+first call at 1.25 times base, and the projection assumes the prefix stays
+cacheable and warm; a
 minimal recall-only surface shrinks the prior further, so the index's via-model
 cost falls to a few hundred tokens, within reach of the zero-token direct floor.
 Caching reduces file search too, but only its re-sent overhead; what remains is its
@@ -460,27 +524,22 @@ implemented in our harness.}
 \label{tab:caching}
 \end{table}
 
-\subsection*{The index encodes the user's prior}
+\subsection*{An untested property}
 
 A property independent of token cost follows from who authors the keys. Embedding
 retrieval returns what is typical in the model's training distribution, an average
 over many corpora; the curated index returns what \emph{this} user filed, in
-\emph{this} user's vocabulary. The user is the client, and the structure of the
-problem lives in the user's own terms and priorities. For a
-conventional query the average is adequate, but when the task is novel the user's
-framing is by construction off the average, and similarity regresses toward the
-conventional. The exact index has no such regression: it returns the user's own
-prior verbatim. Nothing in the measurement above tests this. It is an argument, and
-the question it raises, where similarity retrieval is the right instrument at all,
-precedes cost.
+\emph{this} user's vocabulary, with no regression toward the conventional when
+the task is novel. Nothing in the measurement above tests this.
 
 \section{Conclusion}
 
 The token economy of a curated key index over an agent's file search is real but
 conditional, and the condition is in the engineer's hands. Index the answer or a
-reference and let the human consume it, and retrieval costs almost nothing
-(zero tokens directly, about two orders of magnitude cheaper than search even
-through the model), stays flat as the project grows, and is exact. Make the model
+reference and let the human consume it, and retrieval costs almost nothing:
+zero tokens directly, about 70 times less retrieval payload through the model and
+4 to 9 times fewer total tokens; by construction the cost does not grow with the
+project, and the lookup returns what was filed. Make the model
 expand a recalled document instead, and the advantage shrinks to a few times. The
 rule is short: compress the access, not the store. Return the answer or a pointer,
 and keep retrieval off the model wherever a lookup will do.
@@ -492,35 +551,43 @@ graph-theory course of the late Professor Shimon Even (1935--2004), whose
 network-flow algorithms reach a global result through local rules, and whose
 student the author had the privilege to be.
 
-\section*{References}
 \small
-\begin{enumerate}
-\item V. Bush. \emph{As We May Think.} The Atlantic, 1945.
-\item S.\,R. Ranganathan. \emph{Colon Classification.} Madras Library Association, 1933.
-\item C. Sadowski, K.\,T. Stolee, S. Elbaum. \emph{How Developers Search for Code: A Case Study.} FSE 2015.
-\item P. Lewis, E. Perez, A. Piktus, et al. \emph{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.} NeurIPS 2020; arXiv:2005.11401.
-\item V. Karpukhin, B. O\u{g}uz, S. Min, et al. \emph{Dense Passage Retrieval for Open-Domain Question Answering.} EMNLP 2020; arXiv:2004.04906.
-\item S. Subramanian, A. Akinfaderin, Y. Zhang, et al. \emph{Keyword Search Is All
+\begin{thebibliography}{99}
+\bibitem{bush1945} V. Bush. \emph{As We May Think.} The Atlantic, 1945.
+\bibitem{ranganathan1933} S.\,R. Ranganathan. \emph{Colon Classification.} Madras Library Association, 1933.
+\bibitem{sadowski2015} C. Sadowski, K.\,T. Stolee, S. Elbaum. \emph{How Developers Search for Code: A Case Study.} FSE 2015.
+\bibitem{lewis2020} P. Lewis, E. Perez, A. Piktus, et al. \emph{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.} NeurIPS 2020; arXiv:2005.11401.
+\bibitem{karpukhin2020} V. Karpukhin, B. O\u{g}uz, S. Min, et al. \emph{Dense Passage Retrieval for Open-Domain Question Answering.} EMNLP 2020; arXiv:2004.04906.
+\bibitem{subramanian2026} S. Subramanian, A. Akinfaderin, Y. Zhang, et al. \emph{Keyword Search Is All
 You Need: Achieving RAG-Level Performance without Vector Databases Using Agentic
 Tool Use.} AAAI 2026; arXiv:2602.23368.
-\item M. Vogel, F. Meyer-Eschenbach, S. Kohler, E. Gr\"unewald, F. Balzer.
+\bibitem{vogel2026} M. Vogel, F. Meyer-Eschenbach, S. Kohler, E. Gr\"unewald, F. Balzer.
 \emph{Codebase-Memory: Tree-Sitter-Based Knowledge Graphs for LLM Code Exploration
 via MCP.} arXiv:2603.27277, 2026.
-\item X. Zhang, K. Yang, H. Li, C. Li, Q. Wei, S. Ananiadou. \emph{Implicit Graph,
+\bibitem{zhang2026} X. Zhang, K. Yang, H. Li, C. Li, Q. Wei, S. Ananiadou. \emph{Implicit Graph,
 Explicit Retrieval: Towards Efficient and Interpretable Long-horizon Memory for
 Large Language Models.} arXiv:2601.03417, 2026.
-\item C. Zhou, H. Chai, W. Chen, et al. \emph{Externalization in LLM Agents: A
+\bibitem{zhou2026} C. Zhou, H. Chai, W. Chen, et al. \emph{Externalization in LLM Agents: A
 Unified Review of Memory, Skills, Protocols and Harness Engineering.}
 arXiv:2604.08224, 2026.
-\item Anthropic. \emph{Model Context Protocol.} 2024. \href{https://modelcontextprotocol.io}{modelcontextprotocol.io}.
-\item Anthropic. \emph{Prompt Caching.} Anthropic API documentation, 2024. \href{https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching}{docs.anthropic.com}.
-\item V. Gavrilov. \emph{Intelligence Is the Discovery of Compressors.} Zenodo, 2026.
+\bibitem{mcp} \emph{Model Context Protocol} specification. Introduced by Anthropic, 2024; a project of the Agentic AI Foundation (Linux Foundation) since December 2025. \href{https://modelcontextprotocol.io}{modelcontextprotocol.io}, accessed 2026-11-02.
+\bibitem{caching} Anthropic. \emph{Prompt Caching.} \href{https://platform.claude.com/docs/en/build-with-claude/prompt-caching}{platform.claude.com/docs/en/build-with-claude/prompt-caching}, accessed 2026-11-02.
+\bibitem{pricing} Anthropic. \emph{Pricing.} \href{https://platform.claude.com/docs/en/about-claude/pricing}{platform.claude.com/docs/en/about-claude/pricing}, accessed 2026-11-02.
+\bibitem{openaicaching} OpenAI. \emph{Prompt Caching.} \href{https://developers.openai.com/api/docs/guides/prompt-caching}{developers.openai.com/api/docs/guides/prompt-caching}, accessed 2026-11-02.
+\bibitem{gavrilov2026} V. Gavrilov. \emph{Intelligence Is the Discovery of Compressors.} Zenodo, 2026.
 DOI:~\href{https://doi.org/10.5281/zenodo.20440110}{10.5281/zenodo.20440110}.
-(Conceptual foundation: retrieval as compression of the access path; compression in the embedding space versus in keys.)
-\item AIS: associative-indexing engine, MCP plugin, and measurement harness.
-\href{https://github.com/Anode1/ais}{github.com/Anode1/ais}.
-\item N.\,F. Liu, K. Lin, J. Hewitt, et al. \emph{Lost in the Middle: How Language
+\bibitem{ais} V. Gavrilov. \emph{AIS}: associative-indexing engine and MCP plugin.
+\href{https://github.com/Anode1/ais}{github.com/Anode1/ais}, 2026.
+\bibitem{priority} V. Gavrilov. \emph{AIS: Priority and Provenance Record.} Zenodo, 2026.
+DOI:~\href{https://doi.org/10.5281/zenodo.20647047}{10.5281/zenodo.20647047}.
+\bibitem{kapoor2024} S. Kapoor, B. Stroebl, Z.\,S. Siegel, N. Resnik, A. Narayanan. \emph{AI Agents That Matter.} arXiv:2407.01502, 2024.
+\bibitem{yang2024} J. Yang, C.\,E. Jimenez, A. Wettig, K. Lieret, S. Yao, K. Narasimhan, O. Press. \emph{SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering.} NeurIPS 2024; arXiv:2405.15793.
+\bibitem{dumais2003} S. Dumais, E. Cutrell, J.\,J. Cadiz, G. Jancke, R. Sarin, D.\,C. Robbins. \emph{Stuff I've Seen: A System for Personal Information Retrieval and Re-Use.} SIGIR 2003.
+\bibitem{jones2007} W. Jones. \emph{Keeping Found Things Found: The Study and Practice of Personal Information Management.} Morgan Kaufmann, 2007.
+\bibitem{golder2006} S.\,A. Golder, B.\,A. Huberman. \emph{Usage Patterns of Collaborative Tagging Systems.} Journal of Information Science 32(2), 2006.
+\bibitem{robertson2009} S. Robertson, H. Zaragoza. \emph{The Probabilistic Relevance Framework: BM25 and Beyond.} Foundations and Trends in Information Retrieval 3(4), 2009.
+\bibitem{liu2024} N.\,F. Liu, K. Lin, J. Hewitt, et al. \emph{Lost in the Middle: How Language
 Models Use Long Contexts.} TACL 2024; arXiv:2307.03172.
-\end{enumerate}
+\end{thebibliography}
 
 \end{document}

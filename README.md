@@ -21,7 +21,7 @@ The code for the measurements is in the project repositories, which are linked f
 Shorter pieces and working notes are in [notes](https://github.com/Anode1/notes).
 The context-renormalization paper has its own repository,
 [context-renormalization](https://github.com/Anode1/context-renormalization); it is superseded by
-*Compress the Access, Not the Store* in [`ais`](ais/README.md).
+*Key Lookup versus File Search for a Coding Agent* in [`ais`](ais/README.md).
 
 ## Building
 
