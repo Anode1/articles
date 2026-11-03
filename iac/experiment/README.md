@@ -141,6 +141,16 @@ The run of 2026-11-02 on `claude-fable-5-1` cost 15.22 USD at list and is Sectio
 table in the paper. Two facts from that run that the paper states: the model's safety
 classifier refused the original coding-agent persona on every call (a refused call is billed
 for its cache write and never commits the cache; the persona is now a library notice board and
-`tokenbill.py` aborts on any refusal), and a poll every 360 s still read the cache entry
-written six minutes earlier. The `p600` and `p900` cells are two probes that ran together
-on one 12k context: five- and six-minute gaps read the entry, ten-minute gaps rewrote it.
+`tokenbill.py` aborts on any refusal). The `p360` cell is void: it ran beside the 61k
+chain, which read the same prefix every ten seconds and kept the entry warm. The `p600`
+and `p900` cells are two probes that ran together on one 12k context: five-minute gaps
+read the entry, ten-minute gaps rewrote it. The paper's hourly figures are steady state,
+the one-off cache write of each chain's first cell reported as a first-poll column.
+`results_sonnet_warm.json` carries a `usd` field priced at the July 2026 table
+($3 / $0.30 / $3.75 / $15); the paper prices the same tokens at the current list.
+
+## The pilot record
+
+`pilot/` is the three-seat run of Section 10 (2026-09-01, `django__django-11141`):
+the brief, the room log, each seat's usage and result, the joint patch and the
+SWE-bench harness report. Restored from the articles history (commit `3bf2692`).

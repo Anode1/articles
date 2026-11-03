@@ -1,0 +1,10 @@
+iac send->recv wake latency (30 iterations each)
+
+warm log (inotify path - a live board):
+  n=30   min 1.29 ms   median 1.77 ms   max 11.22 ms
+
+cold room (poll fallback - first message into a new room):
+  n=30   min 99.92 ms   median 100.65 ms   max 101.09 ms
+
+The wake is a fraction of this; two process spin-ups dominate.
+An agent's own turn is seconds - thousands of times larger. The transport is never the bottleneck.

@@ -1,0 +1,61 @@
+diff --git a/django/db/migrations/loader.py b/django/db/migrations/loader.py
+index 8c30862..f31aea6 100644
+--- a/django/db/migrations/loader.py
++++ b/django/db/migrations/loader.py
+@@ -4,8 +4,10 @@ from importlib import import_module, reload
+ 
+ from django.apps import apps
+ from django.conf import settings
++from django.core.exceptions import ImproperlyConfigured
+ from django.db.migrations.graph import MigrationGraph
+ from django.db.migrations.recorder import MigrationRecorder
++from django.utils.version import get_docs_version
+ 
+ from .exceptions import (
+     AmbiguityError, BadMigrationError, InconsistentMigrationHistory,
+@@ -84,15 +86,25 @@ class MigrationLoader:
+                     continue
+                 raise
+             else:
+-                # Empty directories are namespaces.
+-                # getattr() needed on PY36 and older (replace w/attribute access).
+-                if getattr(module, '__file__', None) is None:
+-                    self.unmigrated_apps.add(app_config.label)
+-                    continue
+                 # Module is not a package (e.g. migrations.py).
+                 if not hasattr(module, '__path__'):
+                     self.unmigrated_apps.add(app_config.label)
+                     continue
++                # Empty directories are namespaces. Namespace packages have
++                # multiple locations, so we consider only those with a
++                # single location.
++                if len(module.__path__) > 1:
++                    raise ImproperlyConfigured(
++                        "'%s' is a namespace package spread across %s and "
++                        "you appear to have added it to Django's "
++                        "INSTALLED_APPS setting. This is not supported. See "
++                        "https://docs.djangoproject.com/en/%s/topics/db/migrations/"
++                        "#namespace-packages for details." % (
++                            module_name,
++                            ', '.join(repr(p) for p in module.__path__),
++                            get_docs_version(),
++                        )
++                    )
+                 # Force a reload if it's already loaded (tests need this)
+                 if was_loaded:
+                     reload(module)
+diff --git a/tests/migrations/test_loader.py b/tests/migrations/test_loader.py
+index 0f0a590..ac30f7d 100644
+--- a/tests/migrations/test_loader.py
++++ b/tests/migrations/test_loader.py
+@@ -193,8 +193,8 @@ class LoaderTests(TestCase):
+         with override_settings(MIGRATION_MODULES={"migrations": "migrations.faulty_migrations.namespace"}):
+             loader = MigrationLoader(connection)
+             self.assertIn(
+-                "migrations", loader.unmigrated_apps,
+-                "App missing __init__.py in migrations module not in unmigrated apps."
++                "migrations", loader.migrated_apps,
++                "App missing __init__.py in migrations module is not treated as a namespace package."
+             )
+ 
+     @override_settings(

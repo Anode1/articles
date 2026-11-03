@@ -30,5 +30,5 @@ path records), `run.sh` (the invocation; `run.py --exclude PRIVATE` keeps the
 project's private notes out of both arms), `results_sanitized.csv` (no answer
 column), `table.tex` (from `analyze.py`). `results.csv` with the answers is not
 committed: the answers carry the project's paths. The tree searched was
-3,344 files, 0.21 GB (the main run's June tree was 1,300 files, 0.35 GB; same
+3,323 files, 0.21 GB (its private notes excluded) (the main run's June tree was 1,300 files, 0.35 GB; same
 repository, four months on).

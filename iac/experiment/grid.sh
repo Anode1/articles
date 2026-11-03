@@ -3,7 +3,8 @@
 # Warm cache throughout; the three cells of one context size run back to back so the
 # prefix is written once and read by every later poll.  The p=360 cell polls at six-minute
 # gaps, past the nominal five-minute cache lifetime; on 2026-11-02 the entry was still read
-# at that gap; the 600 s and 900 s probes in grid/ put the expiry between 6 and 10 minutes.
+# at that gap, but the 61k chain ran beside it on the same prefix, so the cell is void; the
+# 600 s and 900 s probes show five-minute gaps read and ten-minute gaps rewritten.
 # Key: ANTHROPIC_API_KEY, or ~/.config/anthropic/api_key.  Validate first:
 #   python3 tokenbill.py --fast --model claude-fable-5-1
 #

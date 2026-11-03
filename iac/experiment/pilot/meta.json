@@ -1,0 +1,23 @@
+{
+ "seats": {
+  "seat1-sonnet": {
+   "subtype": "success",
+   "num_turns": 15,
+   "cost_usd": 0.8816,
+   "duration_s": 410
+  },
+  "seat2-sonnet": {
+   "subtype": "error_max_turns",
+   "num_turns": 41,
+   "cost_usd": 0.6295,
+   "duration_s": 144
+  },
+  "seat3-sonnet": {
+   "subtype": "error_max_turns",
+   "num_turns": 41,
+   "cost_usd": 0.597,
+   "duration_s": 321
+  }
+ },
+ "total_cost_usd": 2.1081
+}
