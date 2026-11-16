@@ -212,6 +212,15 @@ def gitrev(root):
     return r.stdout.strip() or None
 
 
+def generic(label):
+    """A redacted row keeps the kind of its region and drops every name:
+    no table, migration id or method name of the private tree is written."""
+    if label.startswith("DDL"):
+        return "schema DDL"
+    head = label.split(":")[0]
+    return head if ":" in label else label
+
+
 def measure(root, manifest, redact=False):
     rows, missing, seen_paths = [], 0, set()
     for label, rel, a, b in manifest:
@@ -230,10 +239,10 @@ def measure(root, manifest, redact=False):
                "o200k": len(ENC.encode(text))}
         seen_paths.add(rel)
         if redact:
-            row = {"region": label, "lines": row["lines"],
+            row = {"region": generic(label), "lines": row["lines"],
                    "chars": row["chars"], "o200k": row["o200k"]}
         rows.append(row)
-    total = {"commit": gitrev(root), "version": None,
+    total = {"commit": None if redact else gitrev(root), "version": None,
              "lines": sum(r["lines"] for r in rows),
              "chars": sum(r["chars"] for r in rows),
              "o200k": sum(r["o200k"] for r in rows),

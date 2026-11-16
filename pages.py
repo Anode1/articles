@@ -12,8 +12,7 @@ AUTHOR = "Vasili Gavrilov"
 PAPERS = [
  dict(dir="MISRA_C_vs_CPP", page="index.html", pdf="tokens_to_trace.pdf", abstract_md="Abstract.md",
       title="When Abstraction Becomes Indirection: Tokens-to-trace, measured on six stacks",
-      date="2026/08/26", doi="10.5281/zenodo.22113993", group="papers",
-      note="A shorter version is under review at IEEE Software."),
+      date="2026/08/26", doi="10.5281/zenodo.22113993", group="papers"),
  dict(dir="cjitter", page="index.html", tex="stationary.tex", pdf="stationary.pdf",
       title="Layouts Made in Diagram Editors Are Held by Alignment and Flow, Not by Edge Length or Stress: A Per-Term Stationarity Test Before Fitting a Layout Energy",
       date="2026/09/05", doi="10.5281/zenodo.22313827", group="papers",

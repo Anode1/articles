@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>A Wakeup, Not a Broker: The Minimal Transport for Coordinating Stateless LLM Agents</title>
+  <title>Waking a Harness-Invoked Agent: A Blocking Receive in a Child Process and the Token Cost of Polling Instead</title>
   <link rel="canonical" href="https://anode1.github.io/articles/iac/">
-  <meta name="citation_title" content="A Wakeup, Not a Broker: The Minimal Transport for Coordinating Stateless LLM Agents">
+  <meta name="citation_title" content="Waking a Harness-Invoked Agent: A Blocking Receive in a Child Process and the Token Cost of Polling Instead">
   <meta name="citation_author" content="Vasili Gavrilov">
   <meta name="citation_publication_date" content="2026/07/05">
   <meta name="citation_online_date" content="2026/07/05">
@@ -13,11 +13,11 @@
   <meta name="citation_abstract_html_url" content="https://anode1.github.io/articles/iac/">
   <meta name="citation_doi" content="10.5281/zenodo.21206970">
   <meta name="citation_language" content="en">
-  <meta name="description" content="Multi-agent coordination on one machine is treated as a messaging problem and handed to a queue, a broker, or an inter-agent protocol. That answers the wrong question. Moving bytes between processes was solved decades ago. The hard part is that an LLM agent, between turns, is not a running process a">
+  <meta name="description" content="A language-model agent run by a command-line harness exists only while the harness invokes it: between turns there is no process, no socket and no event loop to deliver a message to. Coordinating several such agents on one machine is usually handed to a queue, a broker or an inter-agent protocol, wh">
   <style>body{max-width:42em;margin:2em auto;padding:0 1em;font:16px/1.5 Georgia,serif;color:#111;background:#fff}h1{font-size:1.4em;line-height:1.3}a{color:#1a4d8f}dl dt{font-weight:bold;margin-top:.6em}dl dd{margin:0}p.abstract{text-align:justify}footer{margin-top:3em;font-size:.9em;color:#555}</style>
 </head>
 <body>
-<h1>A Wakeup, Not a Broker: The Minimal Transport for Coordinating Stateless LLM Agents</h1>
+<h1>Waking a Harness-Invoked Agent: A Blocking Receive in a Child Process and the Token Cost of Polling Instead</h1>
 <dl>
   <dt>Authors</dt><dd>Vasili Gavrilov</dd>
   <dt>Date</dt><dd>2026-07-05</dd>
@@ -27,7 +27,7 @@
   <dt>Code</dt><dd><a href="https://github.com/Anode1/iac">github.com/Anode1/iac</a></dd>
 </dl>
 <h2>Abstract</h2>
-<p class="abstract">Multi-agent coordination on one machine is treated as a messaging problem and handed to a queue, a broker, or an inter-agent protocol. That answers the wrong question. Moving bytes between processes was solved decades ago. The hard part is that an LLM agent, between turns, is not a running process at all: slow, serial, dormant, so the throughput a broker manages never binds. The scarce primitive is a wakeup, and the only one a stateless agent can receive is the return of a blocking recv parked in a cheap child process the harness re-invokes on exit: one activation per message, not per poll. The move is the epoll_wait every network server blocks in, relocated from the agent, which cannot hold it, to a child process, which can. We present iac, a dependency-free C99 board of about 1,100 lines, one binary, no heap. The economy is measured: a self-polling agent reprocesses its whole context on every check, millions of tokens an hour to watch an empty mailbox, while a C-blocked wakeup costs zero on any model. The transport is an append-only text log under a file lock, the commit log a log-based broker is built on minus the service, auditable by cat and grep and, because every agent reads the whole shared log, open to peer review. On one host a message is a file append and a page-cache read, and the same proximity keeps the shared history cheap to re-read. The participant is new: an agent woken by nothing but a returning process. A fleet of agents used the board to build the board; three seats later carried an external repair to a verified result.</p>
+<p class="abstract">A language-model agent run by a command-line harness exists only while the harness invokes it: between turns there is no process, no socket and no event loop to deliver a message to. Coordinating several such agents on one machine is usually handed to a queue, a broker or an inter-agent protocol, which deliver to a running consumer. The missing primitive is a wakeup, and we give one: a blocking receive in a child process. The agent parks a small C program on a shared log; the program sleeps on an inotify watch, costs nothing while it waits, and exits when a message for its seat arrives, which is the one signal a harness already turns into an invocation. The alternative, the model polling the log itself, costs one activation per poll, and every activation is billed for the whole context, cached or not. We measure that on two models: billed tokens per poll equal the context at every interval, almost all of them cache reads, so an idle seat&#x27;s bill is polls per hour times context, from cents to tens of dollars an hour for an empty board, while the parked child makes no model call at all. The transport under the wakeup is an append-only log in one directory, locked for writers, with a cursor per member, claims as exclusive file creation and presence as held locks, in under a thousand lines of C99 with no heap allocation. A send and the wake it causes take about two milliseconds whatever the log&#x27;s size, since a reader starts from its own cursor. A pilot put three agent seats on one such log to repair a SWE-bench Verified issue; the official harness scored the joint patch resolved, and the whole exchange is one readable file.</p>
 <footer><a href="../">All papers</a> · <a href="https://orcid.org/0009-0007-9371-5994">ORCID 0009-0007-9371-5994</a> · <a href="https://scholar.google.com/citations?user=7xlK2_gAAAAJ">Google Scholar</a></footer>
 </body>
 </html>

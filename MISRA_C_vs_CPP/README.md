@@ -1,7 +1,7 @@
 # Tokens-to-trace
 
-**A measure of what an AI coding agent must read before it can change one
-endpoint safely, applied to six stacks in three pairs, plain C against idiomatic C++, plain Java
+**A count of the source text that decides one endpoint's behavior, and of
+where that text lives, applied to six stacks in three pairs, plain C against idiomatic C++, plain Java
 with JDBC against Spring Boot, vanilla JavaScript against React, with 430
 controlled agent runs behind it.**
 
@@ -28,7 +28,7 @@ min_len, and Jackson emitted nameLength where the task said name_length.
 The fifteen conventions on that path are stated in 31,535 tokens of
 version-pinned documentation sources (cat3.py), four times the plain
 side's whole deciding text. The web pair: vanilla JavaScript and React
-need the same 1.1k tokens to write, but React adds 283k of its own
+need the same 1.1k tokens to write, but React adds 293k of its own
 machinery outside the project, and a change that crosses a component
 boundary cost React 100% more turns than vanilla (frontend/).
 
@@ -68,6 +68,6 @@ the public systems reproduce without it). `python3 pairs/hidden.py
 selfcheck` verifies the experiment harness; `python3 pairs/run.py` reruns
 the experiment against a local `claude` CLI. The pilot and sites run records are in their `runs/`
 directories here; the pairs, endpoint and frontend records, the generated
-JSON (`closures.json`, `cat3.json`) and the second rater's grading
+JSON (`closures.json`, `cat3.json`) and the second rater's derivation
 (`second_rater.txt`) are not tracked in this repository and ship as
 `run_records.zip` with the paper's Zenodo deposit.

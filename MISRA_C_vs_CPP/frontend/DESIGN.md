@@ -168,8 +168,8 @@ with them, so the ordering is the author's record, not git's. Scored:
    times plain (1,092 against 1,145 tokens; 1.01 in the single-file
    control). Written in the map-and-innerHTML idiom System A uses, plain
    JS concedes nothing to JSX.
-2. Held: category 2 is 282,717 tokens over 29 modules of the React 19.1
-   runtime against zero for plain, 2.3 times the Spring closure. Angular
+2. Held: category 2 is 292,666 tokens over 29 modules of the React 19.2.8
+   runtime against zero for plain, 2.4 times the Spring closure. Angular
    was not measured.
 3. Held exactly: 40 runs, turns flat (6.95 against 6.85, p = 0.91), React
    won one task outright (add a field, 5.6 against 7.6).

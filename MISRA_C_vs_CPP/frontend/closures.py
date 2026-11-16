@@ -8,7 +8,8 @@ counted.
 
   REACT_SRC=~/articles/MISRA_C_vs_CPP/corpora/react-v19 python3 closures.py
 
-React source: facebook/react tag v19.1.0, commit 4a9df08157f001c01b078d259748512211233dcf.
+React source: facebook/react tag v19.2.8, commit 1dd4ecbdabf826f527fc9a58c05ea70375b7d170,
+the version the runs installed.
 The category-2 list is one rater's derivation and has not been blind-checked.
 """
 import os, sys, json
